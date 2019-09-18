@@ -53,13 +53,8 @@
 </template>
 
 <script>
-import Datepicker from '../../../dist/vuejs-datepicker'
-
 export default {
   name: 'Highlighted',
-  components: {
-    Datepicker,
-  },
   data() {
     return {
       highlightedFn: {

@@ -64,13 +64,8 @@
 </template>
 
 <script>
-import Datepicker from '../../../dist/vuejs-datepicker'
-
 export default {
   name: 'Disabled',
-  components: {
-    Datepicker,
-  },
   data() {
     return {
       disabledDates: {},

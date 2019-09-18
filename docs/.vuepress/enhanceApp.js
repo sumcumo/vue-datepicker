@@ -1,5 +1,7 @@
 import VeeValidate from 'vee-validate'
 import Cleave from 'cleave.js'
+import * as lang from '../../dist/locale'
+import Datepicker from '../../dist/vuejs-datepicker'
 
 export default ({
   Vue,
@@ -23,6 +25,8 @@ export default ({
 
 
   Vue.use(VeeValidate, config)
+  Vue.component('Datepicker', Datepicker)
+  Vue.prototype.$datepickerLocals = lang
 
   Vue.directive('cleave', {
     inserted(el, binding) {

@@ -12,14 +12,9 @@
 </template>
 
 <script>
-import Datepicker from '../../../dist/vuejs-datepicker'
-
 // export component
 export default {
   name: 'Cleave',
-  components: {
-    Datepicker,
-  },
   data() {
     return {
       model: '',

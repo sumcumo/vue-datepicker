@@ -17,14 +17,9 @@
 </template>
 
 <script>
-import Datepicker from '../../../dist/vuejs-datepicker'
-
 // export component
 export default {
   name: 'VeeValidate',
-  components: {
-    Datepicker,
-  },
   data() {
     return {
       model: '',

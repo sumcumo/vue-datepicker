@@ -15,13 +15,11 @@
 </template>
 
 <script>
-import Datepicker from '../../../dist/vuejs-datepicker'
 import Format from '../../../docs/.vuepress/components/Formats'
 
 export default {
   name: 'Formatting',
   components: {
-    Datepicker,
     Format,
   },
   data() {

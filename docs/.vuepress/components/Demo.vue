@@ -48,9 +48,9 @@
     </div>
     <div class="example">
       <h3>RTL datepicker</h3>
-      <Datepicker :language="languages.he"></Datepicker>
+      <Datepicker :language="$datepickerLocals.he"></Datepicker>
       <code>
-        &lt;datepicker :language="languages.he"&gt;&lt;/datepicker&gt;
+        &lt;datepicker :language="$datepickerLocals.he"&gt;&lt;/datepicker&gt;
       </code>
     </div>
 
@@ -70,11 +70,11 @@
       <Datepicker
         :minimum-view="'day'"
         :maximum-view="'day'"
-        :language="languages.he"
+        :language="$datepickerLocals.he"
       ></Datepicker>
       <code>
         &lt;datepicker :minimumView="'day'" :maximumView="'day'"
-        language="languages.he"&gt;&lt;/datepicker&gt;
+        language="$datepickerLocals.he"&gt;&lt;/datepicker&gt;
       </code>
     </div>
 
@@ -118,20 +118,14 @@
 </template>
 
 <script>
-import * as lang from '../../../dist/locale'
-import Datepicker from '../../../dist/vuejs-datepicker'
 
 export default {
   name: 'Demo',
-  components: {
-    Datepicker,
-  },
   data() {
     return {
       format: 'd MMMM yyyy',
       openDate: null,
       vModelExample: null,
-      languages: lang,
     }
   },
 }

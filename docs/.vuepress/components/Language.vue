@@ -1,19 +1,19 @@
 <template>
   <div>
     <div class="example">
-      <h5>{{ languages[language].language }} datepicker</h5>
+      <h5>{{ $datepickerLocals[language].language }} datepicker</h5>
 
       <Datepicker
-        :language="languages[language]"
+        :language="$datepickerLocals[language]"
       ></Datepicker>
       <code>
-        &lt;datepicker :language="languages.{{ language }}"&gt;&lt;/datepicker&gt;
+        &lt;datepicker :language="$datepickerLocals.{{ language }}"&gt;&lt;/datepicker&gt;
       </code>
       <div class="settings">
         <h5>Settings</h5>
         <select v-model="language">
           <option
-            v-for="(language, key) in languages"
+            v-for="(language, key) in $datepickerLocals"
             :key="key"
             :value="key"
           >
@@ -26,14 +26,8 @@
 </template>
 
 <script>
-import * as lang from '../../../dist/locale'
-import Datepicker from '../../../dist/vuejs-datepicker'
-
 export default {
   name: 'Language',
-  components: {
-    Datepicker,
-  },
   data() {
     return {
       languages: lang,
