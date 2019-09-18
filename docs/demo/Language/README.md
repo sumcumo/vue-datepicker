@@ -1,0 +1,6 @@
+# Languages
+
+<ClientOnly>
+  <language />
+</ClientOnly>
+

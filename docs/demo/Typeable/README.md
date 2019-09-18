@@ -1,0 +1,5 @@
+# Typeable
+
+<ClientOnly>
+  <typeable />
+</ClientOnly>

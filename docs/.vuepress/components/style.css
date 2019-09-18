@@ -1,0 +1,40 @@
+@import '../../../dist/vuejs-datepicker.css';
+
+.example input, .example select {
+  padding: .75em .5em;
+  font-size: 100%;
+  border: 1px solid #cccccc;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.example select {
+  height: 2.5em;
+}
+
+.example {
+  padding: 0 0 1em;
+  margin-bottom: 2em;
+}
+
+.settings {
+  margin: 2em 0;
+  background: #eeeeee;
+}
+
+.form-group {
+  margin-bottom: 1em;
+}
+
+.form-group label {
+  font-size: 80%;
+  display: block;
+}
+
+.example pre {
+  color: #ffffff;
+}
+
+.error {
+  color: red;
+}

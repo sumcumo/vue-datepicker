@@ -1,0 +1,5 @@
+# Formatting
+
+<ClientOnly>
+  <formatting />
+</ClientOnly>

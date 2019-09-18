@@ -1,0 +1,157 @@
+<template>
+  <div>
+    <slot name="beforeCalendarHeaderMonth" />
+    <PickerHeader
+      :config="headerConfig"
+      :next="nextYear"
+      :previous="previousYear"
+    >
+      <span
+        slot="headerContent"
+        :class="allowedToShowView('year') ? 'up' : ''"
+        class="month__year_btn"
+        @click="showPickerCalendar('year')"
+      >
+        {{ pageYearName }}
+      </span>
+      <slot
+        slot="nextIntervalBtn"
+        name="nextIntervalBtn"
+      />
+      <slot
+        slot="prevIntervalBtn"
+        name="prevIntervalBtn"
+      />
+    </PickerHeader>
+    <span
+      v-for="month in months"
+      :key="month.timestamp"
+      :class="{'selected': month.isSelected, 'disabled': month.isDisabled}"
+      class="cell month"
+      @click.stop="selectMonth(month)"
+    >
+      {{ month.month }}
+    </span>
+    <slot name="calendarFooterMonth" />
+  </div>
+</template>
+<script>
+import pickerMixin from '~/mixins/pickerMixin'
+import { isMonthDisabled } from '~/utils/DisabledDatesUtils'
+
+export default {
+  mixins: [
+    pickerMixin,
+  ],
+  computed: {
+    /**
+     * set an object with all months
+     * @return {Object[]}
+     */
+    months() {
+      const d = this.pageDate
+      const months = []
+      // set up a new date object to the beginning of the current 'page'
+      const dObj = this.useUtc
+        ? new Date(Date.UTC(d.getUTCFullYear(), 0, d.getUTCDate()))
+        : new Date(d.getFullYear(), 0, d.getDate(), d.getHours(), d.getMinutes())
+      for (let i = 0; i < 12; i += 1) {
+        months.push({
+          month: this.utils.getMonthName(i, this.translation.months),
+          timestamp: dObj.getTime(),
+          isSelected: this.isSelectedMonth(dObj),
+          isDisabled: this.isDisabledMonth(dObj),
+        })
+        this.utils.setMonth(dObj, this.utils.getMonth(dObj) + 1)
+      }
+      return months
+    },
+    /**
+     * Get year name on current page.
+     * @return {String}
+     */
+    pageYearName() {
+      const { yearSuffix } = this.translation
+      return `${this.utils.getFullYear(this.pageDate)}${yearSuffix}`
+    },
+  },
+  methods: {
+    /**
+     * Emits a selectMonth event
+     * @param {Object} month
+     */
+    selectMonth(month) {
+      if (!month.isDisabled) {
+        this.$emit('select-month', month)
+        return true
+      }
+      return false
+    },
+    /**
+     * Changes the year up or down
+     * @param {Number} incrementBy
+     */
+    changeYear(incrementBy) {
+      const date = this.pageDate
+      this.utils.setFullYear(date, this.utils.getFullYear(date) + incrementBy)
+      this.$emit('changed-year', date)
+    },
+    /**
+     * Decrements the year
+     */
+    previousYear() {
+      if (!this.isPreviousDisabled()) {
+        this.changeYear(-1)
+      }
+    },
+    /**
+     * Checks if the previous year is disabled or not
+     * @return {Boolean}
+     */
+    isPreviousDisabled() {
+      if (!this.disabledDates || !this.disabledDates.to) {
+        return false
+      }
+      return this.utils.getFullYear(this.disabledDates.to) >= this.utils.getFullYear(this.pageDate)
+    },
+    /**
+     * Increments the year
+     */
+    nextYear() {
+      if (!this.isNextDisabled()) {
+        this.changeYear(1)
+      }
+    },
+    /**
+     * Checks if the next year is disabled or not
+     * @return {Boolean}
+     */
+    isNextDisabled() {
+      if (!this.disabledDates || !this.disabledDates.from) {
+        return false
+      }
+      return this.utils.getFullYear(
+        this.disabledDates.from,
+      ) <= this.utils.getFullYear(this.pageDate)
+    },
+    /**
+     * Whether the selected date is in this month
+     * @param {Date}
+     * @return {Boolean}
+     */
+    isSelectedMonth(date) {
+      return (this.selectedDate
+        && this.utils.getFullYear(this.selectedDate) === this.utils.getFullYear(date)
+        && this.utils.getMonth(this.selectedDate) === this.utils.getMonth(date))
+    },
+    /**
+     * Whether a month is disabled
+     * @param {Date}
+     * @return {Boolean}
+     */
+    isDisabledMonth(date) {
+      return isMonthDisabled(date, this.disabledDates, this.utils)
+    },
+  },
+}
+</script>
