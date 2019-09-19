@@ -30,7 +30,6 @@ export default {
   name: 'Language',
   data() {
     return {
-      languages: lang,
       language: 'en',
     }
   },

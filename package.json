@@ -35,7 +35,7 @@
     "release": "standard-version",
     "prerelease": "standard-version --dry-run",
     "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs --debug"
+    "docs:build": "vuepress build docs"
   },
   "standard-version": {
     "message": "chore(release): %s"
@@ -95,6 +95,6 @@
     "vue-jest": "3.0.5",
     "vue-server-renderer": "2.6.10",
     "vue-template-compiler": "2.6.10",
-    "vuepress": "1.0.2"
+    "vuepress": "1.1.0"
   }
 }
