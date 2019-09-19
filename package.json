@@ -95,6 +95,6 @@
     "vue-jest": "3.0.5",
     "vue-server-renderer": "2.6.10",
     "vue-template-compiler": "2.6.10",
-    "vuepress": "1.0.4"
+    "vuepress": "1.0.2"
   }
 }
