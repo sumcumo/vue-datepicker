@@ -41,7 +41,7 @@ Vue.directive("cleave", {
 </script>
 ```
 
-## [vee-validate](https://github.com/baianat/vee-validate)
+## [vee-validate](https://github.com/baianat/vee-validate) 2.x.x
 
 For input validation.
 You can use `v-validate` with `:input-class="fields[name]"` to add validation classes to the input field.

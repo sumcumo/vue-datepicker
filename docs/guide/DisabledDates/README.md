@@ -81,13 +81,13 @@ var state = {
   }
 }
 ```
-The dates between 2016-12-24 - 2016-12-31 and 2017-02-11 - 2017-03-26
+The dates between 2016-12-24 - 2016-12-31 and 2017-02-11 - 2017-03-26 are disabled
 
 ## Disable after own logic
-A custom function that returns true if the date is disabled
-this can be used for writing your own logic to disable a date if none
-of the above conditions serve your purpose
-this function should accept a date and return true if it is disabled
+A custom function that returns true if the date is disabled.
+This can be used for writing your own logic to disable a date if none
+of the above conditions serve your purpose.
+This function should accept a date and return true if it is disabled
 ```js
 var state = {
   disabledDates: {
