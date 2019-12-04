@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="picker-view">
     <slot name="beforeCalendarHeaderDay" />
     <PickerHeader
       :config="headerConfig"
