@@ -8,11 +8,11 @@ To view demo examples locally, clone the repo and run `npm run install && npm ru
 
 #### npm:
 
-`npm install @sumcumo/vue-datepicker --save`
+`npm install @sum.cumo/vue-datepicker --save`
 
 #### yarn:
 
-`yarn add @sumcumo/vue-datepicker`
+`yarn add @sum.cumo/vue-datepicker`
 
 #### old school:
 
@@ -26,7 +26,7 @@ Download the latest release from github
 </template>
 
 <script>
-import DatePicker from '@sumcumo/vue-datepicker'
+import DatePicker from '@sum.cumo/vue-datepicker'
 
 export default {
   name: 'Example',
@@ -42,6 +42,6 @@ export default {
 </script>
 
 <style>
-@import '@sumcumo/vue-datepicker/dist/vuejs-datepicker.css'
+@import '@sum.cumo/vue-datepicker/dist/vuejs-datepicker.css'
 </style>
 ```

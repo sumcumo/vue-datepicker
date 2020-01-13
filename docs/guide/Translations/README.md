@@ -7,8 +7,8 @@ You can import only the translations that you need
   <datepicker :language="en"></datepicker>
 </template>
 <script>
-  import {en} from '@sumcumo/vue-datepicker/dist/locale'
-  
+  import {en} from '@sum.cumo/vue-datepicker/dist/locale'
+
   export default {
     data () {
         return {

@@ -67,7 +67,7 @@ But the touched event needs to be set manually.
 </template>
 
 <script>
-import DatePicker from "@sumcumo/vue-datepicker";
+import DatePicker from "@sum.cumo/vue-datepicker";
 
 // export component
 export default {
