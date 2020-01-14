@@ -27,6 +27,7 @@ Download the latest release from github
 
 <script>
 import DatePicker from '@sum.cumo/vue-datepicker'
+import '@sum.cumo/vue-datepicker/dist/vuejs-datepicker.css'
 
 export default {
   name: 'Example',
@@ -40,8 +41,20 @@ export default {
   }
 }
 </script>
+```
 
+To load the CSS you can import it inside the script tag like above.
+Another option is to use webpacks [css-loader](https://webpack.js.org/loaders/css-loader/)
+```
 <style>
-@import '@sum.cumo/vue-datepicker/dist/vuejs-datepicker.css'
+@import '~@sum.cumo/vue-datepicker/dist/vuejs-datepicker.css';
+</style>
+```
+
+If you use [SASS](https://sass-lang.com/) you can directly import the src file.
+
+```
+<style lang="scss">
+@import '~@sumcumo/vue-datepicker/src/styles/style.scss';
 </style>
 ```
