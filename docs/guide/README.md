@@ -45,7 +45,7 @@ export default {
 
 To load the CSS you can import it inside the script tag like above.
 Another option is to use webpacks [css-loader](https://webpack.js.org/loaders/css-loader/)
-```
+```vue
 <style>
 @import '~@sum.cumo/vue-datepicker/dist/vuejs-datepicker.css';
 </style>
@@ -53,7 +53,7 @@ Another option is to use webpacks [css-loader](https://webpack.js.org/loaders/cs
 
 If you use [SASS](https://sass-lang.com/) you can directly import the src file.
 
-```
+```vue
 <style lang="scss">
 @import '~@sumcumo/vue-datepicker/src/styles/style.scss';
 </style>
