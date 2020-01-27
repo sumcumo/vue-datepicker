@@ -119,7 +119,7 @@
       <h3>With Button</h3>
       <Datepicker
         :calendar-button="true"
-        :show-calendar-on-button="true"
+        :show-calendar-on-button-click="true"
       />
       <code>
         &lt;datepicker :calendar-button="true" :show-calendar-on-button="true"&gt;&lt;/datepicker&gt;
