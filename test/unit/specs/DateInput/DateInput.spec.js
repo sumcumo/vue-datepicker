@@ -117,4 +117,15 @@ describe('DateInput', () => {
     wrapper.find('input').trigger('focus')
     expect(wrapper.emitted('show-calendar')).toBeTruthy()
   })
+
+  it('should open the calendar only on calendar button click', () => {
+    wrapper.setProps({
+      calendarButton: true,
+      showCalendarOnButtonClick: true,
+    })
+    wrapper.find('input').trigger('click')
+    expect(wrapper.emitted('show-calendar')).toBeFalsy()
+    wrapper.find('.vdp-datepicker__calendar-button').trigger('click')
+    expect(wrapper.emitted('show-calendar')).toBeTruthy()
+  })
 })

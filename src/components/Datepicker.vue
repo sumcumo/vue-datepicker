@@ -27,6 +27,7 @@
       :use-utc="useUtc"
       :show-calendar-on-focus="showCalendarOnFocus"
       :tabindex="tabindex"
+      :show-calendar-on-button-click="showCalendarOnButtonClick"
       @show-calendar="showCalendar"
       @close-calendar="close(true)"
       @typed-date="setTypedDate"

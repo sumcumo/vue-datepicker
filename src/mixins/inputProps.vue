@@ -100,6 +100,10 @@ export default ({
       type: Boolean,
       default: false,
     },
+    showCalendarOnButtonClick: {
+      type: Boolean,
+      default: false,
+    },
   },
 })
 </script>

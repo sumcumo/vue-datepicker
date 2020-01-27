@@ -13,7 +13,7 @@
       <Datepicker
         v-model="vModelExample"
         placeholder="Select Date"
-      ></Datepicker>
+      />
       <div class="coding">
         <code>
           &lt;datepicker placeholder="Select Date" v-model="vmodelexample"&gt;&lt;/datepicker&gt;
@@ -25,7 +25,7 @@
 
     <div class="example">
       <h3>With default open date</h3>
-      <Datepicker :open-date="openDate"></Datepicker>
+      <Datepicker :open-date="openDate"/>
       <code>
         &lt;datepicker :disabled="disabled"&gt;&lt;/datepicker&gt;
       </code>
@@ -33,7 +33,7 @@
         <h5>Settings</h5>
         <div class="form-group">
           <label>Open date:</label>
-          <Datepicker v-model="openDate"></Datepicker>
+          <Datepicker v-model="openDate"/>
         </div>
         <pre>openDate: {{ openDate }}</pre>
       </div>
@@ -41,14 +41,14 @@
 
     <div class="example">
       <h3>Inline datepicker</h3>
-      <Datepicker :inline="true"></Datepicker>
+      <Datepicker :inline="true"/>
       <code>
         &lt;datepicker :inline="true"&gt;&lt;/datepicker&gt;
       </code>
     </div>
     <div class="example">
       <h3>RTL datepicker</h3>
-      <Datepicker :language="$datepickerLocals.he"></Datepicker>
+      <Datepicker :language="$datepickerLocals.he"/>
       <code>
         &lt;datepicker :language="$datepickerLocals.he"&gt;&lt;/datepicker&gt;
       </code>
@@ -59,7 +59,7 @@
       <Datepicker
         :minimum-view="'day'"
         :maximum-view="'day'"
-      ></Datepicker>
+      />
       <code>
         &lt;datepicker :minimumView="'day'" :maximumView="'day'"&gt;&lt;/datepicker&gt;
       </code>
@@ -71,7 +71,7 @@
         :minimum-view="'day'"
         :maximum-view="'day'"
         :language="$datepickerLocals.he"
-      ></Datepicker>
+      />
       <code>
         &lt;datepicker :minimumView="'day'" :maximumView="'day'"
         language="$datepickerLocals.he"&gt;&lt;/datepicker&gt;
@@ -83,7 +83,7 @@
       <Datepicker
         :minimum-view="'month'"
         :maximum-view="'month'"
-      ></Datepicker>
+      />
       <code>
         &lt;datepicker :minimumView="'month'" :maximumView="'month'"&gt;&lt;/datepicker&gt;
       </code>
@@ -95,7 +95,7 @@
         :minimum-view="'day'"
         :maximum-view="'month'"
         :initial-view="'month'"
-      ></Datepicker>
+      />
       <code>
         &lt;datepicker :minimumView="'day'" :maximumView="'month'"
         :initialView="'month'"&gt;&lt;/datepicker&gt;
@@ -108,10 +108,21 @@
         :minimum-view="'month'"
         :maximum-view="'year'"
         :initial-view="'year'"
-      ></Datepicker>
+      />
       <code>
         &lt;datepicker :minimumView="'month'" :maximumView="'year'"
         :initialView="'year'"&gt;&lt;/datepicker&gt;
+      </code>
+    </div>
+
+    <div class="example">
+      <h3>With Button</h3>
+      <Datepicker
+        :calendar-button="true"
+        :show-calendar-on-button="true"
+      />
+      <code>
+        &lt;datepicker :calendar-button="true" :show-calendar-on-button="true"&gt;&lt;/datepicker&gt;
       </code>
     </div>
   </div>

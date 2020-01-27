@@ -7,7 +7,7 @@
       :class="{'input-group-prepend' : bootstrapStyling}"
       :style="{'cursor:not-allowed;' : disabled}"
       class="vdp-datepicker__calendar-button"
-      @click="showCalendar"
+      @click="showCalendar(true)"
     >
       <span :class="{'input-group-text' : bootstrapStyling}">
         <i :class="calendarButtonIcon">
@@ -34,7 +34,7 @@
       :readonly="!typeable"
       :tabindex="tabindex"
       autocomplete="off"
-      @click="showCalendar"
+      @click="showCalendar(false)"
       @focus="showFocusCalendar"
       @keyup="parseTypedDate"
       @blur="inputBlurred"
@@ -124,10 +124,19 @@ export default {
     this.input = this.$el.querySelector('input')
   },
   methods: {
-    showCalendar() {
+    showCalendar(isButton) {
       // prevent to emit the event twice if we are listening focus
       if (!this.showCalendarOnFocus) {
-        this.$emit('show-calendar')
+        if (
+          !this.showCalendarOnButtonClick
+          || (
+            this.showCalendarOnButtonClick
+            && this.calendarButton
+            && isButton
+          )
+        ) {
+          this.$emit('show-calendar')
+        }
       }
     },
     showFocusCalendar() {
