@@ -2,7 +2,7 @@
   <div>
     <div class="example">
       <h3>With minimum and maximum date range</h3>
-      <Datepicker :disabled-dates="disabledDates"></Datepicker>
+      <Datepicker :disabled-dates="disabledDates"/>
       <code>
         &lt;datepicker :disabledDates="disabledDates"&gt;&lt;/datepicker&gt;
       </code>
@@ -10,11 +10,11 @@
         <h5>Settings</h5>
         <div class="form-group">
           <label>Disabled to:</label>
-          <Datepicker @selected="disableTo"></Datepicker>
+          <Datepicker @selected="disableTo"/>
         </div>
         <div class="form-group">
           <label>Disabled from:</label>
-          <Datepicker @selected="disableFrom"></Datepicker>
+          <Datepicker @selected="disableFrom"/>
         </div>
         <div class="form-group">
           <label>Disabled Days of Month:</label>
@@ -31,7 +31,7 @@
 
     <div class="example">
       <h3>Disabled dates</h3>
-      <Datepicker :disabled-dates="disabledFn"></Datepicker>
+      <Datepicker :disabled-dates="disabledFn"/>
       <code>
         &lt;datepicker :disabled-dates="disabledFn"&gt;&lt;/datepicker&gt;
       </code>
@@ -83,10 +83,8 @@ export default {
             return true
           }
           // disable first half of the month when it is a multiple of 2
-          if (month % 2 !== 0 && day < 15) {
-            return true
-          }
-          return false
+          return month % 2 !== 0 && day < 15;
+
         },
       },
       disabledFnContent: ``,

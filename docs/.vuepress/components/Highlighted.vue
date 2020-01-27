@@ -2,7 +2,7 @@
   <div>
     <div class="example">
       <h3>Highlighting Dates</h3>
-      <Datepicker :highlighted="highlighted"></Datepicker>
+      <Datepicker :highlighted="highlighted"/>
 
       <code>
         &lt;datepicker :highlighted="highlighted"&gt;&lt;/datepicker&gt;
@@ -11,11 +11,11 @@
         <h5>Settings</h5>
         <div class="form-group">
           <label>Highlight from:</label>
-          <Datepicker @selected="highlightFrom"></Datepicker>
+          <Datepicker @selected="highlightFrom"/>
         </div>
         <div class="form-group">
           <label>Highlight to:</label>
-          <Datepicker @selected="highlightTo"></Datepicker>
+          <Datepicker @selected="highlightTo"/>
         </div>
         <div class="form-group">
           <label>Highlight Days of Month:</label>
@@ -31,7 +31,7 @@
 
     <div class="example">
       <h3>Highlighting Dates Matching Given Function</h3>
-      <Datepicker :highlighted="highlightedFn"></Datepicker>
+      <Datepicker :highlighted="highlightedFn"/>
       <code>
         &lt;datepicker :highlighted="highlightedFn"&gt;&lt;/datepicker&gt;
       </code>
@@ -59,10 +59,8 @@ export default {
     return {
       highlightedFn: {
         customPredictor(date) {
-          if (date.getDate() % 4 === 0) {
-            return true
-          }
-          return false
+          return date.getDate() % 4 === 0;
+
         },
       },
       highlighted: {},

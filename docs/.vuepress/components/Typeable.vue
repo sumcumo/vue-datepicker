@@ -13,7 +13,7 @@
       <Format
         @selected="selected"
         :format-init="format"
-      ></Format>
+      />
     </div>
   </div>
 </template>

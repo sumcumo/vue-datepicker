@@ -1,6 +1,6 @@
 <template>
   <div class="example">
-    <Datepicker :format="format"></Datepicker>
+    <Datepicker :format="format"/>
     <code>
       &lt;datepicker :format="format"&gt;&lt;/datepicker&gt;
     </code>
@@ -9,7 +9,7 @@
       <Format
         @selected="selected"
         :format-init="format"
-      ></Format>
+      />
     </div>
   </div>
 </template>
