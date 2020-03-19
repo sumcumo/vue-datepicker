@@ -11,11 +11,17 @@
         :format-init="format"
       />
     </div>
+
+    <Datepicker :format="customFormatter" :typeable="true"/>
+    <code>
+      &lt;datepicker :format="format"&gt;&lt;/datepicker&gt;
+    </code>
   </div>
 </template>
 
 <script>
 import Format from '../../../docs/.vuepress/components/Formats'
+import { format } from "date-fns";
 
 export default {
   name: 'Formatting',
@@ -31,6 +37,9 @@ export default {
     selected(newVal) {
       this.format = newVal
     },
+    customFormatter(date) {
+      return format(new Date(date), "dd.MM.yyyy");
+    }
   },
 }
 </script>

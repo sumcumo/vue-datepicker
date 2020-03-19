@@ -196,6 +196,9 @@ export default {
       if (!(dateStr && formatStr)) {
         return dateStr
       }
+      if (typeof formatStr === 'function') {
+        return formatStr(dateStr)
+      }
       const splitter = formatStr.match(/-|\/|\s|\./) || ['-']
       const df = formatStr.split(splitter[0])
       const ds = dateStr.split(splitter[0])

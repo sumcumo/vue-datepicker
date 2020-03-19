@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
+import { format } from 'date-fns'
 import DateInput from '~/components/DateInput'
 import { en } from '~/locale'
 
@@ -67,6 +68,22 @@ describe('DateInput', () => {
       selectedDate: new Date(dateString),
       typeable: true,
       format: 'dd MM yyyy',
+    })
+    const input = wrapper.find('input')
+    wrapper.vm.input.value = dateString
+    expect(wrapper.vm.input.value).toEqual(dateString)
+    input.trigger('keyup')
+    expect(wrapper.vm.formattedValue).toEqual(dateString)
+  })
+
+  it('allows function format', () => {
+    const dateString = '2018-08-12'
+    wrapper.setProps({
+      selectedDate: new Date(dateString),
+      typeable: true,
+      format(date) {
+        return format(new Date(date), 'dd-MM-yyyy')
+      },
     })
     const input = wrapper.find('input')
     wrapper.vm.input.value = dateString

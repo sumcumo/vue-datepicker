@@ -22,16 +22,19 @@ NB. This is not very robust at all - use at your own risk! Needs a better implem
 Delegates date formatting to provided function.
 Function will be called with date and it has to return the formatted date as a string.
 This allow us to use moment, date-fns, globalize or any other library to format date.
+Be aware of the fact that if you use a typeable datepicker the formatting function will be
+triggered on every input change.
 
 ```vue
 <template>
   <DatePicker :format="customFormatter"></DatePicker>
 </template>
 <script>
+import { format } from "date-fns";
 export default {
   methods: {
      customFormatter(date) {
-       return moment(date).format('MMMM Do YYYY, h:mm:ss a');
+       return format(new Date(date), "dd-MM-yyyy");
      }
   }
 }
