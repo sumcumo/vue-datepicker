@@ -122,7 +122,7 @@
         :show-calendar-on-button-click="true"
       />
       <code>
-        &lt;datepicker :calendar-button="true" :show-calendar-on-button="true"&gt;&lt;/datepicker&gt;
+        &lt;datepicker :calendar-button="true" :show-calendar-on-button-click="true"&gt;&lt;/datepicker&gt;
       </code>
     </div>
   </div>
