@@ -40,6 +40,7 @@ import pickerMixin from '~/mixins/pickerMixin'
 import { isMonthDisabled } from '~/utils/DisabledDatesUtils'
 
 export default {
+  name: 'DatepickerMonthView',
   mixins: [
     pickerMixin,
   ],

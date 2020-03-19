@@ -57,6 +57,7 @@ import pickerMixin from '~/mixins/pickerMixin'
 import { isDateDisabled } from '~/utils/DisabledDatesUtils'
 
 export default {
+  name: 'DatepickerDayView',
   mixins: [
     pickerMixin,
   ],

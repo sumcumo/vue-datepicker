@@ -130,6 +130,7 @@ import PickerYear from '~/components/PickerYear'
 import inputProps from '~/mixins/inputProps'
 
 export default {
+  name: 'Datepicker',
   components: {
     DateInput,
     PickerDay,

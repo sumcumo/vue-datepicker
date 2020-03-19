@@ -24,6 +24,7 @@
 
 <script>
 export default {
+  name: 'DatepickerHeader',
   props: {
     config: {
       type: Object,

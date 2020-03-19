@@ -62,6 +62,7 @@ import { makeDateUtils } from '~/utils/DateUtils'
 import inputProps from '~/mixins/inputProps'
 
 export default {
+  name: 'DatepickerInput',
   mixins: [
     inputProps,
   ],

@@ -36,6 +36,7 @@ import pickerMixin from '~/mixins/pickerMixin'
 import { isYearDisabled } from '~/utils/DisabledDatesUtils'
 
 export default {
+  name: 'DatepickerYearView',
   mixins: [
     pickerMixin,
   ],
