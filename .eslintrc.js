@@ -37,17 +37,6 @@ module.exports = {
       },
     ],
     'import/no-extraneous-dependencies': 'off',
-    'no-restricted-imports': [
-      'error',
-      {
-        'paths': [
-          {
-            'name': 'date-fns',
-            'message': 'Please import functions from files for smaller bundle size.',
-          },
-        ],
-      },
-    ],
     'semi': [
       'error',
       'never',
