@@ -14,7 +14,7 @@ export default ({
     },
     name: {
       type: String,
-      default: '',
+      default: null,
     },
     refName: {
       type: String,
@@ -35,14 +35,14 @@ export default ({
     },
     placeholder: {
       type: String,
-      default: '',
+      default: null,
     },
     tabindex: {
       type: [
         Number,
         String,
       ],
-      default: '',
+      default: null,
     },
     inline: {
       type: Boolean,
@@ -54,7 +54,7 @@ export default ({
         Object,
         Array,
       ],
-      default: '',
+      default: null,
     },
     clearButton: {
       type: Boolean,
