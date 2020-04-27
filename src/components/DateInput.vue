@@ -152,11 +152,12 @@ export default {
      * @param {Event} event
      */
     parseTypedDate(event) {
+      const code = (event.keyCode ? event.keyCode : event.which)
       // close calendar if escape or enter are pressed
       if ([
         27, // escape
         13, // enter
-      ].indexOf(event.keyCode) !== -1) {
+      ].indexOf(code) !== -1) {
         this.input.blur()
       }
 
