@@ -25,6 +25,7 @@ describe('Datepicker mounted', () => {
       height: 10,
     }))
     wrapper.vm.showCalendar()
+    await wrapper.vm.$nextTick()
     wrapper.vm.$refs.datepicker.getBoundingClientRect = getBoundingClientRect
     wrapper.vm.$refs.datepicker.parentElement.getBoundingClientRect = getBoundingClientRect
     const calendar = wrapper.vm.$refs.datepicker

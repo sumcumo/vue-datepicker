@@ -30,10 +30,11 @@ describe('DateInput', () => {
     expect(wrapper.findAll('input')).toHaveLength(1)
   })
 
-  it('nulls date', () => {
+  it('nulls date', async () => {
     wrapper.setProps({
       selectedDate: null,
     })
+    await wrapper.vm.$nextTick()
     expect(wrapper.vm.formattedValue).toBeNull()
     expect(wrapper.find('input').element.value).toEqual('')
   })
@@ -43,41 +44,48 @@ describe('DateInput', () => {
     expect(wrapper.find('input').element.value).toEqual('24 Mar 2018')
   })
 
-  it('delegates date formatting', () => {
+  it('delegates date formatting', async () => {
     wrapper.setProps({
       selectedDate: new Date(2016, 1, 15),
       format: () => '2016/1/15',
     })
+    await wrapper.vm.$nextTick()
     expect(wrapper.vm.formattedValue).toEqual('2016/1/15')
     expect(wrapper.find('input').element.value).toEqual('2016/1/15')
   })
 
-  it('emits showCalendar', () => {
+  it('emits showCalendar', async () => {
     wrapper.setProps({
       showCalendarOnFocus: true,
     })
+
+    await wrapper.vm.$nextTick()
     wrapper.vm.showCalendar()
     expect(wrapper.emitted('show-calendar')).toBeFalsy()
 
     wrapper.setProps({
       showCalendarOnFocus: false,
     })
+
+    await wrapper.vm.$nextTick()
     wrapper.vm.showCalendar()
     expect(wrapper.emitted('show-calendar')).toBeTruthy()
   })
 
-  it('adds bootstrap classes', () => {
+  it('adds bootstrap classes', async () => {
     wrapper.setProps({
       bootstrapStyling: true,
     })
+    await wrapper.vm.$nextTick()
     expect(wrapper.find('input').element.classList).toContain('form-control')
   })
 
-  it('appends bootstrap classes', () => {
+  it('appends bootstrap classes', async () => {
     wrapper.setProps({
       inputClass: 'someClass',
       bootstrapStyling: true,
     })
+    await wrapper.vm.$nextTick()
     expect(wrapper.find('input').element.classList).toContain('form-control')
     expect(wrapper.find('input').element.classList).toContain('someClass')
 
@@ -85,21 +93,24 @@ describe('DateInput', () => {
       inputClass: { someClass: true },
       bootstrapStyling: true,
     })
+    await wrapper.vm.$nextTick()
     expect(wrapper.find('input').element.classList).toContain('form-control')
     expect(wrapper.find('input').element.classList).toContain('someClass')
   })
 
-  it('can be disabled', () => {
+  it('can be disabled', async() => {
     wrapper.setProps({
       disabled: true,
     })
+    await wrapper.vm.$nextTick()
     expect(wrapper.find('input').attributes().disabled).toBeDefined()
   })
 
-  it('accepts a function as a formatter', () => {
+  it('accepts a function as a formatter', async () => {
     wrapper.setProps({
       format: () => '!',
     })
+    await wrapper.vm.$nextTick()
     expect(wrapper.find('input').element.value).toEqual('!')
   })
 
@@ -108,21 +119,23 @@ describe('DateInput', () => {
     expect(wrapper.emitted('close-calendar')).toBeTruthy()
   })
 
-  it('should open the calendar on focus', () => {
+  it('should open the calendar on focus', async () => {
     wrapper.find('input').trigger('focus')
     expect(wrapper.emitted('show-calendar')).toBeFalsy()
     wrapper.setProps({
       showCalendarOnFocus: true,
     })
+    await wrapper.vm.$nextTick()
     wrapper.find('input').trigger('focus')
     expect(wrapper.emitted('show-calendar')).toBeTruthy()
   })
 
-  it('should open the calendar only on calendar button click', () => {
+  it('should open the calendar only on calendar button click', async () => {
     wrapper.setProps({
       calendarButton: true,
       showCalendarOnButtonClick: true,
     })
+    await wrapper.vm.$nextTick()
     wrapper.find('input').trigger('click')
     expect(wrapper.emitted('show-calendar')).toBeFalsy()
     wrapper.find('.vdp-datepicker__calendar-button').trigger('click')

@@ -91,7 +91,7 @@ describe('Datepicker with restricted views', () => {
     }).toThrow()
   })
 
-  it('should not render unused views', () => {
+  it('should not render unused views', async () => {
     wrapper = mount(Datepicker, {
       propsData: {
         minimumView: 'day',
@@ -99,6 +99,7 @@ describe('Datepicker with restricted views', () => {
       },
     })
     wrapper.vm.showCalendar()
+    await wrapper.vm.$nextTick()
     expect(wrapper.vm.$el.querySelectorAll('.vdp-datepicker__calendar').length).toEqual(1)
     expect(wrapper.vm.$el.querySelectorAll('.vdp-datepicker__calendar .cell.day').length)
       .toBeGreaterThan(0)
@@ -117,6 +118,7 @@ describe('Datepicker with restricted views', () => {
       },
     })
     wrapper.vm.showCalendar()
+    await wrapper.vm.$nextTick()
     expect(wrapper.vm.$el.querySelectorAll('.vdp-datepicker__calendar').length).toEqual(1)
     expect(wrapper.vm.$el.querySelectorAll('.vdp-datepicker__calendar .cell.day').length)
       .toEqual(0)
