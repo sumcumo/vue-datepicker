@@ -98,7 +98,7 @@ describe('DateInput', () => {
     expect(wrapper.find('input').element.classList).toContain('someClass')
   })
 
-  it('can be disabled', async() => {
+  it('can be disabled', async () => {
     wrapper.setProps({
       disabled: true,
     })
