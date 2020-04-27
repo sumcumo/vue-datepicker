@@ -30,7 +30,7 @@ describe('PickerHeader mounted', () => {
     wrapper.destroy()
   })
 
-  it('should use `isLeftNavDisabled` correctly', () => {
+  it('should use `isLeftNavDisabled` correctly', async () => {
     const spyPrevious = jest.spyOn(wrapper.vm.config, 'isPreviousDisabled')
     const spyNext = jest.spyOn(wrapper.vm.config, 'isNextDisabled')
     expect(wrapper.vm.isLeftNavDisabled).toBeFalsy()
@@ -46,11 +46,12 @@ describe('PickerHeader mounted', () => {
         },
       },
     })
+    await wrapper.vm.$nextTick()
     expect(wrapper.vm.isLeftNavDisabled).toBeFalsy()
     expect(spyNext).toHaveBeenCalled()
   })
 
-  it('should use `isRightNavDisabled` correctly', () => {
+  it('should use `isRightNavDisabled` correctly', async () => {
     const spyPrevious = jest.spyOn(wrapper.vm.config, 'isPreviousDisabled')
     const spyNext = jest.spyOn(wrapper.vm.config, 'isNextDisabled')
 
@@ -67,6 +68,7 @@ describe('PickerHeader mounted', () => {
         },
       },
     })
+    await wrapper.vm.$nextTick()
     expect(wrapper.vm.isRightNavDisabled).toBeFalsy()
     expect(spyPrevious).toHaveBeenCalled()
   })
