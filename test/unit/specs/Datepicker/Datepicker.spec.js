@@ -24,8 +24,37 @@ describe('Datepicker unmounted', () => {
     expect(defaultProps.fixedPosition.validator(true)).toBeFalsy()
   })
 })
-
 describe('Datepicker mounted', () => {
+  let wrapper
+  let date
+  beforeEach(() => {
+    date = new Date(2016, 1, 15)
+    wrapper = mount(Datepicker, {
+      propsData: {
+        format: 'yyyy-MM-dd',
+        value: date,
+      },
+    })
+  })
+
+  afterEach(() => {
+    wrapper.destroy()
+  })
+
+  it('should emit blur', () => {
+    const input = wrapper.find('input')
+    input.trigger('blur')
+    expect(wrapper.emitted().blur).toBeTruthy()
+  })
+
+  it('should emit focus', () => {
+    const input = wrapper.find('input')
+    input.trigger('focus')
+    expect(wrapper.emitted().focus).toBeTruthy()
+  })
+})
+
+describe('Datepicker shallowMounted', () => {
   let wrapper
   let date
   beforeEach(() => {
