@@ -26,7 +26,9 @@
   ],
   "scripts": {
     "prepare": "npm run clear && npm run build",
-    "build": "babel-node scripts/build.js && babel-node scripts/build-locale.js",
+    "build": "npm run build:app && npm run build:locale",
+    "build:app": "babel-node scripts/build.js",
+    "build:locale": "babel-node scripts/build-locale.js",
     "clear": "rm -rf dist/*",
     "audit": "npm audit --registry=https://registry.npmjs.org",
     "serve": "rollup -c scripts/serve.js --watch",
