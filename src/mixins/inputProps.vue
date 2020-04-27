@@ -8,6 +8,10 @@ export default ({
       ],
       default: 'dd MMM yyyy',
     },
+    parser: {
+      type: Function,
+      default: null,
+    },
     id: {
       type: String,
       default: null,

@@ -1,9 +1,5 @@
 <template>
   <div class="example">
-    <Datepicker :format="format"/>
-    <code>
-      &lt;datepicker :format="format"&gt;&lt;/datepicker&gt;
-    </code>
     <div class="settings">
       <h5>Settings</h5>
       <Format
@@ -11,17 +7,22 @@
         :format-init="format"
       />
     </div>
-
-    <Datepicker :format="customFormatter" :typeable="true"/>
+    <h3>Default formatter</h3>
+    <Datepicker :format="format"/>
     <code>
-      &lt;datepicker :format="format"&gt;&lt;/datepicker&gt;
+      &lt;Datepicker :format="format"/&gt;
+    </code>
+    <h3>Custom formatter</h3>
+    <Datepicker :format="customFormatter" :parser="customParser" :typeable="true"/>
+    <code>
+      &lt;Datepicker :format="customFormatter" :parser="customParser"/&gt;
     </code>
   </div>
 </template>
 
 <script>
 import Format from '../../../docs/.vuepress/components/Formats'
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 
 export default {
   name: 'Formatting',
@@ -38,7 +39,10 @@ export default {
       this.format = newVal
     },
     customFormatter(date) {
-      return format(new Date(date), "dd.MM.yyyy");
+      return format(date, this.format)
+    },
+    customParser(date) {
+      return parse(date, this.format, new Date())
     }
   },
 }
