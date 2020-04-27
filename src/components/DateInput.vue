@@ -99,7 +99,7 @@ export default {
         return this.typedDate
       }
       return typeof this.format === 'function'
-        ? this.format(this.selectedDate)
+        ? this.format(new Date(this.selectedDate))
         : this.utils.formatDate(new Date(this.selectedDate), this.format, this.translation)
     },
 
@@ -161,7 +161,7 @@ export default {
       }
 
       if (this.typeable) {
-        const parsableDate = this.parsableDate(this.input.value, this.format)
+        const parsableDate = this.parseDate(this.input.value)
         const parsedDate = Date.parse(parsableDate)
         if (!Number.isNaN(parsedDate)) {
           this.typedDate = this.input.value
@@ -174,7 +174,7 @@ export default {
      * called once the input is blurred
      */
     inputBlurred() {
-      const parsableDate = this.parsableDate(this.input.value, this.format)
+      const parsableDate = this.parseDate(this.input.value)
       if (this.typeable && Number.isNaN(Date.parse(parsableDate))) {
         this.clearDate()
         this.input.value = null
@@ -189,43 +189,13 @@ export default {
     clearDate() {
       this.$emit('clear-date')
     },
-    /**
-     * makes date parseable
-     * to use with international dates
-     */
-    parsableDate(dateStr, formatStr) {
-      if (!(dateStr && formatStr)) {
-        return dateStr
-      }
-      if (typeof formatStr === 'function') {
-        return formatStr(dateStr)
-      }
-      const splitter = formatStr.match(/-|\/|\s|\./) || ['-']
-      const df = formatStr.split(splitter[0])
-      const ds = dateStr.split(splitter[0])
-      const ymd = [
-        0,
-        0,
-        0,
-      ]
-      for (let i = 0; i < df.length; i += 1) {
-        if (/yyyy/i.test(df[i])) {
-          ymd[0] = ds[i]
-        } else if (/mm/i.test(df[i])) {
-          ymd[1] = ds[i]
-        } else if (/m/i.test(df[i])) {
-          ymd[1] = ds[i]
-        } else if (/dd/i.test(df[i])) {
-          ymd[2] = ds[i]
-        } else if (/d/i.test(df[i])) {
-          ymd[2] = ds[i]
-        }
-      }
-      const dat = `${ymd.join('-')}T00:00:00Z`
-      if (Number.isNaN(Date.parse(dat))) {
-        return dateStr
-      }
-      return dat
+    parseDate(value) {
+      return this.utils.parseDate(
+        value,
+        this.format,
+        this.translation,
+        this.parser,
+      )
     },
   },
 }
