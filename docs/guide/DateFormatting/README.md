@@ -8,8 +8,8 @@ NB. This is not very robust at all - use at your own risk! Needs a better implem
 |-------|------------------------|-------------|
 | d     | day                    | 1           |
 | dd    | 0 prefixed day         | 01          |
-| D     | abbr day               | Mon         |
-| su    | date suffix            | st, nd, rd  |
+| E     | abbr day               | Mon         |
+| o     | date suffix            | st, nd, rd  |
 | M     | month number (1 based) | 1 (for Jan) |
 | MM    | 0 prefixed month       | 01          |
 | MMM   | abbreviated month name | Jan         |

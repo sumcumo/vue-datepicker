@@ -34,12 +34,12 @@ export default {
           value: 'yyyy-MM-dd',
         },
         {
-          text: 'dsu MMM yyyy - e.g 12th Feb 2016',
-          value: 'dsu MMM yyyy',
+          text: 'do MMM yyyy - e.g 12th Feb 2016',
+          value: 'do MMM yyyy',
         },
         {
-          text: 'D dsu MMM yyyy - e.g Sat 12th Feb 2016',
-          value: 'D dsu MMM yyyy',
+          text: 'E do MMM yyyy - e.g Sat 12th Feb 2016',
+          value: 'E do MMM yyyy',
         },
         {
           text: 'dd.MM.yyyy - 20.12.2019',
