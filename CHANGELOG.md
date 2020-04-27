@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [2.0.0](https://github.com/sumcumo/vue-datepicker/compare/v1.1.1...v2.0.0) (2020-04-27)
 
+### Breaking changes
+The default formatter should now be more reliable but comes with a few changes:
+- The property `format` as a function now requires an additional property `parser` which handles the exact opposite check out the updated [documentation](https://sumcumo.github.io/vue-datepicker/guide/DateFormatting/#function-formatter)
+- The default formatting has slightly changes to match the formatting rules of other formatters like date-fns
+
+ `su` -> `o` for st, rd, nd, th additions
+
+ `D` -> `E` for the day of the week
+
 
 ### Features
 
