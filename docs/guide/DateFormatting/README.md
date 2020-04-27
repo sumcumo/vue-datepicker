@@ -24,19 +24,29 @@ Function will be called with date and it has to return the formatted date as a s
 This allow us to use moment, date-fns, globalize or any other library to format date.
 Be aware of the fact that if you use a typeable datepicker the formatting function will be
 triggered on every input change.
+The function formatter needs a custom parser to parse the formatted date back to date object.
 
+Here is an example for date-fns:
 ```vue
 <template>
-  <DatePicker :format="customFormatter"></DatePicker>
+  <DatePicker :format="customFormatter" :parser="customParser"></DatePicker>
 </template>
 <script>
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 export default {
-  methods: {
-     customFormatter(date) {
-       return format(new Date(date), "dd-MM-yyyy");
-     }
-  }
+  data() {
+      return {
+        format: 'dd.MM.yyyy',
+      }
+    },
+    methods: {
+      customFormatter(date) {
+        return format(date, this.format)
+      },
+      customParser(date) {
+        return parse(date, this.format, new Date())
+      }
+    },
 }
 </script>
 ```

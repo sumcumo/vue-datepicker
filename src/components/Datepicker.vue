@@ -8,6 +8,7 @@
       :selected-date="selectedDate"
       :reset-typed-date="resetTypedDate"
       :format="format"
+      :parser="parser"
       :translation="translation"
       :inline="inline"
       :name="name"
