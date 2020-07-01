@@ -2,7 +2,7 @@
 
 ## Demo
 
-To view demo examples locally, clone the repo and run `npm run install && npm run serve`
+To view demo examples locally, clone the repo and run `npm install && npm run serve`
 
 ## Install
 

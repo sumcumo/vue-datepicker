@@ -28,7 +28,7 @@ A datepicker Vue component. Compatible with Vue 2.x.
 ## [Demo](https://sumcumo.github.io/vue-datepicker/demo/)
 To view demo examples locally:
 - clone the repo
-- run `npm run install && npm run serve`
+- run `npm install && npm run serve`
 
 ## [Documentation](https://sumcumo.github.io/vue-datepicker/)
 
