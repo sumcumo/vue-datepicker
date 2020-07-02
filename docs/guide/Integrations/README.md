@@ -41,7 +41,10 @@ Vue.directive("cleave", {
 </script>
 ```
 
-## [vee-validate](https://github.com/baianat/vee-validate) 2.x.x
+## [vee-validate](https://github.com/logaretm/vee-validate) 2.x.x
+::: warning Version
+This integration only applies for vee-validate 2.x, and not the latest 3.x version! 
+:::
 
 For input validation.
 You can use `v-validate` with `:input-class="fields[name]"` to add validation classes to the input field.
@@ -69,7 +72,6 @@ But the touched event needs to be set manually.
 <script>
 import DatePicker from "@sum.cumo/vue-datepicker";
 
-// export component
 export default {
   name: "VeeValidate",
   components: {
