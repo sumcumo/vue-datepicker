@@ -10,8 +10,8 @@ on:
     branches: [ master ]
 
 jobs:
-  run-linters:
-    name: Run linters
+  run-linter:
+    name: Run linter
     runs-on: ubuntu-latest
 
     steps:
