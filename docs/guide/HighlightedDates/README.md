@@ -1,9 +1,10 @@
 # Highlighted Dates
-Dates can be highlighted (e.g. for marking an appointment) in a number of ways. 
-####Important:
+Dates can be highlighted (e.g. for marking an appointment) in a number of ways.
+
+::: tip IMPORTANT
 By default disabled dates are ignored, to highlight disabled dates set the `includeDisabled`
-property to `true`. Note: Both `to` and `from` properties are required to define a range of
-dates to highlight.
+property to `true`.
+:::
 
 ```vue
 <template>
@@ -41,7 +42,7 @@ var state = {
   }
 }
 ```
-Every Saturday and Sunday is highlighted 
+Every Saturday and Sunday is highlighted
 
 ## Highlight specific days of each month
 ```js
@@ -51,7 +52,7 @@ var state = {
   }
 }
 ```
-// Highlight 29th, 30th and 31st of each month
+Highlight 29th, 30th and 31st of each month
 
 ## Highlight specific days from an array
 ```js
@@ -71,13 +72,16 @@ Following dates are highlighted:
 2016-10-18
 
 ## Highlight in given ranges
+::: tip IMPORTANT
+Both `to` and `from` properties are required to define a range of dates to highlight.
+:::
 ```js
 var state = {
   highlighted: {
     ranges: [{
       from: new Date(2016, 11, 25),
       to: new Date(2016, 11, 30)
-    }, 
+    },
     {
       from: new Date(2017, 1, 12),
       to: new Date(2017, 2, 25)
@@ -88,10 +92,10 @@ var state = {
 The dates between 2016-12-24 - 2016-12-31 and 2017-02-11 - 2017-03-26 are highlighted
 
 ## Highlight after own logic
-A custom function that returns true if the date is highlighted.
+A custom function that returns `true` if the date is highlighted.
 This can be used for writing your own logic to highlight a date if none
 of the above conditions serve your purpose.
-This function should accept a date and return true if it is highlighted
+This function should accept a date and return `true` if it is highlighted
 ```js
 var state = {
   highlighted: {

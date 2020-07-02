@@ -46,6 +46,15 @@
         &lt;datepicker :inline="true"&gt;&lt;/datepicker&gt;
       </code>
     </div>
+
+    <div class="example">
+      <h3>Fixed position</h3>
+      <Datepicker :fixed-position="'top-right'"/>
+      <code>
+        &lt;datepicker :fixed-position="'top-right'"&gt;&lt;/datepicker&gt;
+      </code>
+    </div>
+
     <div class="example">
       <h3>RTL datepicker</h3>
       <Datepicker :language="$datepickerLocals.he"/>

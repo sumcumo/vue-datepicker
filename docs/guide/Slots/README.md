@@ -27,7 +27,7 @@ to show some custom text:
 ```html
 <DatePicker :bootstrap-styling="true">
   <div slot="calendarFooterMonth">
-    <button>Select all Month</button>
+    <button>Select all Months</button>
   </div>
 </DatePicker>
 ```
@@ -53,7 +53,7 @@ allows you to do that:
 ```html
 <DatePicker>
   <span slot="beforeDateInput">
-    <customIcon />
+    <CustomIcon />
   </span>
 </DatePicker>
 ```

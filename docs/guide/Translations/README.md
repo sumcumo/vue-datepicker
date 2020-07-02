@@ -4,16 +4,16 @@ You can import only the translations that you need
 
 ```vue
 <template>
-  <datepicker :language="en"></datepicker>
+  <DatePicker :language="en"></DatePicker>
 </template>
 <script>
   import { en } from '@sum.cumo/vue-datepicker/dist/locale'
 
   export default {
     data () {
-        return {
-          en: en,
-        }
+      return {
+        en: en,
+      }
     }
   }
 </script>
