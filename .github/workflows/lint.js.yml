@@ -1,5 +1,5 @@
 # This workflow will do a clean install of node dependencies and run eslint
-# For more information see: https://github.com/marketplace/actions/lint-action
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
 name: Lint
 
@@ -23,7 +23,6 @@ jobs:
         with:
           node-version: 12
 
-      # ESLint and Prettier must be in `package.json`
       - name: Install Node.js dependencies
         run: npm ci
 
