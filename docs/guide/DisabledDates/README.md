@@ -3,7 +3,7 @@ Dates can be disabled in a number of ways.
 
 ```vue
 <template>
-  <DatePicker :disabledDates="state.disabledDates"></DatePicker>
+  <DatePicker :disabled-dates="state.disabledDates"></DatePicker>
 </template>
 ```
 
@@ -47,7 +47,7 @@ var state = {
   }
 }
 ```
-// Disable 29th, 30th and 31st of each month
+Disable 29th, 30th and 31st of each month
 
 ## Disable specific days from an array
 ```js
