@@ -83,7 +83,7 @@
       <h3>With minimum and maximum date range</h3>
       <Datepicker :disabled-dates="disabledDates" />
       <code>
-        &lt;datepicker :disabledDates="disabledDates"&gt;&lt;/datepicker&gt;
+        &lt;datepicker :disabled-dates="disabledDates"&gt;&lt;/datepicker&gt;
       </code>
       <div class="settings">
         <h5>Settings</h5>
