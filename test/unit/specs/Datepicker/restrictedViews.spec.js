@@ -108,7 +108,6 @@ describe('Datepicker with restricted views', () => {
     expect(wrapper.vm.$el.querySelectorAll('.vdp-datepicker__calendar .cell.year').length)
       .toEqual(0)
 
-
     expect(wrapper.vm.showSpecificCalendar('Month')).toEqual(false)
 
     wrapper = mount(Datepicker, {
