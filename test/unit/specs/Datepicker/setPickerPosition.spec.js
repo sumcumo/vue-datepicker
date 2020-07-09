@@ -83,7 +83,6 @@ describe('Datepicker mounted', () => {
     wrapper.vm.setPickerPosition()
     await wrapper.vm.$nextTick()
 
-
     wrapper.vm.$refs = {
       datepicker: {
         style: {},

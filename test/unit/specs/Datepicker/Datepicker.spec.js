@@ -5,7 +5,6 @@ import {
 import DateInput from '~/components/DateInput'
 import Datepicker from '~/components/Datepicker'
 
-
 describe('Datepicker unmounted', () => {
   it('has a mounted hook', () => {
     expect(typeof Datepicker.mounted).toEqual('function')
