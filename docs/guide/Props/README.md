@@ -3,6 +3,7 @@
 
 | Prop                          | Type             | Default     | Description                                     |
 | ----------------------------- | -----------------| ----------- | ----------------------------------------------- |
+| autofocus                     | String           |             | Sets html `autofocus` attribute on input        |
 | bootstrap-styling             | Boolean          | false       | Use bootstrap v4 styling classes.               |
 | calendar-button               | Boolean          | false       | Show an icon that that can be clicked           |
 | calendar-button-icon          | String           |             | Use icon for button (ex: fa fa-calendar)        |
@@ -21,11 +22,13 @@
 | inline                        | Boolean          |             | To show the datepicker always open              |
 | input-class                   | String\|Object\|Array   |      | CSS class(es) applied to the input el           |
 | language                      | Object           | en          | Translation for days and months                 |
+| maxlength                     | String           |             | Sets html `maxlength` attribute on input        |
 | maximum-view                  | String           | 'year'      | If set, higher-level views won't show           |
 | minimum-view                  | String           | 'day'       | If set, lower-level views won't show            |
 | monday-first                  | Boolean          | false       | To start the week on Monday                     |
 | name                          | String           |             | Input name property                             |
 | open-date                     | Date\|String     |             | If set, open on that date                       |
+| pattern                       | String           |             | Sets html `pattern` attribute on input          |
 | placeholder                   | String           |             | Input placeholder text                          |
 | required                      | Boolean          | false       | Sets html required attribute on input           |
 | ref-name                      | String           |             | Sets a ref name directly on the input field     |
