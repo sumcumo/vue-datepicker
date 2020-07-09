@@ -108,6 +108,21 @@ export default ({
       type: Boolean,
       default: false,
     },
+    autofocus: {
+      type: Boolean,
+      default: false,
+    },
+    maxlength: {
+      type: [
+        Number,
+        String,
+      ],
+      default: null,
+    },
+    pattern: {
+      type: String,
+      default: null,
+    },
   },
 })
 </script>
