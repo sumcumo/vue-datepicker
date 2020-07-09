@@ -37,7 +37,7 @@ var state = {
   }
 }
 ```
-Every Saturday and Sunday is disabled 
+Every Saturday and Sunday is disabled
 
 ## Disable specific days of each month
 ```js
@@ -67,13 +67,16 @@ Following dates are disabled:
 2016-10-18
 
 ## Disable in given ranges
+::: tip IMPORTANT
+Both `to` and `from` properties are required to define a range of dates to highlight.
+:::
 ```js
 var state = {
   disabledDates: {
     ranges: [{
       from: new Date(2016, 11, 25),
       to: new Date(2016, 11, 30)
-    }, 
+    },
     {
       from: new Date(2017, 1, 12),
       to: new Date(2017, 2, 25)
