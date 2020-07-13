@@ -92,7 +92,7 @@
     "rollup-plugin-terser": "5.3.0",
     "rollup-plugin-vue": "5.1.9",
     "semver": "7.3.2",
-    "standard-version": "8.0.0",
+    "standard-version": "8.0.1",
     "vee-validate": "2.2.15",
     "vue": "2.6.11",
     "vue-jest": "3.0.6",
