@@ -9,7 +9,6 @@ Thanks to the original creators [charliekassel](https://github.com/charliekassel
 A datepicker Vue component. Compatible with Vue 2.x.
 
 - [Features](#features)
-- [Demo](#demo)
 - [Documentation](#Documentation)
 - [Contribution](#Contribution)
 - [License](#License)
@@ -25,13 +24,10 @@ A datepicker Vue component. Compatible with Vue 2.x.
 - compatible with Bootstrap
 - custom slots
 
-## [Demo](https://sumcumo.github.io/vue-datepicker/demo/)
-To view demo examples locally:
-- clone the repo
-- run `npm install && npm run serve`
-
-## [Documentation](https://sumcumo.github.io/vue-datepicker/)
-
+## Documentation
+Checkout the vuepress [Documentation](https://sumcumo.github.io/vue-datepicker/).
+There you will also find the [Demo](https://sumcumo.github.io/vue-datepicker/demo/) pages
+and the [Migration](https://sumcumo.github.io/vue-datepicker/guide/migration) guide
 
 ## Contribution
 
