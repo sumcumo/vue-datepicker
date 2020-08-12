@@ -52,8 +52,7 @@
     <template v-if="isOpen">
       <div
         ref="datepicker"
-        :class="[calendarClass, 'vdp-datepicker__calendar']"
-        :style="calendarStyle"
+        :class="[calendarClass, 'vdp-datepicker__calendar', isInline && 'inline']"
         @mousedown.prevent
       >
         <slot name="beforeCalendarHeader" />
@@ -278,11 +277,6 @@ export default {
       return this.language
     },
 
-    calendarStyle() {
-      return {
-        position: this.isInline ? 'static' : undefined,
-      }
-    },
     isOpen() {
       return this.currentPicker !== ''
     },
