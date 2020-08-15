@@ -9,6 +9,10 @@
   * {
     box-sizing: border-box;
   }
+
+  .calendar-btn-disabled {
+    cursor:not-allowed;
+  }
 }
 
 .vdp-datepicker__calendar {
@@ -17,6 +21,10 @@
   background: #fff;
   width: 300px;
   border: 1px solid #ccc;
+
+  &.inline{
+    position: static;
+  }
 
   header {
     display: block;
