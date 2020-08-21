@@ -4,8 +4,7 @@
     <!-- Calendar Button -->
     <span
       v-if="calendarButton"
-      :class="{'input-group-prepend' : bootstrapStyling}"
-      :style="{'cursor:not-allowed;' : disabled}"
+      :class="{'input-group-prepend' : bootstrapStyling, 'calendar-btn-disabled': disabled}"
       class="vdp-datepicker__calendar-button"
       @click="showCalendar(true)"
     >
@@ -63,11 +62,13 @@
 <script>
 import { makeDateUtils } from '~/utils/DateUtils'
 import inputProps from '~/mixins/inputProps'
+import sharedProps from '~/mixins/sharedProps'
 
 export default {
   name: 'DatepickerInput',
   mixins: [
     inputProps,
+    sharedProps,
   ],
   props: {
     selectedDate: {

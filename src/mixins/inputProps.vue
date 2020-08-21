@@ -24,19 +24,6 @@ export default ({
       type: String,
       default: '',
     },
-    openDate: {
-      type: [
-        String,
-        Date,
-        Number,
-      ],
-      default: null,
-      validator:
-        (val) => val === null
-          || val instanceof Date
-          || typeof val === 'string'
-          || typeof val === 'number',
-    },
     placeholder: {
       type: String,
       default: null,
@@ -47,10 +34,6 @@ export default ({
         String,
       ],
       default: null,
-    },
-    inline: {
-      type: Boolean,
-      default: false,
     },
     inputClass: {
       type: [
@@ -93,10 +76,6 @@ export default ({
       default: false,
     },
     bootstrapStyling: {
-      type: Boolean,
-      default: false,
-    },
-    useUtc: {
       type: Boolean,
       default: false,
     },
