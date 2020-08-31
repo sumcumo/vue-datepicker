@@ -24,38 +24,45 @@
         name="afterDateInput"
       />
     </DateInput>
-    <Calendar
-      v-if="isOpen"
-      v-bind="calendarProperties"
-
-      :open="isOpen"
-      :value="model"
-      :translation="translation"
-
-      @reset-typed-date="onResetTypedDate"
-      @selected-disabled="onSelectedDisabled"
-      @changed-month="onMonthChange"
-      @changed-year="onYearChange"
-      @input="setDate"
-      @close="close"
+    <Popup
+      :append-to-body="appendToBody"
+      :visible="isOpen"
+      :inline="inline"
+      :fixed-position="fixedPosition"
     >
-      <slot
-        slot="beforeCalendarHeader"
-        name="beforeCalendarHeader"
-      />
-      <template
-        v-for="slotKey of calendarSlots"
+      <Calendar
+        v-if="isOpen"
+        v-bind="calendarProperties"
+
+        :open="isOpen"
+        :value="model"
+        :translation="translation"
+
+        @reset-typed-date="onResetTypedDate"
+        @selected-disabled="onSelectedDisabled"
+        @changed-month="onMonthChange"
+        @changed-year="onYearChange"
+        @input="setDate"
+        @close="close"
       >
         <slot
-          :slot="slotKey"
-          :name="slotKey"
+          slot="beforeCalendarHeader"
+          name="beforeCalendarHeader"
         />
-      </template>
-      <slot
-        slot="calendarFooter"
-        name="calendarFooter"
-      />
-    </Calendar>
+        <template
+          v-for="slotKey of calendarSlots"
+        >
+          <slot
+            :slot="slotKey"
+            :name="slotKey"
+          />
+        </template>
+        <slot
+          slot="calendarFooter"
+          name="calendarFooter"
+        />
+      </Calendar>
+    </Popup>
   </div>
 </template>
 <script>
@@ -68,10 +75,12 @@ import inputProps from '~/mixins/inputProps'
 import calendarProps from '~/mixins/calendarProps'
 import sharedProps from '~/mixins/sharedProps'
 import calendarSlots from '~/utils/calendarSlots'
+import Popup from '~/components/Popup'
 
 export default {
   name: 'Datepicker',
   components: {
+    Popup,
     DateInput,
     Calendar,
   },
@@ -105,6 +114,23 @@ export default {
         Array,
       ],
       default: '',
+    },
+
+    appendToBody: {
+      type: Boolean,
+      default: false,
+    },
+
+    fixedPosition: {
+      type: String,
+      default: '',
+      validator: (val) => val === ''
+        || val === 'bottom'
+        || val === 'bottom-left'
+        || val === 'bottom-right'
+        || val === 'top'
+        || val === 'top-left'
+        || val === 'top-right',
     },
   },
   data() {

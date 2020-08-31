@@ -149,51 +149,6 @@ export default {
      */
     init() {
       this.setInitialView()
-      if (!this.isInline) {
-        this.setPickerPosition()
-      }
-    },
-    setPickerPosition() {
-      this.$nextTick(() => {
-        const calendar = this.$refs.datepicker
-        if (calendar) {
-          if (this.currentPicker) {
-            const parent = calendar.parentElement
-            const calendarBounding = calendar.getBoundingClientRect()
-            const outOfBoundsRight = calendarBounding.right > window.innerWidth
-            const outOfBoundsBottom = calendarBounding.bottom > window.innerHeight
-            const parentHeight = `${parent.getBoundingClientRect().height}px`
-
-            if (this.fixedPosition === '') {
-              if (outOfBoundsRight) {
-                calendar.style.right = 0
-              } else {
-                calendar.style.right = 'unset'
-              }
-
-              if (outOfBoundsBottom) {
-                calendar.style.bottom = parentHeight
-              } else {
-                calendar.style.bottom = 'unset'
-              }
-            } else {
-              if (this.fixedPosition.indexOf('right') !== -1) {
-                calendar.style.right = 0
-              } else {
-                calendar.style.right = 'unset'
-              }
-              if (this.fixedPosition.indexOf('top') !== -1) {
-                calendar.style.bottom = parentHeight
-              } else {
-                calendar.style.bottom = 'unset'
-              }
-            }
-          } else {
-            calendar.style.right = 'unset'
-            calendar.style.bottom = 'unset'
-          }
-        }
-      })
     },
     /**
      * @param {Object} date

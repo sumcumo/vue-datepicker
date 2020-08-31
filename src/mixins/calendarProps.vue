@@ -21,17 +21,6 @@ export default ({
       },
     },
 
-    fixedPosition: {
-      type: String,
-      default: '',
-      validator: (val) => val === ''
-        || val === 'bottom'
-        || val === 'bottom-left'
-        || val === 'bottom-right'
-        || val === 'top'
-        || val === 'top-left'
-        || val === 'top-right',
-    },
     fullMonthName: {
       type: Boolean,
       default: false,
