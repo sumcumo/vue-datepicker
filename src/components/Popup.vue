@@ -69,7 +69,13 @@ export default {
         this.popupRect = getPopupElementSize(popup)
       }
       const { width, height } = this.popupRect
-      const { left, top } = getRelativePosition(relativeElement, width, height, this.appendToBody)
+      const { left, top } = getRelativePosition({
+        el: relativeElement,
+        targetWidth: width,
+        targetHeight: height,
+        fixed: this.appendToBody,
+        fixedPosition: this.fixedPosition,
+      })
 
       this.$el.style.left = left
       this.$el.style.top = top

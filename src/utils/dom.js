@@ -32,8 +32,16 @@ export function getPopupElementSize(element) {
  * @param {Number} targetWidth target element's width
  * @param {Number} targetHeight target element's height
  * @param {Boolean} fixed
+ * @param {String} fixedPosition
  */
-export function getRelativePosition(el, targetWidth, targetHeight, fixed) {
+export function getRelativePosition({
+  el,
+  targetWidth,
+  targetHeight,
+  fixed,
+  // eslint-disable-next-line no-unused-vars
+  fixedPosition,
+}) {
   let left = 0
   let top = 0
   let offsetX = 0
