@@ -2,14 +2,14 @@ import { shallowMount } from '@vue/test-utils'
 import PickerDay from '~/components/PickerDay'
 import { en } from '~/locale'
 
+// eslint-disable-next-line max-lines-per-function
 describe('PickerDay: disabled', () => {
   let wrapper
   beforeEach(() => {
     wrapper = shallowMount(PickerDay, {
       propsData: {
         allowedToShowView: () => true,
-        showMonthCalendar: () => {
-        },
+        showMonthCalendar: () => {},
         translation: en,
         disabledDates: {
           to: new Date(2016, 9, 4),
@@ -25,23 +25,29 @@ describe('PickerDay: disabled', () => {
   })
 
   it('should detect a disabled date', () => {
-    expect(wrapper.vm.isDisabledDate(new Date(2006, 9, 2))).toEqual(true)
-    expect(wrapper.vm.isDisabledDate(new Date(2026, 9, 2))).toEqual(true)
+    expect(wrapper.vm.isDisabledDate(new Date(2006, 9, 2)))
+      .toEqual(true)
+    expect(wrapper.vm.isDisabledDate(new Date(2026, 9, 2)))
+      .toEqual(true)
   })
 
   it('should not select a disabled date', () => {
-    expect(wrapper.vm.selectDate({ isDisabled: true })).toEqual(false)
+    expect(wrapper.vm.selectDate({ isDisabled: true }))
+      .toEqual(false)
   })
 
   it('cant change to a disabled month', () => {
     wrapper.vm.previousMonth()
-    expect(wrapper.vm.pageDate.getMonth()).toEqual(9)
+    expect(wrapper.vm.pageDate.getMonth())
+      .toEqual(9)
     wrapper.vm.nextMonth()
-    expect(wrapper.vm.pageDate.getMonth()).toEqual(9)
+    expect(wrapper.vm.pageDate.getMonth())
+      .toEqual(9)
   })
 
   it('can change month despite having a disabled month', () => {
-    expect(wrapper.vm.isNextDisabled()).toBeTruthy()
+    expect(wrapper.vm.nextIsDisabled)
+      .toBeTruthy()
   })
 
   it('should detect disabled dates', () => {
@@ -59,8 +65,10 @@ describe('PickerDay: disabled', () => {
         ],
       },
     })
-    expect(wrapper.vm.isDisabledDate(new Date(2006, 9, 2))).toEqual(true)
-    expect(wrapper.vm.isDisabledDate(new Date(2026, 9, 2))).toEqual(true)
+    expect(wrapper.vm.isDisabledDate(new Date(2006, 9, 2)))
+      .toEqual(true)
+    expect(wrapper.vm.isDisabledDate(new Date(2026, 9, 2)))
+      .toEqual(true)
   })
 
   it('can accept an array of disabled dates', () => {
@@ -73,8 +81,10 @@ describe('PickerDay: disabled', () => {
         ],
       },
     })
-    expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 2))).toEqual(true)
-    expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 3))).toEqual(false)
+    expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 2)))
+      .toEqual(true)
+    expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 3)))
+      .toEqual(false)
   })
 
   it('can accept an array of disabled days of the week', () => {
@@ -86,8 +96,10 @@ describe('PickerDay: disabled', () => {
         ],
       },
     })
-    expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 2))).toEqual(true)
-    expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 3))).toEqual(false)
+    expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 2)))
+      .toEqual(true)
+    expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 3)))
+      .toEqual(false)
   })
 
   it('can accept an array of disabled days of the month', () => {
@@ -100,10 +112,14 @@ describe('PickerDay: disabled', () => {
         ],
       },
     })
-    expect(wrapper.vm.isDisabledDate(new Date(2016, 8, 29))).toEqual(true)
-    expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 31))).toEqual(true)
-    expect(wrapper.vm.isDisabledDate(new Date(2016, 10, 30))).toEqual(true)
-    expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 11))).toEqual(false)
+    expect(wrapper.vm.isDisabledDate(new Date(2016, 8, 29)))
+      .toEqual(true)
+    expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 31)))
+      .toEqual(true)
+    expect(wrapper.vm.isDisabledDate(new Date(2016, 10, 30)))
+      .toEqual(true)
+    expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 11)))
+      .toEqual(false)
   })
 
   it('can accept a customPredictor to check if the date is disabled', () => {
@@ -117,21 +133,28 @@ describe('PickerDay: disabled', () => {
         },
       },
     })
-    expect(wrapper.vm.isDisabledDate(new Date(2016, 8, 29))).toEqual(false)
-    expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 28))).toEqual(true)
-    expect(wrapper.vm.isDisabledDate(new Date(2016, 10, 24))).toEqual(true)
-    expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 11))).toEqual(false)
+    expect(wrapper.vm.isDisabledDate(new Date(2016, 8, 29)))
+      .toEqual(false)
+    expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 28)))
+      .toEqual(true)
+    expect(wrapper.vm.isDisabledDate(new Date(2016, 10, 24)))
+      .toEqual(true)
+    expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 11)))
+      .toEqual(false)
   })
 
   it('should emit a selectedDisabled event for a disabled date', () => {
-    expect(wrapper.vm.selectDate({ isDisabled: true })).toEqual(false)
-    expect(wrapper.emitted()['selected-disabled']).toBeTruthy()
+    expect(wrapper.vm.selectDate({ isDisabled: true }))
+      .toEqual(false)
+    expect(wrapper.emitted()['selected-disabled'])
+      .toBeTruthy()
   })
 
   it('should close without warning when its undefined', () => {
     wrapper.setProps({
       disabledDates: undefined,
     })
-    expect(wrapper.vm.isDisabledDate(new Date(2016, 8, 29))).toEqual(false)
+    expect(wrapper.vm.isDisabledDate(new Date(2016, 8, 29)))
+      .toEqual(false)
   })
 })

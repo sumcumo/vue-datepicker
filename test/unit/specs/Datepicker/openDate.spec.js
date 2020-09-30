@@ -1,7 +1,7 @@
-import { shallowMount } from '@vue/test-utils'
+import { mount, shallowMount } from '@vue/test-utils'
 import Datepicker from '~/components/Datepicker'
 
-describe('Datepicker with open date', () => {
+describe('Datepicker shallowMounted with open date', () => {
   const openDate = new Date(2016, 9, 12)
   let wrapper
   beforeEach(() => {
@@ -23,18 +23,11 @@ describe('Datepicker with open date', () => {
 
   it('should set pageTimestamp to be first day of open date\'s month', () => {
     const date = new Date(wrapper.vm.pageTimestamp)
-    expect(wrapper.vm.openDate.getTime()).toEqual(openDate.getTime())
+    expect(wrapper.vm.openDate.valueOf()).toEqual(openDate.valueOf())
     wrapper.vm.setPageDate()
     expect(date.getFullYear()).toEqual(openDate.getFullYear())
     expect(date.getMonth()).toEqual(openDate.getMonth())
     expect(date.getDate()).toEqual(1)
-  })
-
-  it('should open with selected date if one is set', () => {
-    const newDate = new Date(2018, 10, 9)
-    wrapper.vm.selectDate({ timestamp: newDate.getTime() })
-    expect(wrapper.vm.pageDate.getMonth()).toEqual(10)
-    expect(wrapper.vm.pageDate.getFullYear()).toEqual(2018)
   })
 
   it('should show today\'s date if no open date is set', () => {
@@ -42,5 +35,28 @@ describe('Datepicker with open date', () => {
     const today = new Date()
     expect(wrapper.vm.pageDate.getMonth()).toEqual(today.getMonth())
     expect(wrapper.vm.pageDate.getFullYear()).toEqual(today.getFullYear())
+  })
+})
+
+describe('Datepicker mounted with open date', () => {
+  const openDate = new Date(2016, 9, 12)
+  let wrapper
+  beforeEach(() => {
+    wrapper = mount(Datepicker, {
+      propsData: {
+        openDate,
+      },
+    })
+  })
+
+  afterEach(() => {
+    wrapper.destroy()
+  })
+
+  it('should open with selected date if one is set', () => {
+    const newDate = new Date(2018, 10, 9)
+    wrapper.vm.setDate(newDate.valueOf())
+    expect(wrapper.vm.pageDate.getMonth()).toEqual(10)
+    expect(wrapper.vm.pageDate.getFullYear()).toEqual(2018)
   })
 })

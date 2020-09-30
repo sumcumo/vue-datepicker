@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils'
+import { mount, shallowMount } from '@vue/test-utils'
 import PickerMonth from '~/components/PickerMonth'
 import { en } from '~/locale'
 
@@ -39,13 +39,31 @@ describe('PickerMonth', () => {
   })
 
   it('emits date on selection', () => {
-    const time = new Date().getTime()
+    const time = new Date().valueOf()
     wrapper.vm.selectMonth({ timestamp: time })
     expect(wrapper.emitted()['select-month']).toBeTruthy()
     expect(wrapper.emitted()['select-month'][0][0].timestamp).toEqual(time)
   })
+})
 
-  it('emits show year calendar event when clicked on the year', () => {
+describe('PickerMonth mounted', () => {
+  let wrapper
+  beforeEach(() => {
+    wrapper = mount(PickerMonth, {
+      propsData: {
+        allowedToShowView: () => true,
+        translation: en,
+        pageDate: new Date(2018, 1, 1),
+        selectedDate: new Date(2018, 2, 24),
+      },
+    })
+  })
+
+  afterEach(() => {
+    wrapper.destroy()
+  })
+
+  it('emits show year calendar event when the up button is clicked', () => {
     const yearBtn = wrapper.find('.month__year_btn')
     yearBtn.trigger('click')
     expect(wrapper.emitted()['show-year-calendar']).toBeTruthy()

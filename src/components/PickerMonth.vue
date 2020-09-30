@@ -2,18 +2,24 @@
   <div class="picker-view">
     <slot name="beforeCalendarHeaderMonth" />
     <PickerHeader
+      ref="PickerHeader"
       :config="headerConfig"
       :next="nextYear"
       :previous="previousYear"
+      @focus-first-cell="focus(0)"
+      @focus-up-button="focusUpButton"
     >
-      <span
-        slot="headerContent"
-        :class="allowedToShowView('year') ? 'up' : ''"
+      <UpButton
+        ref="up"
         class="month__year_btn"
-        @click="showPickerCalendar('year')"
+        :is-disabled="upIsDisabled"
+        :is-rtl="isRtl"
+        @focus-first-cell="focus(0)"
+        @focus-nav="focusNav($event)"
+        @next-view-up="showPickerCalendar(nextViewUp)"
       >
         {{ pageYearName }}
-      </span>
+      </UpButton>
       <slot
         slot="nextIntervalBtn"
         name="nextIntervalBtn"
@@ -23,49 +29,78 @@
         name="prevIntervalBtn"
       />
     </PickerHeader>
-    <span
-      v-for="month in months"
-      :key="month.timestamp"
-      :class="{'selected': month.isSelected, 'disabled': month.isDisabled}"
+    <button
+      v-for="cell in cells"
+      :ref="cell.id"
+      :key="cell.id"
+      :class="{ 'selected': cell.isSelected, 'disabled': cell.isDisabled }"
       class="cell month"
-      @click.stop="selectMonth(month)"
+      :tabindex="cell.isDisabled ? -1 : null"
+      @click.stop="selectMonth(cell)"
+      @keydown.up.prevent="refocusCellBy(-3)"
+      @keydown.down.prevent="refocusCellBy(3)"
+      @keydown.left.prevent="refocusCellBy(isRtl ? 1 : -1)"
+      @keydown.right.prevent="refocusCellBy(isRtl ? -1 : 1)"
+      @keyup.esc="$emit('close')"
+      @focus="focusedCell = cell"
     >
-      {{ month.month }}
-    </span>
+      {{ cell.month }}
+    </button>
     <slot name="calendarFooterMonth" />
   </div>
 </template>
 <script>
 import pickerMixin from '~/mixins/pickerMixin'
 import { isMonthDisabled } from '~/utils/DisabledDatesUtils'
+import UpButton from '~/components/UpButton'
 
 export default {
-  name: 'DatepickerMonthView',
+  name: 'PickerMonth',
+  components: { UpButton },
   mixins: [
     pickerMixin,
   ],
   computed: {
     /**
-     * set an object with all months
+     * Set an array with all months
      * @return {Object[]}
      */
-    months() {
-      const d = this.pageDate
+    cells() {
       const months = []
-      // set up a new date object to the beginning of the current 'page'
-      const dObj = this.useUtc
-        ? new Date(Date.UTC(d.getUTCFullYear(), 0, d.getUTCDate()))
-        : new Date(d.getFullYear(), 0, d.getDate(), d.getHours(), d.getMinutes())
+      const dObj = this.newPageMonth()
       for (let i = 0; i < 12; i += 1) {
         months.push({
+          id: i,
           month: this.utils.getMonthName(i, this.translation.months),
-          timestamp: dObj.getTime(),
+          timestamp: dObj.valueOf(),
           isSelected: this.isSelectedMonth(dObj),
           isDisabled: this.isDisabledMonth(dObj),
         })
         this.utils.setMonth(dObj, this.utils.getMonth(dObj) + 1)
       }
       return months
+    },
+    /**
+     * Checks if the previous year is disabled or not
+     * @return {Boolean}
+     */
+    previousIsDisabled() {
+      if (!this.disabledDates || !this.disabledDates.to) {
+        return false
+      }
+      return this.utils.getFullYear(this.disabledDates.to) >= this.utils.getFullYear(this.pageDate)
+    },
+    /**
+     * Checks if the next year is disabled or not
+     * @return {Boolean}
+     */
+    nextIsDisabled() {
+      if (!this.disabledDates || !this.disabledDates.from) {
+        return false
+      }
+      return this.utils.getFullYear(
+        this.disabledDates.from,
+      ) <= this.utils.getFullYear(this.pageDate)
     },
     /**
      * Get year name on current page.
@@ -75,14 +110,34 @@ export default {
       const { yearSuffix } = this.translation
       return `${this.utils.getFullYear(this.pageDate)}${yearSuffix}`
     },
+    todayCell() {
+      const today = this.utils.getNewDateObject()
+      for (let i = 0; i < this.cells.length; i += 1) {
+        if (this.cells[i].id === this.utils.getMonth(today)) {
+          return this.cells[i]
+        }
+      }
+      return null
+    },
   },
   methods: {
+    /**
+     * Set up a new date object to the first month of the current 'page'
+     * @return Date
+     */
+    newPageMonth() {
+      const d = this.pageDate
+      return this.useUtc
+        ? new Date(Date.UTC(d.getUTCFullYear(), 0, d.getUTCDate()))
+        : new Date(d.getFullYear(), 0, d.getDate(), d.getHours(), d.getMinutes())
+    },
     /**
      * Emits a selectMonth event
      * @param {Object} month
      */
     selectMonth(month) {
       if (!month.isDisabled) {
+        this.focus(month.id)
         this.$emit('select-month', month)
         return true
       }
@@ -101,44 +156,22 @@ export default {
      * Decrements the year
      */
     previousYear() {
-      if (!this.isPreviousDisabled()) {
+      if (!this.previousIsDisabled) {
         this.changeYear(-1)
       }
-    },
-    /**
-     * Checks if the previous year is disabled or not
-     * @return {Boolean}
-     */
-    isPreviousDisabled() {
-      if (!this.disabledDates || !this.disabledDates.to) {
-        return false
-      }
-      return this.utils.getFullYear(this.disabledDates.to) >= this.utils.getFullYear(this.pageDate)
     },
     /**
      * Increments the year
      */
     nextYear() {
-      if (!this.isNextDisabled()) {
+      if (!this.nextIsDisabled) {
         this.changeYear(1)
       }
     },
     /**
-     * Checks if the next year is disabled or not
-     * @return {Boolean}
-     */
-    isNextDisabled() {
-      if (!this.disabledDates || !this.disabledDates.from) {
-        return false
-      }
-      return this.utils.getFullYear(
-        this.disabledDates.from,
-      ) <= this.utils.getFullYear(this.pageDate)
-    },
-    /**
      * Whether the selected date is in this month
-     * @param {Date}
      * @return {Boolean}
+     * @param date {Date}
      */
     isSelectedMonth(date) {
       return (this.selectedDate
@@ -147,8 +180,8 @@ export default {
     },
     /**
      * Whether a month is disabled
-     * @param {Date}
      * @return {Boolean}
+     * @param date {Date}
      */
     isDisabledMonth(date) {
       return isMonthDisabled(date, this.disabledDates, this.utils)

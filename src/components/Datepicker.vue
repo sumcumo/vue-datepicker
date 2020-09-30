@@ -2,42 +2,43 @@
   <div
     :class="[wrapperClass, isRtl ? 'rtl' : '']"
     class="vdp-datepicker"
+    @keyup.esc.prevent="closeAndClear"
   >
     <DateInput
       :id="id"
-      :selected-date="selectedDate"
-      :reset-typed-date="resetTypedDate"
-      :format="format"
-      :parser="parser"
-      :translation="translation"
-      :inline="inline"
-      :name="name"
-      :ref-name="refName"
-      :open-date="openDate"
-      :placeholder="placeholder"
-      :input-class="inputClass"
-      :typeable="typeable"
-      :clear-button="clearButton"
-      :clear-button-icon="clearButtonIcon"
+      ref="DateInput"
+      :autofocus="autofocus"
+      :bootstrap-styling="bootstrapStyling"
       :calendar-button="calendarButton"
       :calendar-button-icon="calendarButtonIcon"
       :calendar-button-icon-content="calendarButtonIconContent"
+      :clear-button="clearButton"
+      :clear-button-icon="clearButtonIcon"
       :disabled="disabled"
-      :required="required"
-      :autofocus="autofocus"
+      :format="format"
+      :inline="inline"
+      :is-open="isOpen"
+      :input-class="inputClass"
       :maxlength="maxlength"
+      :name="name"
+      :parser="parser"
       :pattern="pattern"
-      :bootstrap-styling="bootstrapStyling"
-      :use-utc="useUtc"
+      :placeholder="placeholder"
+      :ref-name="refName"
+      :required="required"
+      :selected-date="selectedDate"
+      :show-calendar-on-button-click="showCalendarOnButtonClick"
       :show-calendar-on-focus="showCalendarOnFocus"
       :tabindex="tabindex"
-      :show-calendar-on-button-click="showCalendarOnButtonClick"
-      @show-calendar="showCalendar"
-      @close-calendar="close(true)"
-      @typed-date="setTypedDate"
-      @clear-date="clearDate"
+      :translation="translation"
+      :typeable="typeable"
+      :use-utc="useUtc"
       @blur="onBlur"
+      @clear-date="clearDate"
+      @close-calendar="close"
       @focus="onFocus"
+      @show-calendar="showCalendar"
+      @set-date="setDate"
     >
       <slot
         slot="beforeDateInput"
@@ -58,22 +59,26 @@
         <slot name="beforeCalendarHeader" />
         <component
           :is="currentPicker"
+          ref="PickerView"
+          :allowed-to-show-view="allowedToShowView"
+          :day-cell-content="dayCellContent"
+          :disabled-dates="disabledDates"
+          :first-day-of-week="computedFirstDayOfWeek"
+          :highlighted="highlighted"
+          :is-rtl="isRtl"
+          :is-inline="isInline"
+          :open-date="computedOpenDate"
+          :page-timestamp="pageTimestamp"
           :page-date="pageDate"
           :selected-date="selectedDate"
-          :allowed-to-show-view="allowedToShowView"
-          :disabled-dates="disabledDates"
-          :highlighted="highlighted"
+          :show-edge-dates="showEdgeDates"
+          :show-full-month-name="fullMonthName"
+          :show-header="showHeader"
           :translation="translation"
-          :page-timestamp="pageTimestamp"
-          :is-rtl="isRtl"
+          :typeable="typeable"
           :use-utc="useUtc"
 
-          :show-header="showHeader"
-          :full-month-name="fullMonthName"
-          :monday-first="mondayFirst"
-          :day-cell-content="dayCellContent"
-
-          @select-date="selectDate"
+          @set-date="setDate"
           @changed-month="handleChangedMonthFromDayPicker"
           @selected-disabled="selectDisabledDate"
 
@@ -133,6 +138,11 @@ import PickerMonth from '~/components/PickerMonth'
 import PickerYear from '~/components/PickerYear'
 import inputProps from '~/mixins/inputProps'
 
+const validDate = (val) => val === null
+  || val instanceof Date
+  || typeof val === 'string'
+  || typeof val === 'number'
+
 export default {
   name: 'Datepicker',
   components: {
@@ -162,6 +172,10 @@ export default {
       default() {
         return {}
       },
+    },
+    firstDayOfWeek: {
+      type: String,
+      default: 'sun',
     },
     fixedPosition: {
       type: String,
@@ -200,11 +214,25 @@ export default {
       type: String,
       default: 'day',
     },
+    // Suggest this should be deprecated in favour of 'firstDayOfWeek' - see above
     mondayFirst: {
       type: Boolean,
       default: false,
     },
+    openDate: {
+      type: [
+        String,
+        Date,
+        Number,
+      ],
+      default: null,
+      validator: validDate,
+    },
     showHeader: {
+      type: Boolean,
+      default: true,
+    },
+    showEdgeDates: {
       type: Boolean,
       default: true,
     },
@@ -215,11 +243,7 @@ export default {
         Number,
       ],
       default: '',
-      validator:
-        (val) => val === null
-          || val instanceof Date
-          || typeof val === 'string'
-          || typeof val === 'number',
+      validator: validDate,
     },
     wrapperClass: {
       type: [
@@ -231,7 +255,6 @@ export default {
     },
   },
   data() {
-    // const startDate = this.openDate ? new Date(this.openDate) : new Date()
     const constructedDateUtils = makeDateUtils(this.useUtc)
     let startDate
     if (this.openDate) {
@@ -257,34 +280,36 @@ export default {
        * Positioning
        */
       calendarHeight: 0,
-      resetTypedDate: constructedDateUtils.getNewDateObject(),
       utils: constructedDateUtils,
     }
   },
   computed: {
-    computedInitialView() {
-      if (!this.initialView) {
-        return this.minimumView
+    computedFirstDayOfWeek() {
+      if (this.mondayFirst) {
+        return 1
       }
-
-      return this.initialView
+      return this.utils.getDayFromAbbr(this.firstDayOfWeek)
     },
-    pageDate() {
-      return new Date(this.pageTimestamp)
+    computedInitialView() {
+      return this.initialView ? this.initialView : this.minimumView
     },
-
-    translation() {
-      return this.language
-    },
-
-    isOpen() {
-      return this.currentPicker !== ''
+    computedOpenDate() {
+      return this.openDate ? this.utils.getNewDateObject(this.openDate) : null
     },
     isInline() {
       return !!this.inline
     },
+    isOpen() {
+      return this.currentPicker !== ''
+    },
     isRtl() {
       return this.translation.rtl === true
+    },
+    pageDate() {
+      return new Date(this.pageTimestamp)
+    },
+    translation() {
+      return this.language
     },
   },
   watch: {
@@ -356,15 +381,12 @@ export default {
       this.setPageDate(this.selectedDate)
     },
     /**
-     * Effectively a toggle to show/hide the calendar
-     * @return {mixed}
+     * Shows the calendar at the relevant view: 'day', 'month', or 'year'
+     * @return {boolean}
      */
     showCalendar() {
       if (this.disabled || this.isInline) {
         return false
-      }
-      if (this.isOpen) {
-        return this.close(true)
       }
       this.setInitialView()
       if (!this.isInline) {
@@ -412,19 +434,12 @@ export default {
     },
     /**
      * Show a specific picker
-     * @return {Boolean}
      */
     showSpecificCalendar(type) {
-      if (type) {
-        if (!this.allowedToShowView(type.toLowerCase())) {
-          return false
-        }
-        this.close()
-        this.currentPicker = `Picker${type}`
-        return true
+      if (!this.allowedToShowView(type.toLowerCase())) {
+        return
       }
-      this.currentPicker = ''
-      return false
+      this.currentPicker = `Picker${type}`
     },
     /**
      * Set the selected date
@@ -434,8 +449,16 @@ export default {
       const date = new Date(timestamp)
       this.selectedDate = date
       this.setPageDate(date)
+      this.close()
       this.$emit('selected', date)
       this.$emit('input', date)
+    },
+    /**
+     * Close the calendar and clear the input field
+     */
+    closeAndClear() {
+      this.close()
+      this.clearDate()
     },
     /**
      * Clear the selected date
@@ -446,16 +469,6 @@ export default {
       this.$emit('selected', null)
       this.$emit('input', null)
       this.$emit('cleared')
-    },
-    /**
-     * @param {Object} date
-     */
-    selectDate(date) {
-      this.setDate(date.timestamp)
-      if (!this.isInline) {
-        this.close(true)
-      }
-      this.resetTypedDate = this.utils.getNewDateObject()
     },
     /**
      * @param {Object} date
@@ -473,7 +486,7 @@ export default {
         this.$emit('changed-month', month)
         this.showSpecificCalendar('Day')
       } else {
-        this.selectDate(month)
+        this.setDate(month.timestamp)
       }
     },
     /**
@@ -486,7 +499,7 @@ export default {
         this.$emit('changed-year', year)
         this.showSpecificCalendar('Month')
       } else {
-        this.selectDate(year)
+        this.setDate(year.timestamp)
       }
     },
     /**
@@ -533,19 +546,38 @@ export default {
      * Set the date from a typedDate event
      */
     setTypedDate(date) {
-      this.setDate(date.getTime())
+      this.setDate(date.valueOf())
     },
     /**
-     * Close all calendar layers
-     * @param {Boolean} full - emit close event
+     * Close the calendar views
      */
-    close(full = false) {
-      this.showSpecificCalendar()
-      if (!this.isInline) {
-        if (full) {
-          this.$emit('closed')
-        }
+    close() {
+      if (this.isInline) {
+        return
       }
+      this.currentPicker = ''
+      if (!this.showCalendarOnFocus && !this.typeable) {
+        this.focusInput()
+      }
+      this.$emit('closed')
+    },
+    /**
+     * Focus the input field
+     */
+    focusInput() {
+      this.$refs.DateInput.$refs[this.refName].focus()
+    },
+    /**
+     * Emit blur event
+     */
+    onBlur() {
+      this.$emit('blur')
+    },
+    /**
+     * Emit focus event
+     */
+    onFocus() {
+      this.$emit('focus')
     },
     /**
      * Initiate the component
@@ -558,15 +590,8 @@ export default {
         this.setInitialView()
       }
     },
-    onBlur() {
-      this.$emit('blur')
-    },
-    onFocus() {
-      this.$emit('focus')
-    },
   },
 }
-
 </script>
 <style lang="scss">
 @import '../styles/style.scss';

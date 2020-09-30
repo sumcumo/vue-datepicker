@@ -2,13 +2,15 @@
   <div class="picker-view">
     <slot name="beforeCalendarHeaderYear" />
     <PickerHeader
+      ref="PickerHeader"
       :config="headerConfig"
       :next="nextDecade"
       :previous="previousDecade"
+      @focus-first-cell="focus(0)"
     >
-      <span slot="headerContent">
+      <button tabindex="-1">
         {{ getPageDecade }}
-      </span>
+      </button>
       <slot
         slot="nextIntervalBtn"
         name="nextIntervalBtn"
@@ -18,16 +20,23 @@
         name="prevIntervalBtn"
       />
     </PickerHeader>
-
-    <span
-      v-for="year in years"
-      :key="year.timestamp"
-      :class="{ 'selected': year.isSelected, 'disabled': year.isDisabled }"
+    <button
+      v-for="cell in cells"
+      :ref="cell.id"
+      :key="cell.id"
+      :class="{ 'selected': cell.isSelected, 'disabled': cell.isDisabled }"
       class="cell year"
-      @click.stop="selectYear(year)"
+      :tabindex="cell.isDisabled ? -1 : null"
+      @click.stop="selectYear(cell)"
+      @keydown.up.prevent="refocusCellBy(upKeyChange)"
+      @keydown.down.prevent="refocusCellBy(downKeyChange)"
+      @keydown.left.prevent="refocusCellBy(isRtl ? 1 : -1)"
+      @keydown.right.prevent="refocusCellBy(isRtl ? -1 : 1)"
+      @keyup.esc="$emit('close')"
+      @focus="focusedCell = cell"
     >
-      {{ year.year }}
-    </span>
+      {{ cell.year }}
+    </button>
     <slot name="calendarFooterYear" />
   </div>
 </template>
@@ -36,16 +45,16 @@ import pickerMixin from '~/mixins/pickerMixin'
 import { isYearDisabled } from '~/utils/DisabledDatesUtils'
 
 export default {
-  name: 'DatepickerYearView',
+  name: 'PickerYear',
   mixins: [
     pickerMixin,
   ],
   computed: {
     /**
-     * set an object with years for a decade
+     * Set an array with years for a decade
      * @return {Object[]}
      */
-    years() {
+    cells() {
       const d = this.pageDate
       const years = []
       // set up a new date object to the beginning of the current 'page'7
@@ -60,8 +69,9 @@ export default {
         )
       for (let i = 0; i < 10; i += 1) {
         years.push({
+          id: i,
           year: this.utils.getFullYear(dObj),
-          timestamp: dObj.getTime(),
+          timestamp: dObj.valueOf(),
           isSelected: this.isSelectedYear(dObj),
           isDisabled: this.isDisabledYear(dObj),
         })
@@ -79,6 +89,59 @@ export default {
       const { yearSuffix } = this.translation
       return `${decadeStart} - ${decadeEnd}${yearSuffix}`
     },
+    /**
+     * Checks if the next year is disabled or not
+     * @return {Boolean}
+     */
+    previousIsDisabled() {
+      if (!this.disabledDates || !this.disabledDates.to) {
+        return false
+      }
+      return Math.floor(this.utils.getFullYear(this.disabledDates.to) / 10) * 10
+        >= Math.floor(this.utils.getFullYear(this.pageDate) / 10) * 10
+    },
+    /**
+     * Checks if the next decade is disabled or not
+     * @return {Boolean}
+     */
+    nextIsDisabled() {
+      if (!this.disabledDates || !this.disabledDates.from) {
+        return false
+      }
+      return Math.ceil(this.utils.getFullYear(this.disabledDates.from) / 10) * 10
+        <= Math.ceil(this.utils.getFullYear(this.pageDate) / 10) * 10
+    },
+    downKeyChange() {
+      switch (this.focusedCell.id) {
+        case 7:
+        case 8:
+          return 4
+        case 9:
+          return 1
+        default:
+          return 3
+      }
+    },
+    upKeyChange() {
+      switch (this.focusedCell.id) {
+        case 0:
+          return -1
+        case 1:
+        case 2:
+          return -4
+        default:
+          return -3
+      }
+    },
+    todayCell() {
+      const today = this.utils.getNewDateObject()
+      for (let i = 0; i < this.cells.length; i += 1) {
+        if (this.cells[i].id === this.utils.getFullYear(today) % 10) {
+          return this.cells[i]
+        }
+      }
+      return null
+    },
   },
   methods: {
     /**
@@ -87,6 +150,7 @@ export default {
      */
     selectYear(year) {
       if (!year.isDisabled) {
+        this.focus(year.id)
         this.$emit('select-year', year)
         return true
       }
@@ -105,45 +169,22 @@ export default {
      * Decrements the decade
      */
     previousDecade() {
-      if (!this.isPreviousDisabled()) {
+      if (!this.previousIsDisabled) {
         this.changeYear(-10)
         return true
       }
       return false
     },
     /**
-     * Checks if the next year is disabled or not
-     * @return {Boolean}
-     */
-    isPreviousDisabled() {
-      if (!this.disabledDates || !this.disabledDates.to) {
-        return false
-      }
-      return Math.floor(this.utils.getFullYear(this.disabledDates.to) / 10) * 10
-        >= Math.floor(this.utils.getFullYear(this.pageDate) / 10) * 10
-    },
-    /**
      * Increments the decade
      */
     nextDecade() {
-      if (!this.isNextDisabled()) {
+      if (!this.nextIsDisabled) {
         this.changeYear(10)
         return true
       }
       return false
     },
-    /**
-     * Checks if the next decade is disabled or not
-     * @return {Boolean}
-     */
-    isNextDisabled() {
-      if (!this.disabledDates || !this.disabledDates.from) {
-        return false
-      }
-      return Math.ceil(this.utils.getFullYear(this.disabledDates.from) / 10) * 10
-        <= Math.ceil(this.utils.getFullYear(this.pageDate) / 10) * 10
-    },
-
     /**
      * Whether the selected date is in this year
      * @param {Date} date

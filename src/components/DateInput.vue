@@ -2,11 +2,11 @@
   <div :class="{'input-group' : bootstrapStyling}">
     <slot name="beforeDateInput" />
     <!-- Calendar Button -->
-    <span
+    <button
       v-if="calendarButton"
       :class="{'input-group-prepend' : bootstrapStyling, 'calendar-btn-disabled': disabled}"
       class="vdp-datepicker__calendar-button"
-      @click="showCalendar(true)"
+      @click="showCalendarByButton"
     >
       <span :class="{'input-group-text' : bootstrapStyling}">
         <i :class="calendarButtonIcon">
@@ -16,33 +16,35 @@
           </span>
         </i>
       </span>
-    </span>
+    </button>
     <!-- Input -->
     <input
       :id="id"
       :ref="refName"
-      :type="inline ? 'hidden' : 'text'"
-      :class="computedInputClass"
-      :name="name"
-      :value="formattedValue"
-      :open-date="openDate"
-      :placeholder="placeholder"
-      :clear-button="clearButton"
-      :disabled="disabled"
-      :required="required"
-      :readonly="!typeable"
-      :autofocus="autofocus"
-      :maxlength="maxlength"
-      :pattern="pattern"
-      :tabindex="tabindex"
       autocomplete="off"
-      @click="showCalendar(false)"
-      @focus="showFocusCalendar"
-      @keyup="parseTypedDate"
+      :autofocus="autofocus"
+      :clear-button="clearButton"
+      :class="computedInputClass"
+      :disabled="disabled"
+      :maxlength="maxlength"
+      :name="name"
+      :pattern="pattern"
+      :placeholder="placeholder"
+      :readonly="!typeable"
+      :required="required"
+      :tabindex="tabindex"
+      :type="inline ? 'hidden' : 'text'"
+      :value="formattedValue"
       @blur="inputBlurred"
+      @click="showCalendarByClick"
+      @keydown.space="showCalendarBySpace"
+      @keydown.enter.prevent="showCalendarByEnter"
+      @keydown.esc.prevent="clearDate"
+      @focus="showCalendarByFocus"
+      @keyup="parseTypedDate"
     >
     <!-- Clear Button -->
-    <span
+    <button
       v-if="clearButton && selectedDate"
       :class="{'input-group-append' : bootstrapStyling}"
       class="vdp-datepicker__clear-button"
@@ -55,7 +57,7 @@
           </span>
         </i>
       </span>
-    </span>
+    </button>
     <slot name="afterDateInput" />
   </div>
 </template>
@@ -64,17 +66,17 @@ import { makeDateUtils } from '~/utils/DateUtils'
 import inputProps from '~/mixins/inputProps'
 
 export default {
-  name: 'DatepickerInput',
+  name: 'DateInput',
   mixins: [
     inputProps,
   ],
   props: {
+    isOpen: {
+      type: Boolean,
+      default: false,
+    },
     selectedDate: {
       type: Date,
-      default: null,
-    },
-    resetTypedDate: {
-      type: [Date],
       default: null,
     },
     translation: {
@@ -88,23 +90,11 @@ export default {
     const constructedDateUtils = makeDateUtils(this.useUtc)
     return {
       input: null,
-      typedDate: false,
+      typedDate: '',
       utils: constructedDateUtils,
     }
   },
   computed: {
-    formattedValue() {
-      if (!this.selectedDate) {
-        return null
-      }
-      if (this.typedDate) {
-        return this.typedDate
-      }
-      return typeof this.format === 'function'
-        ? this.format(new Date(this.selectedDate))
-        : this.utils.formatDate(new Date(this.selectedDate), this.format, this.translation)
-    },
-
     computedInputClass() {
       if (this.bootstrapStyling) {
         if (typeof this.inputClass === 'string') {
@@ -117,79 +107,97 @@ export default {
       }
       return this.inputClass
     },
-  },
-  watch: {
-    resetTypedDate() {
-      this.typedDate = false
+    formattedValue() {
+      if (!this.selectedDate) {
+        return null
+      }
+      if (this.typedDate) {
+        return this.typedDate
+      }
+      return this.formattedDate
+    },
+    formattedDate() {
+      return typeof this.format === 'function'
+        ? this.format(new Date(this.selectedDate))
+        : this.utils.formatDate(new Date(this.selectedDate), this.format, this.translation)
     },
   },
   mounted() {
     this.input = this.$el.querySelector('input')
   },
   methods: {
-    showCalendar(isButton) {
-      // prevent to emit the event twice if we are listening focus
-      if (!this.showCalendarOnFocus) {
-        if (
-          !this.showCalendarOnButtonClick
-          || (
-            this.showCalendarOnButtonClick
-            && this.calendarButton
-            && isButton
-          )
-        ) {
-          this.$emit('show-calendar')
-        }
+    showCalendar() {
+      this.$emit(this.isOpen ? 'close-calendar' : 'show-calendar')
+    },
+    showCalendarByButton() {
+      if (!this.typeable) {
+        this.showCalendar()
       }
     },
-    showFocusCalendar() {
+    showCalendarByClick() {
+      if (!this.calendarButton) {
+        this.showCalendar()
+      }
+    },
+    showCalendarByEnter() {
+      if (this.typeable) {
+        this.inputBlurred()
+        return
+      }
+      this.showCalendar()
+    },
+    showCalendarByFocus() {
       if (this.showCalendarOnFocus) {
-        this.$emit('show-calendar', true)
+        this.$emit('show-calendar')
       }
 
       this.$emit('focus')
     },
-    /**
-     * Attempt to parse a typed date
-     * @param {Event} event
-     */
-    parseTypedDate(event) {
-      const code = (event.keyCode ? event.keyCode : event.which)
-      // close calendar if escape or enter are pressed
-      if ([
-        27, // escape
-        13, // enter
-      ].indexOf(code) !== -1) {
-        this.input.blur()
-      }
-
-      if (this.typeable) {
-        const parsableDate = this.parseDate(this.input.value)
-        const parsedDate = Date.parse(parsableDate)
-        if (!Number.isNaN(parsedDate)) {
-          this.typedDate = this.input.value
-          this.$emit('typed-date', new Date(parsedDate))
-        }
+    showCalendarBySpace() {
+      if (!this.typeable) {
+        this.showCalendar()
       }
     },
     /**
-     * nullify the typed date to defer to regular formatting
-     * called once the input is blurred
+     * Attempt to parse a typed date
+     */
+    parseTypedDate() {
+      if (!this.typeable) {
+        return
+      }
+
+      const parsableDate = this.parseDate(this.input.value)
+      const parsedDate = Date.parse(parsableDate)
+
+      if (!Number.isNaN(parsedDate)) {
+        this.typedDate = this.input.value
+      }
+    },
+    /**
+     * Submits a typed date if it's valid
      */
     inputBlurred() {
-      const parsableDate = this.parseDate(this.input.value)
-      if (this.typeable && Number.isNaN(Date.parse(parsableDate))) {
-        this.clearDate()
-        this.input.value = null
-        this.typedDate = null
+      if (this.typeable) {
+        const parsableDate = this.parseDate(this.input.value)
+        const parsedDate = Date.parse(parsableDate)
+
+        if (Number.isNaN(parsedDate)) {
+          this.clearDate()
+        } else {
+          this.input.value = this.formattedDate
+          this.typedDate = null
+          this.$emit('set-date', parsedDate)
+        }
+        this.$emit('close-calendar')
       }
+
       this.$emit('blur')
-      this.$emit('close-calendar')
     },
     /**
      * emit a clearDate event
      */
     clearDate() {
+      this.input.value = null
       this.$emit('clear-date')
     },
     parseDate(value) {

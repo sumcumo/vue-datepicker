@@ -22,6 +22,14 @@ const utils = {
   },
 
   /**
+   * Returns the number of days in the month, using UTC or not
+   * @param {Date} date
+   */
+  getDaysInMonth(date) {
+    return this.daysInMonth(this.getFullYear(date), this.getMonth(date))
+  },
+
+  /**
    * Returns the date, using UTC or not
    * @param {Date} date
    */
@@ -87,12 +95,12 @@ const utils = {
    * @param {Date} date2
    */
   compareDates(date1, date2) {
-    const d1 = new Date(date1.getTime())
-    const d2 = new Date(date2.getTime())
+    const d1 = new Date(date1.valueOf())
+    const d2 = new Date(date2.valueOf())
 
     this.resetDateTime(d1)
     this.resetDateTime(d2)
-    return d1.getTime() === d2.getTime()
+    return d1.valueOf() === d2.valueOf()
   },
 
   /**
@@ -104,7 +112,7 @@ const utils = {
     if (Object.prototype.toString.call(date) !== '[object Date]') {
       return false
     }
-    return !Number.isNaN(date.getTime())
+    return !Number.isNaN(date.valueOf())
   },
 
   /**
@@ -118,6 +126,20 @@ const utils = {
       throw TypeError('Invalid Type')
     }
     return days[this.getDay(date)]
+  },
+
+  /**
+   * Return day number from abbreviated week day name
+   * @param {String} abbr
+   * @return {Number}
+   */
+  getDayFromAbbr(abbr) {
+    for (let i = 0; i < en.days.length; i += 1) {
+      if (abbr.toLowerCase() === en.days[i].toLowerCase()) {
+        return i
+      }
+    }
+    throw TypeError('Invalid week day')
   },
 
   /**
@@ -300,6 +322,14 @@ const utils = {
    */
   getNewDateObject(date) {
     return date ? this.resetDateTime(new Date(date)) : this.resetDateTime(new Date())
+  },
+
+  /**
+   * Subtracts n days from a date (provided this doesn't span summertime)
+   * @return {Date}
+   */
+  subDays(date, days) {
+    return new Date(date.valueOf() - days * 24 * 60 * 60 * 1000)
   },
 }
 

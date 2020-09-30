@@ -23,6 +23,7 @@ describe('Datepicker unmounted', () => {
     expect(defaultProps.fixedPosition.validator(true)).toBeFalsy()
   })
 })
+
 describe('Datepicker mounted', () => {
   let wrapper
   let date
@@ -51,8 +52,73 @@ describe('Datepicker mounted', () => {
     input.trigger('focus')
     expect(wrapper.emitted().focus).toBeTruthy()
   })
+
+  it('should open and close the calendar', () => {
+    expect(wrapper.vm.isOpen).toEqual(false)
+
+    wrapper.vm.showSpecificCalendar('Month')
+    expect(wrapper.vm.isOpen).toEqual(true)
+
+    wrapper.vm.close()
+    expect(wrapper.vm.isOpen).toEqual(false)
+
+    wrapper.vm.showSpecificCalendar('Year')
+    expect(wrapper.vm.isOpen).toEqual(true)
+
+    wrapper.vm.close()
+    expect(wrapper.vm.isOpen).toEqual(false)
+
+    wrapper.vm.showSpecificCalendar('Day')
+    expect(wrapper.vm.isOpen).toEqual(true)
+
+    wrapper.vm.close()
+    expect(wrapper.vm.isOpen).toEqual(false)
+  })
+
+  it('can select a day', () => {
+    const dateTemp = new Date(2016, 9, 1)
+    wrapper.vm.setDate(dateTemp.valueOf())
+    expect(wrapper.vm.pageTimestamp).toEqual(dateTemp.valueOf())
+    expect(wrapper.vm.selectedDate.getMonth()).toEqual(9)
+    expect(wrapper.vm.currentPicker).toEqual('')
+    expect(wrapper.emitted().selected).toBeTruthy()
+  })
+
+  it('sets the date', () => {
+    const dateTemp = new Date(2016, 9, 9)
+    const wrapperTemp = mount(Datepicker, {
+      propsData: {
+        format: 'yyyy-MM-dd',
+      },
+    })
+    wrapperTemp.vm.setDate(dateTemp.valueOf())
+    expect(wrapperTemp.vm.selectedDate.valueOf()).toEqual(dateTemp.valueOf())
+  })
+
+  it('clears the date', () => {
+    const dateTemp = new Date(2016, 9, 9)
+    const wrapperTemp = mount(Datepicker)
+    wrapperTemp.vm.setDate(dateTemp.valueOf())
+    wrapperTemp.vm.clearDate()
+    expect(wrapperTemp.vm.selectedDate).toEqual(null)
+  })
+
+  it('does not set the default page date if a date is selected', () => {
+    const wrapperTemp = mount(Datepicker)
+    const today = new Date()
+    const pastDate = new Date(2018, 3, 20)
+    expect(wrapperTemp.vm.pageDate.getFullYear()).toEqual(today.getFullYear())
+    expect(wrapperTemp.vm.pageDate.getMonth()).toEqual(today.getMonth())
+    expect(wrapperTemp.vm.pageDate.getDate()).toEqual(1)
+    wrapperTemp.vm.setDate(pastDate.valueOf())
+    wrapperTemp.vm.resetDefaultPageDate()
+    expect(wrapperTemp.vm.pageDate.getFullYear()).toEqual(pastDate.getFullYear())
+    expect(wrapperTemp.vm.pageDate.getMonth()).toEqual(pastDate.getMonth())
+    expect(wrapperTemp.vm.pageDate.getDate()).toEqual(1)
+  })
 })
 
+// eslint-disable-next-line max-lines-per-function
 describe('Datepicker shallowMounted', () => {
   let wrapper
   let date
@@ -88,25 +154,6 @@ describe('Datepicker shallowMounted', () => {
     expect(pageDate.getDate()).toEqual(1)
   })
 
-  it('sets the date', () => {
-    const dateTemp = new Date(2016, 9, 9)
-    const wrapperTemp = shallowMount(Datepicker, {
-      propsData: {
-        format: 'yyyy-MM-dd',
-      },
-    })
-    wrapperTemp.vm.setDate(dateTemp.getTime())
-    expect(wrapperTemp.vm.selectedDate.getTime()).toEqual(dateTemp.getTime())
-  })
-
-  it('clears the date', () => {
-    const dateTemp = new Date(2016, 9, 9)
-    const wrapperTemp = shallowMount(Datepicker)
-    wrapperTemp.vm.setDate(dateTemp.getTime())
-    wrapperTemp.vm.clearDate()
-    expect(wrapperTemp.vm.selectedDate).toEqual(null)
-  })
-
   it('should set pageTimestamp to be now', () => {
     const data = Datepicker.data()
     const d = new Date(data.pageTimestamp)
@@ -115,58 +162,26 @@ describe('Datepicker shallowMounted', () => {
     expect(d.getDate()).toEqual(1)
   })
 
-  it('should open and close the calendar', () => {
-    wrapper.vm.close()
-    expect(wrapper.vm.isOpen).toEqual(false)
-
-    wrapper.vm.showSpecificCalendar('Month')
-    expect(wrapper.vm.isOpen).toEqual(true)
-
-    wrapper.vm.close()
-    expect(wrapper.vm.isOpen).toEqual(false)
-
-    wrapper.vm.showSpecificCalendar('Year')
-    expect(wrapper.vm.isOpen).toEqual(true)
-
-    wrapper.vm.close()
-    expect(wrapper.vm.isOpen).toEqual(false)
-
-    wrapper.vm.showSpecificCalendar('Day')
-    expect(wrapper.vm.isOpen).toEqual(true)
-    // calendar is already open so acts as a toggle
-    wrapper.vm.showCalendar()
-    expect(wrapper.vm.isOpen).toEqual(false)
-  })
-
   it('should emit selectedDisabled on a disabled timestamp', () => {
     const dateTemp = new Date(2016, 9, 1)
-    wrapper.vm.selectDisabledDate({ timestamp: dateTemp.getTime() })
+    wrapper.vm.selectDisabledDate({ timestamp: dateTemp.valueOf() })
     expect(wrapper.emitted()['selected-disabled']).toBeTruthy()
-  })
-
-  it('can select a day', () => {
-    const dateTemp = new Date(2016, 9, 1)
-    wrapper.vm.selectDate({ timestamp: dateTemp.getTime() })
-    expect(wrapper.vm.pageTimestamp).toEqual(dateTemp.getTime())
-    expect(wrapper.vm.selectedDate.getMonth()).toEqual(9)
-    expect(wrapper.vm.currentPicker).toEqual('')
-    expect(wrapper.emitted().selected).toBeTruthy()
   })
 
   it('can select a month', () => {
     const dateTemp = new Date(2016, 9, 9)
-    wrapper.vm.selectMonth({ timestamp: dateTemp.getTime() })
+    wrapper.vm.selectMonth({ timestamp: dateTemp.valueOf() })
     expect(wrapper.emitted()['changed-month']).toBeTruthy()
-    expect(wrapper.emitted()['changed-month'][0][0].timestamp).toEqual(dateTemp.getTime())
+    expect(wrapper.emitted()['changed-month'][0][0].timestamp).toEqual(dateTemp.valueOf())
     expect(new Date(wrapper.vm.pageTimestamp).getMonth()).toEqual(dateTemp.getMonth())
     expect(wrapper.vm.currentPicker).toEqual('PickerDay')
   })
 
   it('can select a year', () => {
     const dateTemp = new Date(2018, 9, 9)
-    wrapper.vm.selectYear({ timestamp: dateTemp.getTime() })
+    wrapper.vm.selectYear({ timestamp: dateTemp.valueOf() })
     expect(wrapper.emitted()['changed-year']).toBeTruthy()
-    expect(wrapper.emitted()['changed-year'][0][0].timestamp).toEqual(dateTemp.getTime())
+    expect(wrapper.emitted()['changed-year'][0][0].timestamp).toEqual(dateTemp.valueOf())
     expect(new Date(wrapper.vm.pageTimestamp).getFullYear()).toEqual(dateTemp.getFullYear())
     expect(wrapper.vm.currentPicker).toEqual('PickerMonth')
   })
@@ -181,27 +196,6 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapperTemp.vm.pageDate.getFullYear()).toEqual(today.getFullYear())
     expect(wrapperTemp.vm.pageDate.getMonth()).toEqual(today.getMonth())
     expect(wrapperTemp.vm.pageDate.getDate()).toEqual(1)
-  })
-
-  it('does not set the default page date if a date is selected', () => {
-    const wrapperTemp = shallowMount(Datepicker)
-    const today = new Date()
-    const pastDate = new Date(2018, 3, 20)
-    expect(wrapperTemp.vm.pageDate.getFullYear()).toEqual(today.getFullYear())
-    expect(wrapperTemp.vm.pageDate.getMonth()).toEqual(today.getMonth())
-    expect(wrapperTemp.vm.pageDate.getDate()).toEqual(1)
-    wrapperTemp.vm.setDate(pastDate.getTime())
-    wrapperTemp.vm.resetDefaultPageDate()
-    expect(wrapperTemp.vm.pageDate.getFullYear()).toEqual(pastDate.getFullYear())
-    expect(wrapperTemp.vm.pageDate.getMonth()).toEqual(pastDate.getMonth())
-    expect(wrapperTemp.vm.pageDate.getDate()).toEqual(1)
-  })
-
-  it('sets the date on typedDate event', () => {
-    const wrapperTemp = shallowMount(Datepicker)
-    const today = new Date()
-    wrapperTemp.vm.setTypedDate(today)
-    expect(wrapperTemp.vm.selectedDate).toEqual(today)
   })
 
   it('watches value', async () => {
@@ -242,7 +236,7 @@ describe('Datepicker shallowMounted', () => {
 
   it('should emit changedMonth on a month change received from PickerDay', () => {
     const dateTemp = new Date(2016, 9, 1)
-    wrapper.vm.handleChangedMonthFromDayPicker({ timestamp: dateTemp.getTime() })
+    wrapper.vm.handleChangedMonthFromDayPicker({ timestamp: dateTemp.valueOf() })
     expect(wrapper.emitted()['changed-month']).toBeTruthy()
   })
 })
@@ -278,7 +272,7 @@ describe('Datepicker.vue set by timestamp', () => {
     wrapper = shallowMount(Datepicker, {
       propsData: {
         format: 'yyyy MM dd',
-        value: new Date(Date.UTC(2018, 0, 29)).getTime(),
+        value: new Date(Date.UTC(2018, 0, 29)).valueOf(),
       },
     })
     expect(wrapper.vm.selectedDate.getUTCFullYear()).toEqual(2018)
@@ -331,7 +325,7 @@ describe('Datepicker.vue inline', () => {
 
   it('should not close the calendar when date is selected', () => {
     const date = new Date()
-    wrapper.vm.selectDate({ timestamp: date.getTime() })
+    wrapper.vm.setDate(date.valueOf())
     expect(wrapper.vm.isOpen).toEqual(true)
     document.body.click()
     expect(wrapper.vm.isOpen).toEqual(true)

@@ -6,6 +6,7 @@ import {
 import DateInput from '~/components/DateInput'
 import { en } from '~/locale'
 
+// eslint-disable-next-line max-lines-per-function
 describe('DateInput', () => {
   let wrapper
 
@@ -98,19 +99,20 @@ describe('DateInput', () => {
     expect(wrapper.vm.formattedValue).toEqual('12.08.2018')
   })
 
-  it('emits the date when typed', () => {
+  it('emits set-date when blurred', () => {
     const input = wrapper.find('input')
     wrapper.vm.input.value = '2018-04-24'
-    input.trigger('keyup')
-    expect(wrapper.emitted()['typed-date']).toBeDefined()
-    expect(wrapper.emitted()['typed-date'][0][0]).toBeInstanceOf(Date)
+    input.trigger('blur')
+    expect(wrapper.emitted()['set-date']).toBeDefined()
+    expect(typeof wrapper.emitted()['set-date'][0][0]).toBe('number')
   })
 
-  it('emits closeCalendar when return is pressed', () => {
+  it('emits set-date when return is pressed', () => {
     const input = wrapper.find('input')
-    const blurSpy = jest.spyOn(input.element, 'blur')
-    input.trigger('keyup.enter')
-    expect(blurSpy).toHaveBeenCalled()
+    wrapper.vm.input.value = '2018-04-24'
+    input.trigger('keydown.enter')
+    expect(wrapper.emitted()['set-date']).toBeDefined()
+    expect(typeof wrapper.emitted()['set-date'][0][0]).toBe('number')
   })
 
   it('clears a typed date if it does not parse', () => {

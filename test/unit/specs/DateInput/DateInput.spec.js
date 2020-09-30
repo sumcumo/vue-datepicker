@@ -9,6 +9,7 @@ describe('DateInput unmounted', () => {
   })
 })
 
+// eslint-disable-next-line max-lines-per-function
 describe('DateInput', () => {
   let wrapper
 
@@ -55,20 +56,23 @@ describe('DateInput', () => {
   })
 
   it('emits showCalendar', async () => {
+    wrapper.vm.showCalendar()
+    expect(wrapper.emitted('show-calendar')).toBeTruthy()
+  })
+
+  it('implements the show-calendar-on-focus prop correctly', async () => {
     wrapper.setProps({
       showCalendarOnFocus: true,
     })
 
-    await wrapper.vm.$nextTick()
-    wrapper.vm.showCalendar()
-    expect(wrapper.emitted('show-calendar')).toBeFalsy()
+    wrapper.find('input').element.focus()
+    expect(wrapper.emitted('show-calendar')).toBeTruthy()
 
     wrapper.setProps({
       showCalendarOnFocus: false,
     })
 
-    await wrapper.vm.$nextTick()
-    wrapper.vm.showCalendar()
+    wrapper.find('input').element.focus()
     expect(wrapper.emitted('show-calendar')).toBeTruthy()
   })
 
@@ -112,11 +116,6 @@ describe('DateInput', () => {
     })
     await wrapper.vm.$nextTick()
     expect(wrapper.find('input').element.value).toEqual('!')
-  })
-
-  it('triggers closeCalendar on blur', () => {
-    wrapper.find('input').trigger('blur')
-    expect(wrapper.emitted('close-calendar')).toBeTruthy()
   })
 
   it('should open the calendar on focus', async () => {

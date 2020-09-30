@@ -1,14 +1,20 @@
-import { shallowMount } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import { en } from '~/locale'
 import pickerMixin from '~/mixins/pickerMixin'
 import defaultComponent from '../defaultComponent'
 
 const options = {
   mixins: [pickerMixin],
+  name: 'PickerDay',
   propsData: {
     selectedDate: new Date(2018, 2, 24),
     format: 'dd MMM yyyy',
     translation: en,
+  },
+  data() {
+    return {
+      cells: [],
+    }
   },
 }
 
@@ -25,7 +31,7 @@ describe('pickerMixin', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = shallowMount(defaultComponent, options)
+    wrapper = mount(defaultComponent, options)
   })
 
   afterEach(() => {
@@ -39,12 +45,5 @@ describe('pickerMixin', () => {
   it('should use `showPickerCalendar` correctly', () => {
     wrapper.vm.showPickerCalendar('month')
     expect(wrapper.emitted('show-month-calendar')).toBeTruthy()
-  })
-  it('should use `isNextDisabled` correctly', () => {
-    expect(wrapper.vm.isNextDisabled()).toBeFalsy()
-  })
-
-  it('should use `isPreviousDisabled` correctly', () => {
-    expect(wrapper.vm.isPreviousDisabled()).toBeFalsy()
   })
 })

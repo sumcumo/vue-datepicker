@@ -27,21 +27,29 @@
   }
 
   header {
-    display: block;
+    //display: block;
+    display: flex;
+    justify-content: space-between;
     line-height: 40px;
+    height: 40px;
 
-    span {
+    button {
       display: inline-block;
+      //display: block;
+      flex-grow: 5;
       text-align: center;
-      width: 71.42857142857143%;
-      float: left;
+      background: inherit;
+      border: none;
+      //width: 71.42857142857143%;
+      //float: left;
     }
 
     .prev,
     .next {
       max-height: 40px;
-      width: 14.285714285714286%;
-      float: left;
+      //width: 14.285714285714286%;
+      //float: left;
+      flex-grow: 1;
       position: relative;
 
       .default {
@@ -107,6 +115,8 @@
   }
 
   .cell {
+    background: inherit;
+    border: 1px solid transparent;
     display: inline-block;
     padding: 0 5px;
     width: 14.285714285714286%;
@@ -114,7 +124,6 @@
     line-height: 40px;
     text-align: center;
     vertical-align: middle;
-    border: 1px solid transparent;
 
     &:not(.blank):not(.disabled).day,
     &:not(.blank):not(.disabled).month,
@@ -146,8 +155,16 @@
       }
     }
 
-    &.grey {
-      color: #888;
+    &.muted {
+      color: #a3a3a3;
+
+      &.selected {
+        color: #104756;
+      }
+
+      &.disabled {
+        color: #ddd;
+      }
 
       &:hover {
         background: inherit;
@@ -174,7 +191,6 @@
     width: inherit;
   }
 }
-
 
 .vdp-datepicker__clear-button,
 .vdp-datepicker__calendar-button {

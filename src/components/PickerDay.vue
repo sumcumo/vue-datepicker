@@ -2,18 +2,24 @@
   <div class="picker-view">
     <slot name="beforeCalendarHeaderDay" />
     <PickerHeader
+      ref="PickerHeader"
       :config="headerConfig"
       :next="nextMonth"
       :previous="previousMonth"
+      @focus-first-cell="focus(0)"
+      @focus-up-button="focusUpButton"
     >
-      <span
-        slot="headerContent"
-        :class="allowedToShowView('month') ? 'up' : ''"
+      <UpButton
+        ref="up"
         class="day__month_btn"
-        @click="showPickerCalendar('month')"
+        :is-disabled="upIsDisabled"
+        :is-rtl="isRtl"
+        @focus-first-cell="focus(0)"
+        @focus-nav="focusNav($event)"
+        @next-view-up="showPickerCalendar(nextViewUp)"
       >
         {{ isYmd ? currYearName : currMonthName }} {{ isYmd ? currMonthName : currYearName }}
-      </span>
+      </UpButton>
       <slot
         slot="nextIntervalBtn"
         name="nextIntervalBtn"
@@ -31,23 +37,23 @@
       >
         {{ d }}
       </span>
-      <template v-if="blankDays > 0">
-        <span
-          v-for="d in blankDays"
-          :key="d.timestamp"
-          class="cell day blank"
-        />
-        <!--    TODO change grid system setup with for example flex to remove the magic    -->
-        <!--    the comment arrows in the next two lines are necessary magic to remove the WS   -->
-      </template><!--
-      --><span
-      v-for="day in days"
-      :key="day.timestamp"
-      :class="dayClasses(day)"
-      class="cell day"
-      @click="selectDate(day)"
-      v-html="dayCellContent(day)"
-    />
+      <button
+        v-for="cell in cells"
+        :ref="cell.id"
+        :key="cell.id"
+        :class="dayClasses(cell)"
+        class="cell day"
+        :tabindex="cell.isDisabled ? -1 : null"
+        @click="selectDate(cell)"
+        @keydown.up.prevent="refocusCellBy(-7)"
+        @keydown.down.prevent="refocusCellBy(7)"
+        @keydown.left.prevent="refocusCellBy(isRtl ? 1 : -1)"
+        @keydown.right.prevent="refocusCellBy(isRtl ? -1 : 1)"
+        @keyup.esc="$emit('close')"
+        @focus="focusedCell = cell"
+      >
+        {{ dayCellContent(cell) }}
+      </button>
     </div>
     <slot name="calendarFooterDay" />
   </div>
@@ -55,17 +61,15 @@
 <script>
 import pickerMixin from '~/mixins/pickerMixin'
 import { isDateDisabled } from '~/utils/DisabledDatesUtils'
+import UpButton from '~/components/UpButton'
 
 export default {
-  name: 'DatepickerDayView',
+  name: 'PickerDay',
+  components: { UpButton },
   mixins: [
     pickerMixin,
   ],
   props: {
-    fullMonthName: {
-      type: Boolean,
-      default: false,
-    },
     dayCellContent: {
       type: Function,
       default: (day) => day.date,
@@ -76,9 +80,17 @@ export default {
         return {}
       },
     },
-    mondayFirst: {
+    firstDayOfWeek: {
+      type: Number,
+      default: 0,
+    },
+    showFullMonthName: {
       type: Boolean,
       default: false,
+    },
+    showEdgeDates: {
+      type: Boolean,
+      default: true,
     },
   },
   computed: {
@@ -87,56 +99,43 @@ export default {
      * @return {String[]}
      */
     daysOfWeek() {
-      if (this.mondayFirst) {
-        const tempDays = this.translation.days.slice()
-        tempDays.push(tempDays.shift())
-        return tempDays
-      }
-      return this.translation.days
+      return this.translation.getDaysStartingOn(this.firstDayOfWeek)
     },
     /**
-     * Returns the day number of the week less one for the first of the current month
-     * Used to show amount of empty cells before the first in the day calendar layout
-     * @return {Number}
+     * Returns the number of days in this month
+     * @return {String[]}
      */
-    blankDays() {
-      const d = this.pageDate
-      const dObj = this.useUtc
-        ? new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1))
-        : new Date(d.getFullYear(), d.getMonth(), 1, d.getHours(), d.getMinutes())
-      if (this.mondayFirst) {
-        return this.utils.getDay(dObj) > 0 ? this.utils.getDay(dObj) - 1 : 6
-      }
-      return this.utils.getDay(dObj)
+    daysInMonth() {
+      const dObj = this.newPageDate()
+      return this.utils.getDaysInMonth(dObj)
     },
     /**
-     * Set an object with all days inside the month
-     * @return {Object[]}
+     * Calculates how many days to show from the previous month
+     * @return {number}
      */
-    days() {
-      const d = this.pageDate
+    daysFromPrevMonth() {
+      const dObj = this.newPageDate()
+      return (7 - this.firstDayOfWeek + this.utils.getDay(dObj)) % 7
+    },
+    /**
+     * Calculates how many days to show from the next month
+     * @return {number}
+     */
+    daysFromNextMonth() {
+      const daysThisAndPrevMonth = this.daysFromPrevMonth + this.daysInMonth
+      return (Math.ceil(daysThisAndPrevMonth / 7) * 7) - daysThisAndPrevMonth
+    },
+    /**
+     * Sets an array with all days to show this month
+     * @return {[]}
+     */
+    cells() {
       const days = []
-      // set up a new date object to the beginning of the current 'page'
-      const dObj = this.useUtc
-        ? new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1))
-        : new Date(d.getFullYear(), d.getMonth(), 1, d.getHours(), d.getMinutes())
-      const daysInMonth = this.utils.daysInMonth(
-        this.utils.getFullYear(dObj), this.utils.getMonth(dObj),
-      )
-      for (let i = 0; i < daysInMonth; i += 1) {
-        days.push({
-          date: this.utils.getDate(dObj),
-          timestamp: dObj.getTime(),
-          isSelected: this.isSelectedDate(dObj),
-          isDisabled: this.isDisabledDate(dObj),
-          isHighlighted: this.isHighlightedDate(dObj),
-          isHighlightStart: this.isHighlightStart(dObj),
-          isHighlightEnd: this.isHighlightEnd(dObj),
-          isToday: this.utils.compareDates(dObj, new Date()),
-          isWeekend: this.utils.getDay(dObj) === 0 || this.utils.getDay(dObj) === 6,
-          isSaturday: this.utils.getDay(dObj) === 6,
-          isSunday: this.utils.getDay(dObj) === 0,
-        })
+      const daysInCalendar = this.daysFromPrevMonth + this.daysInMonth + this.daysFromNextMonth
+      const firstOfMonth = this.newPageDate()
+      const dObj = new Date(firstOfMonth.setDate(firstOfMonth.getDate() - this.daysFromPrevMonth))
+      for (let i = 0; i < daysInCalendar; i += 1) {
+        days.push(this.makeDay(i, dObj))
         this.utils.setDate(dObj, this.utils.getDate(dObj) + 1)
       }
       return days
@@ -146,7 +145,8 @@ export default {
      * @return {String}
      */
     currMonthName() {
-      const monthName = this.fullMonthName ? this.translation.months : this.translation.monthsAbbr
+      const monthName = this.showFullMonthName
+        ? this.translation.months : this.translation.monthsAbbr
       return this.utils.getMonthNameAbbr(this.utils.getMonth(this.pageDate), monthName)
     },
     /**
@@ -164,8 +164,55 @@ export default {
     isYmd() {
       return this.translation.ymd && this.translation.ymd === true
     },
+    todayCell() {
+      const today = this.utils.getNewDateObject()
+      for (let i = 0; i < this.cells.length; i += 1) {
+        if (this.cells[i].timestamp === today.valueOf()) {
+          return this.cells[i]
+        }
+      }
+      return null
+    },
+    nextPageDate() {
+      const d = new Date(this.pageTimestamp)
+      return new Date(this.utils.setMonth(d, this.utils.getMonth(d) + 1))
+    },
+    /**
+     * Is the previous month disabled?
+     * @return {Boolean}
+     */
+    previousIsDisabled() {
+      if (!this.disabledDates || !this.disabledDates.to) {
+        return false
+      }
+      const d = this.pageDate
+      return this.utils.getMonth(this.disabledDates.to) >= this.utils.getMonth(d)
+        && this.utils.getFullYear(this.disabledDates.to) >= this.utils.getFullYear(d)
+    },
+    /**
+     * Is the next month disabled?
+     * @return {Boolean}
+     */
+    nextIsDisabled() {
+      if (!this.disabledDates || !this.disabledDates.from) {
+        return false
+      }
+      const d = this.pageDate
+      return this.utils.getMonth(this.disabledDates.from) <= this.utils.getMonth(d)
+        && this.utils.getFullYear(this.disabledDates.from) <= this.utils.getFullYear(d)
+    },
   },
   methods: {
+    /**
+     * Set up a new date object to the first day of the current 'page'
+     * @return Date
+     */
+    newPageDate() {
+      const d = this.pageDate
+      return this.useUtc
+        ? new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1))
+        : new Date(d.getFullYear(), d.getMonth(), 1, d.getHours(), d.getMinutes())
+    },
     /**
      * Emits a selectDate event
      * @param {Object} date
@@ -175,7 +222,28 @@ export default {
         this.$emit('selected-disabled', date)
         return false
       }
-      this.$emit('select-date', date)
+      if (date.isPreviousMonth) {
+        const { timestamp } = date
+        this.previousMonth()
+        this.$nextTick(() => {
+          const newCell = this.cells.find((cell) => cell.timestamp === timestamp)
+          this.focus(newCell.id)
+          this.$emit('set-date', newCell.timestamp)
+        })
+        return true
+      }
+      if (date.isNextMonth) {
+        const { timestamp } = date
+        this.nextMonth()
+        this.$nextTick(() => {
+          const newCell = this.cells.find((cell) => cell.timestamp === timestamp)
+          this.focus(newCell.id)
+          this.$emit('set-date', newCell.timestamp)
+        })
+        return true
+      }
+      this.focus(date.id)
+      this.$emit('set-date', date.timestamp)
       return true
     },
     /**
@@ -197,41 +265,17 @@ export default {
      * Decrement the page month
      */
     previousMonth() {
-      if (!this.isPreviousDisabled()) {
+      if (!this.previousIsDisabled) {
         this.changeMonth(-1)
       }
-    },
-    /**
-     * Is the previous month disabled?
-     * @return {Boolean}
-     */
-    isPreviousDisabled() {
-      if (!this.disabledDates || !this.disabledDates.to) {
-        return false
-      }
-      const d = this.pageDate
-      return this.utils.getMonth(this.disabledDates.to) >= this.utils.getMonth(d)
-        && this.utils.getFullYear(this.disabledDates.to) >= this.utils.getFullYear(d)
     },
     /**
      * Increment the current page month
      */
     nextMonth() {
-      if (!this.isNextDisabled()) {
+      if (!this.nextIsDisabled) {
         this.changeMonth(+1)
       }
-    },
-    /**
-     * Is the next month disabled?
-     * @return {Boolean}
-     */
-    isNextDisabled() {
-      if (!this.disabledDates || !this.disabledDates.from) {
-        return false
-      }
-      const d = this.pageDate
-      return this.utils.getMonth(this.disabledDates.from) <= this.utils.getMonth(d)
-        && this.utils.getFullYear(this.disabledDates.from) <= this.utils.getFullYear(d)
     },
     /**
      * Whether a day is selected
@@ -316,6 +360,7 @@ export default {
         selected: day.isSelected,
         disabled: day.isDisabled,
         highlighted: day.isHighlighted,
+        muted: day.isPreviousMonth || day.isNextMonth,
         today: day.isToday,
         weekend: day.isWeekend,
         sat: day.isSaturday,
@@ -357,6 +402,30 @@ export default {
      */
     isDefined(prop) {
       return typeof prop !== 'undefined' && prop
+    },
+    makeDay(id, dObj) {
+      const isPreviousMonth = dObj < this.pageDate
+      const isNextMonth = dObj >= this.nextPageDate
+      const isSaturday = this.utils.getDay(dObj) === 6
+      const isSunday = this.utils.getDay(dObj) === 0
+      const showDate = !(isPreviousMonth || isNextMonth) || this.showEdgeDates
+
+      return {
+        id,
+        date: showDate ? this.utils.getDate(dObj) : '',
+        timestamp: dObj.valueOf(),
+        isSelected: this.isSelectedDate(dObj),
+        isDisabled: showDate ? this.isDisabledDate(dObj) : true,
+        isHighlighted: this.isHighlightedDate(dObj),
+        isHighlightStart: this.isHighlightStart(dObj),
+        isHighlightEnd: this.isHighlightEnd(dObj),
+        isToday: this.utils.compareDates(dObj, new Date()),
+        isWeekend: isSaturday || isSunday,
+        isSaturday,
+        isSunday,
+        isPreviousMonth,
+        isNextMonth,
+      }
     },
   },
 }

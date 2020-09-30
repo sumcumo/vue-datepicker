@@ -1,6 +1,7 @@
 import DateUtils, { makeDateUtils } from '~/utils/DateUtils'
 import { en } from '~/locale'
 
+// eslint-disable-next-line max-lines-per-function
 describe('DateUtils', () => {
   it('should detect invalid date object', () => {
     expect(DateUtils.isValidDate(null)).toEqual(false)

@@ -2,6 +2,7 @@ import { shallowMount } from '@vue/test-utils'
 import PickerDay from '~/components/PickerDay'
 import { en } from '~/locale'
 
+// eslint-disable-next-line max-lines-per-function
 describe('PickerDay highlight date', () => {
   let wrapper
   beforeEach(() => {
@@ -110,10 +111,7 @@ describe('PickerDay highlight date', () => {
     wrapper.setProps({
       highlighted: {
         customPredictor(date) {
-          if (date.getDate() % 5 === 0) {
-            return true
-          }
-          return false
+          return date.getDate() % 5 === 0
         },
       },
     })

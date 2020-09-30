@@ -54,6 +54,13 @@ export default class Language {
     this._days = days
   }
 
+  getDaysStartingOn(firstDayOfWeek) {
+    const firstDays = this._days.slice(firstDayOfWeek)
+    const lastDays = this._days.slice(0, firstDayOfWeek)
+
+    return firstDays.concat(lastDays)
+  }
+
   getMonthByAbbrName(name) {
     let index = -1
     this._monthsAbbr.some((month, i) => {

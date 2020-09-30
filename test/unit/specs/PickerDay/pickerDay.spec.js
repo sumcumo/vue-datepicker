@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils'
+import { mount, shallowMount } from '@vue/test-utils'
 import PickerDay from '~/components/PickerDay'
 import { en } from '~/locale'
 
@@ -30,14 +30,32 @@ describe('PickerDay: DOM', () => {
 
   it('emits an event when selected', () => {
     wrapper.vm.selectDate({ isDisabled: false })
-    expect(wrapper.emitted()['select-date']).toBeTruthy()
+    expect(wrapper.emitted()['set-date']).toBeTruthy()
   })
 
   it('knows the current page month', () => {
     expect(wrapper.vm.getPageMonth()).toEqual(1)
   })
+})
 
-  it('emits show year calendar event when clicked on the year', () => {
+describe('PickerDay mounted: DOM', () => {
+  let wrapper
+  beforeEach(() => {
+    wrapper = mount(PickerDay, {
+      propsData: {
+        allowedToShowView: () => true,
+        translation: en,
+        pageDate: new Date(2018, 1, 1),
+        selectedDate: new Date(2018, 2, 24),
+      },
+    })
+  })
+
+  afterEach(() => {
+    wrapper.destroy()
+  })
+
+  it('emits show month calendar event when the up button is clicked', () => {
     const yearBtn = wrapper.find('.day__month_btn')
     yearBtn.trigger('click')
     expect(wrapper.emitted()['show-month-calendar']).toBeTruthy()

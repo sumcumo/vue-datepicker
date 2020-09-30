@@ -4,18 +4,15 @@ import PickerHeader from '~/components/PickerHeader'
 describe('PickerHeader unmounted', () => {
   it('sets the correct default data', () => {
     const { props } = PickerHeader
-    expect(typeof props.config.default).toEqual('function')
+    expect(typeof props.config.default)
+      .toEqual('function')
     const configDefault = props.config.default()
-    expect(configDefault.showHeader).toBeTruthy()
-    expect(configDefault.isRtl).toBeFalsy()
-    expect(typeof configDefault.isNextDisabled).toEqual('function')
-    expect(configDefault.isNextDisabled()).toBeFalsy()
-    expect(typeof configDefault.isPreviousDisabled).toEqual('function')
-    expect(configDefault.isPreviousDisabled()).toBeFalsy()
-    expect(typeof props.next.default).toEqual('function')
-    expect(props.next.default()).toBeFalsy()
-    expect(typeof props.previous.default).toEqual('function')
-    expect(props.previous.default()).toBeFalsy()
+    expect(configDefault.showHeader)
+      .toBeTruthy()
+    expect(configDefault.isRtl)
+      .toBeFalsy()
+    expect(configDefault.upIsDisabled)
+      .toBeFalsy()
   })
 })
 
@@ -23,53 +20,43 @@ describe('PickerHeader mounted', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = shallowMount(PickerHeader, {})
+    wrapper = shallowMount(PickerHeader, {
+      propsData: {
+        previous: () => {},
+        next: () => {},
+      },
+    })
   })
 
   afterEach(() => {
     wrapper.destroy()
   })
 
-  it('should use `isLeftNavDisabled` correctly', async () => {
-    const spyPrevious = jest.spyOn(wrapper.vm.config, 'isPreviousDisabled')
-    const spyNext = jest.spyOn(wrapper.vm.config, 'isNextDisabled')
-    expect(wrapper.vm.isLeftNavDisabled).toBeFalsy()
-    expect(spyPrevious).toHaveBeenCalled()
+  it('should set `leftNavIsDisabled` correctly', () => {
+    expect(wrapper.vm.leftNavIsDisabled)
+      .toBeFalsy()
     wrapper.setProps({
       config: {
         isRtl: true,
-        isNextDisabled() {
-          return false
-        },
-        isPreviousDisabled() {
-          return false
-        },
+        isNextDisabled: false,
+        isPreviousDisabled: false,
       },
     })
-    await wrapper.vm.$nextTick()
-    expect(wrapper.vm.isLeftNavDisabled).toBeFalsy()
-    expect(spyNext).toHaveBeenCalled()
+    expect(wrapper.vm.leftNavIsDisabled)
+      .toBeFalsy()
   })
 
-  it('should use `isRightNavDisabled` correctly', async () => {
-    const spyPrevious = jest.spyOn(wrapper.vm.config, 'isPreviousDisabled')
-    const spyNext = jest.spyOn(wrapper.vm.config, 'isNextDisabled')
-
-    expect(wrapper.vm.isRightNavDisabled).toBeFalsy()
-    expect(spyNext).toHaveBeenCalled()
+  it('should set `rightNavIsDisabled` correctly', () => {
+    expect(wrapper.vm.rightNavIsDisabled)
+      .toBeFalsy()
     wrapper.setProps({
       config: {
         isRtl: true,
-        isNextDisabled() {
-          return false
-        },
-        isPreviousDisabled() {
-          return false
-        },
+        isNextDisabled: false,
+        isPreviousDisabled: false,
       },
     })
-    await wrapper.vm.$nextTick()
-    expect(wrapper.vm.isRightNavDisabled).toBeFalsy()
-    expect(spyPrevious).toHaveBeenCalled()
+    expect(wrapper.vm.rightNavIsDisabled)
+      .toBeFalsy()
   })
 })

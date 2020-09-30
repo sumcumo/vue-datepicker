@@ -3,9 +3,20 @@
     <h1>Datepicker Examples</h1>
     <div class="example">
       <h3>Default datepicker...</h3>
-      <Datepicker placeholder="Select Date" />
+      <Datepicker placeholder="Select Date"/>
       <code>
         &lt;datepicker placeholder="Select Date"&gt;&lt;/datepicker&gt;
+      </code>
+    </div>
+
+    <div class="example">
+      <h3>Custom first-day-of-week</h3>
+      <Datepicker
+        placeholder="Type or select date"
+        first-day-of-week="mon"
+      />
+      <code>
+        &lt;datepicker placeholder="Type or select date" first-day-of-week="mon"&gt;&lt;/datepicker&gt;
       </code>
     </div>
 
@@ -17,6 +28,17 @@
       />
       <code>
         &lt;datepicker placeholder="Type or select date" :typeable="true"&gt;&lt;/datepicker&gt;
+      </code>
+    </div>
+
+    <div class="example">
+      <h3>Don't show edge-dates datepicker</h3>
+      <Datepicker
+        placeholder="Type or select date"
+        :show-edge-dates="false"
+      />
+      <code>
+        &lt;datepicker placeholder="Type or select date" :show-edge-dates="false"&gt;&lt;/datepicker&gt;
       </code>
     </div>
 
@@ -47,7 +69,7 @@
 
     <div class="example">
       <h3>Format datepicker</h3>
-      <Datepicker :format="format" />
+      <Datepicker :format="format"/>
       <code>
         &lt;datepicker :format="format"&gt;&lt;/datepicker&gt;
       </code>
@@ -81,7 +103,7 @@
 
     <div class="example">
       <h3>With minimum and maximum date range</h3>
-      <Datepicker :disabled-dates="disabledDates" />
+      <Datepicker :disabled-dates="disabledDates"/>
       <code>
         &lt;datepicker :disabled-dates="disabledDates"&gt;&lt;/datepicker&gt;
       </code>
@@ -89,11 +111,11 @@
         <h5>Settings</h5>
         <div class="form-group">
           <label>Disabled to:</label>
-          <Datepicker @selected="disableTo" />
+          <Datepicker @selected="disableTo"/>
         </div>
         <div class="form-group">
           <label>Disabled from:</label>
-          <Datepicker @selected="disableFrom" />
+          <Datepicker @selected="disableFrom"/>
         </div>
         <div class="form-group">
           <label>Disabled Days of Month:</label>
@@ -104,10 +126,10 @@
             @change="setDisabledDays"
           >
         </div>
-        <pre>disabled: {{ disabledDates }}</pre>
+        <pre>disabledDates: {{ disabledDates }}</pre>
 
         <h5>Resulting Date picker</h5>
-        <Datepicker :disabled-dates="disabledDates" />
+        <Datepicker :disabled-dates="disabledDates"/>
       </div>
     </div>
 
@@ -120,31 +142,31 @@
         </div>
         <pre>{{ disabledFnContent }}</pre>
         <h5>Resulting Date picker</h5>
-        <Datepicker :disabled-dates="disabledFn" />
+        <Datepicker :disabled-dates="disabledFn"/>
       </div>
     </div>
 
     <div class="example">
       <h3>Highlighting Dates Matching Given Function</h3>
-      <Datepicker :highlighted="highlighted" />
+      <Datepicker :highlighted="highlighted"/>
       <code>
         &lt;datepicker :highlighted="highlighted"&gt;&lt;/datepicker&gt;
       </code>
       <div class="settings">
         <h5>Settings</h5>
         <pre>
-          highlighted: {
-            customPredictor: function (date) {
-              // highlights every day of a month which is a multiple of 4
-              if (date.getDate() % 4 === 0) {
-                return true
+            highlighted: {
+              customPredictor: function (date) {
+                // highlights every day of a month which is a multiple of 4
+                if (date.getDate() % 4 === 0) {
+                  return true
+                }
               }
             }
-          }
-        </pre>
+          </pre>
 
         <h5>Resulting Date picker</h5>
-        <Datepicker :highlighted="highlightedFn" />
+        <Datepicker :highlighted="highlightedFn"/>
       </div>
     </div>
 
@@ -157,11 +179,11 @@
         <h5>Settings</h5>
         <div class="form-group">
           <label>Highlight from:</label>
-          <Datepicker @selected="highlightFrom" />
+          <Datepicker @selected="highlightFrom"/>
         </div>
         <div class="form-group">
           <label>Highlight to:</label>
-          <Datepicker @selected="highlightTo" />
+          <Datepicker @selected="highlightTo"/>
         </div>
         <div class="form-group">
           <label>Highlight Days of Month:</label>
@@ -174,13 +196,13 @@
         <pre>highlighted: {{ highlighted }}</pre>
 
         <h5>Resulting Date picker</h5>
-        <Datepicker :highlighted="highlighted" />
+        <Datepicker :highlighted="highlighted"/>
       </div>
     </div>
 
     <div class="example">
       <h3>With default open date</h3>
-      <Datepicker :open-date="openDate" />
+      <Datepicker :open-date="openDate"/>
       <code>
         &lt;datepicker :disabled="disabled"&gt;&lt;/datepicker&gt;
       </code>
@@ -188,9 +210,9 @@
         <h5>Settings</h5>
         <div class="form-group">
           <label>Open date:</label>
-          <Datepicker v-model="openDate" />
+          <Datepicker v-model="openDate"/>
         </div>
-        <pre>openDate: {{ openDate }}</pre>
+        <pre>open-date: {{ openDate }}</pre>
       </div>
     </div>
 
@@ -221,14 +243,14 @@
 
     <div class="example">
       <h3>Inline datepicker</h3>
-      <Datepicker :inline="true" />
+      <Datepicker :inline="true"/>
       <code>
         &lt;datepicker :inline="true"&gt;&lt;/datepicker&gt;
       </code>
     </div>
     <div class="example">
       <h3>RTL datepicker</h3>
-      <Datepicker :language="languages.he" />
+      <Datepicker :language="languages.he"/>
       <code>
         &lt;datepicker :language="languages.he"&gt;&lt;/datepicker&gt;
       </code>
@@ -237,23 +259,23 @@
     <div class="example">
       <h3>Day view only</h3>
       <Datepicker
-        :minimum-view="'day'"
-        :maximum-view="'day'"
+        minimum-view="day"
+        maximum-view="day"
       />
       <code>
-        &lt;datepicker :minimumView="'day'" :maximumView="'day'"&gt;&lt;/datepicker&gt;
+        &lt;datepicker minimum-view="day" maximum-view="day"&gt;&lt;/datepicker&gt;
       </code>
     </div>
 
     <div class="example">
       <h3>Day view only RTL</h3>
       <Datepicker
-        :minimum-view="'day'"
-        :maximum-view="'day'"
+        minimum-view="day"
+        maximum-view="day"
         :language="languages.he"
       />
       <code>
-        &lt;datepicker :minimumView="'day'" :maximumView="'day'"
+        &lt;datepicker minimum-view="day" maximum-view="day"
         language="languages.he"&gt;&lt;/datepicker&gt;
       </code>
     </div>
@@ -261,37 +283,37 @@
     <div class="example">
       <h3>Month view only</h3>
       <Datepicker
-        :minimum-view="'month'"
-        :maximum-view="'month'"
+        minimum-view="month"
+        maximum-view="month"
       />
       <code>
-        &lt;datepicker :minimumView="'month'" :maximumView="'month'"&gt;&lt;/datepicker&gt;
+        &lt;datepicker minimum-view="month" maximum-view="month"&gt;&lt;/datepicker&gt;
       </code>
     </div>
 
     <div class="example">
       <h3>Day and month view only</h3>
       <Datepicker
-        :minimum-view="'day'"
-        :maximum-view="'month'"
+        minimum-view="day"
+        maximum-view="month"
         :initial-view="'month'"
       />
       <code>
-        &lt;datepicker :minimumView="'day'" :maximumView="'month'"
-        :initialView="'month'"&gt;&lt;/datepicker&gt;
+        &lt;datepicker minimum-view="day" maximum-view="month"
+        initial-view="month"&gt;&lt;/datepicker&gt;
       </code>
     </div>
 
     <div class="example">
       <h3>Year and month view only</h3>
       <Datepicker
-        :minimum-view="'month'"
-        :maximum-view="'year'"
-        :initial-view="'year'"
+        minimum-view="month"
+        maximum-view="year"
+        initial-view="year"
       />
       <code>
-        &lt;datepicker :minimumView="'month'" :maximumView="'year'"
-        :initialView="'year'"&gt;&lt;/datepicker&gt;
+        &lt;datepicker minimum-view="month" maximum-view="year"
+        initial-view="year"&gt;&lt;/datepicker&gt;
       </code>
     </div>
   </div>
@@ -401,7 +423,8 @@ export default {
       if (elem.target.value === 'undefined') {
         return
       }
-      const highlightedDays = elem.target.value.split(',').map((day) => parseInt(day, 10))
+      const highlightedDays = elem.target.value.split(',')
+        .map((day) => parseInt(day, 10))
       this.highlighted = {
         from: this.highlighted.from,
         to: this.highlighted.to,
@@ -412,7 +435,8 @@ export default {
       if (elem.target.value === 'undefined') {
         return
       }
-      const disabledDays = elem.target.value.split(',').map((day) => parseInt(day, 10))
+      const disabledDays = elem.target.value.split(',')
+        .map((day) => parseInt(day, 10))
       this.disabledDates = {
         from: this.disabledDates.from,
         to: this.disabledDates.to,
@@ -445,7 +469,7 @@ export default {
 
 <style>
 
-@import url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css');
+/*@import url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css');*/
 
 body {
   font-family: 'Helvetica Neue Light', Helvetica, sans-serif;
