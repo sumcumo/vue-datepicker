@@ -203,17 +203,22 @@ const utils = {
     const year = this.getFullYear(date)
     const month = this.getMonth(date) + 1
     const day = this.getDate(date)
-    return formatStr
-      .replace(/dd/, (`0${day}`).slice(-2))
-      .replace(/d/, day)
-      .replace(/yyyy/, year)
-      .replace(/yy/, String(year).slice(2))
-      .replace(/MMMM/, this.getMonthName(this.getMonth(date), translationTemp.months))
-      .replace(/MMM/, this.getMonthNameAbbr(this.getMonth(date), translationTemp.monthsAbbr))
-      .replace(/MM/, (`0${month}`).slice(-2))
-      .replace(/M(?![aäe])/, month)
-      .replace(/o/, this.getNthSuffix(this.getDate(date)))
-      .replace(/E(?![eéi])/, this.getDayNameAbbr(date, translationTemp.days))
+
+    const matches = {
+      dd: (`0${day}`).slice(-2),
+      d: day,
+      yyyy: year,
+      yy: String(year).slice(2),
+      MMMM: this.getMonthName(this.getMonth(date), translationTemp.months),
+      MMM: this.getMonthNameAbbr(this.getMonth(date), translationTemp.monthsAbbr),
+      MM: (`0${month}`).slice(-2),
+      M: month,
+      o: this.getNthSuffix(this.getDate(date)),
+      E: this.getDayNameAbbr(date, translationTemp.days),
+    }
+
+    const REGEX_FORMAT = /y{2,4}|M{1,4}(?![aäe])|d{1,2}|o{1}|E{1}(?![eéi])/g
+    return formatStr.replace(REGEX_FORMAT, (match) => matches[match] || match)
   },
 
   /**
