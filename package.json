@@ -39,9 +39,6 @@
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs"
   },
-  "standard-version": {
-    "releaseCommitMessageFormat": "chore(release): {{currentTag}}"
-  },
   "pre-commit": [
     "lint",
     "test"
