@@ -44,6 +44,22 @@ describe('DateUtils', () => {
     expect(DateUtils.formatDate(new Date(2016, 11, 2), 'dd MMM yyyy')).toEqual('02 Dec 2016')
   })
 
+  // issue: https://github.com/sumcumo/vue-datepicker/issues/29
+  it('should format date strings without formatting issues like 03 Nrdv 2016 instead of 03 Nov 2016', () => {
+    expect(DateUtils.formatDate(new Date(2016, 0, 12), 'd MMM yyyy')).toEqual('12 Jan 2016')
+    expect(DateUtils.formatDate(new Date(2016, 1, 12), 'd MMM yyyy')).toEqual('12 Feb 2016')
+    expect(DateUtils.formatDate(new Date(2016, 2, 12), 'd MMM yyyy')).toEqual('12 Mar 2016')
+    expect(DateUtils.formatDate(new Date(2016, 3, 12), 'd MMM yyyy')).toEqual('12 Apr 2016')
+    expect(DateUtils.formatDate(new Date(2016, 4, 12), 'd MMM yyyy')).toEqual('12 May 2016')
+    expect(DateUtils.formatDate(new Date(2016, 5, 12), 'd MMM yyyy')).toEqual('12 Jun 2016')
+    expect(DateUtils.formatDate(new Date(2016, 6, 12), 'd MMM yyyy')).toEqual('12 Jul 2016')
+    expect(DateUtils.formatDate(new Date(2016, 7, 12), 'd MMM yyyy')).toEqual('12 Aug 2016')
+    expect(DateUtils.formatDate(new Date(2016, 8, 12), 'd MMM yyyy')).toEqual('12 Sep 2016')
+    expect(DateUtils.formatDate(new Date(2016, 9, 12), 'd MMM yyyy')).toEqual('12 Oct 2016')
+    expect(DateUtils.formatDate(new Date(2016, 10, 12), 'd MMM yyyy')).toEqual('12 Nov 2016')
+    expect(DateUtils.formatDate(new Date(2016, 11, 12), 'd MMM yyyy')).toEqual('12 Dec 2016')
+  })
+
   it('should parse english dates', () => {
     expect(DateUtils.parseDate('16 April 2020', 'd MMMM yyyy', en, null))
       .toEqual('2020-04-16T00:00:00Z')
