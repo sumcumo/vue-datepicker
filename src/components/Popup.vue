@@ -2,7 +2,7 @@
 import {
   getPopupElementSize,
   getRelativePosition,
-} from '../utils/dom'
+} from '~/utils/dom'
 
 export default {
   name: 'Popup',

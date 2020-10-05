@@ -3,7 +3,7 @@
 
 | Prop                          | Type             | Default     | Description                                     |
 | ----------------------------- | -----------------| ----------- | ----------------------------------------------- |
-| append-to-body                | Boolean          |             | Append datepicker calendar to body              |
+| append-to-body                | Boolean          | false       | Append datepicker calendar to body              |
 | autofocus                     | String           |             | Sets html `autofocus` attribute on input        |
 | bootstrap-styling             | Boolean          | false       | Use bootstrap v4 styling classes.               |
 | calendar-button               | Boolean          | false       | Show an icon that that can be clicked           |
