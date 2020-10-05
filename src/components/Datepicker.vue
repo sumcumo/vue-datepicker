@@ -67,6 +67,7 @@
           :page-timestamp="pageTimestamp"
           :is-rtl="isRtl"
           :use-utc="useUtc"
+          :year-picker-range="yearPickerRange"
 
           :show-header="showHeader"
           :full-month-name="fullMonthName"
@@ -228,6 +229,10 @@ export default {
         Array,
       ],
       default: '',
+    },
+    yearPickerRange: {
+      type: Number,
+      default: 10,
     },
   },
   data() {
