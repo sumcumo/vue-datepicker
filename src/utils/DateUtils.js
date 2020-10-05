@@ -217,7 +217,7 @@ const utils = {
       E: this.getDayNameAbbr(date, translationTemp.days),
     }
 
-    const REGEX_FORMAT = /y{2,4}|M{1,4}(?![aäe])|d{1,2}|o{1}|E{1}(?![eéi])/g
+    const REGEX_FORMAT = /y{4}|y{2}|M{1,4}(?![aäe])|d{1,2}|o{1}|E{1}(?![eéi])/g
     return formatStr.replace(REGEX_FORMAT, (match) => matches[match] || match)
   },
 
