@@ -4,10 +4,9 @@
     <!-- Calendar Button -->
     <span
       v-if="calendarButton"
-      :class="{'input-group-prepend' : bootstrapStyling}"
-      :style="{'cursor:not-allowed;' : disabled}"
+      :class="{'input-group-prepend' : bootstrapStyling, 'calendar-btn-disabled': disabled}"
       class="vdp-datepicker__calendar-button"
-      @click="showCalendar(true)"
+      @click="showCalendarByButton"
     >
       <span :class="{'input-group-text' : bootstrapStyling}">
         <i :class="calendarButtonIcon">
@@ -22,25 +21,24 @@
     <input
       :id="id"
       :ref="refName"
-      :type="inline ? 'hidden' : 'text'"
-      :class="computedInputClass"
-      :name="name"
-      :value="formattedValue"
-      :open-date="openDate"
-      :placeholder="placeholder"
-      :clear-button="clearButton"
-      :disabled="disabled"
-      :required="required"
-      :readonly="!typeable"
-      :autofocus="autofocus"
-      :maxlength="maxlength"
-      :pattern="pattern"
-      :tabindex="tabindex"
       autocomplete="off"
-      @click="showCalendar(false)"
-      @focus="showFocusCalendar"
-      @keyup="parseTypedDate"
+      :autofocus="autofocus"
+      :clear-button="clearButton"
+      :class="computedInputClass"
+      :disabled="disabled"
+      :maxlength="maxlength"
+      :name="name"
+      :pattern="pattern"
+      :placeholder="placeholder"
+      :readonly="!typeable"
+      :required="required"
+      :tabindex="tabindex"
+      :type="inline ? 'hidden' : 'text'"
+      :value="formattedValue"
       @blur="inputBlurred"
+      @click="showCalendarByClick"
+      @focus="showCalendarByFocus"
+      @keyup="parseTypedDate"
     >
     <!-- Clear Button -->
     <span
@@ -65,17 +63,21 @@ import { makeDateUtils } from '~/utils/DateUtils'
 import inputProps from '~/mixins/inputProps'
 
 export default {
-  name: 'DatepickerInput',
+  name: 'DateInput',
   mixins: [
     inputProps,
   ],
   props: {
-    selectedDate: {
-      type: Date,
-      default: null,
+    isOpen: {
+      type: Boolean,
+      default: false,
     },
     resetTypedDate: {
       type: [Date],
+      default: null,
+    },
+    selectedDate: {
+      type: Date,
       default: null,
     },
     translation: {
@@ -94,18 +96,6 @@ export default {
     }
   },
   computed: {
-    formattedValue() {
-      if (!this.selectedDate) {
-        return null
-      }
-      if (this.typedDate) {
-        return this.typedDate
-      }
-      return typeof this.format === 'function'
-        ? this.format(new Date(this.selectedDate))
-        : this.utils.formatDate(new Date(this.selectedDate), this.format, this.translation)
-    },
-
     computedInputClass() {
       if (this.bootstrapStyling) {
         if (typeof this.inputClass === 'string') {
@@ -118,6 +108,17 @@ export default {
       }
       return this.inputClass
     },
+    formattedValue() {
+      if (!this.selectedDate) {
+        return null
+      }
+      if (this.typedDate) {
+        return this.typedDate
+      }
+      return typeof this.format === 'function'
+        ? this.format(new Date(this.selectedDate))
+        : this.utils.formatDate(new Date(this.selectedDate), this.format, this.translation)
+    },
   },
   watch: {
     resetTypedDate() {
@@ -128,27 +129,25 @@ export default {
     this.input = this.$el.querySelector('input')
   },
   methods: {
-    showCalendar(isButton) {
-      // prevent to emit the event twice if we are listening focus
-      if (!this.showCalendarOnFocus) {
-        if (
-          !this.showCalendarOnButtonClick
-          || (
-            this.showCalendarOnButtonClick
-            && this.calendarButton
-            && isButton
-          )
-        ) {
-          this.$emit('show-calendar')
-        }
-      }
+    /**
+     * emit a clearDate event
+     */
+    clearDate() {
+      this.$emit('clear-date')
     },
-    showFocusCalendar() {
-      if (this.showCalendarOnFocus) {
-        this.$emit('show-calendar', true)
+    /**
+     * nullify the typed date to defer to regular formatting
+     * called once the input is blurred
+     */
+    inputBlurred() {
+      const parsableDate = this.parseDate(this.input.value)
+      if (this.typeable && Number.isNaN(Date.parse(parsableDate))) {
+        this.clearDate()
+        this.input.value = null
+        this.typedDate = null
       }
-
-      this.$emit('focus')
+      this.$emit('blur')
+      this.$emit('close-calendar')
     },
     /**
      * Attempt to parse a typed date
@@ -173,26 +172,6 @@ export default {
         }
       }
     },
-    /**
-     * nullify the typed date to defer to regular formatting
-     * called once the input is blurred
-     */
-    inputBlurred() {
-      const parsableDate = this.parseDate(this.input.value)
-      if (this.typeable && Number.isNaN(Date.parse(parsableDate))) {
-        this.clearDate()
-        this.input.value = null
-        this.typedDate = null
-      }
-      this.$emit('blur')
-      this.$emit('close-calendar')
-    },
-    /**
-     * emit a clearDate event
-     */
-    clearDate() {
-      this.$emit('clear-date')
-    },
     parseDate(value) {
       return this.utils.parseDate(
         value,
@@ -200,6 +179,26 @@ export default {
         this.translation,
         this.parser,
       )
+    },
+    showCalendar() {
+      this.$emit(this.isOpen ? 'close-calendar' : 'show-calendar')
+    },
+    showCalendarByButton() {
+      if (!this.typeable) {
+        this.showCalendar()
+      }
+    },
+    showCalendarByClick() {
+      if (!this.showCalendarOnButtonClick) {
+        this.showCalendar()
+      }
+    },
+    showCalendarByFocus() {
+      if (this.showCalendarOnFocus) {
+        this.$emit('show-calendar')
+      }
+
+      this.$emit('focus')
     },
   },
 }

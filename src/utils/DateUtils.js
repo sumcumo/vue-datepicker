@@ -87,12 +87,12 @@ const utils = {
    * @param {Date} date2
    */
   compareDates(date1, date2) {
-    const d1 = new Date(date1.getTime())
-    const d2 = new Date(date2.getTime())
+    const d1 = new Date(date1.valueOf())
+    const d2 = new Date(date2.valueOf())
 
     this.resetDateTime(d1)
     this.resetDateTime(d2)
-    return d1.getTime() === d2.getTime()
+    return d1.valueOf() === d2.valueOf()
   },
 
   /**
@@ -104,7 +104,7 @@ const utils = {
     if (Object.prototype.toString.call(date) !== '[object Date]') {
       return false
     }
-    return !Number.isNaN(date.getTime())
+    return !Number.isNaN(date.valueOf())
   },
 
   /**

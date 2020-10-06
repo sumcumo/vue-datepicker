@@ -41,8 +41,8 @@ describe('PickerYear', () => {
         from: new Date(2017, 10, 24),
       },
     })
-    expect(wrapper.vm.isPreviousDisabled()).toEqual(true)
-    expect(wrapper.vm.isNextDisabled()).toEqual(true)
+    expect(wrapper.vm.isPreviousDisabled).toEqual(true)
+    expect(wrapper.vm.isNextDisabled).toEqual(true)
   })
 
   it('can change decade despite having a disabled decade', () => {
@@ -53,8 +53,8 @@ describe('PickerYear', () => {
         from: new Date(2021, 11, 19),
       },
     })
-    expect(wrapper.vm.isPreviousDisabled()).toEqual(false)
-    expect(wrapper.vm.isNextDisabled()).toEqual(false)
+    expect(wrapper.vm.isPreviousDisabled).toEqual(false)
+    expect(wrapper.vm.isNextDisabled).toEqual(false)
   })
 
   it('can accept a customPredictor to check if the year is disabled', () => {

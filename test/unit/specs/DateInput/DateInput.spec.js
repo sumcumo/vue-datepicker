@@ -61,7 +61,7 @@ describe('DateInput', () => {
 
     await wrapper.vm.$nextTick()
     wrapper.vm.showCalendar()
-    expect(wrapper.emitted('show-calendar')).toBeFalsy()
+    expect(wrapper.vm.isOpen).toBeFalsy()
 
     wrapper.setProps({
       showCalendarOnFocus: false,

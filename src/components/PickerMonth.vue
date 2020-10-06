@@ -7,7 +7,6 @@
       :previous="previousYear"
     >
       <span
-        slot="headerContent"
         :class="allowedToShowView('year') ? 'up' : ''"
         class="month__year_btn"
         @click="showPickerCalendar('year')"
@@ -46,8 +45,30 @@ export default {
   ],
   computed: {
     /**
-     * set an object with all months
-     * @return {Object[]}
+     * Checks if the next year is disabled or not
+     * @return {Boolean}
+     */
+    isNextDisabled() {
+      if (!this.disabledDates || !this.disabledDates.from) {
+        return false
+      }
+      return this.utils.getFullYear(
+        this.disabledDates.from,
+      ) <= this.utils.getFullYear(this.pageDate)
+    },
+    /**
+     * Checks if the previous year is disabled or not
+     * @return {Boolean}
+     */
+    isPreviousDisabled() {
+      if (!this.disabledDates || !this.disabledDates.to) {
+        return false
+      }
+      return this.utils.getFullYear(this.disabledDates.to) >= this.utils.getFullYear(this.pageDate)
+    },
+    /**
+     * Set an array with all months
+     * @return {Array}
      */
     months() {
       const d = this.pageDate
@@ -59,7 +80,7 @@ export default {
       for (let i = 0; i < 12; i += 1) {
         months.push({
           month: this.utils.getMonthName(i, this.translation.months),
-          timestamp: dObj.getTime(),
+          timestamp: dObj.valueOf(),
           isSelected: this.isSelectedMonth(dObj),
           isDisabled: this.isDisabledMonth(dObj),
         })
@@ -78,17 +99,6 @@ export default {
   },
   methods: {
     /**
-     * Emits a selectMonth event
-     * @param {Object} month
-     */
-    selectMonth(month) {
-      if (!month.isDisabled) {
-        this.$emit('select-month', month)
-        return true
-      }
-      return false
-    },
-    /**
      * Changes the year up or down
      * @param {Number} incrementBy
      */
@@ -98,46 +108,8 @@ export default {
       this.$emit('changed-year', date)
     },
     /**
-     * Decrements the year
-     */
-    previousYear() {
-      if (!this.isPreviousDisabled()) {
-        this.changeYear(-1)
-      }
-    },
-    /**
-     * Checks if the previous year is disabled or not
-     * @return {Boolean}
-     */
-    isPreviousDisabled() {
-      if (!this.disabledDates || !this.disabledDates.to) {
-        return false
-      }
-      return this.utils.getFullYear(this.disabledDates.to) >= this.utils.getFullYear(this.pageDate)
-    },
-    /**
-     * Increments the year
-     */
-    nextYear() {
-      if (!this.isNextDisabled()) {
-        this.changeYear(1)
-      }
-    },
-    /**
-     * Checks if the next year is disabled or not
-     * @return {Boolean}
-     */
-    isNextDisabled() {
-      if (!this.disabledDates || !this.disabledDates.from) {
-        return false
-      }
-      return this.utils.getFullYear(
-        this.disabledDates.from,
-      ) <= this.utils.getFullYear(this.pageDate)
-    },
-    /**
      * Whether the selected date is in this month
-     * @param {Date}
+     * @param {Date} date
      * @return {Boolean}
      */
     isSelectedMonth(date) {
@@ -147,11 +119,38 @@ export default {
     },
     /**
      * Whether a month is disabled
-     * @param {Date}
+     * @param {Date} date
      * @return {Boolean}
      */
     isDisabledMonth(date) {
       return isMonthDisabled(date, this.disabledDates, this.utils)
+    },
+    /**
+     * Increments the year
+     */
+    nextYear() {
+      if (!this.isNextDisabled) {
+        this.changeYear(1)
+      }
+    },
+    /**
+     * Decrements the year
+     */
+    previousYear() {
+      if (!this.isPreviousDisabled) {
+        this.changeYear(-1)
+      }
+    },
+    /**
+     * Emits a selectMonth event
+     * @param {Object} month
+     */
+    selectMonth(month) {
+      if (!month.isDisabled) {
+        this.$emit('select-month', month)
+        return true
+      }
+      return false
     },
   },
 }

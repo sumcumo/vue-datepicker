@@ -53,24 +53,24 @@ describe('PickerMonth', () => {
   })
 
   it('should disable previous', () => {
-    expect(wrapper.vm.isPreviousDisabled()).toEqual(true)
+    expect(wrapper.vm.isPreviousDisabled).toEqual(true)
   })
 
   it('should not disable previous', () => {
     wrapper.setProps({
       disabledDates: {},
     })
-    expect(wrapper.vm.isPreviousDisabled()).toEqual(false)
+    expect(wrapper.vm.isPreviousDisabled).toEqual(false)
   })
 
   it('should disable next', () => {
-    expect(wrapper.vm.isNextDisabled()).toEqual(true)
+    expect(wrapper.vm.isNextDisabled).toEqual(true)
   })
 
   it('should not disable next', () => {
     wrapper.setProps({
       disabledDates: {},
     })
-    expect(wrapper.vm.isNextDisabled()).toEqual(false)
+    expect(wrapper.vm.isNextDisabled).toEqual(false)
   })
 })

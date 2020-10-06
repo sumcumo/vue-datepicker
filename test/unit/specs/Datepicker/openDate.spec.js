@@ -23,7 +23,7 @@ describe('Datepicker with open date', () => {
 
   it('should set pageTimestamp to be first day of open date\'s month', () => {
     const date = new Date(wrapper.vm.pageTimestamp)
-    expect(wrapper.vm.openDate.getTime()).toEqual(openDate.getTime())
+    expect(wrapper.vm.openDate.valueOf()).toEqual(openDate.valueOf())
     wrapper.vm.setPageDate()
     expect(date.getFullYear()).toEqual(openDate.getFullYear())
     expect(date.getMonth()).toEqual(openDate.getMonth())
@@ -32,7 +32,7 @@ describe('Datepicker with open date', () => {
 
   it('should open with selected date if one is set', () => {
     const newDate = new Date(2018, 10, 9)
-    wrapper.vm.selectDate({ timestamp: newDate.getTime() })
+    wrapper.vm.selectDate({ timestamp: newDate.valueOf() })
     expect(wrapper.vm.pageDate.getMonth()).toEqual(10)
     expect(wrapper.vm.pageDate.getFullYear()).toEqual(2018)
   })

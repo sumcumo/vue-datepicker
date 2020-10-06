@@ -31,6 +31,7 @@ export default {
     }),
     vue({
       css: true,
+      needMap: false, // https://github.com/vuejs/rollup-plugin-vue/issues/238
     }),
     replace({
       'process.env.NODE_ENV': JSON.stringify('development'),

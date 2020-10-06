@@ -55,12 +55,28 @@ export default class Language {
   }
 
   getMonthByAbbrName(name) {
-    const monthValue = this._monthsAbbr.findIndex((month) => month === name) + 1
+    let index = -1
+    this._monthsAbbr.some((month, i) => {
+      if (month === name) {
+        index = i
+        return true
+      }
+      return false
+    })
+    const monthValue = index + 1
     return monthValue < 10 ? `0${monthValue}` : `${monthValue}`
   }
 
   getMonthByName(name) {
-    const monthValue = this._months.findIndex((month) => month === name) + 1
+    let index = -1
+    this._months.some((month, i) => {
+      if (month === name) {
+        index = i
+        return true
+      }
+      return false
+    })
+    const monthValue = index + 1
     return monthValue < 10 ? `0${monthValue}` : `${monthValue}`
   }
 }

@@ -41,7 +41,7 @@ describe('PickerDay: disabled', () => {
   })
 
   it('can change month despite having a disabled month', () => {
-    expect(wrapper.vm.isNextDisabled()).toBeTruthy()
+    expect(wrapper.vm.isNextDisabled).toBeTruthy()
   })
 
   it('should detect disabled dates', () => {
