@@ -134,6 +134,40 @@
         &lt;datepicker :calendar-button="true" :show-calendar-on-button-click="true"&gt;&lt;/datepicker&gt;
       </code>
     </div>
+
+    <div class="example overflow-scroll">
+      <h3>Append datepicker to body</h3>
+      <Datepicker
+        :append-to-body="true"
+      />
+      <h3>Don't append datepicker to body</h3>
+      <Datepicker />
+      <code>
+        &lt;datepicker :append-to-body="true"&gt;&lt;/datepicker&gt;
+      </code>
+    </div>
+
+    <div class="example">
+      <h3>Fixed positions</h3>
+      <Datepicker
+        :fixed-position="fixedPosition"
+      />
+      <code>
+        &lt;datepicker :fixed-position="fixedPosition"&gt;&lt;/datepicker&gt;
+      </code>
+      <div class="settings">
+        <h5>Settings</h5>
+        <select v-model="fixedPosition">
+          <option
+            v-for="(position) in fixedPositions"
+            :key="position"
+            :value="position"
+          >
+            {{ position }}
+          </option>
+        </select>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -146,6 +180,15 @@ export default {
       format: 'd MMMM yyyy',
       openDate: null,
       vModelExample: null,
+      fixedPositions: [
+        'bottom',
+        'bottom-left',
+        'bottom-right',
+        'top',
+        'top-left',
+        'top-right',
+      ],
+      fixedPosition: 'bottom',
     }
   },
 }

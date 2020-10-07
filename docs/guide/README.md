@@ -55,6 +55,6 @@ If you use [SASS](https://sass-lang.com/) you can directly import the src file.
 
 ```vue
 <style lang="scss">
-@import '~@sumcumo/vue-datepicker/src/styles/style.scss';
+@import '~@sum.cumo/vue-datepicker/src/styles/style.scss';
 </style>
 ```
