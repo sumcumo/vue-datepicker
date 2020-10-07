@@ -23,6 +23,10 @@ export default {
       type: String,
       default: '',
     },
+    rtl: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -70,11 +74,13 @@ export default {
       }
       const { width, height } = this.popupRect
       const { left, top } = getRelativePosition({
-        el: relativeElement,
+        el: popup,
+        elRelative: relativeElement,
         targetWidth: width,
         targetHeight: height,
         fixed: this.appendToBody,
         fixedPosition: this.fixedPosition,
+        rtl: this.rtl,
       })
 
       this.$el.style.left = left

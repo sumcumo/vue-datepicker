@@ -28,25 +28,28 @@ export function getPopupElementSize(element) {
 
 /**
  * get the popup position
- * @param {Element} el relative element
+ * @param {Element} el element
+ * @param {Element} elRelative relative element
  * @param {Number} targetWidth target element's width
  * @param {Number} targetHeight target element's height
  * @param {Boolean} fixed
  * @param {String} fixedPosition
+ * @param {Boolean} rtl
  */
 export function getRelativePosition({
   el,
+  elRelative,
   targetWidth,
   targetHeight,
   fixed,
-  // eslint-disable-next-line no-unused-vars
   fixedPosition,
+  rtl,
 }) {
   let left = 0
   let top = 0
   let offsetX = 0
   let offsetY = 0
-  const relativeRect = el.getBoundingClientRect()
+  const relativeRect = elRelative.getBoundingClientRect()
   const documentWidth = document.documentElement.clientWidth
   const documentHeight = document.documentElement.clientHeight
   if (fixed) {
@@ -54,49 +57,65 @@ export function getRelativePosition({
     offsetY = window.pageYOffset + relativeRect.top
   }
 
-  const fixedPositionLeft = fixedPosition.indexOf('left') !== -1
-  const fixedPositionBottom = fixedPosition.indexOf('bottom') !== -1
-  const fixedPositionRight = fixedPosition.indexOf('right') !== -1
-  const fixedPositionTop = fixedPosition.indexOf('top') !== -1
+  const calendarBounding = el.getBoundingClientRect()
+  const outOfBoundsRight = calendarBounding.right > window.innerWidth
+  const outOfBoundsBottom = calendarBounding.bottom > window.innerHeight
 
-  const isLeft = (
-    relativeRect.left + relativeRect.width / 2 <= documentWidth / 2
-    || fixedPositionLeft
-  ) && !fixedPositionRight
+  const fixedPositionRight = fixedPosition && fixedPosition.indexOf('right') !== -1
+  const fixedPositionTop = fixedPosition && fixedPosition.indexOf('top') !== -1
 
-  const hasRelativWidth = documentWidth - relativeRect.left < targetWidth
-    && relativeRect.right < targetWidth
-    && !fixedPositionLeft
-    && !fixedPositionRight
-
-  if (hasRelativWidth) {
-    left = offsetX - relativeRect.left + 1
-  } else if (isLeft) {
+  const setLeft = () => {
     left = offsetX
-    // else is right
-  } else {
+  }
+  const setRight = () => {
     left = offsetX + relativeRect.width - targetWidth
   }
-
-  const isBottom = (
-    relativeRect.top + relativeRect.height / 2 <= documentHeight / 2
-      || fixedPositionBottom
-  )
-    && !fixedPositionTop
-
-  const hasRelativHeight = relativeRect.top <= targetHeight
-    && documentHeight - relativeRect.bottom <= targetHeight
-    && !fixedPositionBottom
-    && !fixedPositionTop
-
-  if (hasRelativHeight) {
-    top = offsetY + documentHeight - relativeRect.top - targetHeight
-  } else if (isBottom) {
+  const setBottom = () => {
     top = offsetY + relativeRect.height
-    // else is top
-  } else {
+  }
+  const setTop = () => {
     top = offsetY - targetHeight
   }
+
+  if (fixedPosition === '') {
+    if (outOfBoundsRight || rtl) {
+      setRight()
+    } else {
+      setLeft()
+    }
+
+    if (outOfBoundsBottom) {
+      setTop()
+    } else {
+      setBottom()
+    }
+    const hasRelativWidth = documentWidth - relativeRect.left < targetWidth
+      && relativeRect.right < targetWidth
+
+    const hasRelativHeight = relativeRect.top <= targetHeight
+      && documentHeight - relativeRect.bottom <= targetHeight
+
+    if (hasRelativWidth) {
+      left = offsetX - relativeRect.left + 1
+    }
+
+    if (hasRelativHeight) {
+      top = offsetY + documentHeight - relativeRect.top - targetHeight
+    }
+  } else {
+    if (fixedPositionRight) {
+      setRight()
+    } else {
+      setLeft()
+    }
+
+    if (fixedPositionTop) {
+      setTop()
+    } else {
+      setBottom()
+    }
+  }
+
   return {
     left: `${left}px`,
     top: `${top}px`,

@@ -29,6 +29,7 @@
       :visible="isOpen"
       :inline="inline"
       :fixed-position="fixedPosition"
+      :rtl="isRtl"
     >
       <Calendar
         v-if="isOpen"
