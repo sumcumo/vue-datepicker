@@ -47,64 +47,58 @@ export function getRelativePosition({
   let offsetX = 0
   let offsetY = 0
   const relativeRect = el.getBoundingClientRect()
-  const dw = document.documentElement.clientWidth
-  const dh = document.documentElement.clientHeight
+  const documentWidth = document.documentElement.clientWidth
+  const documentHeight = document.documentElement.clientHeight
   if (fixed) {
     offsetX = window.pageXOffset + relativeRect.left
     offsetY = window.pageYOffset + relativeRect.top
   }
-  if (dw - relativeRect.left < targetWidth && relativeRect.right < targetWidth) {
+
+  const fixedPositionLeft = fixedPosition.indexOf('left') !== -1
+  const fixedPositionBottom = fixedPosition.indexOf('bottom') !== -1
+  const fixedPositionRight = fixedPosition.indexOf('right') !== -1
+  const fixedPositionTop = fixedPosition.indexOf('top') !== -1
+
+  const isLeft = (
+    relativeRect.left + relativeRect.width / 2 <= documentWidth / 2
+    || fixedPositionLeft
+  ) && !fixedPositionRight
+
+  const hasRelativWidth = documentWidth - relativeRect.left < targetWidth
+    && relativeRect.right < targetWidth
+    && !fixedPositionLeft
+    && !fixedPositionRight
+
+  if (hasRelativWidth) {
     left = offsetX - relativeRect.left + 1
-  } else if (relativeRect.left + relativeRect.width / 2 <= dw / 2) {
+  } else if (isLeft) {
     left = offsetX
+    // else is right
   } else {
     left = offsetX + relativeRect.width - targetWidth
   }
-  if (relativeRect.top <= targetHeight && dh - relativeRect.bottom <= targetHeight) {
-    top = offsetY + dh - relativeRect.top - targetHeight
-  } else if (relativeRect.top + relativeRect.height / 2 <= dh / 2) {
+
+  const isBottom = (
+    relativeRect.top + relativeRect.height / 2 <= documentHeight / 2
+      || fixedPositionBottom
+  )
+    && !fixedPositionTop
+
+  const hasRelativHeight = relativeRect.top <= targetHeight
+    && documentHeight - relativeRect.bottom <= targetHeight
+    && !fixedPositionBottom
+    && !fixedPositionTop
+
+  if (hasRelativHeight) {
+    top = offsetY + documentHeight - relativeRect.top - targetHeight
+  } else if (isBottom) {
     top = offsetY + relativeRect.height
+    // else is top
   } else {
     top = offsetY - targetHeight
   }
   return {
     left: `${left}px`,
     top: `${top}px`,
-  }
-}
-
-export const setPickerPosition = ({
-  element,
-  relativeElement,
-  fixedPosition,
-}) => {
-  const calendarBounding = element.getBoundingClientRect()
-  const outOfBoundsRight = calendarBounding.right > window.innerWidth
-  const outOfBoundsBottom = calendarBounding.bottom > window.innerHeight
-  const relativeElementHeight = `${relativeElement.getBoundingClientRect().height}px`
-
-  if (fixedPosition === '') {
-    if (outOfBoundsRight) {
-      element.style.right = 0
-    } else {
-      element.style.right = 'unset'
-    }
-
-    if (outOfBoundsBottom) {
-      element.style.bottom = relativeElementHeight
-    } else {
-      element.style.bottom = 'unset'
-    }
-  } else {
-    if (fixedPosition.indexOf('right') !== -1) {
-      element.style.right = 0
-    } else {
-      element.style.right = 'unset'
-    }
-    if (fixedPosition.indexOf('top') !== -1) {
-      element.style.bottom = relativeElementHeight
-    } else {
-      element.style.bottom = 'unset'
-    }
   }
 }
