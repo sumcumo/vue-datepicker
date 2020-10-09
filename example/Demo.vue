@@ -294,6 +294,27 @@
         :initialView="'year'"&gt;&lt;/datepicker&gt;
       </code>
     </div>
+
+    <div class="example">
+      <h3>Year picker range</h3>
+      <Datepicker
+        :year-picker-range="yearPickerRange"
+      />
+      <code>
+        &lt;datepicker :year-picker-range="yearPickerRange"&gt;&lt;/datepicker&gt;
+      </code>
+      <div class="settings">
+        <h5>Settings</h5>
+        <div class="form-group">
+          <label>Open date:</label>
+          <input
+            v-model="yearPickerRange"
+            type="number"
+          >
+        </div>
+        <pre>openDate: {{ yearPickerRange }}</pre>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -369,6 +390,7 @@ export default {
       vModelExample: null,
       languages: lang,
       language: 'en',
+      yearPickerRange: 10,
     }
   },
   computed: {
