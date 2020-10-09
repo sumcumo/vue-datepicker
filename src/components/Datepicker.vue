@@ -49,78 +49,64 @@
       />
     </DateInput>
 
-    <template v-if="isOpen">
+    <Popup
+      ref="popup"
+      :append-to-body="appendToBody"
+      :visible="isOpen"
+      :inline="inline"
+      :fixed-position="fixedPosition"
+      :rtl="isRtl"
+    >
       <div
+        v-show="isOpen"
         ref="datepicker"
         :class="[calendarClass, 'vdp-datepicker__calendar', isInline && 'inline']"
         @mousedown.prevent
       >
-        <slot name="beforeCalendarHeader" />
-        <component
-          :is="currentPicker"
-          :page-date="pageDate"
-          :selected-date="selectedDate"
-          :allowed-to-show-view="allowedToShowView"
-          :disabled-dates="disabledDates"
-          :highlighted="highlighted"
-          :translation="translation"
-          :page-timestamp="pageTimestamp"
-          :is-rtl="isRtl"
-          :use-utc="useUtc"
+        <template v-if="isOpen">
+          <slot name="beforeCalendarHeader" />
+          <component
+            :is="currentPicker"
+            :page-date="pageDate"
+            :selected-date="selectedDate"
+            :allowed-to-show-view="allowedToShowView"
+            :disabled-dates="disabledDates"
+            :highlighted="highlighted"
+            :translation="translation"
+            :page-timestamp="pageTimestamp"
+            :is-rtl="isRtl"
+            :use-utc="useUtc"
 
-          :show-header="showHeader"
-          :full-month-name="fullMonthName"
-          :monday-first="mondayFirst"
-          :day-cell-content="dayCellContent"
+            :show-header="showHeader"
+            :full-month-name="fullMonthName"
+            :monday-first="mondayFirst"
+            :day-cell-content="dayCellContent"
 
-          @select-date="selectDate"
-          @changed-month="handleChangedMonthFromDayPicker"
-          @selected-disabled="selectDisabledDate"
+            @select-date="selectDate"
+            @changed-month="handleChangedMonthFromDayPicker"
+            @selected-disabled="selectDisabledDate"
 
-          @select-month="selectMonth"
-          @changed-year="setPageDate"
-          @show-month-calendar="showSpecificCalendar('Month')"
+            @select-month="selectMonth"
+            @changed-year="setPageDate"
+            @show-month-calendar="showSpecificCalendar('Month')"
 
-          @select-year="selectYear"
-          @changed-decade="setPageDate"
-          @show-year-calendar="showSpecificCalendar('Year')"
-        >
-          <slot
-            slot="beforeCalendarHeaderDay"
-            name="beforeCalendarHeaderDay"
-          />
-          <slot
-            slot="calendarFooterDay"
-            name="calendarFooterDay"
-          />
-          <slot
-            slot="beforeCalendarHeaderMonth"
-            name="beforeCalendarHeaderMonth"
-          />
-          <slot
-            slot="calendarFooterMonth"
-            name="calendarFooterMonth"
-          />
-          <slot
-            slot="beforeCalendarHeaderYear"
-            name="beforeCalendarHeaderYear"
-          />
-          <slot
-            slot="calendarFooterYear"
-            name="calendarFooterYear"
-          />
-          <slot
-            slot="nextIntervalBtn"
-            name="nextIntervalBtn"
-          />
-          <slot
-            slot="prevIntervalBtn"
-            name="prevIntervalBtn"
-          />
-        </component>
-        <slot name="calendarFooter" />
+            @select-year="selectYear"
+            @changed-decade="setPageDate"
+            @show-year-calendar="showSpecificCalendar('Year')"
+          >
+            <template
+              v-for="slotKey of calendarSlots"
+            >
+              <slot
+                :slot="slotKey"
+                :name="slotKey"
+              />
+            </template>
+          </component>
+          <slot name="calendarFooter" />
+        </template>
       </div>
-    </template>
+    </Popup>
   </div>
 </template>
 <script>
@@ -132,6 +118,8 @@ import PickerDay from '~/components/PickerDay'
 import PickerMonth from '~/components/PickerMonth'
 import PickerYear from '~/components/PickerYear'
 import inputProps from '~/mixins/inputProps'
+import calendarSlots from '~/utils/calendarSlots'
+import Popup from '~/components/Popup'
 
 export default {
   name: 'Datepicker',
@@ -140,6 +128,7 @@ export default {
     PickerDay,
     PickerMonth,
     PickerYear,
+    Popup,
   },
   mixins: [
     inputProps,
@@ -229,6 +218,11 @@ export default {
       ],
       default: '',
     },
+
+    appendToBody: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     // const startDate = this.openDate ? new Date(this.openDate) : new Date()
@@ -259,6 +253,7 @@ export default {
       calendarHeight: 0,
       resetTypedDate: constructedDateUtils.getNewDateObject(),
       utils: constructedDateUtils,
+      calendarSlots,
     }
   },
   computed: {
@@ -302,48 +297,6 @@ export default {
     this.init()
   },
   methods: {
-    setPickerPosition() {
-      this.$nextTick(() => {
-        const calendar = this.$refs.datepicker
-        if (calendar) {
-          if (this.currentPicker) {
-            const parent = calendar.parentElement
-            const calendarBounding = calendar.getBoundingClientRect()
-            const outOfBoundsRight = calendarBounding.right > window.innerWidth
-            const outOfBoundsBottom = calendarBounding.bottom > window.innerHeight
-            const parentHeight = `${parent.getBoundingClientRect().height}px`
-
-            if (this.fixedPosition === '') {
-              if (outOfBoundsRight) {
-                calendar.style.right = 0
-              } else {
-                calendar.style.right = 'unset'
-              }
-
-              if (outOfBoundsBottom) {
-                calendar.style.bottom = parentHeight
-              } else {
-                calendar.style.bottom = 'unset'
-              }
-            } else {
-              if (this.fixedPosition.indexOf('right') !== -1) {
-                calendar.style.right = 0
-              } else {
-                calendar.style.right = 'unset'
-              }
-              if (this.fixedPosition.indexOf('top') !== -1) {
-                calendar.style.bottom = parentHeight
-              } else {
-                calendar.style.bottom = 'unset'
-              }
-            }
-          } else {
-            calendar.style.right = 'unset'
-            calendar.style.bottom = 'unset'
-          }
-        }
-      })
-    },
     /**
      * Called in the event that the user navigates to date pages and
      * closes the picker without selecting a date.
@@ -368,7 +321,6 @@ export default {
       }
       this.setInitialView()
       if (!this.isInline) {
-        this.setPickerPosition()
         this.$emit('opened')
       }
       return true
@@ -568,6 +520,7 @@ export default {
 }
 
 </script>
+
 <style lang="scss">
 @import '../styles/style.scss';
 </style>

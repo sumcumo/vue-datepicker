@@ -317,11 +317,15 @@ describe('Datepicker.vue using UTC', () => {
 describe('Datepicker.vue inline', () => {
   let wrapper
   beforeEach(() => {
-    wrapper = shallowMount(Datepicker, {
+    wrapper = mount(Datepicker, {
       propsData: {
         inline: true,
       },
     })
+  })
+
+  afterEach(() => {
+    wrapper.vm.$destroy()
   })
 
   it('should not showCalendar as already open', () => {
@@ -367,5 +371,33 @@ describe('Datepicker with initial-view', () => {
     wrapper.vm.showCalendar()
     expect(wrapper.vm.computedInitialView).toEqual('year')
     expect(wrapper.vm.currentPicker).toEqual('PickerYear')
+  })
+})
+
+describe('Datepicker on body', () => {
+  let wrapper
+  it('should append popup to body', async () => {
+    wrapper = mount(Datepicker, {
+      propsData: {
+        appendToBody: true,
+      },
+    })
+    wrapper.vm.showCalendar()
+    await wrapper.vm.$nextTick()
+    expect(wrapper.vm.$el.querySelector('.vdp-datepicker__calendar')).toBeNull()
+    expect(document.querySelector('.vdp-datepicker__calendar')).toBeDefined()
+    wrapper.vm.$destroy()
+  })
+
+  it('should remove popup on body on component removal', async () => {
+    wrapper = mount(Datepicker, {
+      propsData: {
+        appendToBody: true,
+      },
+    })
+    wrapper.vm.showCalendar()
+    await wrapper.vm.$nextTick()
+    wrapper.vm.$destroy()
+    expect(document.querySelector('.vdp-datepicker__calendar')).toBeNull()
   })
 })

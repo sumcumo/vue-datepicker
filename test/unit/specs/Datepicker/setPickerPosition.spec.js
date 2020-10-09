@@ -24,13 +24,15 @@ describe('Datepicker mounted', () => {
       bottom: 10,
       height: 10,
     }))
+    wrapper.vm.$refs.popup.$el.getBoundingClientRect = getBoundingClientRect
+    wrapper.vm.$el.getBoundingClientRect = getBoundingClientRect
+
     wrapper.vm.showCalendar()
     await wrapper.vm.$nextTick()
-    wrapper.vm.$refs.datepicker.getBoundingClientRect = getBoundingClientRect
-    wrapper.vm.$refs.datepicker.parentElement.getBoundingClientRect = getBoundingClientRect
-    const calendar = wrapper.vm.$refs.datepicker
-    expect(calendar.style.bottom).toBe('')
-    expect(calendar.style.right).toBe('')
+
+    const calendar = wrapper.vm.$refs.popup
+    expect(calendar.$el.style.left).toBe('0px')
+    expect(calendar.$el.style.top).toBe('10px')
   })
 
   it('everything out of bound', async () => {
@@ -38,14 +40,24 @@ describe('Datepicker mounted', () => {
       right: 2000,
       bottom: 1000,
       height: 10,
+      width: 0,
     }))
+
+    global.getComputedStyle = jest.fn(() => ({
+      marginLeft: '0',
+      marginRight: '0',
+      marginTop: '-10',
+      marginBottom: '0',
+    }))
+    wrapper.vm.$refs.popup.$el.getBoundingClientRect = getBoundingClientRect
+    wrapper.vm.$el.getBoundingClientRect = getBoundingClientRect
+
     wrapper.vm.showCalendar()
-    wrapper.vm.$refs.datepicker.getBoundingClientRect = getBoundingClientRect
-    wrapper.vm.$refs.datepicker.parentElement.getBoundingClientRect = getBoundingClientRect
     await wrapper.vm.$nextTick()
-    const calendar = wrapper.vm.$refs.datepicker
-    expect(calendar.style.right).toBe('0px')
-    expect(calendar.style.bottom).toBe('10px')
+
+    const calendar = wrapper.vm.$refs.popup
+    expect(calendar.$el.style.left).toBe('0px')
+    expect(calendar.$el.style.top).toBe('10px')
   })
 
   it('fixed position top right', async () => {
@@ -53,46 +65,64 @@ describe('Datepicker mounted', () => {
       right: 10,
       bottom: 10,
       height: 10,
+      width: 10,
     }))
+    global.getComputedStyle = jest.fn(() => ({
+      marginLeft: '0',
+      marginRight: '0',
+      marginTop: '0',
+      marginBottom: '0',
+    }))
+    wrapper.vm.$refs.popup.$el.getBoundingClientRect = getBoundingClientRect
+    wrapper.vm.$el.getBoundingClientRect = getBoundingClientRect
     wrapper.setProps({
       fixedPosition: 'top-right',
     })
+
     wrapper.vm.showCalendar()
-    wrapper.vm.$refs.datepicker.parentElement.getBoundingClientRect = getBoundingClientRect
     await wrapper.vm.$nextTick()
-    const calendar = wrapper.vm.$refs.datepicker
-    expect(calendar.style.right).toBe('0px')
-    expect(calendar.style.bottom).toBe('10px')
+
+    const calendar = wrapper.vm.$refs.popup
+    expect(calendar.$el.style.left).toBe('10px')
+    expect(calendar.$el.style.top).toBe('0px')
   })
 
   it('fixed position bottom left', async () => {
     wrapper.setProps({
       fixedPosition: 'bottom-left',
     })
+
     wrapper.vm.showCalendar()
     await wrapper.vm.$nextTick()
-    const calendar = wrapper.vm.$refs.datepicker
-    expect(calendar.style.right).toBe('')
-    expect(calendar.style.bottom).toBe('')
+
+    const calendar = wrapper.vm.$refs.popup
+    expect(calendar.$el.style.left).toBe('0px')
+    expect(calendar.$el.style.top).toBe('0px')
   })
 
-  it('without picker', async () => {
-    wrapper.setData({
-      currentPicker: '',
-    })
-    wrapper.vm.setPickerPosition()
+  it('should have relative position', async () => {
+    const getBoundingClientRect = jest.fn(() => ({
+      left: 10,
+      right: 10,
+      bottom: 10,
+      height: 10,
+      width: 10,
+      top: 10,
+    }))
+    global.getComputedStyle = jest.fn(() => ({
+      marginLeft: '0',
+      marginRight: '50',
+      marginTop: '50',
+      marginBottom: '0',
+    }))
+    wrapper.vm.$refs.popup.$el.getBoundingClientRect = getBoundingClientRect
+    wrapper.vm.$el.getBoundingClientRect = getBoundingClientRect
+
+    wrapper.vm.showCalendar()
     await wrapper.vm.$nextTick()
 
-    wrapper.vm.$refs = {
-      datepicker: {
-        style: {},
-      },
-    }
-
-    wrapper.vm.setPickerPosition()
-    await wrapper.vm.$nextTick()
-    const calendar = wrapper.vm.$refs.datepicker
-    expect(calendar.style.right).toBe('unset')
-    expect(calendar.style.bottom).toBe('unset')
+    const calendar = wrapper.vm.$refs.popup
+    expect(calendar.$el.style.left).toBe('-9px')
+    expect(calendar.$el.style.top).toBe('-60px')
   })
 })
