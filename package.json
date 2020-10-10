@@ -1,6 +1,6 @@
 {
   "name": "@sum.cumo/vue-datepicker",
-  "version": "2.1.0",
+  "version": "2.1.2",
   "description": "A simple Vue.js datepicker component. Supports disabling of dates, inline mode, translations",
   "license": "Apache-2.0",
   "homepage": "https://github.com/sumcumo/vue-datepicker",
@@ -39,9 +39,6 @@
     "prerelease": "standard-version --dry-run",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs"
-  },
-  "standard-version": {
-    "releaseCommitMessageFormat": "chore(release): {{currentTag}}"
   },
   "pre-commit": [
     "lint",

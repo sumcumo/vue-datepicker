@@ -7,6 +7,7 @@ module.exports = [
         '/guide/',
         'Getting started',
       ],
+      '/guide/Migration/',
       '/guide/DateFormatting/',
       '/guide/DisabledDates/',
       '/guide/Events/',
