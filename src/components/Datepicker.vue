@@ -36,6 +36,7 @@
       @clear-date="clearDate"
       @close-calendar="close"
       @focus="onFocus"
+      @hello="setTypedDate"
       @show-calendar="showCalendar"
       @typed-date="setTypedDate"
     >
@@ -265,9 +266,6 @@ export default {
     computedInitialView() {
       return this.initialView ? this.initialView : this.minimumView
     },
-    computedOpenDate() {
-      return this.openDate ? this.utils.getNewDateObject(this.openDate) : null
-    },
     isInline() {
       return !!this.inline
     },
@@ -385,7 +383,9 @@ export default {
       const date = new Date(timestamp)
       this.selectedDate = date
       this.setPageDate(date)
-      this.close()
+      if (!this.typeable) {
+        this.close()
+      }
       this.$emit('selected', date)
       this.$emit('input', date)
     },
@@ -499,7 +499,7 @@ export default {
     selectDate(date) {
       this.setDate(date.timestamp)
       if (!this.isInline) {
-        this.close(true)
+        this.close()
       }
       this.resetTypedDate = this.utils.getNewDateObject()
     },

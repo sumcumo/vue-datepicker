@@ -162,7 +162,6 @@ export default {
       ].indexOf(code) !== -1) {
         this.input.blur()
       }
-
       if (this.typeable) {
         const parsableDate = this.parseDate(this.input.value)
         const parsedDate = Date.parse(parsableDate)
