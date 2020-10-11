@@ -148,9 +148,7 @@ export default {
     selectMonth(month) {
       if (!month.isDisabled) {
         this.$emit('select-month', month)
-        return true
       }
-      return false
     },
   },
 }

@@ -367,10 +367,9 @@ export default {
     selectDate(date) {
       if (date.isDisabled) {
         this.$emit('selected-disabled', date)
-        return false
+      } else {
+        this.$emit('select-date', date)
       }
-      this.$emit('select-date', date)
-      return true
     },
   },
 }

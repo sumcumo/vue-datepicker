@@ -321,11 +321,11 @@ export default {
           const year = date.getFullYear()
           const month = date.getMonth()
           const day = date.getDate()
-          // disable every years that are a multiple of 2
+          // disable every year that is a multiple of 2
           if (year % 2 === 0) {
             return true
           }
-          // disable every months that are a multiple of 3
+          // disable every month that is a multiple of 3
           if (month % 3 === 0) {
             return true
           }
@@ -341,11 +341,11 @@ export default {
           const year = date.getFullYear()
           const month = date.getMonth()
           const day = date.getDate()
-          // disable every years that are a multiple of 2
+          // disable every year that is a multiple of 2
           if (year % 2 === 0) {
             return true
           }
-          // disable every months that are a multiple of 3
+          // disable every month that is a multiple of 3
           if (month % 3 === 0) {
             return true
           }
@@ -353,6 +353,7 @@ export default {
           if (month % 2 !== 0 && day < 15) {
             return true
           }
+          return false
         }
       }`,
       highlightedFn: {

@@ -325,8 +325,8 @@ describe('Datepicker.vue inline', () => {
     })
   })
 
-  it('should not showCalendar as already open', () => {
-    expect(wrapper.vm.showCalendar()).toEqual(false)
+  it('should show calendar as already open', () => {
+    expect(wrapper.vm.isOpen).toEqual(true)
     expect(wrapper.vm.isInline).toEqual(true)
   })
 
@@ -368,5 +368,15 @@ describe('Datepicker with initial-view', () => {
     wrapper.vm.showCalendar()
     expect(wrapper.vm.computedInitialView).toEqual('year')
     expect(wrapper.vm.currentPicker).toEqual('PickerYear')
+  })
+
+  it('should not open if the calendar is disabled', () => {
+    wrapper = shallowMount(Datepicker, {
+      propsData: {
+        disabled: true,
+      },
+    })
+    wrapper.vm.showCalendar()
+    expect(wrapper.vm.isOpen).toBeFalsy()
   })
 })

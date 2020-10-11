@@ -135,9 +135,7 @@ export default {
     nextDecade() {
       if (!this.isNextDisabled) {
         this.changeYear(10)
-        return true
       }
-      return false
     },
     /**
      * Decrements the decade
@@ -145,9 +143,7 @@ export default {
     previousDecade() {
       if (!this.isPreviousDisabled) {
         this.changeYear(-10)
-        return true
       }
-      return false
     },
     /**
      * Emits a selectYear event
@@ -156,9 +152,7 @@ export default {
     selectYear(year) {
       if (!year.isDisabled) {
         this.$emit('select-year', year)
-        return true
       }
-      return false
     },
   },
 }

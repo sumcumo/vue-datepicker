@@ -36,7 +36,6 @@
       @clear-date="clearDate"
       @close-calendar="close"
       @focus="onFocus"
-      @hello="setTypedDate"
       @show-calendar="showCalendar"
       @typed-date="setTypedDate"
     >
@@ -328,11 +327,10 @@ export default {
      * Close the calendar views
      */
     close() {
-      if (this.isInline) {
-        return
+      if (!this.isInline) {
+        this.currentPicker = ''
+        this.$emit('closed')
       }
-      this.currentPicker = ''
-      this.$emit('closed')
     },
     /**
      * Handles a month change from the day picker
@@ -383,9 +381,6 @@ export default {
       const date = new Date(timestamp)
       this.selectedDate = date
       this.setPageDate(date)
-      if (!this.typeable) {
-        this.close()
-      }
       this.$emit('selected', date)
       this.$emit('input', date)
     },
@@ -497,11 +492,9 @@ export default {
      * @param {Object} date
      */
     selectDate(date) {
-      this.setDate(date.timestamp)
-      if (!this.isInline) {
-        this.close()
-      }
       this.resetTypedDate = this.utils.getNewDateObject()
+      this.close()
+      this.setDate(date.timestamp)
     },
     /**
      * @param {Object} date
@@ -537,27 +530,22 @@ export default {
     },
     /**
      * Shows the calendar at the relevant view: 'day', 'month', or 'year'
-     * @return {boolean}
      */
     showCalendar() {
       if (this.disabled || this.isInline) {
-        return false
+        return
       }
       this.setInitialView()
-      if (!this.isInline) {
-        this.setPickerPosition()
-        this.$emit('opened')
-      }
-      return true
+      this.setPickerPosition()
+      this.$emit('opened')
     },
     /**
      * Show a specific picker
      */
     showSpecificCalendar(type) {
-      if (!this.allowedToShowView(type.toLowerCase())) {
-        return
+      if (this.allowedToShowView(type.toLowerCase())) {
+        this.currentPicker = `Picker${type}`
       }
-      this.currentPicker = `Picker${type}`
     },
   },
 }

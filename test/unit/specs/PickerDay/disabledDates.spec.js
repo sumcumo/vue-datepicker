@@ -30,7 +30,8 @@ describe('PickerDay: disabled', () => {
   })
 
   it('should not select a disabled date', () => {
-    expect(wrapper.vm.selectDate({ isDisabled: true })).toEqual(false)
+    wrapper.vm.selectDate({ isDisabled: true })
+    expect(wrapper.emitted()['select-date']).toBeFalsy()
   })
 
   it('cant change to a disabled month', () => {
@@ -123,8 +124,8 @@ describe('PickerDay: disabled', () => {
     expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 11))).toEqual(false)
   })
 
-  it('should emit a selectedDisabled event for a disabled date', () => {
-    expect(wrapper.vm.selectDate({ isDisabled: true })).toEqual(false)
+  it('should emit a selected-disabled event for a disabled date', () => {
+    wrapper.vm.selectDate({ isDisabled: true })
     expect(wrapper.emitted()['selected-disabled']).toBeTruthy()
   })
 

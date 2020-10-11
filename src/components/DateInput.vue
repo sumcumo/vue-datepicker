@@ -6,7 +6,7 @@
       v-if="calendarButton"
       :class="{'input-group-prepend' : bootstrapStyling, 'calendar-btn-disabled': disabled}"
       class="vdp-datepicker__calendar-button"
-      @click="showCalendarByButton"
+      @click="toggleCalendar"
     >
       <span :class="{'input-group-text' : bootstrapStyling}">
         <i :class="calendarButtonIcon">
@@ -91,7 +91,7 @@ export default {
     const constructedDateUtils = makeDateUtils(this.useUtc)
     return {
       input: null,
-      typedDate: false,
+      typedDate: '',
       utils: constructedDateUtils,
     }
   },
@@ -112,7 +112,7 @@ export default {
       if (!this.selectedDate) {
         return null
       }
-      if (this.typedDate) {
+      if (this.typedDate.length) {
         return this.typedDate
       }
       return typeof this.format === 'function'
@@ -122,7 +122,7 @@ export default {
   },
   watch: {
     resetTypedDate() {
-      this.typedDate = false
+      this.typedDate = ''
     },
   },
   mounted() {
@@ -144,7 +144,7 @@ export default {
       if (this.typeable && Number.isNaN(Date.parse(parsableDate))) {
         this.clearDate()
         this.input.value = null
-        this.typedDate = null
+        this.typedDate = ''
       }
       this.$emit('blur')
       this.$emit('close-calendar')
@@ -179,17 +179,12 @@ export default {
         this.parser,
       )
     },
-    showCalendar() {
+    toggleCalendar() {
       this.$emit(this.isOpen ? 'close-calendar' : 'show-calendar')
-    },
-    showCalendarByButton() {
-      if (!this.typeable) {
-        this.showCalendar()
-      }
     },
     showCalendarByClick() {
       if (!this.showCalendarOnButtonClick) {
-        this.showCalendar()
+        this.toggleCalendar()
       }
     },
     showCalendarByFocus() {
