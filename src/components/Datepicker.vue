@@ -67,7 +67,7 @@
           :page-timestamp="pageTimestamp"
           :is-rtl="isRtl"
           :use-utc="useUtc"
-          :year-picker-range="yearPickerRange"
+          :year-range="yearPickerRange"
 
           :show-header="showHeader"
           :full-month-name="fullMonthName"

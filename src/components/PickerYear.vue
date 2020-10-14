@@ -41,7 +41,7 @@ export default {
     pickerMixin,
   ],
   props: {
-    yearPickerRange: {
+    yearRange: {
       type: Number,
       default: 10,
     },
@@ -56,8 +56,8 @@ export default {
       const years = []
 
       const year = this.useUtc
-        ? Math.floor(d.getUTCFullYear() / this.yearPickerRange) * this.yearPickerRange
-        : Math.floor(d.getFullYear() / this.yearPickerRange) * this.yearPickerRange
+        ? Math.floor(d.getUTCFullYear() / this.yearRange) * this.yearRange
+        : Math.floor(d.getFullYear() / this.yearRange) * this.yearRange
 
       // set up a new date object to the beginning of the current 'page'7
       const dObj = this.useUtc
@@ -67,7 +67,7 @@ export default {
         : new Date(
           year, d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(),
         )
-      for (let i = 0; i < this.yearPickerRange; i += 1) {
+      for (let i = 0; i < this.yearRange; i += 1) {
         years.push({
           year: this.utils.getFullYear(dObj),
           timestamp: dObj.getTime(),
@@ -85,8 +85,8 @@ export default {
     getPageDecade() {
       const yearPageDate = this.utils.getFullYear(this.pageDate)
 
-      const decadeStart = Math.floor(yearPageDate / this.yearPickerRange) * this.yearPickerRange
-      const decadeEnd = decadeStart + (this.yearPickerRange - 1)
+      const decadeStart = Math.floor(yearPageDate / this.yearRange) * this.yearRange
+      const decadeEnd = decadeStart + (this.yearRange - 1)
       const { yearSuffix } = this.translation
       return `${decadeStart} - ${decadeEnd}${yearSuffix}`
     },
@@ -117,7 +117,7 @@ export default {
      */
     previousDecade() {
       if (!this.isPreviousDisabled()) {
-        this.changeYear(-this.yearPickerRange)
+        this.changeYear(-this.yearRange)
         return true
       }
       return false
@@ -133,15 +133,15 @@ export default {
       const yearTo = this.utils.getFullYear(this.disabledDates.to)
       const yearPageDate = this.utils.getFullYear(this.pageDate)
 
-      return Math.floor(yearTo / this.yearPickerRange) * this.yearPickerRange
-        >= Math.floor(yearPageDate / this.yearPickerRange) * this.yearPickerRange
+      return Math.floor(yearTo / this.yearRange) * this.yearRange
+        >= Math.floor(yearPageDate / this.yearRange) * this.yearRange
     },
     /**
      * Increments the decade
      */
     nextDecade() {
       if (!this.isNextDisabled()) {
-        this.changeYear(this.yearPickerRange)
+        this.changeYear(this.yearRange)
         return true
       }
       return false
@@ -157,8 +157,8 @@ export default {
       const yearFrom = this.utils.getFullYear(this.disabledDates.from)
       const yearPageDate = this.utils.getFullYear(this.pageDate)
 
-      return Math.ceil(yearFrom / this.yearPickerRange) * this.yearPickerRange
-        <= Math.ceil(yearPageDate / this.yearPickerRange) * this.yearPickerRange
+      return Math.ceil(yearFrom / this.yearRange) * this.yearRange
+        <= Math.ceil(yearPageDate / this.yearRange) * this.yearRange
     },
 
     /**
