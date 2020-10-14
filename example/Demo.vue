@@ -306,7 +306,7 @@
       <div class="settings">
         <h5>Settings</h5>
         <div class="form-group">
-          <label>Open date:</label>
+          <label>Year picker range:</label>
           <input
             v-model="yearPickerRange"
             type="number"
