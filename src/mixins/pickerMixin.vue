@@ -6,10 +6,6 @@ export default ({
   components: { PickerHeader },
   inheritAttrs: false,
   props: {
-    showHeader: {
-      type: Boolean,
-      default: true,
-    },
     allowedToShowView: {
       type: Function,
       default() {
@@ -37,6 +33,10 @@ export default ({
       type: Date,
       default: null,
     },
+    showHeader: {
+      type: Boolean,
+      default: true,
+    },
     translation: {
       type: Object,
       default() {
@@ -50,13 +50,16 @@ export default ({
   },
   data() {
     return {
-      utils: makeDateUtils(this.useUtc),
       headerConfig: {
         showHeader: this.showHeader,
         isRtl: this.isRtl,
+        /**
+         * Need to be set inside the different pickers for month, year, decade
+         */
         isNextDisabled: this.isNextDisabled,
         isPreviousDisabled: this.isPreviousDisabled,
       },
+      utils: makeDateUtils(this.useUtc),
     }
   },
   methods: {
@@ -65,15 +68,6 @@ export default ({
      */
     showPickerCalendar(type) {
       this.$emit(`show-${type}-calendar`)
-    },
-    /**
-     * Need to be set inside the different pickers for month, year, decade
-     */
-    isNextDisabled() {
-      return false
-    },
-    isPreviousDisabled() {
-      return false
     },
   },
 })

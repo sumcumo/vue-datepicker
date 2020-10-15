@@ -1,5 +1,5 @@
 <template>
-  <header v-show="config.showHeader">
+  <header v-if="config.showHeader">
     <span
       :class="{'disabled': isLeftNavDisabled}"
       class="prev"
@@ -9,7 +9,7 @@
         <span class="default">&lt;</span>
       </slot>
     </span>
-    <slot name="headerContent" />
+    <slot />
     <span
       :class="{'disabled': isRightNavDisabled}"
       class="next"
@@ -24,7 +24,7 @@
 
 <script>
 export default {
-  name: 'DatepickerHeader',
+  name: 'PickerHeader',
   props: {
     config: {
       type: Object,
@@ -32,26 +32,18 @@ export default {
         return {
           showHeader: true,
           isRtl: false,
-          isNextDisabled() {
-            return false
-          },
-          isPreviousDisabled() {
-            return false
-          },
+          isNextDisabled: false,
+          isPreviousDisabled: false,
         }
       },
     },
     next: {
       type: Function,
-      default() {
-        return false
-      },
+      required: true,
     },
     previous: {
       type: Function,
-      default() {
-        return false
-      },
+      required: true,
     },
   },
   computed: {
@@ -61,8 +53,8 @@ export default {
      */
     isLeftNavDisabled() {
       return this.config.isRtl
-        ? this.config.isNextDisabled()
-        : this.config.isPreviousDisabled()
+        ? this.config.isNextDisabled
+        : this.config.isPreviousDisabled
     },
     /**
      * Is the right hand navigation button disabled?
@@ -70,8 +62,8 @@ export default {
      */
     isRightNavDisabled() {
       return this.config.isRtl
-        ? this.config.isPreviousDisabled()
-        : this.config.isNextDisabled()
+        ? this.config.isPreviousDisabled
+        : this.config.isNextDisabled
     },
   },
 }
