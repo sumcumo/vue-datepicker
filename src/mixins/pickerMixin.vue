@@ -1,5 +1,5 @@
 <script>
-import PickerHeader from '~/components/PickerHeader'
+import PickerHeader from '~/components/PickerHeader.vue'
 import { makeDateUtils } from '~/utils/DateUtils'
 
 export default ({

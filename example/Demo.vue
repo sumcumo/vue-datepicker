@@ -298,7 +298,7 @@
 </template>
 
 <script>
-import Datepicker from '~/components/Datepicker'
+import Datepicker from '~/components/Datepicker.vue'
 import * as lang from '~/locale/index'
 
 const state = {

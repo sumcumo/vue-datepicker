@@ -3,7 +3,7 @@ import {
   format,
   parse,
 } from 'date-fns'
-import DateInput from '~/components/DateInput'
+import DateInput from '~/components/DateInput.vue'
 import { en } from '~/locale'
 
 describe('DateInput', () => {

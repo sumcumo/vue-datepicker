@@ -1,7 +1,7 @@
 import { shallowMount } from '@vue/test-utils'
 import { en } from '~/locale'
-import pickerMixin from '~/mixins/pickerMixin'
-import defaultComponent from '../defaultComponent'
+import pickerMixin from '~/mixins/pickerMixin.vue'
+import defaultComponent from '../defaultComponent.vue'
 
 const options = {
   mixins: [pickerMixin],

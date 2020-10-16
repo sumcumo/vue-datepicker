@@ -2,8 +2,8 @@ import {
   mount,
   shallowMount,
 } from '@vue/test-utils'
-import DateInput from '~/components/DateInput'
-import Datepicker from '~/components/Datepicker'
+import DateInput from '~/components/DateInput.vue'
+import Datepicker from '~/components/Datepicker.vue'
 
 describe('Datepicker unmounted', () => {
   it('has a mounted hook', () => {

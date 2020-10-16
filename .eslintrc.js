@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
   parserOptions: {
-    'parser': 'babel-eslint',
+    parser: 'babel-eslint',
   },
   extends: [
     'airbnb-base',
@@ -18,8 +18,8 @@ module.exports = {
   ],
   settings: {
     'import/resolver': {
-      'webpack': {
-        'config': 'eslint-webpack-resolver.config.js',
+      webpack: {
+        config: 'eslint-webpack-resolver.config.js',
       },
     },
     polyfills: [
@@ -32,19 +32,18 @@ module.exports = {
       'error',
       'always',
       {
-        'js': 'never',
-        'vue': 'never',
+        js: 'never',
       },
     ],
     'import/no-extraneous-dependencies': 'off',
-    'semi': [
+    semi: [
       'error',
       'never',
     ],
     'no-console': [
       'error',
       {
-        'allow': [
+        allow: [
           'info',
           'warn',
           'error',
@@ -54,24 +53,24 @@ module.exports = {
     'no-unused-vars': [
       'error',
       {
-        'argsIgnorePattern': '^_',
+        argsIgnorePattern: '^_',
       },
     ],
-    'complexity': [
+    complexity: [
       'error',
       20,
     ],
     'max-lines-per-function': [
       'warn',
       {
-        'max': 100,
-        'skipComments': true,
-        'skipBlankLines': true,
+        max: 100,
+        skipComments: true,
+        skipBlankLines: true,
       },
     ],
 
   },
   env: {
-    'browser': true,
+    browser: true,
   },
 }

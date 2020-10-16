@@ -127,11 +127,11 @@
 import '~/utils/polyfills'
 import en from '~/locale/translations/en'
 import { makeDateUtils } from '~/utils/DateUtils'
-import DateInput from '~/components/DateInput'
-import PickerDay from '~/components/PickerDay'
-import PickerMonth from '~/components/PickerMonth'
-import PickerYear from '~/components/PickerYear'
-import inputProps from '~/mixins/inputProps'
+import DateInput from '~/components/DateInput.vue'
+import PickerDay from '~/components/PickerDay.vue'
+import PickerMonth from '~/components/PickerMonth.vue'
+import PickerYear from '~/components/PickerYear.vue'
+import inputProps from '~/mixins/inputProps.vue'
 
 export default {
   name: 'Datepicker',

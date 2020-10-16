@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import PickerMonth from '~/components/PickerMonth'
+import PickerMonth from '~/components/PickerMonth.vue'
 import { en } from '~/locale'
 
 describe('PickerMonth', () => {
