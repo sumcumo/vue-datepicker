@@ -54,22 +54,24 @@ describe('DateInput', () => {
     expect(wrapper.find('input').element.value).toEqual('2016/1/15')
   })
 
-  it('emits showCalendar', async () => {
+  it('opens calendar on focus, if show-calendar-on-focus prop is true', async () => {
     wrapper.setProps({
       showCalendarOnFocus: true,
     })
+    expect(wrapper.vm.isOpen).toBeFalsy()
 
-    await wrapper.vm.$nextTick()
-    wrapper.vm.showCalendar()
-    expect(wrapper.emitted('show-calendar')).toBeFalsy()
+    await wrapper.find('input').element.focus()
+    expect(wrapper.emitted('show-calendar')).toBeTruthy()
+  })
 
+  it('does not open calendar on focus, if show-calendar-on-focus prop is false', async () => {
     wrapper.setProps({
       showCalendarOnFocus: false,
     })
+    expect(wrapper.vm.isOpen).toBeFalsy()
 
-    await wrapper.vm.$nextTick()
-    wrapper.vm.showCalendar()
-    expect(wrapper.emitted('show-calendar')).toBeTruthy()
+    await wrapper.find('input').element.focus()
+    expect(wrapper.emitted('show-calendar')).toBeFalsy()
   })
 
   it('adds bootstrap classes', async () => {

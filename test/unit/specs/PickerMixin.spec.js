@@ -41,10 +41,10 @@ describe('pickerMixin', () => {
     expect(wrapper.emitted('show-month-calendar')).toBeTruthy()
   })
   it('should use `isNextDisabled` correctly', () => {
-    expect(wrapper.vm.isNextDisabled()).toBeFalsy()
+    expect(wrapper.vm.isNextDisabled).toBeFalsy()
   })
 
   it('should use `isPreviousDisabled` correctly', () => {
-    expect(wrapper.vm.isPreviousDisabled()).toBeFalsy()
+    expect(wrapper.vm.isPreviousDisabled).toBeFalsy()
   })
 })

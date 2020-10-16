@@ -6,7 +6,7 @@
       :next="nextDecade"
       :previous="previousDecade"
     >
-      <span slot="headerContent">
+      <span>
         {{ getPageDecade }}
       </span>
       <slot
@@ -42,8 +42,40 @@ export default {
   ],
   computed: {
     /**
-     * set an object with years for a decade
-     * @return {Object[]}
+     * Checks if the next decade is disabled or not
+     * @return {Boolean}
+     */
+    isNextDisabled() {
+      if (!this.disabledDates || !this.disabledDates.from) {
+        return false
+      }
+      return Math.ceil(this.utils.getFullYear(this.disabledDates.from) / 10) * 10
+        <= Math.ceil(this.utils.getFullYear(this.pageDate) / 10) * 10
+    },
+    /**
+     * Checks if the previous decade is disabled or not
+     * @return {Boolean}
+     */
+    isPreviousDisabled() {
+      if (!this.disabledDates || !this.disabledDates.to) {
+        return false
+      }
+      return Math.floor(this.utils.getFullYear(this.disabledDates.to) / 10) * 10
+        >= Math.floor(this.utils.getFullYear(this.pageDate) / 10) * 10
+    },
+    /**
+     * Get decade name on current page.
+     * @return {String}
+     */
+    getPageDecade() {
+      const decadeStart = Math.floor(this.utils.getFullYear(this.pageDate) / 10) * 10
+      const decadeEnd = decadeStart + 9
+      const { yearSuffix } = this.translation
+      return `${decadeStart} - ${decadeEnd}${yearSuffix}`
+    },
+    /**
+     * Set an array with years for a decade
+     * @return {Array}
      */
     years() {
       const d = this.pageDate
@@ -61,7 +93,7 @@ export default {
       for (let i = 0; i < 10; i += 1) {
         years.push({
           year: this.utils.getFullYear(dObj),
-          timestamp: dObj.getTime(),
+          timestamp: dObj.valueOf(),
           isSelected: this.isSelectedYear(dObj),
           isDisabled: this.isDisabledYear(dObj),
         })
@@ -69,29 +101,8 @@ export default {
       }
       return years
     },
-    /**
-     * Get decade name on current page.
-     * @return {String}
-     */
-    getPageDecade() {
-      const decadeStart = Math.floor(this.utils.getFullYear(this.pageDate) / 10) * 10
-      const decadeEnd = decadeStart + 9
-      const { yearSuffix } = this.translation
-      return `${decadeStart} - ${decadeEnd}${yearSuffix}`
-    },
   },
   methods: {
-    /**
-     * Emits a selectYear event
-     * @param {Object} year
-     */
-    selectYear(year) {
-      if (!year.isDisabled) {
-        this.$emit('select-year', year)
-        return true
-      }
-      return false
-    },
     /**
      * Changes the year up or down
      * @param {Number} incrementBy
@@ -102,48 +113,13 @@ export default {
       this.$emit('changed-decade', date)
     },
     /**
-     * Decrements the decade
-     */
-    previousDecade() {
-      if (!this.isPreviousDisabled()) {
-        this.changeYear(-10)
-        return true
-      }
-      return false
-    },
-    /**
-     * Checks if the next year is disabled or not
+     * Whether a year is disabled
+     * @param {Date} date
      * @return {Boolean}
      */
-    isPreviousDisabled() {
-      if (!this.disabledDates || !this.disabledDates.to) {
-        return false
-      }
-      return Math.floor(this.utils.getFullYear(this.disabledDates.to) / 10) * 10
-        >= Math.floor(this.utils.getFullYear(this.pageDate) / 10) * 10
+    isDisabledYear(date) {
+      return isYearDisabled(date, this.disabledDates, this.utils)
     },
-    /**
-     * Increments the decade
-     */
-    nextDecade() {
-      if (!this.isNextDisabled()) {
-        this.changeYear(10)
-        return true
-      }
-      return false
-    },
-    /**
-     * Checks if the next decade is disabled or not
-     * @return {Boolean}
-     */
-    isNextDisabled() {
-      if (!this.disabledDates || !this.disabledDates.from) {
-        return false
-      }
-      return Math.ceil(this.utils.getFullYear(this.disabledDates.from) / 10) * 10
-        <= Math.ceil(this.utils.getFullYear(this.pageDate) / 10) * 10
-    },
-
     /**
      * Whether the selected date is in this year
      * @param {Date} date
@@ -154,12 +130,29 @@ export default {
         && this.utils.getFullYear(this.selectedDate) === this.utils.getFullYear(date)
     },
     /**
-     * Whether a year is disabled
-     * @param {Date} date
-     * @return {Boolean}
+     * Increments the decade
      */
-    isDisabledYear(date) {
-      return isYearDisabled(date, this.disabledDates, this.utils)
+    nextDecade() {
+      if (!this.isNextDisabled) {
+        this.changeYear(10)
+      }
+    },
+    /**
+     * Decrements the decade
+     */
+    previousDecade() {
+      if (!this.isPreviousDisabled) {
+        this.changeYear(-10)
+      }
+    },
+    /**
+     * Emits a selectYear event
+     * @param {Object} year
+     */
+    selectYear(year) {
+      if (!year.isDisabled) {
+        this.$emit('select-year', year)
+      }
     },
   },
 }
