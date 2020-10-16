@@ -124,7 +124,6 @@
   </div>
 </template>
 <script>
-import '~/utils/polyfills'
 import en from '~/locale/translations/en'
 import { makeDateUtils } from '~/utils/DateUtils'
 import DateInput from '~/components/DateInput.vue'

@@ -1,48 +1,86 @@
 import fs from 'fs'
-import path from 'path'
+import chalk from 'chalk'
 import { rollup } from 'rollup'
 import { terser } from 'rollup-plugin-terser'
-import chalk from 'chalk'
-import buble from 'rollup-plugin-buble'
+import babel from '@rollup/plugin-babel'
+import resolve from '@rollup/plugin-node-resolve'
+
+const babelConfig = {
+  extensions: ['.js'],
+  babelHelpers: 'bundled',
+  babelrc: true,
+}
 
 async function build() {
-  console.log(chalk.cyan('Building individual translations.'))
+  // eslint-disable-next-line no-console
+  console.time('Individual')
+  console.info(chalk.cyan('Start building individual translations.'))
   const files = fs.readdirSync('./src/locale/translations')
-  files.forEach(async(file) => {
-    const inputOptions = {
-      input: path.join(__dirname, '..', 'src', 'locale', 'translations', file),
+  // eslint-disable-next-line no-restricted-syntax
+  for (const file of files) {
+    console.info(chalk.cyan(`Building ${file} translations.`))
+    // eslint-disable-next-line no-await-in-loop
+    const bundle = await rollup({
+      input: `./src/locale/translations/${file}`,
       plugins: [
-        buble(),
+        resolve(),
+        babel(babelConfig),
         terser(),
       ],
-    }
-    const bundle = await rollup(inputOptions)
-    const outputOptions = {
-      file: path.join(__dirname, '..', 'dist', 'locale', 'translations', file),
+    })
+    // eslint-disable-next-line no-await-in-loop
+    await bundle.write({
+      file: `./dist/locale/translations/${file}`,
       format: 'umd',
       name: file.split('.')[0],
-    }
-    await bundle.write(outputOptions)
-  })
-  await console.log(chalk.green('Individual translations built.'))
+    })
+    console.info(chalk.cyan(`Done building ${file} translations.`))
+  }
+  await console.info(chalk.green('Individual translations built.'))
+  // eslint-disable-next-line no-console
+  console.timeEnd('Individual')
 }
 
 async function buildAll() {
-  console.log(chalk.cyan('Building translation importer.'))
-  const bundle = await rollup({
-    input: path.join(__dirname, '..', 'src', 'locale', 'index.js'),
+  // eslint-disable-next-line no-console
+  console.time('Index')
+  console.info(chalk.cyan('Building translation importer.'))
+  const bundleUmd = await rollup({
+    input: './src/locale/index.js',
     plugins: [
-      buble(),
+      resolve(),
+      babel(babelConfig),
       terser(),
     ],
   })
-  await bundle.write({
-    file: path.join(__dirname, '..', 'dist', 'locale', 'index.js'),
+  const bundleCjs = await rollup({
+    input: './src/locale/index.js',
+    plugins: [
+      resolve(),
+      babel(babelConfig),
+    ],
+  })
+  await bundleUmd.write({
+    file: './dist/locale/index.bundle.js',
     format: 'umd',
     name: 'languages',
   })
-  await console.log(chalk.green('All translations built.'))
+  await bundleCjs.write({
+    file: './dist/locale/index.js',
+    format: 'cjs',
+  })
+  await console.info(chalk.green('All translations built.'))
+  // eslint-disable-next-line no-console
+  console.timeEnd('Index')
 }
 
-build()
-buildAll()
+const run = async () => {
+  // eslint-disable-next-line no-console
+  console.time('Overall')
+  await build()
+  await buildAll()
+  // eslint-disable-next-line no-console
+  console.timeEnd('Overall')
+}
+
+run()
