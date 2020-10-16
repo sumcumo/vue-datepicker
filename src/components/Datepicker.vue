@@ -71,6 +71,7 @@
           :show-header="showHeader"
           :translation="translation"
           :use-utc="useUtc"
+          :year-range="yearPickerRange"
 
           @select-date="selectDate"
           @changed-month="handleChangedMonthFromDayPicker"
@@ -228,6 +229,10 @@ export default {
         Array,
       ],
       default: '',
+    },
+    yearPickerRange: {
+      type: Number,
+      default: 10,
     },
   },
   data() {

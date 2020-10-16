@@ -40,3 +40,4 @@
 | use-utc                       | Boolean          | false       | Use UTC for time calculations                   |
 | value                         | Date\|String     |             | Date value of the datepicker                    |
 | wrapper-class                 | String\|Object   |             | CSS class applied to the outer div              |
+| year-picker-range             | Number           | 10          | Amount of years inside the year picker          |

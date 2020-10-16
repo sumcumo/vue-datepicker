@@ -68,11 +68,11 @@
             <option value="yyyy-MM-dd">
               yyyy-MM-dd - e.g 2016-02-12
             </option>
-            <option value="dsu MMM yyyy">
-              dsu MMM yyyy - e.g 12th Feb 2016
+            <option value="do MMM yyyy">
+              do MMM yyyy - e.g 12th Feb 2016
             </option>
-            <option value="D dsu MMM yyyy">
-              D dsu MMM yyyy - e.g Sat 12th Feb 2016
+            <option value="E do MMM yyyy">
+              E do MMM yyyy - e.g Sat 12th Feb 2016
             </option>
           </select>
         </div>
@@ -294,6 +294,27 @@
         initial-view="year"&gt;&lt;/datepicker&gt;
       </code>
     </div>
+
+    <div class="example">
+      <h3>Year picker range</h3>
+      <Datepicker
+        :year-picker-range="yearPickerRange"
+      />
+      <code>
+        &lt;datepicker :year-picker-range="yearPickerRange"&gt;&lt;/datepicker&gt;
+      </code>
+      <div class="settings">
+        <h5>Settings</h5>
+        <div class="form-group">
+          <label>Year picker range:</label>
+          <input
+            v-model="yearPickerRange"
+            type="number"
+          >
+        </div>
+        <pre>yearPickerRange: {{ yearPickerRange }}</pre>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -370,6 +391,7 @@ export default {
       vModelExample: null,
       languages: lang,
       language: 'en',
+      yearPickerRange: 10,
     }
   },
   computed: {
