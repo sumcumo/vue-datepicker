@@ -5,39 +5,39 @@
   >
     <DateInput
       :id="id"
-      :selected-date="selectedDate"
-      :reset-typed-date="resetTypedDate"
-      :format="format"
-      :parser="parser"
-      :translation="translation"
-      :inline="inline"
-      :name="name"
-      :ref-name="refName"
-      :open-date="openDate"
-      :placeholder="placeholder"
-      :input-class="inputClass"
-      :typeable="typeable"
-      :clear-button="clearButton"
-      :clear-button-icon="clearButtonIcon"
+      :autofocus="autofocus"
+      :bootstrap-styling="bootstrapStyling"
       :calendar-button="calendarButton"
       :calendar-button-icon="calendarButtonIcon"
       :calendar-button-icon-content="calendarButtonIconContent"
+      :clear-button="clearButton"
+      :clear-button-icon="clearButtonIcon"
       :disabled="disabled"
-      :required="required"
-      :autofocus="autofocus"
+      :format="format"
+      :inline="inline"
+      :is-open="isOpen"
+      :input-class="inputClass"
       :maxlength="maxlength"
+      :name="name"
+      :parser="parser"
       :pattern="pattern"
-      :bootstrap-styling="bootstrapStyling"
-      :use-utc="useUtc"
+      :placeholder="placeholder"
+      :ref-name="refName"
+      :required="required"
+      :reset-typed-date="resetTypedDate"
+      :selected-date="selectedDate"
+      :show-calendar-on-button-click="showCalendarOnButtonClick"
       :show-calendar-on-focus="showCalendarOnFocus"
       :tabindex="tabindex"
-      :show-calendar-on-button-click="showCalendarOnButtonClick"
-      @show-calendar="showCalendar"
-      @close-calendar="close(true)"
-      @typed-date="setTypedDate"
-      @clear-date="clearDate"
+      :translation="translation"
+      :typeable="typeable"
+      :use-utc="useUtc"
       @blur="onBlur"
+      @clear-date="clearDate"
+      @close-calendar="close"
       @focus="onFocus"
+      @show-calendar="showCalendar"
+      @typed-date="setTypedDate"
     >
       <slot
         slot="beforeDateInput"
@@ -67,20 +67,20 @@
           <slot name="beforeCalendarHeader" />
           <component
             :is="currentPicker"
-            :page-date="pageDate"
-            :selected-date="selectedDate"
             :allowed-to-show-view="allowedToShowView"
+            :day-cell-content="dayCellContent"
             :disabled-dates="disabledDates"
             :highlighted="highlighted"
-            :translation="translation"
-            :page-timestamp="pageTimestamp"
             :is-rtl="isRtl"
-            :use-utc="useUtc"
-
-            :show-header="showHeader"
-            :full-month-name="fullMonthName"
             :monday-first="mondayFirst"
-            :day-cell-content="dayCellContent"
+            :page-date="pageDate"
+            :page-timestamp="pageTimestamp"
+            :selected-date="selectedDate"
+            :show-full-month-name="fullMonthName"
+            :show-header="showHeader"
+            :translation="translation"
+            :use-utc="useUtc"
+            :year-range="yearPickerRange"
 
             @select-date="selectDate"
             @changed-month="handleChangedMonthFromDayPicker"
@@ -120,6 +120,11 @@ import PickerYear from '~/components/PickerYear'
 import inputProps from '~/mixins/inputProps'
 import calendarSlots from '~/utils/calendarSlots'
 import Popup from '~/components/Popup'
+
+const validDate = (val) => val === null
+  || val instanceof Date
+  || typeof val === 'string'
+  || typeof val === 'number'
 
 export default {
   name: 'Datepicker',
@@ -204,11 +209,7 @@ export default {
         Number,
       ],
       default: '',
-      validator:
-        (val) => val === null
-          || val instanceof Date
-          || typeof val === 'string'
-          || typeof val === 'number',
+      validator: validDate,
     },
     wrapperClass: {
       type: [
@@ -218,7 +219,10 @@ export default {
       ],
       default: '',
     },
-
+    yearPickerRange: {
+      type: Number,
+      default: 10,
+    },
     appendToBody: {
       type: Boolean,
       default: false,
@@ -258,45 +262,105 @@ export default {
   },
   computed: {
     computedInitialView() {
-      if (!this.initialView) {
-        return this.minimumView
-      }
-
-      return this.initialView
-    },
-    pageDate() {
-      return new Date(this.pageTimestamp)
-    },
-
-    translation() {
-      return this.language
-    },
-
-    isOpen() {
-      return this.currentPicker !== ''
+      return this.initialView ? this.initialView : this.minimumView
     },
     isInline() {
       return !!this.inline
     },
+    isOpen() {
+      return this.currentPicker !== ''
+    },
     isRtl() {
       return this.translation.rtl === true
     },
+    pageDate() {
+      return new Date(this.pageTimestamp)
+    },
+    translation() {
+      return this.language
+    },
   },
   watch: {
-    value(value) {
-      this.setValue(value)
+    initialView() {
+      this.setInitialView()
     },
     openDate() {
       this.setPageDate()
     },
-    initialView() {
-      this.setInitialView()
+    value(value) {
+      this.setValue(value)
     },
   },
   mounted() {
     this.init()
   },
   methods: {
+    /**
+     * Are we allowed to show a specific picker view?
+     * @param {String} view
+     * @return {Boolean}
+     */
+    allowedToShowView(view) {
+      const views = [
+        'day',
+        'month',
+        'year',
+      ]
+      const minimumViewIndex = views.indexOf(this.minimumView)
+      const maximumViewIndex = views.indexOf(this.maximumView)
+      const viewIndex = views.indexOf(view)
+
+      return viewIndex >= minimumViewIndex && viewIndex <= maximumViewIndex
+    },
+    /**
+     * Clear the selected date
+     */
+    clearDate() {
+      this.selectedDate = null
+      this.setPageDate()
+      this.$emit('selected', null)
+      this.$emit('input', null)
+      this.$emit('cleared')
+    },
+    /**
+     * Close the calendar views
+     */
+    close() {
+      if (!this.isInline) {
+        this.currentPicker = ''
+        this.$emit('closed')
+      }
+    },
+    /**
+     * Handles a month change from the day picker
+     */
+    handleChangedMonthFromDayPicker(date) {
+      this.setPageDate(date)
+      this.$emit('changed-month', date)
+    },
+    /**
+     * Initiate the component
+     */
+    init() {
+      if (this.value) {
+        this.setValue(this.value)
+      }
+      if (this.isInline) {
+        this.setInitialView()
+      }
+    },
+    /**
+     * Emits a 'blur' event
+     */
+    onBlur() {
+      this.$emit('blur')
+    },
+    /**
+     * Emits a 'focus' event
+     */
+    onFocus() {
+      this.$emit('focus')
+    },
     /**
      * Called in the event that the user navigates to date pages and
      * closes the picker without selecting a date.
@@ -309,21 +373,15 @@ export default {
       this.setPageDate(this.selectedDate)
     },
     /**
-     * Effectively a toggle to show/hide the calendar
-     * @return {mixed}
+     * Set the selected date
+     * @param {Number} timestamp
      */
-    showCalendar() {
-      if (this.disabled || this.isInline) {
-        return false
-      }
-      if (this.isOpen) {
-        return this.close(true)
-      }
-      this.setInitialView()
-      if (!this.isInline) {
-        this.$emit('opened')
-      }
-      return true
+    setDate(timestamp) {
+      const date = new Date(timestamp)
+      this.selectedDate = date
+      this.setPageDate(date)
+      this.$emit('selected', date)
+      this.$emit('input', date)
     },
     /**
      * Sets the initial picker page view: day, month or year
@@ -346,68 +404,51 @@ export default {
       }
     },
     /**
-     * Are we allowed to show a specific picker view?
-     * @param {String} view
-     * @return {Boolean}
+     * Sets the date that the calendar should open on
      */
-    allowedToShowView(view) {
-      const views = [
-        'day',
-        'month',
-        'year',
-      ]
-      const minimumViewIndex = views.indexOf(this.minimumView)
-      const maximumViewIndex = views.indexOf(this.maximumView)
-      const viewIndex = views.indexOf(view)
-
-      return viewIndex >= minimumViewIndex && viewIndex <= maximumViewIndex
-    },
-    /**
-     * Show a specific picker
-     * @return {Boolean}
-     */
-    showSpecificCalendar(type) {
-      if (type) {
-        if (!this.allowedToShowView(type.toLowerCase())) {
-          return false
+    setPageDate(date) {
+      let dateTemp = date
+      if (!dateTemp) {
+        if (this.openDate) {
+          dateTemp = new Date(this.openDate)
+        } else {
+          dateTemp = new Date()
         }
-        this.close()
-        this.currentPicker = `Picker${type}`
-        return true
+        dateTemp = this.utils.resetDateTime(dateTemp)
       }
-      this.currentPicker = ''
-      return false
+      this.pageTimestamp = this.utils.setDate(new Date(dateTemp), 1)
     },
     /**
-     * Set the selected date
-     * @param {Number} timestamp
+     * Set the date from a typedDate event
      */
-    setDate(timestamp) {
-      const date = new Date(timestamp)
-      this.selectedDate = date
-      this.setPageDate(date)
-      this.$emit('selected', date)
-      this.$emit('input', date)
+    setTypedDate(date) {
+      this.setDate(date.valueOf())
     },
     /**
-     * Clear the selected date
+     * Set the datepicker value
+     * @param {Date|String|Number|null} date
      */
-    clearDate() {
-      this.selectedDate = null
-      this.setPageDate()
-      this.$emit('selected', null)
-      this.$emit('input', null)
-      this.$emit('cleared')
+    setValue(date) {
+      let dateTemp = date
+      if (typeof dateTemp === 'string' || typeof dateTemp === 'number') {
+        const parsed = new Date(dateTemp)
+        dateTemp = Number.isNaN(parsed.valueOf()) ? null : parsed
+      }
+      if (!dateTemp) {
+        this.setPageDate()
+        this.selectedDate = null
+        return
+      }
+      this.selectedDate = dateTemp
+      this.setPageDate(dateTemp)
     },
     /**
      * @param {Object} date
      */
     selectDate(date) {
-      this.setDate(date.timestamp)
-      if (!this.isInline) {
-        this.close(true)
-      }
       this.resetTypedDate = this.utils.getNewDateObject()
+      this.close()
+      this.setDate(date.timestamp)
     },
     /**
      * @param {Object} date
@@ -442,83 +483,25 @@ export default {
       }
     },
     /**
-     * Set the datepicker value
-     * @param {Date|String|Number|null} date
+     * Shows the calendar at the relevant view: 'day', 'month', or 'year'
      */
-    setValue(date) {
-      let dateTemp = date
-      if (typeof dateTemp === 'string' || typeof dateTemp === 'number') {
-        const parsed = new Date(dateTemp)
-        dateTemp = Number.isNaN(parsed.valueOf()) ? null : parsed
-      }
-      if (!dateTemp) {
-        this.setPageDate()
-        this.selectedDate = null
+    showCalendar() {
+      if (this.disabled || this.isInline) {
         return
       }
-      this.selectedDate = dateTemp
-      this.setPageDate(dateTemp)
+      this.setInitialView()
+      this.$emit('opened')
     },
     /**
-     * Sets the date that the calendar should open on
+     * Show a specific picker
      */
-    setPageDate(date) {
-      let dateTemp = date
-      if (!dateTemp) {
-        if (this.openDate) {
-          dateTemp = new Date(this.openDate)
-        } else {
-          dateTemp = new Date()
-        }
-        dateTemp = this.utils.resetDateTime(dateTemp)
+    showSpecificCalendar(type) {
+      if (this.allowedToShowView(type.toLowerCase())) {
+        this.currentPicker = `Picker${type}`
       }
-      this.pageTimestamp = this.utils.setDate(new Date(dateTemp), 1)
-    },
-    /**
-     * Handles a month change from the day picker
-     */
-    handleChangedMonthFromDayPicker(date) {
-      this.setPageDate(date)
-      this.$emit('changed-month', date)
-    },
-    /**
-     * Set the date from a typedDate event
-     */
-    setTypedDate(date) {
-      this.setDate(date.getTime())
-    },
-    /**
-     * Close all calendar layers
-     * @param {Boolean} full - emit close event
-     */
-    close(full = false) {
-      this.showSpecificCalendar()
-      if (!this.isInline) {
-        if (full) {
-          this.$emit('closed')
-        }
-      }
-    },
-    /**
-     * Initiate the component
-     */
-    init() {
-      if (this.value) {
-        this.setValue(this.value)
-      }
-      if (this.isInline) {
-        this.setInitialView()
-      }
-    },
-    onBlur() {
-      this.$emit('blur')
-    },
-    onFocus() {
-      this.$emit('focus')
     },
   },
 }
-
 </script>
 
 <style lang="scss">
