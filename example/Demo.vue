@@ -68,11 +68,11 @@
             <option value="yyyy-MM-dd">
               yyyy-MM-dd - e.g 2016-02-12
             </option>
-            <option value="dsu MMM yyyy">
-              dsu MMM yyyy - e.g 12th Feb 2016
+            <option value="do MMM yyyy">
+              do MMM yyyy - e.g 12th Feb 2016
             </option>
-            <option value="D dsu MMM yyyy">
-              D dsu MMM yyyy - e.g Sat 12th Feb 2016
+            <option value="E do MMM yyyy">
+              E do MMM yyyy - e.g Sat 12th Feb 2016
             </option>
           </select>
         </div>
@@ -312,7 +312,7 @@
             type="number"
           >
         </div>
-        <pre>openDate: {{ yearPickerRange }}</pre>
+        <pre>yearPickerRange: {{ yearPickerRange }}</pre>
       </div>
     </div>
   </div>

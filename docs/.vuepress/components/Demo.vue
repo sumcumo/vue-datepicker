@@ -149,7 +149,7 @@
           <label>Year picker range:</label>
           <input v-model="yearPickerRange" type="number"/>
         </div>
-        <pre>openDate: {{ yearPickerRange }}</pre>
+        <pre>yearPickerRange: {{ yearPickerRange }}</pre>
       </div>
     </div>
   </div>
