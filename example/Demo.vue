@@ -104,7 +104,7 @@
             @change="setDisabledDays"
           >
         </div>
-        <pre>disabled: {{ disabledDates }}</pre>
+        <pre>disabledDates: {{ disabledDates }}</pre>
 
         <h5>Resulting Date picker</h5>
         <Datepicker :disabled-dates="disabledDates" />
@@ -190,7 +190,7 @@
           <label>Open date:</label>
           <Datepicker v-model="openDate" />
         </div>
-        <pre>openDate: {{ openDate }}</pre>
+        <pre>open-date: {{ openDate }}</pre>
       </div>
     </div>
 
@@ -237,23 +237,23 @@
     <div class="example">
       <h3>Day view only</h3>
       <Datepicker
-        :minimum-view="'day'"
-        :maximum-view="'day'"
+        minimum-view="day"
+        maximum-view="day"
       />
       <code>
-        &lt;datepicker :minimumView="'day'" :maximumView="'day'"&gt;&lt;/datepicker&gt;
+        &lt;datepicker minimum-view="day" maximum-view="day"&gt;&lt;/datepicker&gt;
       </code>
     </div>
 
     <div class="example">
       <h3>Day view only RTL</h3>
       <Datepicker
-        :minimum-view="'day'"
-        :maximum-view="'day'"
+        minimum-view="day"
+        maximum-view="day"
         :language="languages.he"
       />
       <code>
-        &lt;datepicker :minimumView="'day'" :maximumView="'day'"
+        &lt;datepicker minimum-view="day" maximum-view="day"
         language="languages.he"&gt;&lt;/datepicker&gt;
       </code>
     </div>
@@ -261,37 +261,37 @@
     <div class="example">
       <h3>Month view only</h3>
       <Datepicker
-        :minimum-view="'month'"
-        :maximum-view="'month'"
+        minimum-view="month"
+        maximum-view="month"
       />
       <code>
-        &lt;datepicker :minimumView="'month'" :maximumView="'month'"&gt;&lt;/datepicker&gt;
+        &lt;datepicker minimum-view="month" maximum-view="month"&gt;&lt;/datepicker&gt;
       </code>
     </div>
 
     <div class="example">
       <h3>Day and month view only</h3>
       <Datepicker
-        :minimum-view="'day'"
-        :maximum-view="'month'"
-        :initial-view="'month'"
+        minimum-view="day"
+        maximum-view="month"
+        initial-view="month"
       />
       <code>
-        &lt;datepicker :minimumView="'day'" :maximumView="'month'"
-        :initialView="'month'"&gt;&lt;/datepicker&gt;
+        &lt;datepicker minimum-view="day" maximum-view="month"
+        initial-view="month"&gt;&lt;/datepicker&gt;
       </code>
     </div>
 
     <div class="example">
       <h3>Year and month view only</h3>
       <Datepicker
-        :minimum-view="'month'"
-        :maximum-view="'year'"
-        :initial-view="'year'"
+        minimum-view="month"
+        maximum-view="year"
+        initial-view="year"
       />
       <code>
-        &lt;datepicker :minimumView="'month'" :maximumView="'year'"
-        :initialView="'year'"&gt;&lt;/datepicker&gt;
+        &lt;datepicker minimum-view="month" maximum-view="year"
+        initial-view="year"&gt;&lt;/datepicker&gt;
       </code>
     </div>
 
@@ -342,11 +342,11 @@ export default {
           const year = date.getFullYear()
           const month = date.getMonth()
           const day = date.getDate()
-          // disable every years that are a multiple of 2
+          // disable every year that is a multiple of 2
           if (year % 2 === 0) {
             return true
           }
-          // disable every months that are a multiple of 3
+          // disable every month that is a multiple of 3
           if (month % 3 === 0) {
             return true
           }
@@ -362,11 +362,11 @@ export default {
           const year = date.getFullYear()
           const month = date.getMonth()
           const day = date.getDate()
-          // disable every years that are a multiple of 2
+          // disable every year that is a multiple of 2
           if (year % 2 === 0) {
             return true
           }
-          // disable every months that are a multiple of 3
+          // disable every month that is a multiple of 3
           if (month % 3 === 0) {
             return true
           }
@@ -374,6 +374,7 @@ export default {
           if (month % 2 !== 0 && day < 15) {
             return true
           }
+          return false
         }
       }`,
       highlightedFn: {
@@ -488,7 +489,7 @@ select {
 .example {
   background: #f2f2f2;
   border: 1px solid #ddd;
-  padding: 0em 1em 1em;
+  padding: 0 1em 1em;
   margin-bottom: 2em;
 }
 
