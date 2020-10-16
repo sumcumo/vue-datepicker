@@ -7,8 +7,8 @@
       :previous="previousYear"
     >
       <span
-        :class="allowedToShowView('year') ? 'up' : ''"
         class="month__year_btn"
+        :class="allowedToShowView('year') ? 'up' : ''"
         @click="showPickerCalendar('year')"
       >
         {{ pageYearName }}
@@ -24,9 +24,9 @@
     </PickerHeader>
     <span
       v-for="month in months"
-      :key="month.timestamp"
       :class="{'selected': month.isSelected, 'disabled': month.isDisabled}"
       class="cell month"
+      :key="month.timestamp"
       @click.stop="selectMonth(month)"
     >
       {{ month.month }}

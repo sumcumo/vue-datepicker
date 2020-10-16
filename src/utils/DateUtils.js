@@ -121,6 +121,20 @@ const utils = {
   },
 
   /**
+   * Return day number from abbreviated week day name
+   * @param {String} abbr
+   * @return {Number}
+   */
+  getDayFromAbbr(abbr) {
+    for (let i = 0; i < en.days.length; i += 1) {
+      if (abbr.toLowerCase() === en.days[i].toLowerCase()) {
+        return i
+      }
+    }
+    throw TypeError('Invalid week day')
+  },
+
+  /**
    * Return name of the month
    * @param {Number|Date} month
    * @param {Array} months

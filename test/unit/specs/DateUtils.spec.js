@@ -219,4 +219,10 @@ describe('UTC functions', () => {
     expect(DateUtils.setDate(date, 31)).toEqual(date.setDate(31))
     expect(utcUtils.setDate(date, 31)).toEqual(date.setUTCDate(31))
   })
+
+  it('returns the correct day number from an abbreviated day name', () => {
+    expect(DateUtils.getDayFromAbbr('sun')).toEqual(0)
+    expect(DateUtils.getDayFromAbbr('sat')).toEqual(6)
+    expect(() => DateUtils.getDayFromAbbr('nonsense')).toThrow('Invalid week day')
+  })
 })
