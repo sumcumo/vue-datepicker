@@ -52,10 +52,10 @@
     <Popup
       ref="popup"
       :append-to-body="appendToBody"
-      :visible="isOpen"
-      :inline="inline"
       :fixed-position="fixedPosition"
+      :inline="inline"
       :rtl="isRtl"
+      :visible="isOpen"
     >
       <div
         v-show="isOpen"

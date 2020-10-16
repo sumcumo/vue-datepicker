@@ -7,23 +7,23 @@ import {
 export default {
   name: 'Popup',
   props: {
-    visible: {
-      type: Boolean,
-      default: false,
-    },
     appendToBody: {
       type: Boolean,
       default: true,
-    },
-    inline: {
-      type: Boolean,
-      default: false,
     },
     fixedPosition: {
       type: String,
       default: '',
     },
+    inline: {
+      type: Boolean,
+      default: false,
+    },
     rtl: {
+      type: Boolean,
+      default: false,
+    },
+    visible: {
       type: Boolean,
       default: false,
     },
