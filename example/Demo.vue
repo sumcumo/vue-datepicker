@@ -3,7 +3,10 @@
     <h1>Datepicker Examples</h1>
     <div class="example">
       <h3>Default datepicker...</h3>
-      <Datepicker placeholder="Select Date" />
+      <Datepicker
+        placeholder="Select Date"
+        :append-to-body="true"
+      />
       <code>
         &lt;datepicker placeholder="Select Date"&gt;&lt;/datepicker&gt;
       </code>
@@ -37,12 +40,25 @@
       <Datepicker
         v-model="vModelExample"
         placeholder="Select Date"
+        :append-to-body="true"
       />
       <code>
         &lt;datepicker placeholder="Select Date" v-model="vmodelexample"&gt;&lt;/datepicker&gt;
       </code>
       <hr>
       <p>{{ vModelExample }}</p>
+    </div>
+
+    <div class="example overflow-scroll">
+      <h3>Append datepicker to body</h3>
+      <Datepicker
+        :append-to-body="true"
+      />
+      <h3>Don't append datepicker to body</h3>
+      <Datepicker />
+      <code>
+        &lt;datepicker :append-to-body="true"&gt;&lt;/datepicker&gt;
+      </code>
     </div>
 
     <div class="example">
@@ -315,6 +331,29 @@
         <pre>yearPickerRange: {{ yearPickerRange }}</pre>
       </div>
     </div>
+
+    <div class="example">
+      <h3>Fixed positions</h3>
+      <Datepicker
+        :fixed-position="fixedPosition"
+        :append-to-body="true"
+      />
+      <code>
+        &lt;datepicker :fixed-position="fixedPosition"&gt;&lt;/datepicker&gt;
+      </code>
+      <div class="settings">
+        <h5>Settings</h5>
+        <select v-model="fixedPosition">
+          <option
+            v-for="(position) in fixedPositions"
+            :key="position"
+            :value="position"
+          >
+            {{ position }}
+          </option>
+        </select>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -392,6 +431,15 @@ export default {
       languages: lang,
       language: 'en',
       yearPickerRange: 10,
+      fixedPositions: [
+        'bottom',
+        'bottom-left',
+        'bottom-right',
+        'top',
+        'top-left',
+        'top-right',
+      ],
+      fixedPosition: 'bottom',
     }
   },
   computed: {
@@ -521,5 +569,9 @@ h5 {
 .form-group label {
   font-size: 80%;
   display: block;
+}
+
+.overflow-scroll {
+  overflow: scroll
 }
 </style>
