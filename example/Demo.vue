@@ -3,7 +3,10 @@
     <h1>Datepicker Examples</h1>
     <div class="example">
       <h3>Default datepicker...</h3>
-      <Datepicker placeholder="Select Date" />
+      <Datepicker
+        placeholder="Select Date"
+        :append-to-body="true"
+      />
       <code>
         &lt;datepicker placeholder="Select Date"&gt;&lt;/datepicker&gt;
       </code>
@@ -37,12 +40,25 @@
       <Datepicker
         v-model="vModelExample"
         placeholder="Select Date"
+        :append-to-body="true"
       />
       <code>
         &lt;datepicker placeholder="Select Date" v-model="vmodelexample"&gt;&lt;/datepicker&gt;
       </code>
       <hr>
       <p>{{ vModelExample }}</p>
+    </div>
+
+    <div class="example overflow-scroll">
+      <h3>Append datepicker to body</h3>
+      <Datepicker
+        :append-to-body="true"
+      />
+      <h3>Don't append datepicker to body</h3>
+      <Datepicker />
+      <code>
+        &lt;datepicker :append-to-body="true"&gt;&lt;/datepicker&gt;
+      </code>
     </div>
 
     <div class="example">
@@ -68,11 +84,11 @@
             <option value="yyyy-MM-dd">
               yyyy-MM-dd - e.g 2016-02-12
             </option>
-            <option value="dsu MMM yyyy">
-              dsu MMM yyyy - e.g 12th Feb 2016
+            <option value="do MMM yyyy">
+              do MMM yyyy - e.g 12th Feb 2016
             </option>
-            <option value="D dsu MMM yyyy">
-              D dsu MMM yyyy - e.g Sat 12th Feb 2016
+            <option value="E do MMM yyyy">
+              E do MMM yyyy - e.g Sat 12th Feb 2016
             </option>
           </select>
         </div>
@@ -104,7 +120,7 @@
             @change="setDisabledDays"
           >
         </div>
-        <pre>disabled: {{ disabledDates }}</pre>
+        <pre>disabledDates: {{ disabledDates }}</pre>
 
         <h5>Resulting Date picker</h5>
         <Datepicker :disabled-dates="disabledDates" />
@@ -190,7 +206,7 @@
           <label>Open date:</label>
           <Datepicker v-model="openDate" />
         </div>
-        <pre>openDate: {{ openDate }}</pre>
+        <pre>open-date: {{ openDate }}</pre>
       </div>
     </div>
 
@@ -237,23 +253,23 @@
     <div class="example">
       <h3>Day view only</h3>
       <Datepicker
-        :minimum-view="'day'"
-        :maximum-view="'day'"
+        minimum-view="day"
+        maximum-view="day"
       />
       <code>
-        &lt;datepicker :minimumView="'day'" :maximumView="'day'"&gt;&lt;/datepicker&gt;
+        &lt;datepicker minimum-view="day" maximum-view="day"&gt;&lt;/datepicker&gt;
       </code>
     </div>
 
     <div class="example">
       <h3>Day view only RTL</h3>
       <Datepicker
-        :minimum-view="'day'"
-        :maximum-view="'day'"
+        minimum-view="day"
+        maximum-view="day"
         :language="languages.he"
       />
       <code>
-        &lt;datepicker :minimumView="'day'" :maximumView="'day'"
+        &lt;datepicker minimum-view="day" maximum-view="day"
         language="languages.he"&gt;&lt;/datepicker&gt;
       </code>
     </div>
@@ -261,38 +277,82 @@
     <div class="example">
       <h3>Month view only</h3>
       <Datepicker
-        :minimum-view="'month'"
-        :maximum-view="'month'"
+        minimum-view="month"
+        maximum-view="month"
       />
       <code>
-        &lt;datepicker :minimumView="'month'" :maximumView="'month'"&gt;&lt;/datepicker&gt;
+        &lt;datepicker minimum-view="month" maximum-view="month"&gt;&lt;/datepicker&gt;
       </code>
     </div>
 
     <div class="example">
       <h3>Day and month view only</h3>
       <Datepicker
-        :minimum-view="'day'"
-        :maximum-view="'month'"
-        :initial-view="'month'"
+        minimum-view="day"
+        maximum-view="month"
+        initial-view="month"
       />
       <code>
-        &lt;datepicker :minimumView="'day'" :maximumView="'month'"
-        :initialView="'month'"&gt;&lt;/datepicker&gt;
+        &lt;datepicker minimum-view="day" maximum-view="month"
+        initial-view="month"&gt;&lt;/datepicker&gt;
       </code>
     </div>
 
     <div class="example">
       <h3>Year and month view only</h3>
       <Datepicker
-        :minimum-view="'month'"
-        :maximum-view="'year'"
-        :initial-view="'year'"
+        minimum-view="month"
+        maximum-view="year"
+        initial-view="year"
       />
       <code>
-        &lt;datepicker :minimumView="'month'" :maximumView="'year'"
-        :initialView="'year'"&gt;&lt;/datepicker&gt;
+        &lt;datepicker minimum-view="month" maximum-view="year"
+        initial-view="year"&gt;&lt;/datepicker&gt;
       </code>
+    </div>
+
+    <div class="example">
+      <h3>Year picker range</h3>
+      <Datepicker
+        :year-picker-range="yearPickerRange"
+      />
+      <code>
+        &lt;datepicker :year-picker-range="yearPickerRange"&gt;&lt;/datepicker&gt;
+      </code>
+      <div class="settings">
+        <h5>Settings</h5>
+        <div class="form-group">
+          <label>Year picker range:</label>
+          <input
+            v-model="yearPickerRange"
+            type="number"
+          >
+        </div>
+        <pre>yearPickerRange: {{ yearPickerRange }}</pre>
+      </div>
+    </div>
+
+    <div class="example">
+      <h3>Fixed positions</h3>
+      <Datepicker
+        :fixed-position="fixedPosition"
+        :append-to-body="true"
+      />
+      <code>
+        &lt;datepicker :fixed-position="fixedPosition"&gt;&lt;/datepicker&gt;
+      </code>
+      <div class="settings">
+        <h5>Settings</h5>
+        <select v-model="fixedPosition">
+          <option
+            v-for="(position) in fixedPositions"
+            :key="position"
+            :value="position"
+          >
+            {{ position }}
+          </option>
+        </select>
+      </div>
     </div>
   </div>
 </template>
@@ -321,11 +381,11 @@ export default {
           const year = date.getFullYear()
           const month = date.getMonth()
           const day = date.getDate()
-          // disable every years that are a multiple of 2
+          // disable every year that is a multiple of 2
           if (year % 2 === 0) {
             return true
           }
-          // disable every months that are a multiple of 3
+          // disable every month that is a multiple of 3
           if (month % 3 === 0) {
             return true
           }
@@ -341,11 +401,11 @@ export default {
           const year = date.getFullYear()
           const month = date.getMonth()
           const day = date.getDate()
-          // disable every years that are a multiple of 2
+          // disable every year that is a multiple of 2
           if (year % 2 === 0) {
             return true
           }
-          // disable every months that are a multiple of 3
+          // disable every month that is a multiple of 3
           if (month % 3 === 0) {
             return true
           }
@@ -353,6 +413,7 @@ export default {
           if (month % 2 !== 0 && day < 15) {
             return true
           }
+          return false
         }
       }`,
       highlightedFn: {
@@ -369,6 +430,16 @@ export default {
       vModelExample: null,
       languages: lang,
       language: 'en',
+      yearPickerRange: 10,
+      fixedPositions: [
+        'bottom',
+        'bottom-left',
+        'bottom-right',
+        'top',
+        'top-left',
+        'top-right',
+      ],
+      fixedPosition: 'bottom',
     }
   },
   computed: {
@@ -466,7 +537,7 @@ select {
 .example {
   background: #f2f2f2;
   border: 1px solid #ddd;
-  padding: 0em 1em 1em;
+  padding: 0 1em 1em;
   margin-bottom: 2em;
 }
 
@@ -498,5 +569,9 @@ h5 {
 .form-group label {
   font-size: 80%;
   display: block;
+}
+
+.overflow-scroll {
+  overflow: scroll
 }
 </style>

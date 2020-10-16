@@ -53,4 +53,14 @@ describe('PickerYear', () => {
     wrapper.vm.selectYear({ isDisabled: false })
     expect(wrapper.emitted()['select-year']).toBeTruthy()
   })
+
+  it('should set custom decade range', () => {
+    wrapper.setProps({
+      pageDate: new Date(2021, 1, 1),
+      yearRange: 12,
+    })
+    expect(wrapper.vm.getPageDecade).toEqual('2016 - 2027')
+    expect(wrapper.vm.$el.querySelectorAll('.cell.year').length)
+      .toEqual(12)
+  })
 })

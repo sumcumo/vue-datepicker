@@ -3,6 +3,7 @@
 
 | Prop                          | Type             | Default     | Description                                     |
 | ----------------------------- | -----------------| ----------- | ----------------------------------------------- |
+| append-to-body                | Boolean          | false       | Append datepicker calendar to body              |
 | autofocus                     | String           |             | Sets html `autofocus` attribute on input        |
 | bootstrap-styling             | Boolean          | false       | Use bootstrap v4 styling classes.               |
 | calendar-button               | Boolean          | false       | Show an icon that that can be clicked           |
@@ -40,3 +41,4 @@
 | use-utc                       | Boolean          | false       | Use UTC for time calculations                   |
 | value                         | Date\|String     |             | Date value of the datepicker                    |
 | wrapper-class                 | String\|Object   |             | CSS class applied to the outer div              |
+| year-picker-range             | Number           | 10          | Amount of years inside the year picker          |

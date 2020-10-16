@@ -1,9 +1,10 @@
-import { shallowMount } from '@vue/test-utils'
+import { mount, shallowMount } from '@vue/test-utils'
 import {
   format,
   parse,
 } from 'date-fns'
 import DateInput from '~/components/DateInput.vue'
+import Datepicker from '~/components/Datepicker.vue'
 import { en } from '~/locale'
 
 describe('DateInput', () => {
@@ -133,5 +134,42 @@ describe('DateInput', () => {
     input.trigger('keydown')
     input.trigger('keyup')
     expect(wrapperNotTypeAble.emitted().typedDate).not.toBeDefined()
+  })
+})
+
+describe('Datepicker mount', () => {
+  let wrapper
+
+  beforeEach(() => {
+    wrapper = mount(Datepicker, {
+      propsData: {
+        format: 'dd MMM yyyy',
+        translation: en,
+        typeable: true,
+        useUtc: true,
+      },
+    })
+  })
+
+  afterEach(() => {
+    wrapper.destroy()
+  })
+
+  it('shows the correct month as you type', async () => {
+    const spySetDate = jest.spyOn(wrapper.vm, 'setDate')
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+    input.element.value = 'Jan'
+    await input.trigger('keyup')
+
+    expect(spySetDate).toHaveBeenCalled()
+    expect(wrapper.vm.isOpen).toBeTruthy()
+    expect(new Date(wrapper.vm.pageDate).getMonth()).toBe(0)
+
+    input.element.value = 'Feb'
+    await input.trigger('keyup')
+
+    expect(new Date(wrapper.vm.pageDate).getMonth()).toBe(1)
   })
 })
