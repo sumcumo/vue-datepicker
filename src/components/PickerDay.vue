@@ -87,10 +87,7 @@ export default {
      */
     blankDays() {
       const dObj = this.newPageDate()
-      if (this.firstDayOfWeek === 1) {
-        return this.utils.getDay(dObj) > 0 ? this.utils.getDay(dObj) - 1 : 6
-      }
-      return this.utils.getDay(dObj)
+      return (7 - this.firstDayOfWeek + this.utils.getDay(dObj)) % 7
     },
     /**
      * Gets the name of the month the current page is on
