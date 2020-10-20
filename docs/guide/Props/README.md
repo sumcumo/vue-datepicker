@@ -9,7 +9,7 @@
 | calendar-button               | Boolean          | false       | Show an icon that that can be clicked           |
 | calendar-button-icon          | String           |             | Use icon for button (ex: fa fa-calendar)        |
 | calendar-button-icon-content  | String           |             | Use for material-icons (ex: event)              |
-| calendar-class                | String&#124;Object |           | CSS class applied to the calendar el            |
+| calendar-class                | String\|Object |           | CSS class applied to the calendar el            |
 | clear-button                  | Boolean          | false       | Show an icon for clearing the date              |
 | clear-button-icon             | String           |             | Use icon for button (ex: fa fa-times)           |
 | day-cell-content              | Function         |             | Use to render custom content in day cell        |
@@ -27,7 +27,6 @@
 | maxlength                     | String           |             | Sets html `maxlength` attribute on input        |
 | maximum-view                  | String           | year        | If set, higher-level views won't show           |
 | minimum-view                  | String           | day         | If set, lower-level views won't show            |
-| monday-first                  | Boolean          | false       | [DEPRECATED in favour of `first-day-of-week`]. To start the week on Monday |
 | name                          | String           |             | Input name property                             |
 | open-date                     | Date&#124;String |             | If set, open on that date                       |
 | pattern                       | String           |             | Sets html `pattern` attribute on input          |

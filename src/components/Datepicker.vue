@@ -70,7 +70,7 @@
             :allowed-to-show-view="allowedToShowView"
             :day-cell-content="dayCellContent"
             :disabled-dates="disabledDates"
-            :first-day-of-week="computedFirstDayOfWeek"
+            :first-day-of-week="firstDayOfWeek"
             :highlighted="highlighted"
             :is-rtl="isRtl"
             :page-date="pageDate"
@@ -202,11 +202,6 @@ export default {
       type: String,
       default: 'day',
     },
-    // Suggest this should be deprecated in favour of 'firstDayOfWeek'
-    mondayFirst: {
-      type: Boolean,
-      default: false,
-    },
     showHeader: {
       type: Boolean,
       default: true,
@@ -266,9 +261,6 @@ export default {
     }
   },
   computed: {
-    computedFirstDayOfWeek() {
-      return this.mondayFirst ? 1 : this.utils.getDayFromAbbr(this.firstDayOfWeek)
-    },
     computedInitialView() {
       return this.initialView ? this.initialView : this.minimumView
     },

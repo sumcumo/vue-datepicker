@@ -71,8 +71,8 @@ export default {
       },
     },
     firstDayOfWeek: {
-      type: Number,
-      default: 0,
+      type: String,
+      default: 'sun',
     },
     showFullMonthName: {
       type: Boolean,
@@ -87,7 +87,7 @@ export default {
      */
     blankDays() {
       const dObj = this.newPageDate()
-      return (7 - this.firstDayOfWeek + this.utils.getDay(dObj)) % 7
+      return (7 - this.firstDayOfWeekNumber + this.utils.getDay(dObj)) % 7
     },
     /**
      * Gets the name of the month the current page is on
@@ -127,7 +127,14 @@ export default {
      * @return {String[]}
      */
     daysOfWeek() {
-      return this.translation.getDaysStartingOn(this.firstDayOfWeek)
+      return this.translation.getDaysStartingOn(this.firstDayOfWeekNumber)
+    },
+    /**
+     * Returns first-day-of-week as a number (Sunday is 0)
+     * @return {Number}
+     */
+    firstDayOfWeekNumber() {
+      return this.utils.getDayFromAbbr(this.firstDayOfWeek)
     },
     /**
      * Is the next month disabled?
