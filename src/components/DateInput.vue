@@ -115,6 +115,9 @@ export default {
       if (this.typedDate.length) {
         return this.typedDate
       }
+      return this.formattedDate
+    },
+    formattedDate() {
       return typeof this.format === 'function'
         ? this.format(new Date(this.selectedDate))
         : this.utils.formatDate(new Date(this.selectedDate), this.format, this.translation)
@@ -136,15 +139,20 @@ export default {
       this.$emit('clear-date')
     },
     /**
-     * nullify the typed date to defer to regular formatting
-     * called once the input is blurred
+     * Submits a typed date if it's valid
      */
     inputBlurred() {
-      const parsableDate = this.parseDate(this.input.value)
-      if (this.typeable && Number.isNaN(Date.parse(parsableDate))) {
-        this.clearDate()
-        this.input.value = null
-        this.typedDate = ''
+      if (this.typeable) {
+        const parsableDate = this.parseDate(this.input.value)
+        const parsedDate = Date.parse(parsableDate)
+
+        if (Number.isNaN(parsedDate)) {
+          this.clearDate()
+        } else {
+          this.input.value = this.formattedDate
+          this.typedDate = ''
+          this.$emit('typed-date', parsedDate)
+        }
       }
       this.$emit('blur')
       this.$emit('close-calendar')
@@ -155,11 +163,12 @@ export default {
      */
     parseTypedDate(event) {
       const code = (event.keyCode ? event.keyCode : event.which)
-      // close calendar if escape or enter are pressed
-      if ([
-        27, // escape
-        13, // enter
-      ].indexOf(code) !== -1) {
+      // close calendar if escape is pressed
+      if (code === 27) {
+        this.$emit('close-calendar')
+      }
+      // submit date if enter is pressed
+      if (code === 13) {
         this.input.blur()
       }
       if (this.typeable) {
