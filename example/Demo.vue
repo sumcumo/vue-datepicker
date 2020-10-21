@@ -324,7 +324,7 @@
         <div class="form-group">
           <label>Year picker range:</label>
           <input
-            v-model="yearPickerRange"
+            v-model.number="yearPickerRange"
             type="number"
           >
         </div>
