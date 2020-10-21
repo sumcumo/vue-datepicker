@@ -4,6 +4,7 @@ import { rollup } from 'rollup'
 import { terser } from 'rollup-plugin-terser'
 import babel from '@rollup/plugin-babel'
 import resolve from '@rollup/plugin-node-resolve'
+import commonjs from '@rollup/plugin-commonjs'
 
 const babelConfig = {
   extensions: ['.js'],
@@ -57,6 +58,7 @@ async function buildAll() {
     input: './src/locale/index.js',
     plugins: [
       resolve(),
+      commonjs(),
       babel(babelConfig),
     ],
   })

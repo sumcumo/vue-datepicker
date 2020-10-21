@@ -16,9 +16,9 @@
     "calendar",
     "typeable"
   ],
-  "main": "dist/vuejs-datepicker.common.js",
-  "module": "dist/vuejs-datepicker.esm.js",
-  "unpkg": "dist/vuejs-datepicker.min.js",
+  "main": "dist/Datepicker.common.js",
+  "module": "dist/Datepicker.esm.js",
+  "unpkg": "dist/Datepicker.min.js",
   "files": [
     "src",
     "dist",
