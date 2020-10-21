@@ -68,7 +68,7 @@
         :append-to-body="true"
       />
       <h3>Don't append datepicker to body</h3>
-      <Datepicker/>
+      <Datepicker />
       <code>
         &lt;datepicker :append-to-body="true"&gt;&lt;/datepicker&gt;
       </code>
@@ -76,7 +76,7 @@
 
     <div class="example">
       <h3>Format datepicker</h3>
-      <Datepicker :format="format"/>
+      <Datepicker :format="format" />
       <code>
         &lt;datepicker :format="format"&gt;&lt;/datepicker&gt;
       </code>
@@ -110,7 +110,7 @@
 
     <div class="example">
       <h3>With minimum and maximum date range</h3>
-      <Datepicker :disabled-dates="disabledDates"/>
+      <Datepicker :disabled-dates="disabledDates" />
       <code>
         &lt;datepicker :disabled-dates="disabledDates"&gt;&lt;/datepicker&gt;
       </code>
@@ -118,11 +118,11 @@
         <h5>Settings</h5>
         <div class="form-group">
           <label>Disabled to:</label>
-          <Datepicker @selected="disableTo"/>
+          <Datepicker @selected="disableTo" />
         </div>
         <div class="form-group">
           <label>Disabled from:</label>
-          <Datepicker @selected="disableFrom"/>
+          <Datepicker @selected="disableFrom" />
         </div>
         <div class="form-group">
           <label>Disabled Days of Month:</label>
@@ -136,7 +136,7 @@
         <pre>disabledDates: {{ disabledDates }}</pre>
 
         <h5>Resulting Date picker</h5>
-        <Datepicker :disabled-dates="disabledDates"/>
+        <Datepicker :disabled-dates="disabledDates" />
       </div>
     </div>
 
@@ -149,13 +149,13 @@
         </div>
         <pre>{{ disabledFnContent }}</pre>
         <h5>Resulting Date picker</h5>
-        <Datepicker :disabled-dates="disabledFn"/>
+        <Datepicker :disabled-dates="disabledFn" />
       </div>
     </div>
 
     <div class="example">
       <h3>Highlighting Dates Matching Given Function</h3>
-      <Datepicker :highlighted="highlighted"/>
+      <Datepicker :highlighted="highlighted" />
       <code>
         &lt;datepicker :highlighted="highlighted"&gt;&lt;/datepicker&gt;
       </code>
@@ -173,7 +173,7 @@
         </pre>
 
         <h5>Resulting Date picker</h5>
-        <Datepicker :highlighted="highlightedFn"/>
+        <Datepicker :highlighted="highlightedFn" />
       </div>
     </div>
 
@@ -186,11 +186,11 @@
         <h5>Settings</h5>
         <div class="form-group">
           <label>Highlight from:</label>
-          <Datepicker @selected="highlightFrom"/>
+          <Datepicker @selected="highlightFrom" />
         </div>
         <div class="form-group">
           <label>Highlight to:</label>
-          <Datepicker @selected="highlightTo"/>
+          <Datepicker @selected="highlightTo" />
         </div>
         <div class="form-group">
           <label>Highlight Days of Month:</label>
@@ -203,13 +203,13 @@
         <pre>highlighted: {{ highlighted }}</pre>
 
         <h5>Resulting Date picker</h5>
-        <Datepicker :highlighted="highlighted"/>
+        <Datepicker :highlighted="highlighted" />
       </div>
     </div>
 
     <div class="example">
       <h3>With default open date</h3>
-      <Datepicker :open-date="openDate"/>
+      <Datepicker :open-date="openDate" />
       <code>
         &lt;datepicker :disabled="disabled"&gt;&lt;/datepicker&gt;
       </code>
@@ -217,7 +217,7 @@
         <h5>Settings</h5>
         <div class="form-group">
           <label>Open date:</label>
-          <Datepicker v-model="openDate"/>
+          <Datepicker v-model="openDate" />
         </div>
         <pre>open-date: {{ openDate }}</pre>
       </div>
@@ -250,14 +250,14 @@
 
     <div class="example">
       <h3>Inline datepicker</h3>
-      <Datepicker :inline="true"/>
+      <Datepicker :inline="true" />
       <code>
         &lt;datepicker :inline="true"&gt;&lt;/datepicker&gt;
       </code>
     </div>
     <div class="example">
       <h3>RTL datepicker</h3>
-      <Datepicker :language="languages.he"/>
+      <Datepicker :language="languages.he" />
       <code>
         &lt;datepicker :language="languages.he"&gt;&lt;/datepicker&gt;
       </code>
