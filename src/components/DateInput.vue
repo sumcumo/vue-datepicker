@@ -163,12 +163,11 @@ export default {
      */
     parseTypedDate(event) {
       const code = (event.keyCode ? event.keyCode : event.which)
-      // close calendar if escape is pressed
-      if (code === 27) {
-        this.$emit('close-calendar')
-      }
-      // submit date if enter is pressed
-      if (code === 13) {
+      // close calendar if escape or enter are pressed
+      if ([
+        27, // escape
+        13, // enter
+      ].indexOf(code) !== -1) {
         this.input.blur()
       }
       if (this.typeable) {
