@@ -24,6 +24,23 @@
     </div>
 
     <div class="example">
+      <h3>Custom first-day-of-week datepicker</h3>
+      <Datepicker
+        placeholder="Select Date"
+        first-day-of-week="mon"
+      />
+      <div class="coding">
+        <code>
+          &lt;datepicker
+            placeholder="Select Date"
+            first-day-of-week="mon"&gt;&lt;/datepicker&gt;
+        </code>
+        <hr />
+        <p>{{ vModelExample }}</p>
+      </div>
+    </div>
+
+    <div class="example">
       <h3>With default open date</h3>
       <Datepicker :open-date="openDate"/>
       <code>
