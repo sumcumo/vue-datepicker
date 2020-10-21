@@ -164,7 +164,7 @@
         <h5>Settings</h5>
         <div class="form-group">
           <label>Year picker range:</label>
-          <input v-model="yearPickerRange" type="number"/>
+          <input v-model.number="yearPickerRange" type="number"/>
         </div>
         <pre>yearPickerRange: {{ yearPickerRange }}</pre>
       </div>
