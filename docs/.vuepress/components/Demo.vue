@@ -31,9 +31,7 @@
       />
       <div class="coding">
         <code>
-          &lt;datepicker
-            placeholder="Select Date"
-            first-day-of-week="mon"&gt;&lt;/datepicker&gt;
+          &lt;datepicker placeholder="Select Date" first-day-of-week="mon"&gt;&lt;/datepicker&gt;
         </code>
         <hr />
         <p>{{ vModelExample }}</p>
@@ -42,7 +40,7 @@
 
     <div class="example">
       <h3>With default open date</h3>
-      <Datepicker :open-date="openDate"/>
+      <Datepicker :open-date="openDate" />
       <code>
         &lt;datepicker :disabled="disabled"&gt;&lt;/datepicker&gt;
       </code>
@@ -50,7 +48,7 @@
         <h5>Settings</h5>
         <div class="form-group">
           <label>Open date:</label>
-          <Datepicker v-model="openDate"/>
+          <Datepicker v-model="openDate" />
         </div>
         <pre>openDate: {{ openDate }}</pre>
       </div>
@@ -58,7 +56,7 @@
 
     <div class="example">
       <h3>Inline datepicker</h3>
-      <Datepicker :inline="true"/>
+      <Datepicker :inline="true" />
       <code>
         &lt;datepicker :inline="true"&gt;&lt;/datepicker&gt;
       </code>
@@ -66,7 +64,7 @@
 
     <div class="example">
       <h3>Fixed position</h3>
-      <Datepicker :fixed-position="'top-right'"/>
+      <Datepicker :fixed-position="'top-right'" />
       <code>
         &lt;datepicker :fixed-position="'top-right'"&gt;&lt;/datepicker&gt;
       </code>
@@ -74,7 +72,7 @@
 
     <div class="example">
       <h3>RTL datepicker</h3>
-      <Datepicker :language="$datepickerLocals.he"/>
+      <Datepicker :language="$datepickerLocals.he" />
       <code>
         &lt;datepicker :language="$datepickerLocals.he"&gt;&lt;/datepicker&gt;
       </code>
@@ -188,6 +186,6 @@ export default {
 </script>
 
 <style>
-  @import 'style.css';
+@import 'style.css';
 </style>
 
