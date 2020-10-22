@@ -1,8 +1,8 @@
 <template>
   <header v-if="config.showHeader">
     <span
-      :class="{'disabled': isLeftNavDisabled}"
       class="prev"
+      :class="{'disabled': isLeftNavDisabled}"
       @click="config.isRtl ? next() : previous()"
     >
       <slot name="prevIntervalBtn">
@@ -11,8 +11,8 @@
     </span>
     <slot />
     <span
-      :class="{'disabled': isRightNavDisabled}"
       class="next"
+      :class="{'disabled': isRightNavDisabled}"
       @click="config.isRtl ? previous() : next()"
     >
       <slot name="nextIntervalBtn">

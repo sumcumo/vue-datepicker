@@ -70,9 +70,9 @@
             :allowed-to-show-view="allowedToShowView"
             :day-cell-content="dayCellContent"
             :disabled-dates="disabledDates"
+            :first-day-of-week="firstDayOfWeek"
             :highlighted="highlighted"
             :is-rtl="isRtl"
-            :monday-first="mondayFirst"
             :page-date="pageDate"
             :page-timestamp="pageTimestamp"
             :selected-date="selectedDate"
@@ -113,12 +113,12 @@
 import '~/utils/polyfills'
 import en from '~/locale/translations/en'
 import { makeDateUtils } from '~/utils/DateUtils'
+import calendarSlots from '~/utils/calendarSlots'
 import DateInput from '~/components/DateInput'
+import inputProps from '~/mixins/inputProps'
 import PickerDay from '~/components/PickerDay'
 import PickerMonth from '~/components/PickerMonth'
 import PickerYear from '~/components/PickerYear'
-import inputProps from '~/mixins/inputProps'
-import calendarSlots from '~/utils/calendarSlots'
 import Popup from '~/components/Popup'
 
 const validDate = (val) => val === null
@@ -139,6 +139,10 @@ export default {
     inputProps,
   ],
   props: {
+    appendToBody: {
+      type: Boolean,
+      default: false,
+    },
     calendarClass: {
       type: [
         String,
@@ -156,6 +160,10 @@ export default {
       default() {
         return {}
       },
+    },
+    firstDayOfWeek: {
+      type: String,
+      default: 'sun',
     },
     fixedPosition: {
       type: String,
@@ -194,10 +202,6 @@ export default {
       type: String,
       default: 'day',
     },
-    mondayFirst: {
-      type: Boolean,
-      default: false,
-    },
     showHeader: {
       type: Boolean,
       default: true,
@@ -223,10 +227,6 @@ export default {
       type: Number,
       default: 10,
     },
-    appendToBody: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     // const startDate = this.openDate ? new Date(this.openDate) : new Date()
@@ -240,24 +240,24 @@ export default {
     const pageTimestamp = constructedDateUtils.setDate(startDate, 1)
     return {
       /*
+       * Positioning
+       */
+      calendarHeight: 0,
+      calendarSlots,
+      currentPicker: '',
+      /*
        * Vue cannot observe changes to a Date Object so date must be stored as a timestamp
        * This represents the first day of the current viewing month
        * {Number}
        */
       pageTimestamp,
-      currentPicker: '',
+      resetTypedDate: constructedDateUtils.getNewDateObject(),
       /*
        * Selected Date
        * {Date}
        */
       selectedDate: null,
-      /*
-       * Positioning
-       */
-      calendarHeight: 0,
-      resetTypedDate: constructedDateUtils.getNewDateObject(),
       utils: constructedDateUtils,
-      calendarSlots,
     }
   },
   computed: {

@@ -70,9 +70,9 @@ export default {
         return {}
       },
     },
-    mondayFirst: {
-      type: Boolean,
-      default: false,
+    firstDayOfWeek: {
+      type: String,
+      default: 'sun',
     },
     showFullMonthName: {
       type: Boolean,
@@ -87,10 +87,7 @@ export default {
      */
     blankDays() {
       const dObj = this.newPageDate()
-      if (this.mondayFirst) {
-        return this.utils.getDay(dObj) > 0 ? this.utils.getDay(dObj) - 1 : 6
-      }
-      return this.utils.getDay(dObj)
+      return (7 - this.firstDayOfWeekNumber + this.utils.getDay(dObj)) % 7
     },
     /**
      * Gets the name of the month the current page is on
@@ -130,12 +127,14 @@ export default {
      * @return {String[]}
      */
     daysOfWeek() {
-      if (this.mondayFirst) {
-        const tempDays = this.translation.days.slice()
-        tempDays.push(tempDays.shift())
-        return tempDays
-      }
-      return this.translation.days
+      return this.translation.getDaysStartingOn(this.firstDayOfWeekNumber)
+    },
+    /**
+     * Returns first-day-of-week as a number (Sunday is 0)
+     * @return {Number}
+     */
+    firstDayOfWeekNumber() {
+      return this.utils.getDayFromAbbr(this.firstDayOfWeek)
     },
     /**
      * Is the next month disabled?
@@ -335,14 +334,6 @@ export default {
       }
     },
     /**
-     * Increment the current page month
-     */
-    nextMonth() {
-      if (!this.isNextDisabled) {
-        this.changeMonth(+1)
-      }
-    },
-    /**
      * Set up a new date object to the first day of the current 'page'
      * @return Date
      */
@@ -351,6 +342,14 @@ export default {
       return this.useUtc
         ? new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1))
         : new Date(d.getFullYear(), d.getMonth(), 1, d.getHours(), d.getMinutes())
+    },
+    /**
+     * Increment the current page month
+     */
+    nextMonth() {
+      if (!this.isNextDisabled) {
+        this.changeMonth(+1)
+      }
     },
     /**
      * Decrement the page month

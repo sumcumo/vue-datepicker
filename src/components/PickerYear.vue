@@ -94,7 +94,6 @@ export default {
     years() {
       const d = this.pageDate
       const years = []
-
       const year = this.useUtc
         ? Math.floor(d.getUTCFullYear() / this.yearRange) * this.yearRange
         : Math.floor(d.getFullYear() / this.yearRange) * this.yearRange
