@@ -76,6 +76,7 @@
             :page-date="pageDate"
             :page-timestamp="pageTimestamp"
             :selected-date="selectedDate"
+            :show-edge-dates="showEdgeDates"
             :show-full-month-name="fullMonthName"
             :show-header="showHeader"
             :translation="translation"
@@ -201,6 +202,10 @@ export default {
     minimumView: {
       type: String,
       default: 'day',
+    },
+    showEdgeDates: {
+      type: Boolean,
+      default: true,
     },
     showHeader: {
       type: Boolean,

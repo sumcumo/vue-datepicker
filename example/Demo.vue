@@ -37,6 +37,17 @@
     </div>
 
     <div class="example">
+      <h3>Only show dates from current month datepicker</h3>
+      <Datepicker
+        placeholder="Type or select date"
+        :show-edge-dates="false"
+      />
+      <code>
+        &lt;datepicker placeholder="Type or select date" :show-edge-dates="false"&gt;&lt;/datepicker&gt;
+      </code>
+    </div>
+
+    <div class="example">
       <h3>Bootstrap styled datepicker</h3>
       <Datepicker
         :bootstrap-styling="true"

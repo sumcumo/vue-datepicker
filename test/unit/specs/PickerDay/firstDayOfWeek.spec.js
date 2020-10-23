@@ -1,6 +1,9 @@
 import { shallowMount } from '@vue/test-utils'
 import PickerDay from '~/components/PickerDay'
 import { en } from '~/locale'
+import { makeDateUtils } from '~/utils/DateUtils'
+
+const constructedDateUtils = makeDateUtils(false)
 
 describe('PickerDay: Set first day of week', () => {
   let wrapper
@@ -27,18 +30,30 @@ describe('PickerDay: Set first day of week', () => {
     expect(wrapper.vm.daysOfWeek[6]).toEqual('Sun')
   })
 
-  it('should have 6 blankDays when month starts on a Sunday', () => {
+  it('should have 6 days from previous month when month starts on a Sunday', () => {
+    const testDate = new Date(2020, 10, 1)
+    const startDate = constructedDateUtils.getNewDateObject(testDate)
+
     wrapper.setProps({
-      pageDate: new Date(2018, 3, 1),
+      pageDate: testDate,
+      pageTimestamp: constructedDateUtils.setDate(startDate, 1),
     })
-    expect(wrapper.vm.blankDays).toEqual(6)
+    for (let i = 0; i < 6; i += 1) {
+      expect(wrapper.vm.days[i].isPreviousMonth).toBeTruthy()
+      expect(wrapper.vm.days[i].isNextMonth).toBeFalsy()
+    }
   })
 
-  it('should have no blankDays when month starts on a Monday', () => {
+  it('should have no days from previous month when month starts on a Monday', () => {
+    const testDate = new Date(2020, 5, 1)
+    const startDate = constructedDateUtils.getNewDateObject(testDate)
+
     wrapper.setProps({
-      pageDate: new Date(2018, 9, 1),
+      pageDate: testDate,
+      pageTimestamp: constructedDateUtils.setDate(startDate, 1),
     })
-    expect(wrapper.vm.blankDays).toEqual(0)
+    expect(wrapper.vm.days[0].isPreviousMonth).toBeFalsy()
+    expect(wrapper.vm.days[0].isNextMonth).toBeFalsy()
   })
 })
 
@@ -59,17 +74,29 @@ describe('PickerDay: Datepicker with Saturday as first day of week', () => {
     wrapper.destroy()
   })
 
-  it('should have 6 blankDays when month starts on a Friday', () => {
+  it('should have 6 days from previous month when month starts on a Friday', () => {
+    const testDate = new Date(2021, 0, 1)
+    const startDate = constructedDateUtils.getNewDateObject(testDate)
+
     wrapper.setProps({
-      pageDate: new Date(2021, 0, 1),
+      pageDate: testDate,
+      pageTimestamp: constructedDateUtils.setDate(startDate, 1),
     })
-    expect(wrapper.vm.blankDays).toEqual(6)
+    for (let i = 0; i < 6; i += 1) {
+      expect(wrapper.vm.days[i].isPreviousMonth).toBeTruthy()
+      expect(wrapper.vm.days[i].isNextMonth).toBeFalsy()
+    }
   })
 
-  it('should have no blankDays when month starts on a Saturday', () => {
+  it('should have no days from previous month when month starts on a Saturday', () => {
+    const testDate = new Date(2020, 7, 1)
+    const startDate = constructedDateUtils.getNewDateObject(testDate)
+
     wrapper.setProps({
-      pageDate: new Date(2020, 7, 1),
+      pageDate: testDate,
+      pageTimestamp: constructedDateUtils.setDate(startDate, 1),
     })
-    expect(wrapper.vm.blankDays).toEqual(0)
+    expect(wrapper.vm.days[0].isPreviousMonth).toBeFalsy()
+    expect(wrapper.vm.days[0].isNextMonth).toBeFalsy()
   })
 })

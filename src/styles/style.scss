@@ -146,8 +146,8 @@
       }
     }
 
-    &.grey {
-      color: #888;
+    &.muted {
+      color: #a3a3a3;
 
       &:hover {
         background: inherit;
@@ -174,7 +174,6 @@
     width: inherit;
   }
 }
-
 
 .vdp-datepicker__clear-button,
 .vdp-datepicker__calendar-button {
