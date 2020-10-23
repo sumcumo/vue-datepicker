@@ -31,9 +31,7 @@
       />
       <div class="coding">
         <code>
-          &lt;datepicker
-          placeholder="Select Date"
-          first-day-of-week="mon"&gt;&lt;/datepicker&gt;
+          &lt;datepicker placeholder="Select Date" first-day-of-week="mon"&gt;&lt;/datepicker&gt;
         </code>
         <hr />
         <p>{{ vModelExample }}</p>
