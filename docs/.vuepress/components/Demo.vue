@@ -31,7 +31,9 @@
       />
       <div class="coding">
         <code>
-          &lt;datepicker placeholder="Select Date" first-day-of-week="mon"&gt;&lt;/datepicker&gt;
+          &lt;datepicker
+          placeholder="Select Date"
+          first-day-of-week="mon"&gt;&lt;/datepicker&gt;
         </code>
         <hr />
         <p>{{ vModelExample }}</p>
@@ -40,7 +42,7 @@
 
     <div class="example">
       <h3>With default open date</h3>
-      <Datepicker :open-date="openDate" />
+      <Datepicker :open-date="openDate"/>
       <code>
         &lt;datepicker :disabled="disabled"&gt;&lt;/datepicker&gt;
       </code>
@@ -48,7 +50,7 @@
         <h5>Settings</h5>
         <div class="form-group">
           <label>Open date:</label>
-          <Datepicker v-model="openDate" />
+          <Datepicker v-model="openDate"/>
         </div>
         <pre>openDate: {{ openDate }}</pre>
       </div>
@@ -56,7 +58,7 @@
 
     <div class="example">
       <h3>Inline datepicker</h3>
-      <Datepicker :inline="true" />
+      <Datepicker :inline="true"/>
       <code>
         &lt;datepicker :inline="true"&gt;&lt;/datepicker&gt;
       </code>
@@ -64,15 +66,15 @@
 
     <div class="example">
       <h3>Fixed position</h3>
-      <Datepicker :fixed-position="'top-right'" />
+      <Datepicker fixed-position="top-right"/>
       <code>
-        &lt;datepicker :fixed-position="'top-right'"&gt;&lt;/datepicker&gt;
+        &lt;datepicker fixed-position="top-right"&gt;&lt;/datepicker&gt;
       </code>
     </div>
 
     <div class="example">
       <h3>RTL datepicker</h3>
-      <Datepicker :language="$datepickerLocals.he" />
+      <Datepicker :language="$datepickerLocals.he"/>
       <code>
         &lt;datepicker :language="$datepickerLocals.he"&gt;&lt;/datepicker&gt;
       </code>
@@ -81,23 +83,23 @@
     <div class="example">
       <h3>Day view only</h3>
       <Datepicker
-        :minimum-view="'day'"
-        :maximum-view="'day'"
+        minimum-view="day"
+        maximum-view="day"
       />
       <code>
-        &lt;datepicker :minimumView="'day'" :maximumView="'day'"&gt;&lt;/datepicker&gt;
+        &lt;datepicker minimum-view="day" maximum-view="day"&gt;&lt;/datepicker&gt;
       </code>
     </div>
 
     <div class="example">
       <h3>Day view only RTL</h3>
       <Datepicker
-        :minimum-view="'day'"
-        :maximum-view="'day'"
+        minimum-view="day"
+        maximum-view="day"
         :language="$datepickerLocals.he"
       />
       <code>
-        &lt;datepicker :minimumView="'day'" :maximumView="'day'"
+        &lt;datepicker minimum-view="day" maximum-view="day"
         language="$datepickerLocals.he"&gt;&lt;/datepicker&gt;
       </code>
     </div>
@@ -105,37 +107,37 @@
     <div class="example">
       <h3>Month view only</h3>
       <Datepicker
-        :minimum-view="'month'"
-        :maximum-view="'month'"
+        minimum-view="month"
+        maximum-view="month"
       />
       <code>
-        &lt;datepicker :minimumView="'month'" :maximumView="'month'"&gt;&lt;/datepicker&gt;
+        &lt;datepicker minimum-view="month" maximum-view="month"&gt;&lt;/datepicker&gt;
       </code>
     </div>
 
     <div class="example">
       <h3>Day and month view only</h3>
       <Datepicker
-        :minimum-view="'day'"
-        :maximum-view="'month'"
-        :initial-view="'month'"
+        minimum-view="day"
+        maximum-view="month"
+        initial-view="month"
       />
       <code>
-        &lt;datepicker :minimumView="'day'" :maximumView="'month'"
-        :initialView="'month'"&gt;&lt;/datepicker&gt;
+        &lt;datepicker minimum-view="day" maximum-view="month"
+        initial-view="month"&gt;&lt;/datepicker&gt;
       </code>
     </div>
 
     <div class="example">
       <h3>Year and month view only</h3>
       <Datepicker
-        :minimum-view="'month'"
-        :maximum-view="'year'"
-        :initial-view="'year'"
+        minimum-view="month"
+        maximum-view="year"
+        initial-view="year"
       />
       <code>
-        &lt;datepicker :minimumView="'month'" :maximumView="'year'"
-        :initialView="'year'"&gt;&lt;/datepicker&gt;
+        &lt;datepicker minimum-view="month" maximum-view="year"
+        initial-view="year"&gt;&lt;/datepicker&gt;
       </code>
     </div>
 
@@ -188,4 +190,3 @@ export default {
 <style>
 @import 'style.css';
 </style>
-
