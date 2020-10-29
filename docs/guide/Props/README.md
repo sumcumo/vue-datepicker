@@ -9,7 +9,7 @@
 | calendar-button               | Boolean          | false       | Show an icon that that can be clicked           |
 | calendar-button-icon          | String           |             | Use icon for button (ex: fa fa-calendar)        |
 | calendar-button-icon-content  | String           |             | Use for material-icons (ex: event)              |
-| calendar-class                | String\|Object |           | CSS class applied to the calendar el            |
+| calendar-class                | String&#124;Object |           | CSS class applied to the calendar el            |
 | clear-button                  | Boolean          | false       | Show an icon for clearing the date              |
 | clear-button-icon             | String           |             | Use icon for button (ex: fa fa-times)           |
 | day-cell-content              | Function         |             | Use to render custom content in day cell        |
@@ -33,6 +33,7 @@
 | placeholder                   | String           |             | Input placeholder text                          |
 | required                      | Boolean          | false       | Sets html required attribute on input           |
 | ref-name                      | String           |             | Sets a ref name directly on the input field     |
+| show-edge-dates               | Boolean          | true        | If `false`, dates from previous/next months won't show       |
 | show-header                   | Boolean          | true        | If `false`, the header section won't show       |
 | show-calendar-on-focus        | Boolean          | false       | Opens the calendar on input focus               |
 | show-calendar-on-button-click | Boolean          | false       | Only open the calendar on calendar-button click |

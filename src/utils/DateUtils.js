@@ -22,6 +22,14 @@ const utils = {
   },
 
   /**
+   * Returns the number of days in the month, using UTC or not
+   * @param {Date} date
+   */
+  getDaysInMonth(date) {
+    return this.daysInMonth(this.getFullYear(date), this.getMonth(date))
+  },
+
+  /**
    * Returns the date, using UTC or not
    * @param {Date} date
    */

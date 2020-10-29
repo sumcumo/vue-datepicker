@@ -30,22 +30,15 @@
       >
         {{ d }}
       </span>
-      <template v-if="blankDays > 0">
-        <span
-          v-for="d in blankDays"
-          :key="d.timestamp"
-          class="cell day blank"
-        />
-        <!--    TODO change grid system setup with for example flex to remove the magic    -->
-        <!--    the comment arrows in the next two lines are necessary magic to remove the WS   -->
-      </template><!--
-      --><span
-      v-for="day in days"
-      :key="day.timestamp"
-      :class="dayClasses(day)"
-      class="cell day"
-      @click="selectDate(day)"
-    >{{ dayCellContent(day) }}</span>
+      <span
+        v-for="day in days"
+        :key="day.timestamp"
+        class="cell day"
+        :class="dayClasses(day)"
+        @click="selectDate(day)"
+      >
+        {{ dayCellContent(day) }}
+      </span>
     </div>
     <slot name="calendarFooterDay" />
   </div>
@@ -78,17 +71,12 @@ export default {
       type: Boolean,
       default: false,
     },
+    showEdgeDates: {
+      type: Boolean,
+      default: true,
+    },
   },
   computed: {
-    /**
-     * Returns the day number of the week less one for the first of the current month
-     * Used to show amount of empty cells before the first in the day calendar layout
-     * @return {Number}
-     */
-    blankDays() {
-      const dObj = this.newPageDate()
-      return (7 - this.firstDayOfWeekNumber + this.utils.getDay(dObj)) % 7
-    },
     /**
      * Gets the name of the month the current page is on
      * @return {String}
@@ -112,11 +100,10 @@ export default {
      */
     days() {
       const days = []
-      const dObj = this.newPageDate()
-      const daysInMonth = this.utils.daysInMonth(
-        this.utils.getFullYear(dObj), this.utils.getMonth(dObj),
-      )
-      for (let i = 0; i < daysInMonth; i += 1) {
+      const daysInCalendar = this.daysFromPrevMonth + this.daysInMonth + this.daysFromNextMonth
+      const firstOfMonth = this.newPageDate()
+      const dObj = new Date(firstOfMonth.setDate(firstOfMonth.getDate() - this.daysFromPrevMonth))
+      for (let i = 0; i < daysInCalendar; i += 1) {
         days.push(this.makeDay(i, dObj))
         this.utils.setDate(dObj, this.utils.getDate(dObj) + 1)
       }
@@ -128,6 +115,30 @@ export default {
      */
     daysOfWeek() {
       return this.translation.getDaysStartingOn(this.firstDayOfWeekNumber)
+    },
+    /**
+     * Returns the number of days in this month
+     * @return {String[]}
+     */
+    daysInMonth() {
+      const dObj = this.newPageDate()
+      return this.utils.getDaysInMonth(dObj)
+    },
+    /**
+     * Calculates how many days to show from the previous month
+     * @return {number}
+     */
+    daysFromPrevMonth() {
+      const dObj = this.newPageDate()
+      return (7 - this.firstDayOfWeekNumber + this.utils.getDay(dObj)) % 7
+    },
+    /**
+     * Calculates how many days to show from the next month
+     * @return {number}
+     */
+    daysFromNextMonth() {
+      const daysThisAndPrevMonth = this.daysFromPrevMonth + this.daysInMonth
+      return (Math.ceil(daysThisAndPrevMonth / 7) * 7) - daysThisAndPrevMonth
     },
     /**
      * Returns first-day-of-week as a number (Sunday is 0)
@@ -167,6 +178,10 @@ export default {
     isYmd() {
       return this.translation.ymd && this.translation.ymd === true
     },
+    nextPageDate() {
+      const d = new Date(this.pageTimestamp)
+      return new Date(this.utils.setMonth(d, this.utils.getMonth(d) + 1))
+    },
   },
   methods: {
     /**
@@ -188,6 +203,7 @@ export default {
         selected: day.isSelected,
         disabled: day.isDisabled,
         highlighted: day.isHighlighted,
+        muted: day.isPreviousMonth || day.isNextMonth,
         today: day.isToday,
         weekend: day.isWeekend,
         sat: day.isSaturday,
@@ -316,14 +332,17 @@ export default {
      * @return {Object}
      */
     makeDay(id, dObj) {
+      const isNextMonth = dObj >= this.nextPageDate
+      const isPreviousMonth = dObj < this.pageDate
       const isSaturday = this.utils.getDay(dObj) === 6
       const isSunday = this.utils.getDay(dObj) === 0
+      const showDate = this.showEdgeDates || !(isPreviousMonth || isNextMonth)
 
       return {
-        date: this.utils.getDate(dObj),
+        date: showDate ? this.utils.getDate(dObj) : '',
         timestamp: dObj.valueOf(),
         isSelected: this.isSelectedDate(dObj),
-        isDisabled: this.isDisabledDate(dObj),
+        isDisabled: showDate ? this.isDisabledDate(dObj) : true,
         isHighlighted: this.isHighlightedDate(dObj),
         isHighlightStart: this.isHighlightStart(dObj),
         isHighlightEnd: this.isHighlightEnd(dObj),
@@ -331,6 +350,8 @@ export default {
         isWeekend: isSaturday || isSunday,
         isSaturday,
         isSunday,
+        isPreviousMonth,
+        isNextMonth,
       }
     },
     /**
