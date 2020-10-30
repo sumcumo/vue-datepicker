@@ -16,11 +16,11 @@
 }
 
 .vdp-datepicker__calendar {
-  position: absolute;
-  z-index: 10000;
   background: #fff;
-  width: 300px;
   border: 1px solid #ccc;
+  position: absolute;
+  width: 300px;
+  z-index: 10000;
 
   &.inline{
     position: static;
@@ -32,28 +32,28 @@
 
     span {
       display: inline-block;
+      float: left;
       text-align: center;
       width: 71.42857142857143%;
-      float: left;
     }
 
     .prev,
     .next {
-      max-height: 40px;
-      width: 14.285714285714286%;
       float: left;
+      max-height: 40px;
       position: relative;
+      width: 14.285714285714286%;
 
       .default {
         text-indent: -10000px;
 
         &:after {
+          border: 6px solid transparent;
           content: '';
-          position: absolute;
           left: 50%;
+          position: absolute;
           top: 50%;
           transform: translateX(-50%) translateY(-50%);
-          border: 6px solid transparent;
         }
       }
     }
@@ -98,23 +98,27 @@
   .disabled {
     color: #ddd;
     cursor: default;
+
+    //&.selected {
+    //  color: #104756;
+    //}
   }
 
   .flex-rtl {
     display: flex;
-    width: inherit;
     flex-wrap: wrap;
+    width: inherit;
   }
 
   .cell {
+    border: 1px solid transparent;
     display: inline-block;
-    padding: 0 5px;
-    width: 14.285714285714286%;
     height: 40px;
     line-height: 40px;
+    padding: 0 5px;
     text-align: center;
     vertical-align: middle;
-    border: 1px solid transparent;
+    width: 14.285714285714286%;
 
     &:not(.blank):not(.disabled).day,
     &:not(.blank):not(.disabled).month,
@@ -128,6 +132,7 @@
 
     &.selected {
       background: #4bd;
+      color: #104756;
 
       &:hover {
         background: #4bd;
@@ -140,24 +145,29 @@
 
     &.highlighted {
       background: #cae5ed;
+      color: #104756;
 
       &.disabled {
-        color: #a3a3a3;
+        color: #104756;
       }
     }
 
     &.muted {
-      color: #a3a3a3;
+      color: #757575;
 
-      &:hover {
-        background: inherit;
+      &.selected, &.highlighted {
+        color: #104756;
+      }
+
+      &.disabled:not(.selected) {
+        color: #ddd;
       }
     }
 
     &.day-header {
+      cursor: inherit;
       font-size: 75%;
       white-space: nowrap;
-      cursor: inherit;
 
       &:hover {
         background: inherit;

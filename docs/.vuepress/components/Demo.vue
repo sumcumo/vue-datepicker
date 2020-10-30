@@ -54,6 +54,20 @@
     </div>
 
     <div class="example">
+      <h3>Only show dates from current month datepicker</h3>
+      <Datepicker
+        placeholder="Select Date"
+        :show-edge-dates="false"
+      />
+      <div class="coding">
+        <code>
+          &lt;datepicker placeholder="Select Date" :show-edge-dates="false"&gt;&lt;/datepicker&gt;
+        </code>
+        <hr />
+      </div>
+    </div>
+
+    <div class="example">
       <h3>With default open date</h3>
       <Datepicker :open-date="openDate"/>
       <code>
