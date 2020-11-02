@@ -105,4 +105,5 @@ export default [
   generateConfig({ type: 'esm' }),
   generateConfig({ type: 'cjs' }),
   generateConfig({ type: 'umd' }),
-  generateConfig({ type: 'umd', extraPlugins: [terser()], extraName: '.min' })]
+  generateConfig({ type: 'umd', extraPlugins: [terser()], extraName: '.min' }),
+]

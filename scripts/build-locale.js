@@ -12,7 +12,7 @@ const babelConfig = {
   babelrc: true,
 }
 
-async function build() {
+async function buildLanguages() {
   // eslint-disable-next-line no-console
   console.time('Individual')
   console.info(chalk.cyan('Start building individual translations.'))
@@ -25,7 +25,11 @@ async function build() {
       input: `./src/locale/translations/${file}`,
       plugins: [
         resolve(),
-        babel(babelConfig),
+        commonjs(),
+        babel({
+          ...babelConfig,
+          exclude: 'node_modules/**',
+        }),
         terser(),
       ],
     })
@@ -42,19 +46,28 @@ async function build() {
   console.timeEnd('Individual')
 }
 
-async function buildAll() {
-  // eslint-disable-next-line no-console
-  console.time('Index')
-  console.info(chalk.cyan('Building translation importer.'))
-  const bundleUmd = await rollup({
+async function buildUmd() {
+  const bundle = await rollup({
     input: './src/locale/index.js',
     plugins: [
       resolve(),
-      babel(babelConfig),
+      commonjs(),
+      babel({
+        ...babelConfig,
+        exclude: 'node_modules/**',
+      }),
       terser(),
     ],
   })
-  const bundleCjs = await rollup({
+  await bundle.write({
+    file: './dist/locale/index.js',
+    format: 'umd',
+    name: 'languages',
+  })
+}
+
+async function buildCjs() {
+  const bundle = await rollup({
     input: './src/locale/index.js',
     plugins: [
       resolve(),
@@ -62,15 +75,41 @@ async function buildAll() {
       babel(babelConfig),
     ],
   })
-  await bundleUmd.write({
-    file: './dist/locale/index.bundle.js',
-    format: 'umd',
-    name: 'languages',
-  })
-  await bundleCjs.write({
-    file: './dist/locale/index.js',
+  await bundle.write({
+    file: './dist/locale/index.common.js',
     format: 'cjs',
+    exports: 'auto',
   })
+}
+
+async function buildEsm() {
+  const bundle = await rollup({
+    input: './src/locale/index.js',
+    plugins: [
+      resolve(),
+      babel({
+        ...babelConfig,
+        babelrc: false,
+      }),
+    ],
+  })
+  await bundle.write({
+    dir: './dist/locale/',
+    format: 'esm',
+    preserveModules: true,
+    entryFileNames: '[name].esm.js',
+    assetFileNames: '[name].esm.js',
+  })
+}
+async function buildIndexes() {
+  // eslint-disable-next-line no-console
+  console.time('Index')
+  console.info(chalk.cyan('Building translation importer.'))
+
+  await buildUmd()
+  await buildCjs()
+  await buildEsm()
+
   await console.info(chalk.green('All translations built.'))
   // eslint-disable-next-line no-console
   console.timeEnd('Index')
@@ -79,8 +118,8 @@ async function buildAll() {
 const run = async () => {
   // eslint-disable-next-line no-console
   console.time('Overall')
-  await build()
-  await buildAll()
+  await buildLanguages()
+  await buildIndexes()
   // eslint-disable-next-line no-console
   console.timeEnd('Overall')
 }
