@@ -56,10 +56,9 @@ export default {
         return false
       }
       const yearFrom = this.utils.getFullYear(this.disabledDates.from)
-      const yearPageDate = this.utils.getFullYear(this.pageDate)
+      const lastCellYear = this.years[this.years.length - 1].year
 
-      return Math.ceil(yearFrom / this.yearRange) * this.yearRange
-        <= Math.ceil(yearPageDate / this.yearRange) * this.yearRange
+      return yearFrom <= lastCellYear
     },
     /**
      * Checks if the previous decade is disabled or not
