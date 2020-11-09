@@ -289,11 +289,19 @@ const utils = {
         ymd[2] = tmp < 10 ? `0${tmp}` : `${tmp}`
       }
     }
-    const dat = `${ymd.join('-')}T00:00:00Z`
+    const dat = `${ymd.join('-')}${this.getZeroTime()}`
     if (Number.isNaN(Date.parse(dat))) {
       return dateStr
     }
     return dat
+  },
+
+  getZeroTime() {
+    const time = 'T00:00:00'
+    if (this.useUtc) {
+      return `${time}Z`
+    }
+    return time
   },
 
   /**
