@@ -226,8 +226,8 @@ describe('UTC functions', () => {
     expect(() => DateUtils.getDayFromAbbr('nonsense')).toThrow('Invalid week day')
   })
 
-  it('getZeroTime', () => {
-    expect(DateUtils.getZeroTime()).toEqual('T00:00:00')
-    expect(utcUtils.getZeroTime()).toEqual('T00:00:00Z')
+  it('getTime', () => {
+    expect(DateUtils.getTime()).toEqual('T00:00:00')
+    expect(utcUtils.getTime()).toEqual('T00:00:00Z')
   })
 })
