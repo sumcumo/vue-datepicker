@@ -38,7 +38,7 @@ describe('PickerYear', () => {
 
   it('can\'t change decade when previous or next decades are disabled', () => {
     wrapper.setProps({
-      pageDate: new Date(2016, 9, 15),
+      pageDate: new Date(2010, 9, 1),
       disabledDates: {
         to: new Date(2010, 8, 6),
         from: new Date(2017, 10, 24),
@@ -50,7 +50,7 @@ describe('PickerYear', () => {
 
   it('can change decade despite having a disabled decade', () => {
     wrapper.setProps({
-      pageDate: new Date(2016, 9, 15),
+      pageDate: new Date(2010, 9, 1),
       disabledDates: {
         to: new Date(2000, 11, 19),
         from: new Date(2021, 11, 19),
