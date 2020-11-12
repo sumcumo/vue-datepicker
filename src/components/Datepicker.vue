@@ -1,10 +1,13 @@
 <template>
   <div
-    :class="[wrapperClass, isRtl ? 'rtl' : '']"
+    ref="vdp-datepicker"
     class="vdp-datepicker"
+    :class="[wrapperClass, { 'rtl' : isRtl }]"
+    @keyup.esc.prevent="closeAndClear"
   >
     <DateInput
       :id="id"
+      ref="DateInput"
       :autofocus="autofocus"
       :bootstrap-styling="bootstrapStyling"
       :calendar-button="calendarButton"
@@ -33,6 +36,7 @@
       :typeable="typeable"
       :use-utc="useUtc"
       @blur="onBlur"
+      @check-focus="checkFocus"
       @clear-date="clearDate"
       @close-calendar="close"
       @focus="onFocus"
@@ -67,12 +71,16 @@
           <slot name="beforeCalendarHeader" />
           <component
             :is="currentPicker"
+            ref="PickerView"
             :allowed-to-show-view="allowedToShowView"
             :day-cell-content="dayCellContent"
             :disabled-dates="disabledDates"
             :first-day-of-week="firstDayOfWeek"
+            :has-been-focused="hasBeenFocused"
             :highlighted="highlighted"
             :is-rtl="isRtl"
+            :is-inline="isInline"
+            :open-date="computedOpenDate"
             :page-date="pageDate"
             :page-timestamp="pageTimestamp"
             :selected-date="selectedDate"
@@ -80,6 +88,7 @@
             :show-full-month-name="fullMonthName"
             :show-header="showHeader"
             :translation="translation"
+            :typeable="typeable"
             :use-utc="useUtc"
             :year-range="yearPickerRange"
 
@@ -94,6 +103,7 @@
             @select-year="selectYear"
             @changed-decade="setPageDate"
             @show-year-calendar="showSpecificCalendar('Year')"
+            @check-focus="checkFocus"
           >
             <template
               v-for="slotKey of calendarSlots"
@@ -263,11 +273,15 @@ export default {
        */
       selectedDate: null,
       utils: constructedDateUtils,
+      hasBeenFocused: false,
     }
   },
   computed: {
     computedInitialView() {
       return this.initialView ? this.initialView : this.minimumView
+    },
+    computedOpenDate() {
+      return this.openDate ? this.utils.getNewDateObject(this.openDate) : null
     },
     isInline() {
       return !!this.inline
@@ -276,7 +290,7 @@ export default {
       return this.currentPicker !== ''
     },
     isRtl() {
-      return this.translation.rtl === true
+      return this.translation.rtl
     },
     pageDate() {
       return new Date(this.pageTimestamp)
@@ -318,6 +332,25 @@ export default {
       return viewIndex >= minimumViewIndex && viewIndex <= maximumViewIndex
     },
     /**
+     * Close the calendar if no element within it is focused
+     */
+    checkFocus() {
+      this.$nextTick(() => {
+        // N.B. During testing: wrap in a try/catch block to avoid the following error
+        // [Vue warn]: Error in nextTick: "SyntaxError: ':focus-within' is not a valid selector"
+
+        // try {
+        if (this.$refs['vdp-datepicker'].matches(':focus-within')) {
+          this.hasBeenFocused = true
+        } else {
+          this.close()
+        }
+        // } catch {
+        //   // :focus-within is not supported by this browser - https://caniuse.com/css-focus-within
+        // }
+      })
+    },
+    /**
      * Clear the selected date
      */
     clearDate() {
@@ -331,10 +364,27 @@ export default {
      * Close the calendar views
      */
     close() {
-      if (!this.isInline) {
-        this.currentPicker = ''
-        this.$emit('closed')
+      if (this.isInline) {
+        return
       }
+      this.currentPicker = ''
+      if (!this.showCalendarOnFocus && !this.typeable) {
+        this.focusInput()
+      }
+      this.$emit('closed')
+    },
+    /**
+     * Close the calendar and clear the input field
+     */
+    closeAndClear() {
+      this.close()
+      this.clearDate()
+    },
+    /**
+     * Focus the input field
+     */
+    focusInput() {
+      this.$refs.DateInput.$refs[this.refName].focus()
     },
     /**
      * Handles a month change from the day picker
@@ -405,7 +455,6 @@ export default {
           break
         default:
           this.showSpecificCalendar('Day')
-          break
       }
     },
     /**

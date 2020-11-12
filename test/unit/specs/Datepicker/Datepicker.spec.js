@@ -41,6 +41,29 @@ describe('Datepicker mounted', () => {
     wrapper.destroy()
   })
 
+  it('should open and close the calendar', () => {
+    wrapper.vm.close()
+    expect(wrapper.vm.isOpen).toEqual(false)
+
+    wrapper.vm.showSpecificCalendar('Month')
+    expect(wrapper.vm.isOpen).toEqual(true)
+
+    wrapper.vm.close()
+    expect(wrapper.vm.isOpen).toEqual(false)
+
+    wrapper.vm.showSpecificCalendar('Year')
+    expect(wrapper.vm.isOpen).toEqual(true)
+
+    wrapper.vm.close()
+    expect(wrapper.vm.isOpen).toEqual(false)
+
+    wrapper.vm.showSpecificCalendar('Day')
+    expect(wrapper.vm.isOpen).toEqual(true)
+
+    wrapper.vm.close()
+    expect(wrapper.vm.isOpen).toEqual(false)
+  })
+
   it('should emit blur', () => {
     const input = wrapper.find('input')
     input.trigger('blur')
@@ -51,6 +74,33 @@ describe('Datepicker mounted', () => {
     const input = wrapper.find('input')
     input.trigger('focus')
     expect(wrapper.emitted().focus).toBeTruthy()
+  })
+
+  it('can select a day', () => {
+    const dateTemp = new Date(2016, 9, 1)
+    wrapper.vm.selectDate({ timestamp: dateTemp.valueOf() })
+    expect(wrapper.vm.pageTimestamp).toEqual(dateTemp.valueOf())
+    expect(wrapper.vm.selectedDate.getMonth()).toEqual(9)
+    expect(wrapper.vm.currentPicker).toEqual('')
+    expect(wrapper.emitted().selected).toBeTruthy()
+  })
+
+  it('can select a month', () => {
+    const dateTemp = new Date(2016, 9, 9)
+    wrapper.vm.selectMonth({ timestamp: dateTemp.valueOf() })
+    expect(wrapper.emitted()['changed-month']).toBeTruthy()
+    expect(wrapper.emitted()['changed-month'][0][0].timestamp).toEqual(dateTemp.valueOf())
+    expect(new Date(wrapper.vm.pageTimestamp).getMonth()).toEqual(dateTemp.getMonth())
+    expect(wrapper.vm.currentPicker).toEqual('PickerDay')
+  })
+
+  it('can select a year', () => {
+    const dateTemp = new Date(2018, 9, 9)
+    wrapper.vm.selectYear({ timestamp: dateTemp.valueOf() })
+    expect(wrapper.emitted()['changed-year']).toBeTruthy()
+    expect(wrapper.emitted()['changed-year'][0][0].timestamp).toEqual(dateTemp.valueOf())
+    expect(new Date(wrapper.vm.pageTimestamp).getFullYear()).toEqual(dateTemp.getFullYear())
+    expect(wrapper.vm.currentPicker).toEqual('PickerMonth')
   })
 })
 
@@ -116,60 +166,10 @@ describe('Datepicker shallowMounted', () => {
     expect(d.getDate()).toEqual(1)
   })
 
-  it('should open and close the calendar', () => {
-    wrapper.vm.close()
-    expect(wrapper.vm.isOpen).toEqual(false)
-
-    wrapper.vm.showSpecificCalendar('Month')
-    expect(wrapper.vm.isOpen).toEqual(true)
-
-    wrapper.vm.close()
-    expect(wrapper.vm.isOpen).toEqual(false)
-
-    wrapper.vm.showSpecificCalendar('Year')
-    expect(wrapper.vm.isOpen).toEqual(true)
-
-    wrapper.vm.close()
-    expect(wrapper.vm.isOpen).toEqual(false)
-
-    wrapper.vm.showSpecificCalendar('Day')
-    expect(wrapper.vm.isOpen).toEqual(true)
-
-    wrapper.vm.close()
-    expect(wrapper.vm.isOpen).toEqual(false)
-  })
-
   it('should emit selectedDisabled on a disabled timestamp', () => {
     const dateTemp = new Date(2016, 9, 1)
     wrapper.vm.selectDisabledDate({ timestamp: dateTemp.valueOf() })
     expect(wrapper.emitted()['selected-disabled']).toBeTruthy()
-  })
-
-  it('can select a day', () => {
-    const dateTemp = new Date(2016, 9, 1)
-    wrapper.vm.selectDate({ timestamp: dateTemp.valueOf() })
-    expect(wrapper.vm.pageTimestamp).toEqual(dateTemp.valueOf())
-    expect(wrapper.vm.selectedDate.getMonth()).toEqual(9)
-    expect(wrapper.vm.currentPicker).toEqual('')
-    expect(wrapper.emitted().selected).toBeTruthy()
-  })
-
-  it('can select a month', () => {
-    const dateTemp = new Date(2016, 9, 9)
-    wrapper.vm.selectMonth({ timestamp: dateTemp.valueOf() })
-    expect(wrapper.emitted()['changed-month']).toBeTruthy()
-    expect(wrapper.emitted()['changed-month'][0][0].timestamp).toEqual(dateTemp.valueOf())
-    expect(new Date(wrapper.vm.pageTimestamp).getMonth()).toEqual(dateTemp.getMonth())
-    expect(wrapper.vm.currentPicker).toEqual('PickerDay')
-  })
-
-  it('can select a year', () => {
-    const dateTemp = new Date(2018, 9, 9)
-    wrapper.vm.selectYear({ timestamp: dateTemp.valueOf() })
-    expect(wrapper.emitted()['changed-year']).toBeTruthy()
-    expect(wrapper.emitted()['changed-year'][0][0].timestamp).toEqual(dateTemp.valueOf())
-    expect(new Date(wrapper.vm.pageTimestamp).getFullYear()).toEqual(dateTemp.getFullYear())
-    expect(wrapper.vm.currentPicker).toEqual('PickerMonth')
   })
 
   it('resets the default page date', () => {

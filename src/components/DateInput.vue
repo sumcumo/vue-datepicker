@@ -2,11 +2,14 @@
   <div :class="{'input-group' : bootstrapStyling}">
     <slot name="beforeDateInput" />
     <!-- Calendar Button -->
-    <span
+    <button
       v-if="calendarButton"
+      ref="calendarButton"
       :class="{'input-group-prepend' : bootstrapStyling, 'calendar-btn-disabled': disabled}"
       class="vdp-datepicker__calendar-button"
-      @click="toggleCalendar"
+      :disabled="disabled"
+      @blur="$emit('check-focus')"
+      @click="toggleCalendarFromButton"
     >
       <span :class="{'input-group-text' : bootstrapStyling}">
         <i :class="calendarButtonIcon">
@@ -16,7 +19,7 @@
           </span>
         </i>
       </span>
-    </span>
+    </button>
     <!-- Input -->
     <input
       :id="id"
@@ -37,14 +40,19 @@
       :value="formattedValue"
       @blur="inputBlurred"
       @click="showCalendarByClick"
+      @keydown.space="showCalendarBySpace"
+      @keydown.enter.prevent="showCalendarByEnter"
+      @keydown.esc.prevent="clearDate"
       @focus="showCalendarByFocus"
       @keyup="parseTypedDate"
     >
     <!-- Clear Button -->
-    <span
+    <button
       v-if="clearButton && selectedDate"
       :class="{'input-group-append' : bootstrapStyling}"
       class="vdp-datepicker__clear-button"
+      :disabled="disabled"
+      @blur="$emit('check-focus')"
       @click="clearDate()"
     >
       <span :class="{'input-group-text' : bootstrapStyling}">
@@ -54,7 +62,7 @@
           </span>
         </i>
       </span>
-    </span>
+    </button>
     <slot name="afterDateInput" />
   </div>
 </template>
@@ -136,6 +144,7 @@ export default {
      * emit a clearDate event
      */
     clearDate() {
+      this.input.value = ''
       this.$emit('clear-date')
     },
     /**
@@ -153,23 +162,15 @@ export default {
           this.typedDate = ''
           this.$emit('typed-date', parsedDate)
         }
+        this.$emit('close-calendar')
       }
       this.$emit('blur')
-      this.$emit('close-calendar')
+      this.$emit('check-focus')
     },
     /**
      * Attempt to parse a typed date
-     * @param {Event} event
      */
-    parseTypedDate(event) {
-      const code = (event.keyCode ? event.keyCode : event.which)
-      // close calendar if escape or enter are pressed
-      if ([
-        27, // escape
-        13, // enter
-      ].indexOf(code) !== -1) {
-        this.input.blur()
-      }
+    parseTypedDate() {
       if (this.typeable) {
         const parsableDate = this.parseDate(this.input.value)
         const parsedDate = Date.parse(parsableDate)
@@ -190,10 +191,30 @@ export default {
     toggleCalendar() {
       this.$emit(this.isOpen ? 'close-calendar' : 'show-calendar')
     },
+    toggleCalendarFromButton() {
+      this.toggleCalendar()
+      this.$nextTick(() => {
+        if (!this.isOpen) {
+          this.$refs.calendarButton.focus()
+        }
+      })
+    },
+    showCalendarByButton() {
+      if (!this.typeable) {
+        this.toggleCalendar()
+      }
+    },
     showCalendarByClick() {
       if (!this.showCalendarOnButtonClick) {
         this.toggleCalendar()
       }
+    },
+    showCalendarByEnter() {
+      if (this.typeable) {
+        this.inputBlurred()
+        return
+      }
+      this.toggleCalendar()
     },
     showCalendarByFocus() {
       if (this.showCalendarOnFocus) {
@@ -201,6 +222,11 @@ export default {
       }
 
       this.$emit('focus')
+    },
+    showCalendarBySpace() {
+      if (!this.typeable) {
+        this.toggleCalendar()
+      }
     },
   },
 }

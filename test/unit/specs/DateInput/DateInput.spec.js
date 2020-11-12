@@ -116,11 +116,6 @@ describe('DateInput', () => {
     expect(wrapper.find('input').element.value).toEqual('!')
   })
 
-  it('triggers closeCalendar on blur', () => {
-    wrapper.find('input').trigger('blur')
-    expect(wrapper.emitted('close-calendar')).toBeTruthy()
-  })
-
   it('should open the calendar on focus', async () => {
     wrapper.find('input').trigger('focus')
     expect(wrapper.emitted('show-calendar')).toBeFalsy()

@@ -3,6 +3,7 @@ import Datepicker from '~/components/Datepicker'
 
 describe('Datepicker with restricted views', () => {
   let wrapper
+
   it('should default initialView to minimumView', () => {
     wrapper = mount(Datepicker, {
       propsData: {
@@ -59,7 +60,7 @@ describe('Datepicker with restricted views', () => {
     await upButton.trigger('click')
     expect(wrapper.vm.currentPicker).toBe('PickerMonth')
     upButton = wrapper.find('.month__year_btn')
-    expect(upButton.element.tabIndex).toBe(-1)
+    expect(upButton.element.disabled).toBeTruthy()
 
     wrapper.destroy()
 

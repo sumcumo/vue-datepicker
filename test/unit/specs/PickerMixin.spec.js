@@ -6,8 +6,9 @@ import defaultComponent from '../defaultComponent'
 const options = {
   mixins: [pickerMixin],
   propsData: {
-    selectedDate: new Date(2018, 2, 24),
     format: 'dd MMM yyyy',
+    pageDate: new Date(2018, 2, 1),
+    selectedDate: new Date(2018, 2, 24),
     translation: en,
   },
 }
@@ -40,6 +41,7 @@ describe('pickerMixin', () => {
     wrapper.vm.showPickerCalendar('month')
     expect(wrapper.emitted('show-month-calendar')).toBeTruthy()
   })
+
   it('should use `isNextDisabled` correctly', () => {
     expect(wrapper.vm.isNextDisabled).toBeFalsy()
   })

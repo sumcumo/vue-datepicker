@@ -108,10 +108,13 @@ describe('DateInput', () => {
   })
 
   it('emits closeCalendar when return is pressed', () => {
-    const input = wrapper.find('input')
-    const blurSpy = jest.spyOn(input.element, 'blur')
-    input.trigger('keyup.enter')
-    expect(blurSpy).toHaveBeenCalled()
+    wrapper.find('input').trigger('keydown.enter')
+    expect(wrapper.emitted('close-calendar')).toBeTruthy()
+  })
+
+  it('emits closeCalendar on blur', () => {
+    wrapper.find('input').trigger('blur')
+    expect(wrapper.emitted('close-calendar')).toBeTruthy()
   })
 
   it('clears a typed date if it does not parse', () => {

@@ -1,24 +1,34 @@
 <template>
-  <header v-if="config.showHeader">
-    <span
+  <header v-if="showHeader">
+    <button
+      ref="prev"
       class="prev"
-      :class="{'disabled': isLeftNavDisabled}"
-      @click="config.isRtl ? next() : previous()"
+      :disabled="isLeftNavDisabled"
+      @blur="$emit('check-focus')"
+      @click="isRtl ? next() : previous()"
+      @keydown.down.prevent="$emit('focus-first-cell')"
+      @keydown.left.prevent="isRtl ? focusUp('prev') : null"
+      @keydown.right.prevent="isRtl ? null : focusUp('prev')"
     >
       <slot name="prevIntervalBtn">
         <span class="default">&lt;</span>
       </slot>
-    </span>
+    </button>
     <slot />
-    <span
+    <button
+      ref="next"
       class="next"
-      :class="{'disabled': isRightNavDisabled}"
-      @click="config.isRtl ? previous() : next()"
+      :disabled="isRightNavDisabled"
+      @blur="$emit('check-focus')"
+      @click="isRtl ? previous() : next()"
+      @keydown.down.prevent="$emit('focus-first-cell')"
+      @keydown.left.prevent="isRtl ? null : focusUp('next')"
+      @keydown.right.prevent="isRtl ? focusUp('next') : null"
     >
       <slot name="nextIntervalBtn">
         <span class="default">&gt;</span>
       </slot>
-    </span>
+    </button>
   </header>
 </template>
 
@@ -26,16 +36,21 @@
 export default {
   name: 'PickerHeader',
   props: {
-    config: {
-      type: Object,
-      default() {
-        return {
-          showHeader: true,
-          isRtl: false,
-          isNextDisabled: false,
-          isPreviousDisabled: false,
-        }
-      },
+    isNextDisabled: {
+      type: Boolean,
+      required: true,
+    },
+    isPreviousDisabled: {
+      type: Boolean,
+      required: true,
+    },
+    isRtl: {
+      type: Boolean,
+      required: true,
+    },
+    isUpDisabled: {
+      type: Boolean,
+      required: true,
     },
     next: {
       type: Function,
@@ -45,6 +60,10 @@ export default {
       type: Function,
       required: true,
     },
+    showHeader: {
+      type: Boolean,
+      default: true,
+    },
   },
   computed: {
     /**
@@ -52,18 +71,31 @@ export default {
      * @return {Boolean}
      */
     isLeftNavDisabled() {
-      return this.config.isRtl
-        ? this.config.isNextDisabled
-        : this.config.isPreviousDisabled
+      return this.isRtl ? this.isNextDisabled : this.isPreviousDisabled
     },
     /**
      * Is the right hand navigation button disabled?
      * @return {Boolean}
      */
     isRightNavDisabled() {
-      return this.config.isRtl
-        ? this.config.isPreviousDisabled
-        : this.config.isNextDisabled
+      return this.isRtl ? this.isPreviousDisabled : this.isNextDisabled
+    },
+  },
+  methods: {
+    /**
+     * Focus the up button, or if its disabled, skip to the other prev/next button
+     */
+    focusUp(fromButton) {
+      if (!this.isUpDisabled) {
+        this.$emit('focus-up-button')
+        return
+      }
+
+      if (fromButton === 'prev') {
+        this.$refs.next.focus()
+      } else {
+        this.$refs.prev.focus()
+      }
     },
   },
 }

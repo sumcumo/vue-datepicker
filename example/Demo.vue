@@ -5,7 +5,6 @@
       <h3>Default datepicker...</h3>
       <Datepicker
         placeholder="Select Date"
-        :append-to-body="true"
       />
       <code>
         &lt;datepicker placeholder="Select Date"&gt;&lt;/datepicker&gt;

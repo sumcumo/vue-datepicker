@@ -2,11 +2,18 @@
   <div class="picker-view">
     <slot name="beforeCalendarHeaderYear" />
     <PickerHeader
-      :config="headerConfig"
+      ref="PickerHeader"
+      :is-next-disabled="isNextDisabled"
+      :is-previous-disabled="isPreviousDisabled"
+      :is-rtl="isRtl"
+      :is-up-disabled="isUpDisabled"
       :next="nextDecade"
       :previous="previousDecade"
+      :show-header="showHeader"
+      @check-focus="$emit('check-focus')"
+      @focus-first-cell="focusFirstNonDisabledCell"
     >
-      <span>
+      <span class="decade">
         {{ getPageDecade }}
       </span>
       <slot
@@ -19,15 +26,24 @@
       />
     </PickerHeader>
 
-    <span
-      v-for="year in years"
-      :key="year.timestamp"
-      :class="{ 'selected': year.isSelected, 'disabled': year.isDisabled }"
+    <button
+      v-for="cell in cells"
+      :ref="cell.id"
+      :key="cell.id"
+      :class="{ 'selected': cell.isSelected }"
       class="cell year"
-      @click.stop="selectYear(year)"
+      :disabled="cell.isDisabled"
+      @blur="$emit('check-focus')"
+      @click.stop="selectYear(cell)"
+      @focus="focusedCell = cell"
+      @keydown.up.prevent="updateCellFocus(keyUpChange)"
+      @keydown.down.prevent="updateCellFocus(keyDownChange)"
+      @keydown.left.prevent="updateCellFocus(keyLeftChange)"
+      @keydown.right.prevent="updateCellFocus(keyRightChange)"
+      @keyup.esc="$emit('close')"
     >
-      {{ year.year }}
-    </span>
+      {{ cell.year }}
+    </button>
     <slot name="calendarFooterYear" />
   </div>
 </template>
@@ -36,7 +52,7 @@ import pickerMixin from '~/mixins/pickerMixin'
 import { isYearDisabled } from '~/utils/DisabledDatesUtils'
 
 export default {
-  name: 'DatepickerYearView',
+  name: 'PickerYear',
   mixins: [
     pickerMixin,
   ],
@@ -48,32 +64,53 @@ export default {
   },
   computed: {
     /**
-     * Checks if the next decade is disabled or not
-     * @return {Boolean}
+     * Sets an array with years for a decade (or the no. of years in yearRange)
+     * @return {Array}
      */
-    isNextDisabled() {
-      if (!this.disabledDates || !this.disabledDates.from) {
-        return false
-      }
-      const yearFrom = this.utils.getFullYear(this.disabledDates.from)
-      const yearPageDate = this.utils.getFullYear(this.pageDate)
+    cells() {
+      const years = []
+      const dObj = this.newPageYear()
+      const cellsInGrid = Math.ceil(this.yearRange / this.cols) * this.cols
 
-      return Math.ceil(yearFrom / this.yearRange) * this.yearRange
-        <= Math.ceil(yearPageDate / this.yearRange) * this.yearRange
+      for (let i = 0; i < this.yearRange; i += 1) {
+        years.push({
+          id: i,
+          year: this.utils.getFullYear(dObj),
+          timestamp: dObj.valueOf(),
+          isSelected: this.isSelectedYear(dObj),
+          isDisabled: this.isDisabledYear(dObj),
+        })
+        this.utils.setFullYear(dObj, this.utils.getFullYear(dObj) + 1)
+      }
+
+      // Fill any remaining cells with blanks to position trailing cells correctly when rtl
+      for (let i = years.length; i < cellsInGrid; i += 1) {
+        years.push({
+          id: i,
+          isDisabled: true,
+        })
+      }
+      return years
     },
     /**
-     * Checks if the previous decade is disabled or not
-     * @return {Boolean}
+     * The number of non-blank cells on the last row
+     * @return {Number}
      */
-    isPreviousDisabled() {
-      if (!this.disabledDates || !this.disabledDates.to) {
-        return false
-      }
-      const yearTo = this.utils.getFullYear(this.disabledDates.to)
-      const yearPageDate = this.utils.getFullYear(this.pageDate)
-
-      return Math.floor(yearTo / this.yearRange) * this.yearRange
-        >= Math.floor(yearPageDate / this.yearRange) * this.yearRange
+    cellsOnLastRow() {
+      return this.yearRange - this.fullRowCells
+    },
+    disabledYearFrom() {
+      return this.disabledDates.from ? this.utils.getFullYear(this.disabledDates.from) : null
+    },
+    disabledYearTo() {
+      return this.disabledDates.to ? this.utils.getFullYear(this.disabledDates.to) : null
+    },
+    /**
+     * The number of cells which are not on the last row
+     * @return {Number}
+     */
+    fullRowCells() {
+      return Math.floor(this.yearRange / this.cols) * this.cols
     },
     /**
      * Get decade name on current page.
@@ -88,34 +125,93 @@ export default {
       return `${decadeStart} - ${decadeEnd}${yearSuffix}`
     },
     /**
-     * Set an array with years for a decade
-     * @return {Array}
+     * Is the next decade disabled?
+     * @return {Boolean}
      */
-    years() {
-      const d = this.pageDate
-      const years = []
-      const year = this.useUtc
-        ? Math.floor(d.getUTCFullYear() / this.yearRange) * this.yearRange
-        : Math.floor(d.getFullYear() / this.yearRange) * this.yearRange
-
-      // set up a new date object to the beginning of the current 'page'7
-      const dObj = this.useUtc
-        ? new Date(
-          Date.UTC(year, d.getUTCMonth(), d.getUTCDate()),
-        )
-        : new Date(
-          year, d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(),
-        )
-      for (let i = 0; i < this.yearRange; i += 1) {
-        years.push({
-          year: this.utils.getFullYear(dObj),
-          timestamp: dObj.valueOf(),
-          isSelected: this.isSelectedYear(dObj),
-          isDisabled: this.isDisabledYear(dObj),
-        })
-        this.utils.setFullYear(dObj, this.utils.getFullYear(dObj) + 1)
+    isNextDisabled() {
+      if (this.disabledFromDateNotUsed) {
+        return false
       }
-      return years
+      const lastCellYear = this.cells[this.yearRange - 1].year
+
+      return this.disabledYearFrom <= lastCellYear
+    },
+    /**
+     * Is the previous decade disabled?
+     * @return {Boolean}
+     */
+    isPreviousDisabled() {
+      if (this.disabledToDateNotUsed) {
+        return false
+      }
+      const yearPageDate = this.utils.getFullYear(this.pageDate)
+
+      return Math.floor(this.disabledYearTo / this.yearRange) * this.yearRange
+        >= Math.floor(yearPageDate / this.yearRange) * this.yearRange
+    },
+    todayCell() {
+      const today = this.utils.getNewDateObject()
+      for (let i = 0; i < this.cells.length; i += 1) {
+        if (this.cells[i].id === this.utils.getFullYear(today) % 10) {
+          return this.cells[i]
+        }
+      }
+      return null
+    },
+    keyUpChange() {
+      const isFirstRow = this.focusedCell.id < this.cols
+      const landsOnLastRow = this.cellsCount - this.focusedCell.id > this.fullRowCells
+
+      if (this.isPreviousDisabled && isFirstRow) {
+        return 0
+      }
+      if (landsOnLastRow) {
+        return -this.cellsOnLastRow
+      }
+      if (isFirstRow) {
+        return -this.cols - this.cellsOnLastRow
+      }
+
+      return -this.cols
+    },
+    keyDownChange() {
+      const isLastRow = this.focusedCell.id >= this.cells.length - this.cols
+      const nextCellIsBlank = (this.focusedCell.id + this.cols) >= this.yearRange
+
+      if (this.isNextDisabled && (isLastRow || nextCellIsBlank)) {
+        return 0
+      }
+      if (isLastRow) {
+        return this.cellsOnLastRow === 0 ? this.cols : this.cellsOnLastRow
+      }
+      if (nextCellIsBlank) {
+        return this.cols + this.cellsOnLastRow
+      }
+      return this.cols
+    },
+    keyRightChange() {
+      if (this.isRtl && !this.disabledYearTo) {
+        return -1
+      }
+      if (!this.isRtl && !this.disabledYearFrom) {
+        return 1
+      }
+      if (this.isRtl) {
+        return this.focusedCell.year <= this.disabledYearTo ? 0 : -1
+      }
+      return this.focusedCell.year >= this.disabledYearFrom ? 0 : 1
+    },
+    keyLeftChange() {
+      if (this.isRtl && !this.disabledYearFrom) {
+        return 1
+      }
+      if (!this.isRtl && !this.disabledYearTo) {
+        return -1
+      }
+      if (this.isRtl) {
+        return this.focusedCell.year >= this.disabledYearFrom ? 0 : 1
+      }
+      return this.focusedCell.year <= this.disabledYearTo ? 0 : -1
     },
   },
   methods: {
@@ -146,11 +242,25 @@ export default {
         && this.utils.getFullYear(this.selectedDate) === this.utils.getFullYear(date)
     },
     /**
+     * Set up a new date object to the first year of the current 'page'
+     */
+    newPageYear() {
+      const d = this.pageDate
+      const year = this.useUtc
+        ? Math.floor(d.getUTCFullYear() / this.yearRange) * this.yearRange
+        : Math.floor(d.getFullYear() / this.yearRange) * this.yearRange
+
+      return this.useUtc
+        ? new Date(Date.UTC(year, d.getUTCMonth(), d.getUTCDate()))
+        : new Date(year, d.getMonth(), d.getDate(), d.getHours(), d.getMinutes())
+    },
+    /**
      * Increments the decade
      */
     nextDecade() {
       if (!this.isNextDisabled) {
         this.changeYear(this.yearRange)
+        this.focusIntervalButton(this.isRtl ? 'prev' : 'next')
       }
     },
     /**
@@ -159,6 +269,7 @@ export default {
     previousDecade() {
       if (!this.isPreviousDisabled) {
         this.changeYear(-this.yearRange)
+        this.focusIntervalButton(this.isRtl ? 'next' : 'prev')
       }
     },
     /**
@@ -167,6 +278,7 @@ export default {
      */
     selectYear(year) {
       if (!year.isDisabled) {
+        this.focus(year.id)
         this.$emit('select-year', year)
       }
     },
