@@ -10,7 +10,7 @@ features:
 - title: Disable dates
   details: You can disable dates in multiple ways
 - title: Highlight dates
-  details: You can highlight dates in multiple ways 
+  details: You can highlight dates in multiple ways
 - title: Inline calendar
   details: If you want to disable showing the calendar on click, you can make it always visible as an inline element
 - title: Auto-alignment
@@ -19,6 +19,8 @@ features:
   details: Self-explanatory
 - title: Custom slots
   details: Customize your calendar with slots displaying information of your choosing
-  
+- title: Append to body
+  details: Append the picker to the body
+
 footer: sum.cumo ® - Made to Innovate
 ---
