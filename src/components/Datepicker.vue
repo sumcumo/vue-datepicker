@@ -60,7 +60,7 @@
       <div
         v-if="isOpen"
         ref="datepicker"
-        :class="[calendarClass, 'vdp-datepicker__calendar', isInline && 'inline']"
+        :class="pickerClasses"
         @mousedown.prevent
       >
         <template v-if="isOpen">
@@ -280,6 +280,14 @@ export default {
     },
     pageDate() {
       return new Date(this.pageTimestamp)
+    },
+    pickerClasses() {
+      return [
+        this.calendarClass,
+        'vdp-datepicker__calendar',
+        this.isInline && 'inline',
+        this.isRtl && this.appendToBody && 'rtl',
+      ]
     },
     translation() {
       return this.language
