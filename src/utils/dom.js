@@ -32,7 +32,7 @@ export function getPopupElementSize(element) {
  * @param {Element} elRelative relative element
  * @param {Number} targetWidth target element's width
  * @param {Number} targetHeight target element's height
- * @param {Boolean} fixed
+ * @param {Boolean} appendToBody
  * @param {String} fixedPosition
  * @param {Boolean} rtl
  */
@@ -41,7 +41,7 @@ export function getRelativePosition({
   elRelative,
   targetWidth,
   targetHeight,
-  fixed,
+  appendToBody,
   fixedPosition,
   rtl,
 }) {
@@ -52,7 +52,7 @@ export function getRelativePosition({
   const relativeRect = elRelative.getBoundingClientRect()
   const documentWidth = document.documentElement.clientWidth
   const documentHeight = document.documentElement.clientHeight
-  if (fixed) {
+  if (appendToBody) {
     offsetX = window.pageXOffset + relativeRect.left
     offsetY = window.pageYOffset + relativeRect.top
   }

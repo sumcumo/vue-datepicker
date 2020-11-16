@@ -58,7 +58,7 @@
       :visible="isOpen"
     >
       <div
-        v-show="isOpen"
+        v-if="isOpen"
         ref="datepicker"
         :class="[calendarClass, 'vdp-datepicker__calendar', isInline && 'inline']"
         @mousedown.prevent
