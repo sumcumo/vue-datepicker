@@ -31,7 +31,6 @@ export default {
   data() {
     return {
       popupRect: null,
-      relativeElement: null,
     }
   },
   watch: {
@@ -40,7 +39,6 @@ export default {
       handler(val) {
         this.$nextTick(() => {
           if (val) {
-            this.relativeElement = this.$parent.$el
             this.displayPopup()
           }
         })
