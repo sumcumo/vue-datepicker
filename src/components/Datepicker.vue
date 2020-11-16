@@ -339,15 +339,18 @@ export default {
         // N.B. During testing: wrap in a try/catch block to avoid the following error
         // [Vue warn]: Error in nextTick: "SyntaxError: ':focus-within' is not a valid selector"
 
-        // try {
-        if (this.$refs['vdp-datepicker'].matches(':focus-within')) {
-          this.hasBeenFocused = true
-        } else {
-          this.close()
+        try {
+          if (this.$refs['vdp-datepicker'].matches(':focus-within')) {
+            this.hasBeenFocused = true
+            return
+          }
+
+          if (this.isOpen) {
+            this.close()
+          }
+        } catch {
+          // :focus-within is not supported by this browser - https://caniuse.com/css-focus-within
         }
-        // } catch {
-        //   // :focus-within is not supported by this browser - https://caniuse.com/css-focus-within
-        // }
       })
     },
     /**

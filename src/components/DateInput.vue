@@ -214,7 +214,9 @@ export default {
         this.inputBlurred()
         return
       }
-      this.toggleCalendar()
+      if (!this.showCalendarOnButtonClick) {
+        this.toggleCalendar()
+      }
     },
     showCalendarByFocus() {
       if (this.showCalendarOnFocus) {
@@ -224,7 +226,7 @@ export default {
       this.$emit('focus')
     },
     showCalendarBySpace() {
-      if (!this.typeable) {
+      if (!this.typeable && !this.showCalendarOnButtonClick) {
         this.toggleCalendar()
       }
     },
