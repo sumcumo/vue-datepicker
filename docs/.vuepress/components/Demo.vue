@@ -71,7 +71,7 @@
       <h3>With default open date</h3>
       <Datepicker :open-date="openDate"/>
       <code>
-        &lt;datepicker :disabled="disabled"&gt;&lt;/datepicker&gt;
+        &lt;datepicker :open-date="openDate"&gt;&lt;/datepicker&gt;
       </code>
       <div class="settings">
         <h5>Settings</h5>
