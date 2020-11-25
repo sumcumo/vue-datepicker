@@ -1,8 +1,5 @@
 <script>
-import {
-  getPopupElementSize,
-  getRelativePosition,
-} from '~/utils/dom'
+import { getPopupElementSize, getRelativePosition } from '~/utils/dom'
 
 export default {
   name: 'Popup',

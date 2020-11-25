@@ -1,5 +1,5 @@
 <template>
-  <Datepicker :language="$datepickerLocals.he"/>
+  <Datepicker :language="$datepickerLocals.he" />
 </template>
 
 <script>

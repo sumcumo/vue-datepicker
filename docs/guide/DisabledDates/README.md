@@ -1,4 +1,5 @@
 # Disabled Dates
+
 Dates can be disabled in a number of ways.
 
 ```vue
@@ -8,6 +9,7 @@ Dates can be disabled in a number of ways.
 ```
 
 ## Disable up to a specific date
+
 ```js
 var state = {
   disabledDates: {
@@ -15,10 +17,11 @@ var state = {
   }
 }
 ```
+
 Everything before 2016-01-05 is disabled
 
-
 ## Disable from a specific date
+
 ```js
 var state = {
   disabledDates: {
@@ -26,10 +29,11 @@ var state = {
   }
 }
 ```
+
 Everything after 2016-01-26 is disabled
 
-
 ## Disable specific days in each week
+
 ```js
 var state = {
   disabledDates: {
@@ -37,9 +41,11 @@ var state = {
   }
 }
 ```
+
 Every Saturday and Sunday is disabled
 
 ## Disable specific days of each month
+
 ```js
 var state = {
   disabledDates: {
@@ -47,9 +53,11 @@ var state = {
   }
 }
 ```
+
 Disable 29th, 30th and 31st of each month
 
 ## Disable specific days from an array
+
 ```js
 var state = {
   disabledDates: {
@@ -61,15 +69,18 @@ var state = {
   }
 }
 ```
+
 Following dates are disabled:
 2016-10-16
 2016-10-17
 2016-10-18
 
 ## Disable in given ranges
+
 ::: tip IMPORTANT
 Both `to` and `from` properties are required to define a range of dates to highlight.
 :::
+
 ```js
 var state = {
   disabledDates: {
@@ -84,13 +95,16 @@ var state = {
   }
 }
 ```
+
 The dates between 2016-12-24 - 2016-12-31 and 2017-02-11 - 2017-03-26 are disabled
 
 ## Disable after own logic
+
 A custom function that returns `true` if the date is disabled.
 This can be used for writing your own logic to disable a date if none
 of the above conditions serve your purpose.
 This function should accept a date and return `true` if it is disabled
+
 ```js
 var state = {
   disabledDates: {
@@ -103,4 +117,5 @@ var state = {
   }
 }
 ```
+
 Every date that is a multiple of 5 is disabled

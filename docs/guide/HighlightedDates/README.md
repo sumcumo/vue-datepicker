@@ -1,4 +1,5 @@
 # Highlighted Dates
+
 Dates can be highlighted (e.g. for marking an appointment) in a number of ways.
 
 ::: tip IMPORTANT
@@ -13,6 +14,7 @@ property to `true`.
 ```
 
 ## Highlight up to a specific date
+
 ```js
 var state = {
   highlighted: {
@@ -20,10 +22,11 @@ var state = {
   }
 }
 ```
+
 Everything before 2016-01-05 is highlighted
 
-
 ## Highlight from a specific date
+
 ```js
 var state = {
   highlighted: {
@@ -31,10 +34,11 @@ var state = {
   }
 }
 ```
+
 Everything after 2016-01-26 is highlighted
 
-
 ## Highlight specific days in each week
+
 ```js
 var state = {
   highlighted: {
@@ -42,9 +46,11 @@ var state = {
   }
 }
 ```
+
 Every Saturday and Sunday is highlighted
 
 ## Highlight specific days of each month
+
 ```js
 var state = {
   highlighted: {
@@ -52,9 +58,11 @@ var state = {
   }
 }
 ```
+
 Highlight 29th, 30th and 31st of each month
 
 ## Highlight specific days from an array
+
 ```js
 var state = {
   highlighted: {
@@ -66,15 +74,18 @@ var state = {
   }
 }
 ```
+
 Following dates are highlighted:
 2016-10-16
 2016-10-17
 2016-10-18
 
 ## Highlight in given ranges
+
 ::: tip IMPORTANT
 Both `to` and `from` properties are required to define a range of dates to highlight.
 :::
+
 ```js
 var state = {
   highlighted: {
@@ -89,13 +100,16 @@ var state = {
   }
 }
 ```
+
 The dates between 2016-12-24 - 2016-12-31 and 2017-02-11 - 2017-03-26 are highlighted
 
 ## Highlight after own logic
+
 A custom function that returns `true` if the date is highlighted.
 This can be used for writing your own logic to highlight a date if none
 of the above conditions serve your purpose.
 This function should accept a date and return `true` if it is highlighted
+
 ```js
 var state = {
   highlighted: {
@@ -108,4 +122,5 @@ var state = {
   }
 }
 ```
+
 Every date that is a multiple of 5 is highlighted

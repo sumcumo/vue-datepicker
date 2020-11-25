@@ -1,10 +1,7 @@
 <template>
   <div>
-    <Datepicker
-      v-model="vModelExample"
-      placeholder="Select Date"
-    />
-    <hr>
+    <Datepicker v-model="vModelExample" placeholder="Select Date" />
+    <hr />
     <p>{{ vModelExample }}</p>
   </div>
 </template>

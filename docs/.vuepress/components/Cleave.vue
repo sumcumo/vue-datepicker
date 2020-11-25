@@ -35,5 +35,5 @@ export default {
 }
 </script>
 <style>
-  @import 'style.css';
+@import 'style.css';
 </style>

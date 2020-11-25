@@ -78,10 +78,7 @@ describe('PickerDay highlight date', () => {
   it('can accept an array of highlighted days of the week', () => {
     wrapper.setProps({
       highlighted: {
-        days: [
-          6,
-          0,
-        ],
+        days: [6, 0],
       },
     })
     expect(wrapper.vm.isHighlightedDate(new Date(2016, 9, 2))).toEqual(true)
@@ -91,11 +88,7 @@ describe('PickerDay highlight date', () => {
   it('can accept an array of highlighted days of the month', () => {
     wrapper.setProps({
       highlighted: {
-        daysOfMonth: [
-          1,
-          10,
-          31,
-        ],
+        daysOfMonth: [1, 10, 31],
       },
     })
     expect(wrapper.vm.isHighlightedDate(new Date(2016, 9, 1))).toEqual(true)

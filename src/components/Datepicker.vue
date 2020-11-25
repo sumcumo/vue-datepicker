@@ -1,8 +1,5 @@
 <template>
-  <div
-    :class="[wrapperClass, isRtl ? 'rtl' : '']"
-    class="vdp-datepicker"
-  >
+  <div :class="[wrapperClass, isRtl ? 'rtl' : '']" class="vdp-datepicker">
     <DateInput
       :id="id"
       :autofocus="autofocus"
@@ -39,14 +36,8 @@
       @show-calendar="showCalendar"
       @typed-date="setTypedDate"
     >
-      <slot
-        slot="beforeDateInput"
-        name="beforeDateInput"
-      />
-      <slot
-        slot="afterDateInput"
-        name="afterDateInput"
-      />
+      <slot slot="beforeDateInput" name="beforeDateInput" />
+      <slot slot="afterDateInput" name="afterDateInput" />
     </DateInput>
 
     <Popup
@@ -65,7 +56,7 @@
       >
         <template v-if="isOpen">
           <slot name="beforeCalendarHeader" />
-          <component
+          <Component
             :is="currentPicker"
             :allowed-to-show-view="allowedToShowView"
             :day-cell-content="dayCellContent"
@@ -82,28 +73,20 @@
             :translation="translation"
             :use-utc="useUtc"
             :year-range="yearPickerRange"
-
             @select-date="selectDate"
             @changed-month="handleChangedMonthFromDayPicker"
             @selected-disabled="selectDisabledDate"
-
             @select-month="selectMonth"
             @changed-year="setPageDate"
             @show-month-calendar="showSpecificCalendar('Month')"
-
             @select-year="selectYear"
             @changed-decade="setPageDate"
             @show-year-calendar="showSpecificCalendar('Year')"
           >
-            <template
-              v-for="slotKey of calendarSlots"
-            >
-              <slot
-                :slot="slotKey"
-                :name="slotKey"
-              />
+            <template v-for="slotKey of calendarSlots">
+              <slot :slot="slotKey" :name="slotKey" />
             </template>
-          </component>
+          </Component>
           <slot name="calendarFooter" />
         </template>
       </div>
@@ -121,10 +104,11 @@ import PickerMonth from '~/components/PickerMonth.vue'
 import PickerYear from '~/components/PickerYear.vue'
 import Popup from '~/components/Popup.vue'
 
-const validDate = (val) => val === null
-  || val instanceof Date
-  || typeof val === 'string'
-  || typeof val === 'number'
+const validDate = (val) =>
+  val === null ||
+  val instanceof Date ||
+  typeof val === 'string' ||
+  typeof val === 'number'
 
 export default {
   name: 'Datepicker',
@@ -135,20 +119,14 @@ export default {
     PickerYear,
     Popup,
   },
-  mixins: [
-    inputProps,
-  ],
+  mixins: [inputProps],
   props: {
     appendToBody: {
       type: Boolean,
       default: false,
     },
     calendarClass: {
-      type: [
-        String,
-        Object,
-        Array,
-      ],
+      type: [String, Object, Array],
       default: '',
     },
     dayCellContent: {
@@ -168,13 +146,18 @@ export default {
     fixedPosition: {
       type: String,
       default: '',
-      validator: (val) => val === ''
-        || val === 'bottom'
-        || val === 'bottom-left'
-        || val === 'bottom-right'
-        || val === 'top'
-        || val === 'top-left'
-        || val === 'top-right',
+      validator: (val) => {
+        const possibleValues = [
+          '',
+          'bottom',
+          'bottom-left',
+          'bottom-right',
+          'top',
+          'top-left',
+          'top-right',
+        ]
+        return possibleValues.includes(val)
+      },
     },
     fullMonthName: {
       type: Boolean,
@@ -211,20 +194,12 @@ export default {
       default: true,
     },
     value: {
-      type: [
-        String,
-        Date,
-        Number,
-      ],
+      type: [String, Date, Number],
       default: '',
       validator: validDate,
     },
     wrapperClass: {
-      type: [
-        String,
-        Object,
-        Array,
-      ],
+      type: [String, Object, Array],
       default: '',
     },
     yearPickerRange: {
@@ -313,11 +288,7 @@ export default {
      * @return {Boolean}
      */
     allowedToShowView(view) {
-      const views = [
-        'day',
-        'month',
-        'year',
-      ]
+      const views = ['day', 'month', 'year']
       const minimumViewIndex = views.indexOf(this.minimumView)
       const maximumViewIndex = views.indexOf(this.maximumView)
       const viewIndex = views.indexOf(view)
@@ -401,7 +372,9 @@ export default {
     setInitialView() {
       const initialView = this.computedInitialView
       if (!this.allowedToShowView(initialView)) {
-        throw new Error(`initialView '${this.initialView}' cannot be rendered based on minimum '${this.minimumView}' and maximum '${this.maximumView}'`)
+        throw new Error(
+          `initialView '${this.initialView}' cannot be rendered based on minimum '${this.minimumView}' and maximum '${this.maximumView}'`,
+        )
       }
       switch (initialView) {
         case 'year':

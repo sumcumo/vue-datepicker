@@ -2,7 +2,7 @@
   <header v-if="config.showHeader">
     <span
       class="prev"
-      :class="{'disabled': isLeftNavDisabled}"
+      :class="{ disabled: isLeftNavDisabled }"
       @click="config.isRtl ? next() : previous()"
     >
       <slot name="prevIntervalBtn">
@@ -12,7 +12,7 @@
     <slot />
     <span
       class="next"
-      :class="{'disabled': isRightNavDisabled}"
+      :class="{ disabled: isRightNavDisabled }"
       @click="config.isRtl ? previous() : next()"
     >
       <slot name="nextIntervalBtn">

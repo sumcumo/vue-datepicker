@@ -4,15 +4,12 @@
       <h5>Settings</h5>
       <div class="form-group">
         <label>Open date:</label>
-        <Datepicker v-model="openDate" placeholder="Select open Date"/>
+        <Datepicker v-model="openDate" placeholder="Select open Date" />
       </div>
       <pre>openDate: {{ openDate }}</pre>
     </div>
-    <Datepicker
-      :open-date="openDate"
-      placeholder="Select Date"
-    />
-    <hr>
+    <Datepicker :open-date="openDate" placeholder="Select Date" />
+    <hr />
   </div>
 </template>
 

@@ -42,8 +42,9 @@ Vue.directive("cleave", {
 ```
 
 ## [vee-validate](https://github.com/logaretm/vee-validate) 2.x.x
+
 ::: warning Version
-This integration only applies for vee-validate 2.x, and not the latest 3.x version! 
+This integration only applies for vee-validate 2.x, and not the latest 3.x version!
 :::
 
 For input validation.

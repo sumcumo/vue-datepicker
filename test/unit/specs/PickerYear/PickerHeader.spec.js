@@ -30,8 +30,7 @@ describe('PickerHeader mounted', () => {
   })
 
   it('should set `isLeftNavDisabled` correctly', () => {
-    expect(wrapper.vm.isLeftNavDisabled)
-      .toBeFalsy()
+    expect(wrapper.vm.isLeftNavDisabled).toBeFalsy()
     wrapper.setProps({
       config: {
         isRtl: true,

@@ -13,19 +13,13 @@
       >
         {{ pageYearName }}
       </span>
-      <slot
-        slot="nextIntervalBtn"
-        name="nextIntervalBtn"
-      />
-      <slot
-        slot="prevIntervalBtn"
-        name="prevIntervalBtn"
-      />
+      <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
+      <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
     <span
       v-for="month in months"
       :key="month.timestamp"
-      :class="{'selected': month.isSelected, 'disabled': month.isDisabled}"
+      :class="{ selected: month.isSelected, disabled: month.isDisabled }"
       class="cell month"
       @click.stop="selectMonth(month)"
     >
@@ -40,9 +34,7 @@ import { isMonthDisabled } from '~/utils/DisabledDatesUtils'
 
 export default {
   name: 'DatepickerMonthView',
-  mixins: [
-    pickerMixin,
-  ],
+  mixins: [pickerMixin],
   computed: {
     /**
      * Checks if the next year is disabled or not
@@ -52,9 +44,10 @@ export default {
       if (!this.disabledDates || !this.disabledDates.from) {
         return false
       }
-      return this.utils.getFullYear(
-        this.disabledDates.from,
-      ) <= this.utils.getFullYear(this.pageDate)
+      return (
+        this.utils.getFullYear(this.disabledDates.from) <=
+        this.utils.getFullYear(this.pageDate)
+      )
     },
     /**
      * Checks if the previous year is disabled or not
@@ -64,7 +57,10 @@ export default {
       if (!this.disabledDates || !this.disabledDates.to) {
         return false
       }
-      return this.utils.getFullYear(this.disabledDates.to) >= this.utils.getFullYear(this.pageDate)
+      return (
+        this.utils.getFullYear(this.disabledDates.to) >=
+        this.utils.getFullYear(this.pageDate)
+      )
     },
     /**
      * Set an array with all months
@@ -76,7 +72,13 @@ export default {
       // set up a new date object to the beginning of the current 'page'
       const dObj = this.useUtc
         ? new Date(Date.UTC(d.getUTCFullYear(), 0, d.getUTCDate()))
-        : new Date(d.getFullYear(), 0, d.getDate(), d.getHours(), d.getMinutes())
+        : new Date(
+            d.getFullYear(),
+            0,
+            d.getDate(),
+            d.getHours(),
+            d.getMinutes(),
+          )
       for (let i = 0; i < 12; i += 1) {
         months.push({
           month: this.utils.getMonthName(i, this.translation.months),
@@ -121,9 +123,12 @@ export default {
      * @return {Boolean}
      */
     isSelectedMonth(date) {
-      return (this.selectedDate
-        && this.utils.getFullYear(this.selectedDate) === this.utils.getFullYear(date)
-        && this.utils.getMonth(this.selectedDate) === this.utils.getMonth(date))
+      return (
+        this.selectedDate &&
+        this.utils.getFullYear(this.selectedDate) ===
+          this.utils.getFullYear(date) &&
+        this.utils.getMonth(this.selectedDate) === this.utils.getMonth(date)
+      )
     },
     /**
      * Increments the year

@@ -1,8 +1,5 @@
 import { mount, shallowMount } from '@vue/test-utils'
-import {
-  format,
-  parse,
-} from 'date-fns'
+import { format, parse } from 'date-fns'
 import DateInput from '~/components/DateInput.vue'
 import Datepicker from '~/components/Datepicker.vue'
 import { en } from '~/locale'
@@ -121,7 +118,7 @@ describe('DateInput', () => {
     expect(wrapper.emitted()['clear-date']).toBeDefined()
   })
 
-  it('doesn\'t emit the date if typeable=false', () => {
+  it("doesn't emit the date if typeable=false", () => {
     const wrapperNotTypeAble = shallowMount(DateInput, {
       propsData: {
         format: 'dd MMM yyyy',

@@ -1,6 +1,7 @@
 # Demo
 
 ## Default
+
 <ClientOnly>
   <Datepicker placeholder="Select Date" :append-to-body="true"/>
 </ClientOnly>
@@ -10,18 +11,17 @@
 ```
 
 ## v-model
+
 <ClientOnly>
   <Datepicker-VModel/>
 </ClientOnly>
 
 ```html
-<Datepicker
-  v-model="vModelExample"
-/>
+<Datepicker v-model="vModelExample" />
 ```
 
-
 ## First day of Week
+
 <ClientOnly>
   <Datepicker
     placeholder="Select Date"
@@ -30,12 +30,11 @@
 </ClientOnly>
 
 ```html
-<Datepicker
-  first-day-of-week="mon"
-/>
+<Datepicker first-day-of-week="mon" />
 ```
 
 ## Don't show edge dates
+
 <ClientOnly>
   <Datepicker
     placeholder="Select Date"
@@ -44,25 +43,21 @@
 </ClientOnly>
 
 ```html
-<Datepicker
-  :show-edge-dates="false"
-/>
+<Datepicker :show-edge-dates="false" />
 ```
 
-
 ## Custom open Date
+
 <ClientOnly>
   <Datepicker-OpenDate/>
 </ClientOnly>
 
 ```html
-<Datepicker
-  :open-date="openDate"
-/>
+<Datepicker :open-date="openDate" />
 ```
 
-
 ## Inline
+
 <ClientOnly>
   <Datepicker
     placeholder="Select Date"
@@ -71,12 +66,11 @@
 </ClientOnly>
 
 ```html
-<Datepicker
-  :inline="true"
-/>
+<Datepicker :inline="true" />
 ```
 
 ## Fixed position
+
 <ClientOnly>
   <Datepicker
     placeholder="Select Date"
@@ -85,13 +79,11 @@
 </ClientOnly>
 
 ```html
-<Datepicker
-  fixed-position="top-right"
-/>
+<Datepicker fixed-position="top-right" />
 ```
 
-
 ## Rtl
+
 <ClientOnly>
   <Datepicker
     :language="$datepickerLocals.he"
@@ -99,13 +91,11 @@
 </ClientOnly>
 
 ```html
-<Datepicker
-  :language="$datepickerLocals.he"
-/>
+<Datepicker :language="$datepickerLocals.he" />
 ```
 
-
 ## Day view only
+
 <ClientOnly>
   <Datepicker
     minimum-view="day"
@@ -114,14 +104,11 @@
 </ClientOnly>
 
 ```html
-<Datepicker
-  minimum-view="day"
-  maximum-view="day"
-/>
+<Datepicker minimum-view="day" maximum-view="day" />
 ```
 
-
 ## Day and month view only
+
 <ClientOnly>
   <Datepicker
     minimum-view="day"
@@ -131,15 +118,11 @@
 </ClientOnly>
 
 ```html
-<Datepicker
-  minimum-view="day"
-  maximum-view="month"
-  initial-view="month"
-/>
+<Datepicker minimum-view="day" maximum-view="month" initial-view="month" />
 ```
 
-
 ## With Button
+
 <ClientOnly>
   <Datepicker
     :calendar-button="true"
@@ -148,45 +131,37 @@
 </ClientOnly>
 
 ```html
-<Datepicker
-  :calendar-button="true"
-  :show-calendar-on-button-click="true"
-/>
+<Datepicker :calendar-button="true" :show-calendar-on-button-click="true" />
 ```
 
-
 ## Year picker range
+
 <ClientOnly>
   <Datepicker-YearPickerRange/>
 </ClientOnly>
 
 ```html
-<Datepicker
-  :year-picker-range="yearPickerRange"
-/>
+<Datepicker :year-picker-range="yearPickerRange" />
 ```
 
-
 ## Comparison append picker to body
+
 <ClientOnly>
   <Datepicker-AppendToBody/>
 </ClientOnly>
 
 ```html
-<Datepicker
- :append-to-body="true"
-/>
+<Datepicker :append-to-body="true" />
 ```
 
 ## Comparison use utc or not
+
 <ClientOnly>
   <Datepicker-UseUtc/>
 </ClientOnly>
 
 ```html
-<Datepicker
-  :use-utc="true"
-/>
+<Datepicker :use-utc="true" />
 ```
 
 <style>

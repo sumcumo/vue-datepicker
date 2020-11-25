@@ -2,18 +2,19 @@
   <div class="example">
     <div class="settings">
       <h5>Settings</h5>
-      <Format
-        @selected="selected"
-        :format-init="format"
-      />
+      <Format @selected="selected" :format-init="format" />
     </div>
     <h3>Default formatter</h3>
-    <Datepicker :format="format"/>
+    <Datepicker :format="format" />
     <code>
       &lt;Datepicker :format="format"/&gt;
     </code>
     <h3>Custom formatter</h3>
-    <Datepicker :format="customFormatter" :parser="customParser" :typeable="true"/>
+    <Datepicker
+      :format="customFormatter"
+      :parser="customParser"
+      :typeable="true"
+    />
     <code>
       &lt;Datepicker :format="customFormatter" :parser="customParser"/&gt;
     </code>
@@ -49,5 +50,5 @@ export default {
 </script>
 
 <style>
-  @import 'style.css';
+@import 'style.css';
 </style>

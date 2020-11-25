@@ -111,13 +111,21 @@ describe('Datepicker with restricted views', () => {
     })
     wrapper.vm.showCalendar()
     await wrapper.vm.$nextTick()
-    expect(wrapper.vm.$el.querySelectorAll('.vdp-datepicker__calendar').length).toEqual(1)
-    expect(wrapper.vm.$el.querySelectorAll('.vdp-datepicker__calendar .cell.day').length)
-      .toBeGreaterThan(0)
-    expect(wrapper.vm.$el.querySelectorAll('.vdp-datepicker__calendar .cell.month').length)
-      .toEqual(0)
-    expect(wrapper.vm.$el.querySelectorAll('.vdp-datepicker__calendar .cell.year').length)
-      .toEqual(0)
+    expect(
+      wrapper.vm.$el.querySelectorAll('.vdp-datepicker__calendar').length,
+    ).toEqual(1)
+    expect(
+      wrapper.vm.$el.querySelectorAll('.vdp-datepicker__calendar .cell.day')
+        .length,
+    ).toBeGreaterThan(0)
+    expect(
+      wrapper.vm.$el.querySelectorAll('.vdp-datepicker__calendar .cell.month')
+        .length,
+    ).toEqual(0)
+    expect(
+      wrapper.vm.$el.querySelectorAll('.vdp-datepicker__calendar .cell.year')
+        .length,
+    ).toEqual(0)
 
     expect(wrapper.vm.currentPicker).toBe('PickerDay')
 
@@ -129,12 +137,20 @@ describe('Datepicker with restricted views', () => {
     })
     wrapper.vm.showCalendar()
     await wrapper.vm.$nextTick()
-    expect(wrapper.vm.$el.querySelectorAll('.vdp-datepicker__calendar').length).toEqual(1)
-    expect(wrapper.vm.$el.querySelectorAll('.vdp-datepicker__calendar .cell.day').length)
-      .toEqual(0)
-    expect(wrapper.vm.$el.querySelectorAll('.vdp-datepicker__calendar .cell.month').length)
-      .toBeGreaterThan(0)
-    expect(wrapper.vm.$el.querySelectorAll('.vdp-datepicker__calendar .cell.year').length)
-      .toEqual(0)
+    expect(
+      wrapper.vm.$el.querySelectorAll('.vdp-datepicker__calendar').length,
+    ).toEqual(1)
+    expect(
+      wrapper.vm.$el.querySelectorAll('.vdp-datepicker__calendar .cell.day')
+        .length,
+    ).toEqual(0)
+    expect(
+      wrapper.vm.$el.querySelectorAll('.vdp-datepicker__calendar .cell.month')
+        .length,
+    ).toBeGreaterThan(0)
+    expect(
+      wrapper.vm.$el.querySelectorAll('.vdp-datepicker__calendar .cell.year')
+        .length,
+    ).toEqual(0)
   })
 })
