@@ -84,7 +84,7 @@ const generateConfig = ({
         css: false,
       }),
       postcss({
-        extract: 'vuejs-datepicker.css',
+        extract: 'Datepicker.css',
         minimize: true,
         plugins: [
           autoprefixer(),
