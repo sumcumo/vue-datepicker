@@ -1,7 +1,7 @@
 import VeeValidate from 'vee-validate'
 import Cleave from 'cleave.js'
 import * as lang from '../../dist/locale'
-import Datepicker from '../../dist/vuejs-datepicker'
+import Datepicker from '../../dist/Datepicker'
 
 export default ({
   Vue,

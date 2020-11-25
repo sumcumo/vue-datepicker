@@ -190,7 +190,7 @@
 ```
 
 <style>
-@import '../../dist/vuejs-datepicker.css';
+@import '../../dist/Datepicker.css';
 input, select {
   padding: .75em .5em;
   font-size: 100%;

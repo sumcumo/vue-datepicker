@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import PickerHeader from '~/components/PickerHeader'
+import PickerHeader from '~/components/PickerHeader.vue'
 
 describe('PickerHeader unmounted', () => {
   it('sets the correct default data', () => {

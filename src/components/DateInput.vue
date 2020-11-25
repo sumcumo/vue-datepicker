@@ -60,7 +60,7 @@
 </template>
 <script>
 import { makeDateUtils } from '~/utils/DateUtils'
-import inputProps from '~/mixins/inputProps'
+import inputProps from '~/mixins/inputProps.vue'
 
 export default {
   name: 'DateInput',

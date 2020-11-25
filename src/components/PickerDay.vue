@@ -44,7 +44,7 @@
   </div>
 </template>
 <script>
-import pickerMixin from '~/mixins/pickerMixin'
+import pickerMixin from '~/mixins/pickerMixin.vue'
 import { isDateDisabled } from '~/utils/DisabledDatesUtils'
 
 export default {

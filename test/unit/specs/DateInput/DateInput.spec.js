@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import DateInput from '~/components/DateInput'
+import DateInput from '~/components/DateInput.vue'
 import { en } from '~/locale'
 
 describe('DateInput unmounted', () => {

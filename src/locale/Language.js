@@ -1,12 +1,12 @@
 export default class Language {
-  constructor(language, months, monthsAbbr, days) {
+  constructor(language, months, monthsAbbr, days, rtl = false, ymd = false, yearSuffix = '') {
     this.language = language
     this.months = months
     this.monthsAbbr = monthsAbbr
     this.days = days
-    this.rtl = false
-    this.ymd = false
-    this.yearSuffix = ''
+    this.rtl = rtl
+    this.ymd = ymd
+    this.yearSuffix = yearSuffix
   }
 
   /* eslint-disable no-underscore-dangle */
