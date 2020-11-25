@@ -36,6 +36,7 @@ export function getPopupElementSize(element) {
  * @param {String} fixedPosition
  * @param {Boolean} rtl
  */
+// eslint-disable-next-line complexity,max-statements
 export function getRelativePosition({
   el,
   elRelative,

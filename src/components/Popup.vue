@@ -59,12 +59,15 @@ export default {
     }
   },
   methods: {
-    displayPopup() {
-      if (this.inline || !this.visible) return
+    setTopStyle() {
       if (this.appendToBody) {
         const relativeRect = this.$parent.$el.getBoundingClientRect()
         this.$el.style.top = `${relativeRect.bottom + window.scrollY}px`
       }
+    },
+    displayPopup() {
+      if (this.inline || !this.visible) return
+      this.setTopStyle()
       const popup = this.$el
       const relativeElement = this.$parent.$el
       if (!this.popupRect) {

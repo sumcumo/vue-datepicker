@@ -222,14 +222,6 @@ export default {
       return this.utils.getMonth(this.pageDate)
     },
     /**
-     * Helper
-     * @param  {all}  prop
-     * @return {Boolean}
-     */
-    isDefined(prop) {
-      return typeof prop !== 'undefined' && prop
-    },
-    /**
      * Whether a day is disabled
      * @param {Date} date to check if disabled
      * @return {Boolean}
@@ -243,18 +235,15 @@ export default {
      * @param {Date} date to check if highlighted
      * @return {Boolean}
      */
+    // eslint-disable-next-line complexity,max-statements
     isHighlightedDate(date) {
+      let highlighted = false
       const dateWithoutTime = this.utils.resetDateTime(date)
       if (
-        !(this.highlighted && this.highlighted.includeDisabled) &&
-        this.isDisabledDate(dateWithoutTime)
+        typeof this.highlighted === 'undefined' ||
+        (!(this.highlighted && this.highlighted.includeDisabled) &&
+          this.isDisabledDate(dateWithoutTime))
       ) {
-        return false
-      }
-
-      let highlighted = false
-
-      if (typeof this.highlighted === 'undefined') {
         return false
       }
 
@@ -266,34 +255,33 @@ export default {
         })
       }
 
-      if (
-        this.isDefined(this.highlighted.from) &&
-        this.isDefined(this.highlighted.to)
-      ) {
-        highlighted =
-          dateWithoutTime >= this.highlighted.from &&
-          dateWithoutTime <= this.highlighted.to
-      }
+      const hasHighlightedTo =
+        typeof this.highlighted.to !== 'undefined' &&
+        dateWithoutTime <= this.highlighted.to
 
-      if (
+      const hasHighlightedFrom =
+        typeof this.highlighted.from !== 'undefined' &&
+        dateWithoutTime >= this.highlighted.from
+
+      const hasHighlightedDays =
         typeof this.highlighted.days !== 'undefined' &&
         this.highlighted.days.indexOf(this.utils.getDay(dateWithoutTime)) !== -1
-      ) {
-        highlighted = true
-      }
 
-      if (
+      const hasHighlightedDaysOfMonth =
         typeof this.highlighted.daysOfMonth !== 'undefined' &&
         this.highlighted.daysOfMonth.indexOf(
           this.utils.getDate(dateWithoutTime),
         ) !== -1
-      ) {
-        highlighted = true
-      }
 
-      if (
+      const hasCustomPredictor =
         typeof this.highlighted.customPredictor === 'function' &&
         this.highlighted.customPredictor(dateWithoutTime)
+
+      if (
+        hasHighlightedDays ||
+        hasHighlightedDaysOfMonth ||
+        hasCustomPredictor ||
+        (hasHighlightedTo && hasHighlightedFrom)
       ) {
         highlighted = true
       }
@@ -350,6 +338,7 @@ export default {
      * @param  {Date}  dObj
      * @return {Object}
      */
+    // eslint-disable-next-line complexity
     makeDay(id, dObj) {
       const isNextMonth = dObj >= this.nextPageDate
       const isPreviousMonth = dObj < this.pageDate
