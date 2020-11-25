@@ -59,8 +59,7 @@ describe('DateInput', () => {
       showCalendarOnFocus: true,
     })
     expect(wrapper.vm.isOpen).toBeFalsy()
-
-    await wrapper.find('input').element.focus()
+    wrapper.find('input').trigger('focus')
     expect(wrapper.emitted('show-calendar')).toBeTruthy()
   })
 
@@ -70,7 +69,7 @@ describe('DateInput', () => {
     })
     expect(wrapper.vm.isOpen).toBeFalsy()
 
-    await wrapper.find('input').element.focus()
+    wrapper.find('input').trigger('focus')
     expect(wrapper.emitted('show-calendar')).toBeFalsy()
   })
 
