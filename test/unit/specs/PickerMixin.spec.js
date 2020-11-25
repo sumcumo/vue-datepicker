@@ -33,7 +33,7 @@ describe('pickerMixin', () => {
   })
 
   it('should mount', () => {
-    expect(wrapper.isVueInstance()).toBeTruthy()
+    expect(wrapper.vm).toBeTruthy()
   })
 
   it('should use `showPickerCalendar` correctly', () => {
