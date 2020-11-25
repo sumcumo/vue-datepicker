@@ -13,6 +13,19 @@
     </div>
 
     <div class="example">
+      <h3>Custom first-day-of-week datepicker</h3>
+      <Datepicker
+        placeholder="Type or select date"
+        first-day-of-week="mon"
+      />
+      <code>
+        &lt;datepicker placeholder="Type or select date"
+        first-day-of-week="mon"
+        &gt;&lt;/datepicker&gt;
+      </code>
+    </div>
+
+    <div class="example">
       <h3>Typeable datepicker</h3>
       <Datepicker
         placeholder="Type or select date"
@@ -20,6 +33,17 @@
       />
       <code>
         &lt;datepicker placeholder="Type or select date" :typeable="true"&gt;&lt;/datepicker&gt;
+      </code>
+    </div>
+
+    <div class="example">
+      <h3>Only show dates from current month datepicker</h3>
+      <Datepicker
+        placeholder="Type or select date"
+        :show-edge-dates="false"
+      />
+      <code>
+        &lt;datepicker placeholder="Type or select date" :show-edge-dates="false"&gt;&lt;/datepicker&gt;
       </code>
     </div>
 
@@ -324,7 +348,7 @@
         <div class="form-group">
           <label>Year picker range:</label>
           <input
-            v-model="yearPickerRange"
+            v-model.number="yearPickerRange"
             type="number"
           >
         </div>
@@ -472,7 +496,8 @@ export default {
       if (elem.target.value === 'undefined') {
         return
       }
-      const highlightedDays = elem.target.value.split(',').map((day) => parseInt(day, 10))
+      const highlightedDays = elem.target.value.split(',')
+        .map((day) => parseInt(day, 10))
       this.highlighted = {
         from: this.highlighted.from,
         to: this.highlighted.to,
@@ -483,7 +508,8 @@ export default {
       if (elem.target.value === 'undefined') {
         return
       }
-      const disabledDays = elem.target.value.split(',').map((day) => parseInt(day, 10))
+      const disabledDays = elem.target.value.split(',')
+        .map((day) => parseInt(day, 10))
       this.disabledDates = {
         from: this.disabledDates.from,
         to: this.disabledDates.to,

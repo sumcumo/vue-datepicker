@@ -7,8 +7,8 @@
       :previous="previousYear"
     >
       <span
-        :class="allowedToShowView('year') ? 'up' : ''"
         class="month__year_btn"
+        :class="allowedToShowView('year') ? 'up' : ''"
         @click="showPickerCalendar('year')"
       >
         {{ pageYearName }}

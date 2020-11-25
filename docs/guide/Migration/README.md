@@ -1,5 +1,11 @@
 # Migration
 
+## 2.x.x to 3.x.x
+- removed `monday-first` in favor of `first-day-of-week`. If you had `<Datepicker :monday-first="true"/>` you need to change it to `<Datepicker first-day-of-week="mon"/>`
+
+
+
+## From `vuejs-datepicker 1.6.2` to `@sum.cumo/vue-datepicker 2.x.x`
 This is a fork from the project [vuejs-datepicker](https://github.com/charliekassel/vuejs-datepicker) with some changes.
 To migrate from `vuejs-datepicker 1.6.2` to `@sum.cumo/vue-datepicker 2.x.x` there are only a few breaking changes that you need to consider:
 

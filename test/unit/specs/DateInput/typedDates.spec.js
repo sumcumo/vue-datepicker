@@ -172,4 +172,11 @@ describe('Datepicker mount', () => {
 
     expect(new Date(wrapper.vm.pageDate).getMonth()).toBe(1)
   })
+
+  it('formats the date on blur', () => {
+    const input = wrapper.find('input')
+    input.element.value = '2018-04-24'
+    input.trigger('blur')
+    expect(input.element.value).toEqual('24 Apr 2018')
+  })
 })

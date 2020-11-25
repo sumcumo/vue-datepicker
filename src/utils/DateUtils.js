@@ -22,6 +22,14 @@ const utils = {
   },
 
   /**
+   * Returns the number of days in the month, using UTC or not
+   * @param {Date} date
+   */
+  getDaysInMonth(date) {
+    return this.daysInMonth(this.getFullYear(date), this.getMonth(date))
+  },
+
+  /**
    * Returns the date, using UTC or not
    * @param {Date} date
    */
@@ -118,6 +126,20 @@ const utils = {
       throw TypeError('Invalid Type')
     }
     return days[this.getDay(date)]
+  },
+
+  /**
+   * Return day number from abbreviated week day name
+   * @param {String} abbr
+   * @return {Number}
+   */
+  getDayFromAbbr(abbr) {
+    for (let i = 0; i < en.days.length; i += 1) {
+      if (abbr.toLowerCase() === en.days[i].toLowerCase()) {
+        return i
+      }
+    }
+    throw TypeError('Invalid week day')
   },
 
   /**
@@ -267,11 +289,19 @@ const utils = {
         ymd[2] = tmp < 10 ? `0${tmp}` : `${tmp}`
       }
     }
-    const dat = `${ymd.join('-')}T00:00:00Z`
+    const dat = `${ymd.join('-')}${this.getTime()}`
     if (Number.isNaN(Date.parse(dat))) {
       return dateStr
     }
     return dat
+  },
+
+  getTime() {
+    const time = 'T00:00:00'
+    if (this.useUtc) {
+      return `${time}Z`
+    }
+    return time
   },
 
   /**

@@ -62,15 +62,15 @@ describe('DateUtils', () => {
 
   it('should parse english dates', () => {
     expect(DateUtils.parseDate('16 April 2020', 'd MMMM yyyy', en, null))
-      .toEqual('2020-04-16T00:00:00Z')
+      .toEqual('2020-04-16T00:00:00')
     expect(DateUtils.parseDate('16th Apr 2020', 'do MMM yyyy', en, null))
-      .toEqual('2020-04-16T00:00:00Z')
+      .toEqual('2020-04-16T00:00:00')
     expect(DateUtils.parseDate('Thu 16th Apr 2020', 'E do MMM yyyy', en, null))
-      .toEqual('2020-04-16T00:00:00Z')
+      .toEqual('2020-04-16T00:00:00')
     expect(DateUtils.parseDate('16.04.2020', 'dd.MM.yyyy', en, null))
-      .toEqual('2020-04-16T00:00:00Z')
+      .toEqual('2020-04-16T00:00:00')
     expect(DateUtils.parseDate('04.16.2020', 'MM.dd.yyyy', en, null))
-      .toEqual('2020-04-16T00:00:00Z')
+      .toEqual('2020-04-16T00:00:00')
   })
 
   it('should fail to parse because of missing parser', () => {
@@ -218,5 +218,16 @@ describe('UTC functions', () => {
     const date = getAmbiguousDate()
     expect(DateUtils.setDate(date, 31)).toEqual(date.setDate(31))
     expect(utcUtils.setDate(date, 31)).toEqual(date.setUTCDate(31))
+  })
+
+  it('returns the correct day number from an abbreviated day name', () => {
+    expect(DateUtils.getDayFromAbbr('sun')).toEqual(0)
+    expect(DateUtils.getDayFromAbbr('sat')).toEqual(6)
+    expect(() => DateUtils.getDayFromAbbr('nonsense')).toThrow('Invalid week day')
+  })
+
+  it('getTime', () => {
+    expect(DateUtils.getTime()).toEqual('T00:00:00')
+    expect(utcUtils.getTime()).toEqual('T00:00:00Z')
   })
 })

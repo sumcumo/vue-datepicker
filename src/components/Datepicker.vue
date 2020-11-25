@@ -58,9 +58,9 @@
       :visible="isOpen"
     >
       <div
-        v-show="isOpen"
+        v-if="isOpen"
         ref="datepicker"
-        :class="[calendarClass, 'vdp-datepicker__calendar', isInline && 'inline']"
+        :class="pickerClasses"
         @mousedown.prevent
       >
         <template v-if="isOpen">
@@ -70,12 +70,13 @@
             :allowed-to-show-view="allowedToShowView"
             :day-cell-content="dayCellContent"
             :disabled-dates="disabledDates"
+            :first-day-of-week="firstDayOfWeek"
             :highlighted="highlighted"
             :is-rtl="isRtl"
-            :monday-first="mondayFirst"
             :page-date="pageDate"
             :page-timestamp="pageTimestamp"
             :selected-date="selectedDate"
+            :show-edge-dates="showEdgeDates"
             :show-full-month-name="fullMonthName"
             :show-header="showHeader"
             :translation="translation"
@@ -112,12 +113,12 @@
 <script>
 import en from '~/locale/translations/en'
 import { makeDateUtils } from '~/utils/DateUtils'
+import calendarSlots from '~/utils/calendarSlots'
 import DateInput from '~/components/DateInput.vue'
+import inputProps from '~/mixins/inputProps.vue'
 import PickerDay from '~/components/PickerDay.vue'
 import PickerMonth from '~/components/PickerMonth.vue'
 import PickerYear from '~/components/PickerYear.vue'
-import inputProps from '~/mixins/inputProps.vue'
-import calendarSlots from '~/utils/calendarSlots'
 import Popup from '~/components/Popup.vue'
 
 const validDate = (val) => val === null
@@ -138,6 +139,10 @@ export default {
     inputProps,
   ],
   props: {
+    appendToBody: {
+      type: Boolean,
+      default: false,
+    },
     calendarClass: {
       type: [
         String,
@@ -155,6 +160,10 @@ export default {
       default() {
         return {}
       },
+    },
+    firstDayOfWeek: {
+      type: String,
+      default: 'sun',
     },
     fixedPosition: {
       type: String,
@@ -193,9 +202,9 @@ export default {
       type: String,
       default: 'day',
     },
-    mondayFirst: {
+    showEdgeDates: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     showHeader: {
       type: Boolean,
@@ -222,10 +231,6 @@ export default {
       type: Number,
       default: 10,
     },
-    appendToBody: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     // const startDate = this.openDate ? new Date(this.openDate) : new Date()
@@ -239,24 +244,24 @@ export default {
     const pageTimestamp = constructedDateUtils.setDate(startDate, 1)
     return {
       /*
+       * Positioning
+       */
+      calendarHeight: 0,
+      calendarSlots,
+      currentPicker: '',
+      /*
        * Vue cannot observe changes to a Date Object so date must be stored as a timestamp
        * This represents the first day of the current viewing month
        * {Number}
        */
       pageTimestamp,
-      currentPicker: '',
+      resetTypedDate: constructedDateUtils.getNewDateObject(),
       /*
        * Selected Date
        * {Date}
        */
       selectedDate: null,
-      /*
-       * Positioning
-       */
-      calendarHeight: 0,
-      resetTypedDate: constructedDateUtils.getNewDateObject(),
       utils: constructedDateUtils,
-      calendarSlots,
     }
   },
   computed: {
@@ -274,6 +279,14 @@ export default {
     },
     pageDate() {
       return new Date(this.pageTimestamp)
+    },
+    pickerClasses() {
+      return [
+        this.calendarClass,
+        'vdp-datepicker__calendar',
+        this.isInline && 'inline',
+        this.isRtl && this.appendToBody && 'rtl',
+      ]
     },
     translation() {
       return this.language

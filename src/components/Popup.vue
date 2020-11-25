@@ -31,7 +31,6 @@ export default {
   data() {
     return {
       popupRect: null,
-      relativeElement: null,
     }
   },
   watch: {
@@ -50,11 +49,8 @@ export default {
     if (this.inline) {
       return
     }
-    this.relativeElement = this.$parent.$el
     if (this.appendToBody) {
       document.body.appendChild(this.$el)
-      const relativeRect = this.$parent.$el.getBoundingClientRect()
-      this.$el.style.top = `${relativeRect.top}px`
     }
   },
   beforeDestroy() {
@@ -68,6 +64,10 @@ export default {
   methods: {
     displayPopup() {
       if (this.inline || !this.visible) return
+      if (this.appendToBody) {
+        const relativeRect = this.$parent.$el.getBoundingClientRect()
+        this.$el.style.top = `${relativeRect.bottom + window.scrollY}px`
+      }
       const popup = this.$el
       const relativeElement = this.$parent.$el
       if (!this.popupRect) {
@@ -79,7 +79,7 @@ export default {
         elRelative: relativeElement,
         targetWidth: width,
         targetHeight: height,
-        fixed: this.appendToBody,
+        appendToBody: this.appendToBody,
         fixedPosition: this.fixedPosition,
         rtl: this.rtl,
       })
