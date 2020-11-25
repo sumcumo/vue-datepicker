@@ -19,11 +19,12 @@ describe('PickerYear', () => {
     wrapper.destroy()
   })
 
-  it('knows the selected year', () => {
+  it('knows the selected year', async () => {
     const newDate = new Date(2016, 9, 15)
     wrapper.setProps({
       selectedDate: newDate,
     })
+    await wrapper.vm.$nextTick()
     expect(wrapper.vm.isSelectedYear(newDate)).toEqual(true)
     expect(wrapper.vm.isSelectedYear(new Date(2017, 1, 1))).toEqual(false)
   })
@@ -38,14 +39,16 @@ describe('PickerYear', () => {
     expect(wrapper.emitted()['changed-decade']).toBeTruthy()
   })
 
-  it('formats the decade range', () => {
+  it('formats the decade range', async () => {
     wrapper.setProps({
       pageDate: new Date(2021, 1, 1),
     })
+    await wrapper.vm.$nextTick()
     expect(wrapper.vm.getPageDecade).toEqual('2020 - 2029')
     wrapper.setProps({
       pageDate: new Date(2001, 1, 1),
     })
+    await wrapper.vm.$nextTick()
     expect(wrapper.vm.getPageDecade).toEqual('2000 - 2009')
   })
 
@@ -54,11 +57,12 @@ describe('PickerYear', () => {
     expect(wrapper.emitted()['select-year']).toBeTruthy()
   })
 
-  it('should set custom decade range', () => {
+  it('should set custom decade range', async () => {
     wrapper.setProps({
       pageDate: new Date(2021, 1, 1),
       yearRange: 12,
     })
+    await wrapper.vm.$nextTick()
     expect(wrapper.vm.getPageDecade).toEqual('2016 - 2027')
     expect(wrapper.vm.$el.querySelectorAll('.cell.year').length)
       .toEqual(12)
