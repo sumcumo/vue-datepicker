@@ -1,5 +1,5 @@
 import { mount, shallowMount } from '@vue/test-utils'
-import Datepicker from '~/components/Datepicker'
+import Datepicker from '~/components/Datepicker.vue'
 
 describe('Datepicker with open date: shallowMount', () => {
   const openDate = new Date(2016, 9, 12)

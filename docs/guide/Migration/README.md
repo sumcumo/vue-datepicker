@@ -1,5 +1,12 @@
 # Migration
 
+## 2.x.x to 3.x.x
+- removed `monday-first` in favor of `first-day-of-week`. If you had `<Datepicker :monday-first="true"/>` you need to change it to `<Datepicker first-day-of-week="mon"/>`
+- The build process was redone. The filenames inside the dist folder changed from `vuejs-datepicker.js` to `Datepicker.js`. Same goes with the css file.
+The umd and cjs build are now going through babel and will include needed polyfills automatically while the esm build is free of any polyfills.
+Same with the locale files which now have a esm and cjs build, too.
+
+## From `vuejs-datepicker 1.6.2` to `@sum.cumo/vue-datepicker 2.x.x`
 This is a fork from the project [vuejs-datepicker](https://github.com/charliekassel/vuejs-datepicker) with some changes.
 To migrate from `vuejs-datepicker 1.6.2` to `@sum.cumo/vue-datepicker 2.x.x` there are only a few breaking changes that you need to consider:
 

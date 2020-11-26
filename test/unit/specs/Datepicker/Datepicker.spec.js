@@ -2,8 +2,8 @@ import {
   mount,
   shallowMount,
 } from '@vue/test-utils'
-import DateInput from '~/components/DateInput'
-import Datepicker from '~/components/Datepicker'
+import DateInput from '~/components/DateInput.vue'
+import Datepicker from '~/components/Datepicker.vue'
 
 describe('Datepicker unmounted', () => {
   it('has a mounted hook', () => {
@@ -311,7 +311,7 @@ describe('Datepicker.vue using UTC', () => {
     })
     // It's important to assert the input rendered output
     await wrapper.vm.$nextTick()
-    return expect(wrapper.find(DateInput).vm.formattedValue).toEqual(UTCString)
+    expect(wrapper.findComponent(DateInput).vm.formattedValue).toEqual(UTCString)
   })
 })
 

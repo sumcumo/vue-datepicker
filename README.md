@@ -23,6 +23,7 @@ A datepicker Vue component. Compatible with Vue 2.x.
 - auto-alignment
 - compatible with Bootstrap
 - custom slots
+- append to body
 
 ## Documentation
 Checkout the vuepress [Documentation](https://sumcumo.github.io/vue-datepicker/).

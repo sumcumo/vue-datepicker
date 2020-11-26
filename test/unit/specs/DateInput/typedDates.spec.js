@@ -3,8 +3,8 @@ import {
   format,
   parse,
 } from 'date-fns'
-import DateInput from '~/components/DateInput'
-import Datepicker from '~/components/Datepicker'
+import DateInput from '~/components/DateInput.vue'
+import Datepicker from '~/components/Datepicker.vue'
 import { en } from '~/locale'
 
 describe('DateInput', () => {
@@ -176,10 +176,11 @@ describe('Datepicker mount', () => {
     expect(new Date(wrapper.vm.pageDate).getMonth()).toBe(1)
   })
 
-  it('formats the date on blur', () => {
+  it('formats the date on blur', async () => {
     const input = wrapper.find('input')
     input.element.value = '2018-04-24'
     input.trigger('blur')
+    await wrapper.vm.$nextTick()
     expect(input.element.value).toEqual('24 Apr 2018')
   })
 })

@@ -62,9 +62,9 @@
       :visible="isOpen"
     >
       <div
-        v-show="isOpen"
+        v-if="isOpen"
         ref="datepicker"
-        :class="[calendarClass, 'vdp-datepicker__calendar', isInline && 'inline']"
+        :class="pickerClasses"
         @mousedown.prevent
       >
         <template v-if="isOpen">
@@ -121,16 +121,15 @@
   </div>
 </template>
 <script>
-import '~/utils/polyfills'
 import en from '~/locale/translations/en'
 import { makeDateUtils } from '~/utils/DateUtils'
 import calendarSlots from '~/utils/calendarSlots'
-import DateInput from '~/components/DateInput'
-import inputProps from '~/mixins/inputProps'
-import PickerDay from '~/components/PickerDay'
-import PickerMonth from '~/components/PickerMonth'
-import PickerYear from '~/components/PickerYear'
-import Popup from '~/components/Popup'
+import DateInput from '~/components/DateInput.vue'
+import inputProps from '~/mixins/inputProps.vue'
+import PickerDay from '~/components/PickerDay.vue'
+import PickerMonth from '~/components/PickerMonth.vue'
+import PickerYear from '~/components/PickerYear.vue'
+import Popup from '~/components/Popup.vue'
 
 const validDate = (val) => val === null
   || val instanceof Date
@@ -294,6 +293,14 @@ export default {
     },
     pageDate() {
       return new Date(this.pageTimestamp)
+    },
+    pickerClasses() {
+      return [
+        this.calendarClass,
+        'vdp-datepicker__calendar',
+        this.isInline && 'inline',
+        this.isRtl && this.appendToBody && 'rtl',
+      ]
     },
     translation() {
       return this.language

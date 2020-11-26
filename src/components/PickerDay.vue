@@ -67,9 +67,9 @@
   </div>
 </template>
 <script>
-import pickerMixin from '~/mixins/pickerMixin'
+import pickerMixin from '~/mixins/pickerMixin.vue'
 import { isDateDisabled } from '~/utils/DisabledDatesUtils'
-import UpButton from '~/components/UpButton'
+import UpButton from '~/components/UpButton.vue'
 
 export default {
   name: 'PickerDay',

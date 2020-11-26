@@ -1,17 +1,17 @@
 import path from 'path'
+import alias from '@rollup/plugin-alias'
+import babel from '@rollup/plugin-babel'
+import commonjs from '@rollup/plugin-commonjs'
+import resolve from '@rollup/plugin-node-resolve'
+import replace from '@rollup/plugin-replace'
 import serve from 'rollup-plugin-serve'
 import livereload from 'rollup-plugin-livereload'
 import vue from 'rollup-plugin-vue'
-import buble from 'rollup-plugin-buble'
-import resolve from 'rollup-plugin-node-resolve'
-import replace from 'rollup-plugin-replace'
-import common from 'rollup-plugin-commonjs'
-import alias from 'rollup-plugin-alias'
 
 export default {
-  input: path.join(__dirname, '..', 'example', 'main.js'),
+  input: './example/main.js',
   output: {
-    file: path.join(__dirname, '..', 'example', 'demo.js'),
+    file: './example/demo.js',
     format: 'iife',
     name: 'demo',
     sourcemap: true,
@@ -41,9 +41,9 @@ export default {
       jsnext: true,
       browser: true,
     }),
-    common(),
-    buble({
-      objectAssign: 'Object.assign',
+    commonjs(),
+    babel({
+      babelHelpers: 'bundled',
     }),
     serve({
       contentBase: path.join(__dirname, '..', 'example'),

@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import Datepicker from '~/components/Datepicker'
+import Datepicker from '~/components/Datepicker.vue'
 
 describe('Datepicker with restricted views', () => {
   let wrapper
@@ -51,6 +51,7 @@ describe('Datepicker with restricted views', () => {
       },
     })
     wrapper.vm.showCalendar()
+    await wrapper.vm.$nextTick()
 
     expect(wrapper.vm.allowedToShowView('year')).toEqual(false)
     expect(wrapper.vm.allowedToShowView('day')).toEqual(true)
