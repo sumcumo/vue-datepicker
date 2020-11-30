@@ -4,7 +4,7 @@
 # Datepicker
 
 This is a fork from the project [vuejs-datepicker](https://github.com/charliekassel/vuejs-datepicker)
-what is licensed under the [MIT](https://github.com/charliekassel/vuejs-datepicker/blob/master/LICENSE) license.
+which is licensed under the [MIT](https://github.com/charliekassel/vuejs-datepicker/blob/master/LICENSE) license.
 Thanks to the original creators [charliekassel](https://github.com/charliekassel) for the great work.
 
 A datepicker Vue component. Compatible with Vue 2.x.
