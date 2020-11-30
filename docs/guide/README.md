@@ -34,11 +34,11 @@ export default {
   components: {
     DatePicker,
   },
-  data(){
+  data() {
     return {
-      date: new Date()
+      date: new Date(),
     }
-  }
+  },
 }
 </script>
 ```

@@ -6,9 +6,7 @@
     </div>
     <h3>Default formatter</h3>
     <Datepicker :format="format" />
-    <code>
-      &lt;Datepicker :format="format"/&gt;
-    </code>
+    <code>&lt;Datepicker :format="format"/&gt;</code>
     <h3>Custom formatter</h3>
     <Datepicker
       :format="customFormatter"
@@ -23,7 +21,7 @@
 
 <script>
 import Format from '../../../docs/.vuepress/components/Formats'
-import { format, parse } from "date-fns";
+import { format, parse } from 'date-fns'
 
 export default {
   name: 'Formatting',
@@ -44,7 +42,7 @@ export default {
     },
     customParser(date) {
       return parse(date, this.format, new Date())
-    }
+    },
   },
 }
 </script>

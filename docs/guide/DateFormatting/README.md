@@ -33,21 +33,21 @@ Here is an example for date-fns:
   <DatePicker :format="customFormatter" :parser="customParser"></DatePicker>
 </template>
 <script>
-import { format, parse } from "date-fns";
+import { format, parse } from 'date-fns'
 export default {
   data() {
-      return {
-        format: 'dd.MM.yyyy',
-      }
+    return {
+      format: 'dd.MM.yyyy',
+    }
+  },
+  methods: {
+    customFormatter(date) {
+      return format(date, this.format)
     },
-    methods: {
-      customFormatter(date) {
-        return format(date, this.format)
-      },
-      customParser(date) {
-        return parse(date, this.format, new Date())
-      }
+    customParser(date) {
+      return parse(date, this.format, new Date())
     },
+  },
 }
 </script>
 ```

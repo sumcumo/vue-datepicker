@@ -11,7 +11,7 @@ export default {
   name: 'DatepickerVModel',
   data() {
     return {
-      vModelExample: new Date()
+      vModelExample: new Date(),
     }
   },
 }

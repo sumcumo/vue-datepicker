@@ -5,8 +5,8 @@
 
       <Datepicker :language="$datepickerLocals[language]" />
       <code>
-        &lt;datepicker :language="$datepickerLocals.{{ language
-        }}"&gt;&lt;/datepicker&gt;
+        &lt;datepicker :language="$datepickerLocals.{{ language }}"&gt;
+        &lt;/datepicker&gt;
       </code>
       <div class="settings">
         <h5>Settings</h5>

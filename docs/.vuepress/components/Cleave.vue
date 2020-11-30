@@ -23,11 +23,7 @@ export default {
       options: {
         delimiter: '.',
         date: true,
-        datePattern: [
-          'd',
-          'm',
-          'Y',
-        ],
+        datePattern: ['d', 'm', 'Y'],
       },
     }
   },

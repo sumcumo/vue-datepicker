@@ -18,7 +18,7 @@ export default {
   name: 'DatepickerOpenDate',
   data() {
     return {
-      openDate: null
+      openDate: null,
     }
   },
 }

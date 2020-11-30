@@ -83,8 +83,7 @@ export default {
             return true
           }
           // disable first half of the month when it is a multiple of 2
-          return month % 2 !== 0 && day < 15;
-
+          return month % 2 !== 0 && day < 15
         },
       },
       disabledFnContent: ``,
@@ -95,7 +94,9 @@ export default {
       if (elem.target.value === 'undefined') {
         return
       }
-      const disabledDays = elem.target.value.split(',').map(day => parseInt(day, 10))
+      const disabledDays = elem.target.value
+        .split(',')
+        .map((day) => parseInt(day, 10))
       this.disabledDates = {
         from: this.disabledDates.from,
         to: this.disabledDates.to,

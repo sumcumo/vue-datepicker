@@ -14,7 +14,7 @@ Dates can be disabled in a number of ways.
 var state = {
   disabledDates: {
     to: new Date(2016, 0, 5),
-  }
+  },
 }
 ```
 
@@ -26,7 +26,7 @@ Everything before 2016-01-05 is disabled
 var state = {
   disabledDates: {
     from: new Date(2016, 0, 26),
-  }
+  },
 }
 ```
 
@@ -37,8 +37,8 @@ Everything after 2016-01-26 is disabled
 ```js
 var state = {
   disabledDates: {
-     days: [6, 0],
-  }
+    days: [6, 0],
+  },
 }
 ```
 
@@ -50,7 +50,7 @@ Every Saturday and Sunday is disabled
 var state = {
   disabledDates: {
     daysOfMonth: [29, 30, 31],
-  }
+  },
 }
 ```
 
@@ -64,9 +64,9 @@ var state = {
     dates: [
       new Date(2016, 9, 16),
       new Date(2016, 9, 17),
-      new Date(2016, 9, 18)
+      new Date(2016, 9, 18),
     ],
-  }
+  },
 }
 ```
 
@@ -84,15 +84,17 @@ Both `to` and `from` properties are required to define a range of dates to highl
 ```js
 var state = {
   disabledDates: {
-    ranges: [{
-      from: new Date(2016, 11, 25),
-      to: new Date(2016, 11, 30)
-    },
-    {
-      from: new Date(2017, 1, 12),
-      to: new Date(2017, 2, 25)
-    }],
-  }
+    ranges: [
+      {
+        from: new Date(2016, 11, 25),
+        to: new Date(2016, 11, 30),
+      },
+      {
+        from: new Date(2017, 1, 12),
+        to: new Date(2017, 2, 25),
+      },
+    ],
+  },
 }
 ```
 
@@ -108,13 +110,13 @@ This function should accept a date and return `true` if it is disabled
 ```js
 var state = {
   disabledDates: {
-    customPredictor: function(date) {
+    customPredictor: function (date) {
       // disables the date if it is a multiple of 5
-      if(date.getDate() % 5 == 0){
+      if (date.getDate() % 5 == 0) {
         return true
       }
-    }
-  }
+    },
+  },
 }
 ```
 

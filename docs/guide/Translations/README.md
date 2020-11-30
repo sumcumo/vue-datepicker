@@ -10,11 +10,11 @@ You can import only the translations that you need
 import { en } from '@sum.cumo/vue-datepicker/dist/locale'
 
 export default {
-  data () {
+  data() {
     return {
       en: en,
     }
-  }
+  },
 }
 </script>
 ```

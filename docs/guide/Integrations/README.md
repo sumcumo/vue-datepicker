@@ -18,26 +18,26 @@ The easiest way to integrate Cleave is to use a directive:
 </template>
 
 <script>
-import Cleave from "cleave.js";
-import Vue from "vue";
+import Cleave from 'cleave.js'
+import Vue from 'vue'
 
-Vue.directive("cleave", {
+Vue.directive('cleave', {
   inserted(el, binding) {
     // if the binded element is not an input field search for one
     // this is for cases where the input is inside a wrapper
-    if (el.tagName !== "INPUT") {
-      el = el.querySelector("input");
+    if (el.tagName !== 'INPUT') {
+      el = el.querySelector('input')
     }
     // only apply cleave if it is an input field and the options are set
     if (
-      el.tagName === "INPUT" &&
+      el.tagName === 'INPUT' &&
       Object.keys(binding.value).length !== 0 &&
       binding.value.constructor === Object
     ) {
-      new Cleave(el, binding.value);
+      new Cleave(el, binding.value)
     }
-  }
-});
+  },
+})
 </script>
 ```
 
@@ -71,29 +71,29 @@ But the touched event needs to be set manually.
 </template>
 
 <script>
-import DatePicker from "@sum.cumo/vue-datepicker";
+import DatePicker from '@sum.cumo/vue-datepicker'
 
 export default {
-  name: "VeeValidate",
+  name: 'VeeValidate',
   components: {
-    DatePicker
+    DatePicker,
   },
   data() {
     return {
-      model: "",
-      name: "datepicker",
-      format: "dd.MM.yyyy"
-    };
+      model: '',
+      name: 'datepicker',
+      format: 'dd.MM.yyyy',
+    }
   },
   methods: {
     touched() {
       this.$validator.flag(this.name, {
         untouched: false,
-        touched: true
-      });
-    }
+        touched: true,
+      })
+    },
   },
-  inject: ["$validator"]
-};
+  inject: ['$validator'],
+}
 </script>
 ```

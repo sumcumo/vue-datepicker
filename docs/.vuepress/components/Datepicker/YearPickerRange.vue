@@ -18,7 +18,7 @@ export default {
   name: 'DatepickerOpenDate',
   data() {
     return {
-      yearPickerRange: 10
+      yearPickerRange: 10,
     }
   },
 }
