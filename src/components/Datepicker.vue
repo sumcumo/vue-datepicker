@@ -46,10 +46,12 @@
       <slot
         slot="beforeDateInput"
         name="beforeDateInput"
+        @blur="$emit('check-focus')"
       />
       <slot
         slot="afterDateInput"
         name="afterDateInput"
+        @blur="$emit('check-focus')"
       />
     </DateInput>
 
@@ -66,9 +68,13 @@
         ref="datepicker"
         :class="pickerClasses"
         @mousedown.prevent
+        @check-focus="checkFocus"
       >
         <template v-if="isOpen">
-          <slot name="beforeCalendarHeader" />
+          <slot
+            name="beforeCalendarHeader"
+            @check-focus="$emit('check-focus')"
+          />
           <component
             :is="currentPicker"
             ref="PickerView"
@@ -103,7 +109,7 @@
             @select-year="selectYear"
             @changed-decade="setPageDate"
             @show-year-calendar="showSpecificCalendar('Year')"
-            @check-focus="checkFocus"
+            @check-focus="$emit('check-focus')"
           >
             <template
               v-for="slotKey of calendarSlots"
@@ -111,10 +117,14 @@
               <slot
                 :slot="slotKey"
                 :name="slotKey"
+                @blur="$emit('check-focus')"
               />
             </template>
           </component>
-          <slot name="calendarFooter" />
+          <slot
+            name="calendarFooter"
+            @blur="$emit('check-focus')"
+          />
         </template>
       </div>
     </Popup>
