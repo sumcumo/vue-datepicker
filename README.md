@@ -1,9 +1,10 @@
 [![@sum.cumo/vue-datepicker](https://badgen.net/bundlephobia/min/@sum.cumo/vue-datepicker)](https://bundlephobia.com/result?p=@sum.cumo/vue-datepicker)
 [![@sum.cumo/vue-datepicker](https://badgen.net/npm/v/@sum.cumo/vue-datepicker)](https://www.npmjs.com/package/@sum.cumo/vue-datepicker)
+
 # Datepicker
 
 This is a fork from the project [vuejs-datepicker](https://github.com/charliekassel/vuejs-datepicker)
-what is licensed under the [MIT](https://github.com/charliekassel/vuejs-datepicker/blob/master/LICENSE) license.
+which is licensed under the [MIT](https://github.com/charliekassel/vuejs-datepicker/blob/master/LICENSE) license.
 Thanks to the original creators [charliekassel](https://github.com/charliekassel) for the great work.
 
 A datepicker Vue component. Compatible with Vue 2.x.
@@ -14,6 +15,7 @@ A datepicker Vue component. Compatible with Vue 2.x.
 - [License](#License)
 
 ## Features
+
 - accepts keyboard input
 - internationalized
 - date picker
@@ -26,6 +28,7 @@ A datepicker Vue component. Compatible with Vue 2.x.
 - append to body
 
 ## Documentation
+
 Checkout the vuepress [Documentation](https://sumcumo.github.io/vue-datepicker/).
 There you will also find the [Demo](https://sumcumo.github.io/vue-datepicker/demo/) pages
 and the [Migration](https://sumcumo.github.io/vue-datepicker/guide/migration) guide.

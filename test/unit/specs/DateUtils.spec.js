@@ -27,57 +27,108 @@ describe('DateUtils', () => {
   })
 
   it('should format date strings correctly in English', () => {
-    expect(DateUtils.formatDate(new Date(2016, 0, 1), 'd MMMM yyyy')).toEqual('1 January 2016')
-    expect(DateUtils.formatDate(new Date(2016, 0, 9), 'dd MMM yyyy')).toEqual('09 Jan 2016')
-    expect(DateUtils.formatDate(new Date(2016, 0, 9), 'dd MMM yy')).toEqual('09 Jan 16')
-    expect(DateUtils.formatDate(new Date(2016, 2, 9), 'yyyy-MM-dd')).toEqual('2016-03-09')
-    expect(DateUtils.formatDate(new Date(2016, 2, 9), 'do MMMM yyyy')).toEqual('9th March 2016')
-    expect(DateUtils.formatDate(new Date(2016, 2, 1), 'do MMMM yyyy')).toEqual('1st March 2016')
-    expect(DateUtils.formatDate(new Date(2016, 2, 2), 'do MMMM yyyy')).toEqual('2nd March 2016')
-    expect(DateUtils.formatDate(new Date(2016, 2, 3), 'do MMMM yyyy')).toEqual('3rd March 2016')
-    expect(DateUtils.formatDate(new Date(2016, 7, 1), 'E do MMMM yyyy'))
-      .toEqual('Mon 1st August 2016')
-    expect(DateUtils.formatDate(new Date(2016, 8, 1), 'E do MMMM yyyy'))
-      .toEqual('Thu 1st September 2016')
-    expect(DateUtils.formatDate(new Date(2016, 7, 7), 'E do MMMM yyyy'))
-      .toEqual('Sun 7th August 2016')
-    expect(DateUtils.formatDate(new Date(2016, 11, 2), 'dd MMM yyyy')).toEqual('02 Dec 2016')
+    expect(DateUtils.formatDate(new Date(2016, 0, 1), 'd MMMM yyyy')).toEqual(
+      '1 January 2016',
+    )
+    expect(DateUtils.formatDate(new Date(2016, 0, 9), 'dd MMM yyyy')).toEqual(
+      '09 Jan 2016',
+    )
+    expect(DateUtils.formatDate(new Date(2016, 0, 9), 'dd MMM yy')).toEqual(
+      '09 Jan 16',
+    )
+    expect(DateUtils.formatDate(new Date(2016, 2, 9), 'yyyy-MM-dd')).toEqual(
+      '2016-03-09',
+    )
+    expect(DateUtils.formatDate(new Date(2016, 2, 9), 'do MMMM yyyy')).toEqual(
+      '9th March 2016',
+    )
+    expect(DateUtils.formatDate(new Date(2016, 2, 1), 'do MMMM yyyy')).toEqual(
+      '1st March 2016',
+    )
+    expect(DateUtils.formatDate(new Date(2016, 2, 2), 'do MMMM yyyy')).toEqual(
+      '2nd March 2016',
+    )
+    expect(DateUtils.formatDate(new Date(2016, 2, 3), 'do MMMM yyyy')).toEqual(
+      '3rd March 2016',
+    )
+    expect(
+      DateUtils.formatDate(new Date(2016, 7, 1), 'E do MMMM yyyy'),
+    ).toEqual('Mon 1st August 2016')
+    expect(
+      DateUtils.formatDate(new Date(2016, 8, 1), 'E do MMMM yyyy'),
+    ).toEqual('Thu 1st September 2016')
+    expect(
+      DateUtils.formatDate(new Date(2016, 7, 7), 'E do MMMM yyyy'),
+    ).toEqual('Sun 7th August 2016')
+    expect(DateUtils.formatDate(new Date(2016, 11, 2), 'dd MMM yyyy')).toEqual(
+      '02 Dec 2016',
+    )
   })
 
   // issue: https://github.com/sumcumo/vue-datepicker/issues/29
   it('should format date strings without formatting issues like 03 Nrdv 2016 instead of 03 Nov 2016', () => {
-    expect(DateUtils.formatDate(new Date(2016, 0, 12), 'd MMM yyyy')).toEqual('12 Jan 2016')
-    expect(DateUtils.formatDate(new Date(2016, 1, 12), 'd MMM yyyy')).toEqual('12 Feb 2016')
-    expect(DateUtils.formatDate(new Date(2016, 2, 12), 'd MMM yyyy')).toEqual('12 Mar 2016')
-    expect(DateUtils.formatDate(new Date(2016, 3, 12), 'd MMM yyyy')).toEqual('12 Apr 2016')
-    expect(DateUtils.formatDate(new Date(2016, 4, 12), 'd MMM yyyy')).toEqual('12 May 2016')
-    expect(DateUtils.formatDate(new Date(2016, 5, 12), 'd MMM yyyy')).toEqual('12 Jun 2016')
-    expect(DateUtils.formatDate(new Date(2016, 6, 12), 'd MMM yyyy')).toEqual('12 Jul 2016')
-    expect(DateUtils.formatDate(new Date(2016, 7, 12), 'd MMM yyyy')).toEqual('12 Aug 2016')
-    expect(DateUtils.formatDate(new Date(2016, 8, 12), 'd MMM yyyy')).toEqual('12 Sep 2016')
-    expect(DateUtils.formatDate(new Date(2016, 9, 12), 'd MMM yyyy')).toEqual('12 Oct 2016')
-    expect(DateUtils.formatDate(new Date(2016, 10, 12), 'd MMM yyyy')).toEqual('12 Nov 2016')
-    expect(DateUtils.formatDate(new Date(2016, 11, 12), 'd MMM yyyy')).toEqual('12 Dec 2016')
+    expect(DateUtils.formatDate(new Date(2016, 0, 12), 'd MMM yyyy')).toEqual(
+      '12 Jan 2016',
+    )
+    expect(DateUtils.formatDate(new Date(2016, 1, 12), 'd MMM yyyy')).toEqual(
+      '12 Feb 2016',
+    )
+    expect(DateUtils.formatDate(new Date(2016, 2, 12), 'd MMM yyyy')).toEqual(
+      '12 Mar 2016',
+    )
+    expect(DateUtils.formatDate(new Date(2016, 3, 12), 'd MMM yyyy')).toEqual(
+      '12 Apr 2016',
+    )
+    expect(DateUtils.formatDate(new Date(2016, 4, 12), 'd MMM yyyy')).toEqual(
+      '12 May 2016',
+    )
+    expect(DateUtils.formatDate(new Date(2016, 5, 12), 'd MMM yyyy')).toEqual(
+      '12 Jun 2016',
+    )
+    expect(DateUtils.formatDate(new Date(2016, 6, 12), 'd MMM yyyy')).toEqual(
+      '12 Jul 2016',
+    )
+    expect(DateUtils.formatDate(new Date(2016, 7, 12), 'd MMM yyyy')).toEqual(
+      '12 Aug 2016',
+    )
+    expect(DateUtils.formatDate(new Date(2016, 8, 12), 'd MMM yyyy')).toEqual(
+      '12 Sep 2016',
+    )
+    expect(DateUtils.formatDate(new Date(2016, 9, 12), 'd MMM yyyy')).toEqual(
+      '12 Oct 2016',
+    )
+    expect(DateUtils.formatDate(new Date(2016, 10, 12), 'd MMM yyyy')).toEqual(
+      '12 Nov 2016',
+    )
+    expect(DateUtils.formatDate(new Date(2016, 11, 12), 'd MMM yyyy')).toEqual(
+      '12 Dec 2016',
+    )
   })
 
   it('should parse english dates', () => {
-    expect(DateUtils.parseDate('16 April 2020', 'd MMMM yyyy', en, null))
-      .toEqual('2020-04-16T00:00:00')
-    expect(DateUtils.parseDate('16th Apr 2020', 'do MMM yyyy', en, null))
-      .toEqual('2020-04-16T00:00:00')
-    expect(DateUtils.parseDate('Thu 16th Apr 2020', 'E do MMM yyyy', en, null))
-      .toEqual('2020-04-16T00:00:00')
-    expect(DateUtils.parseDate('16.04.2020', 'dd.MM.yyyy', en, null))
-      .toEqual('2020-04-16T00:00:00')
-    expect(DateUtils.parseDate('04.16.2020', 'MM.dd.yyyy', en, null))
-      .toEqual('2020-04-16T00:00:00')
+    expect(
+      DateUtils.parseDate('16 April 2020', 'd MMMM yyyy', en, null),
+    ).toEqual('2020-04-16T00:00:00')
+    expect(
+      DateUtils.parseDate('16th Apr 2020', 'do MMM yyyy', en, null),
+    ).toEqual('2020-04-16T00:00:00')
+    expect(
+      DateUtils.parseDate('Thu 16th Apr 2020', 'E do MMM yyyy', en, null),
+    ).toEqual('2020-04-16T00:00:00')
+    expect(DateUtils.parseDate('16.04.2020', 'dd.MM.yyyy', en, null)).toEqual(
+      '2020-04-16T00:00:00',
+    )
+    expect(DateUtils.parseDate('04.16.2020', 'MM.dd.yyyy', en, null)).toEqual(
+      '2020-04-16T00:00:00',
+    )
   })
 
   it('should fail to parse because of missing parser', () => {
     expect(() => {
-      DateUtils.parseDate('16 April 2020', () => {
-      }, en, null)
-    }).toThrowError('Parser need to be a function if you are using a custom formatter')
+      DateUtils.parseDate('16 April 2020', () => {}, en, null)
+    }).toThrowError(
+      'Parser need to be a function if you are using a custom formatter',
+    )
   })
 
   it('should give the correct day', () => {
@@ -119,11 +170,15 @@ describe('DateUtils', () => {
   })
 
   it('getMonthName accepts a Date object', () => {
-    expect(DateUtils.getMonthName(new Date(2016, 9, 10), en.months)).toEqual('October')
+    expect(DateUtils.getMonthName(new Date(2016, 9, 10), en.months)).toEqual(
+      'October',
+    )
   })
 
   it('getMonthNameAbbr moans if date is not a Date object', () => {
-    expect(() => DateUtils.getMonthNameAbbr('abc', en.months)).toThrow(TypeError)
+    expect(() => DateUtils.getMonthNameAbbr('abc', en.months)).toThrow(
+      TypeError,
+    )
   })
 
   it('getMonthNameAbbr complains if missing months array', () => {
@@ -131,7 +186,9 @@ describe('DateUtils', () => {
   })
 
   it('getMonthNameAbbr accepts a Date object', () => {
-    expect(DateUtils.getMonthNameAbbr(new Date(2016, 9, 10), en.monthsAbbr)).toEqual('Oct')
+    expect(
+      DateUtils.getMonthNameAbbr(new Date(2016, 9, 10), en.monthsAbbr),
+    ).toEqual('Oct')
   })
 
   it('getMonthName accepts a number return a short name', () => {
@@ -157,7 +214,7 @@ describe('daysInMonth', () => {
 })
 
 const getAmbiguousDate = (_) => {
-  const timezoneOffset = ((new Date()).getTimezoneOffset() / 60)
+  const timezoneOffset = new Date().getTimezoneOffset() / 60
   const ambiguousHour = 25 - timezoneOffset
   const ambiguousDate = new Date(2018, 11, 31, ambiguousHour)
   return ambiguousDate
@@ -223,7 +280,9 @@ describe('UTC functions', () => {
   it('returns the correct day number from an abbreviated day name', () => {
     expect(DateUtils.getDayFromAbbr('sun')).toEqual(0)
     expect(DateUtils.getDayFromAbbr('sat')).toEqual(6)
-    expect(() => DateUtils.getDayFromAbbr('nonsense')).toThrow('Invalid week day')
+    expect(() => DateUtils.getDayFromAbbr('nonsense')).toThrow(
+      'Invalid week day',
+    )
   })
 
   it('getTime', () => {

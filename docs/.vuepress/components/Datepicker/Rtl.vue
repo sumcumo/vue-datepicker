@@ -1,5 +1,5 @@
 <template>
-  <Datepicker :language="$datepickerLocals.he"/>
+  <Datepicker :language="$datepickerLocals.he" />
 </template>
 
 <script>
@@ -7,7 +7,7 @@ export default {
   name: 'DatepickerOpenDate',
   data() {
     return {
-      openDate: null
+      openDate: null,
     }
   },
 }

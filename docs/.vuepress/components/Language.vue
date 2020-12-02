@@ -3,11 +3,10 @@
     <div class="example">
       <h5>{{ $datepickerLocals[language].language }} datepicker</h5>
 
-      <Datepicker
-        :language="$datepickerLocals[language]"
-      />
+      <Datepicker :language="$datepickerLocals[language]" />
       <code>
-        &lt;datepicker :language="$datepickerLocals.{{ language }}"&gt;&lt;/datepicker&gt;
+        &lt;datepicker :language="$datepickerLocals.{{ language }}"&gt;
+        &lt;/datepicker&gt;
       </code>
       <div class="settings">
         <h5>Settings</h5>

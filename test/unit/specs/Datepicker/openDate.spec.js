@@ -21,7 +21,7 @@ describe('Datepicker with open date', () => {
     expect(wrapper.vm.pageDate.getFullYear()).toEqual(2016)
   })
 
-  it('should set pageTimestamp to be first day of open date\'s month', () => {
+  it("should set pageTimestamp to be first day of open date's month", () => {
     const date = new Date(wrapper.vm.pageTimestamp)
     expect(wrapper.vm.openDate.valueOf()).toEqual(openDate.valueOf())
     wrapper.vm.setPageDate()
@@ -37,7 +37,7 @@ describe('Datepicker with open date', () => {
     expect(wrapper.vm.pageDate.getFullYear()).toEqual(2018)
   })
 
-  it('should show today\'s date if no open date is set', () => {
+  it("should show today's date if no open date is set", () => {
     wrapper = shallowMount(Datepicker)
     const today = new Date()
     expect(wrapper.vm.pageDate.getMonth()).toEqual(today.getMonth())

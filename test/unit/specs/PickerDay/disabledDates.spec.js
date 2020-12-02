@@ -8,8 +8,7 @@ describe('PickerDay: disabled', () => {
     wrapper = shallowMount(PickerDay, {
       propsData: {
         allowedToShowView: () => true,
-        showMonthCalendar: () => {
-        },
+        showMonthCalendar: () => {},
         translation: en,
         disabledDates: {
           to: new Date(2016, 9, 4),
@@ -81,10 +80,7 @@ describe('PickerDay: disabled', () => {
   it('can accept an array of disabled days of the week', () => {
     wrapper.setProps({
       disabledDates: {
-        days: [
-          6,
-          0,
-        ],
+        days: [6, 0],
       },
     })
     expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 2))).toEqual(true)
@@ -94,11 +90,7 @@ describe('PickerDay: disabled', () => {
   it('can accept an array of disabled days of the month', () => {
     wrapper.setProps({
       disabledDates: {
-        daysOfMonth: [
-          29,
-          30,
-          31,
-        ],
+        daysOfMonth: [29, 30, 31],
       },
     })
     expect(wrapper.vm.isDisabledDate(new Date(2016, 8, 29))).toEqual(true)

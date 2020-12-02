@@ -39,9 +39,7 @@ To implement some custom styling (for instance to add an animated placeholder) o
 
 ```html
 <DatePicker>
-  <span slot="afterDateInput" class="animated-placeholder">
-    Choose a Date
-  </span>
+  <span slot="afterDateInput" class="animated-placeholder">Choose a Date</span>
 </DatePicker>
 ```
 

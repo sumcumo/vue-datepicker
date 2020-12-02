@@ -23,12 +23,12 @@ describe('PickerYear', () => {
     wrapper.destroy()
   })
 
-  it('can\'t select a disabled year', () => {
+  it("can't select a disabled year", () => {
     wrapper.vm.selectYear({ isDisabled: true })
     expect(wrapper.emitted()['select-year']).toBeFalsy()
   })
 
-  it('can\'t navigate to a disabled year', () => {
+  it("can't navigate to a disabled year", () => {
     wrapper.vm.previousDecade()
     expect(wrapper.emitted()['changed-decade']).toBeFalsy()
 
@@ -36,7 +36,7 @@ describe('PickerYear', () => {
     expect(wrapper.emitted()['changed-decade']).toBeFalsy()
   })
 
-  it('can\'t change decade when previous or next decades are disabled', () => {
+  it("can't change decade when previous or next decades are disabled", () => {
     wrapper.setProps({
       pageDate: new Date(2010, 9, 1),
       disabledDates: {

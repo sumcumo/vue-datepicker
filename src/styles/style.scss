@@ -8,7 +8,7 @@
   box-sizing: border-box;
 
   .calendar-btn-disabled {
-    cursor:not-allowed;
+    cursor: not-allowed;
   }
 }
 
@@ -23,7 +23,7 @@
     box-sizing: border-box;
   }
 
-  &.inline{
+  &.inline {
     position: static;
   }
 
@@ -156,7 +156,8 @@
     &.muted {
       color: #757575;
 
-      &.selected, &.highlighted {
+      &.selected,
+      &.highlighted {
         color: #104756;
       }
 

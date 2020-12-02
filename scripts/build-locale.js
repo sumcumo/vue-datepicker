@@ -69,11 +69,7 @@ async function buildUmd() {
 async function buildCjs() {
   const bundle = await rollup({
     input: './src/locale/index.js',
-    plugins: [
-      resolve(),
-      commonjs(),
-      babel(babelConfig),
-    ],
+    plugins: [resolve(), commonjs(), babel(babelConfig)],
   })
   await bundle.write({
     file: './dist/locale/index.common.js',

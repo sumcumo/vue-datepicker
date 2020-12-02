@@ -8,14 +8,20 @@ describe('Language class', () => {
   })
 
   it('should throw when there are not exacty 12 months', () => {
-    expect(() => new Language('a', ['j', 'f', 'm'], months, days)).toThrow(RangeError)
+    expect(() => new Language('a', ['j', 'f', 'm'], months, days)).toThrow(
+      RangeError,
+    )
   })
 
   it('should throw when there are not exacty 12 abbreviated months', () => {
-    expect(() => new Language('a', months, ['j', 'f', 'm'], days)).toThrow(RangeError)
+    expect(() => new Language('a', months, ['j', 'f', 'm'], days)).toThrow(
+      RangeError,
+    )
   })
 
   it('should throw when there are not exacty 7 days', () => {
-    expect(() => new Language('a', months, months, ['m', 't', 'w'])).toThrow(RangeError)
+    expect(() => new Language('a', months, months, ['m', 't', 'w'])).toThrow(
+      RangeError,
+    )
   })
 })

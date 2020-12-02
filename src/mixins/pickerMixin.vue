@@ -2,14 +2,13 @@
 import PickerHeader from '~/components/PickerHeader.vue'
 import { makeDateUtils } from '~/utils/DateUtils'
 
-export default ({
+export default {
   components: { PickerHeader },
   inheritAttrs: false,
   props: {
     allowedToShowView: {
       type: Function,
-      default() {
-      },
+      default() {},
     },
     disabledDates: {
       type: Object,
@@ -70,5 +69,5 @@ export default ({
       this.$emit(`show-${type}-calendar`)
     },
   },
-})
+}
 </script>

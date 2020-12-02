@@ -23,7 +23,7 @@ describe('PickerMonth', () => {
     wrapper.destroy()
   })
 
-  it('can\'t select a disabled month', () => {
+  it("can't select a disabled month", () => {
     wrapper.vm.selectMonth({ isDisabled: true })
     expect(wrapper.emitted['select-month']).toBeFalsy()
   })

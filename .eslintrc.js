@@ -1,3 +1,5 @@
+const prettierConfig = require('./prettier')
+
 module.exports = {
   root: true,
   parserOptions: {
@@ -6,28 +8,23 @@ module.exports = {
   extends: [
     'airbnb-base',
     'plugin:compat/recommended',
-    'plugin:vue/recommended',
+    'prettier',
+    'prettier/babel',
     'plugin:jest/recommended',
+    'plugin:vue/recommended',
+    'prettier/vue',
   ],
-  // required to lint *.vue files
-  plugins: [
-    'import',
-    'html',
-    'vue',
-    'jest',
-  ],
+  plugins: ['import', 'prettier', 'html', 'vue', 'jest'],
   settings: {
     'import/resolver': {
       webpack: {
         config: 'eslint-webpack-resolver.config.js',
       },
     },
-    polyfills: [
-      'Number.isNaN',
-    ],
   },
-  // add your custom rules here
   rules: {
+    'prettier/prettier': ['error', prettierConfig],
+    'import/prefer-default-export': 'off',
     'import/extensions': [
       'error',
       'always',
@@ -36,29 +33,48 @@ module.exports = {
       },
     ],
     'import/no-extraneous-dependencies': 'off',
-    semi: [
-      'error',
-      'never',
-    ],
-    'no-console': [
-      'error',
-      {
-        allow: [
-          'info',
-          'warn',
-          'error',
-        ],
-      },
-    ],
+    'no-console': ['error', { allow: ['info', 'warn', 'error'] }],
     'no-unused-vars': [
       'error',
       {
         argsIgnorePattern: '^_',
       },
     ],
-    complexity: [
+    'no-use-before-define': [
       'error',
-      20,
+      {
+        functions: false,
+        classes: true,
+        variables: true,
+      },
+    ],
+    'max-nested-callbacks': ['error', { max: 3 }],
+    'max-statements': [
+      'error',
+      {
+        max: 10,
+      },
+      {
+        ignoreTopLevelFunctions: false,
+      },
+    ],
+    'complexity': [
+      'error',
+      {
+        max: 5,
+      },
+    ],
+    'max-depth': [
+      'error',
+      {
+        max: 2,
+      },
+    ],
+    'max-params': [
+      'error',
+      {
+        max: 3,
+      },
     ],
     'max-lines-per-function': [
       'warn',
@@ -68,8 +84,24 @@ module.exports = {
         skipBlankLines: true,
       },
     ],
-
+    'vue/component-name-in-template-casing': [
+      'error',
+      'PascalCase',
+      { registeredComponentsOnly: false },
+    ],
+    'vue/no-deprecated-scope-attribute': 'error',
   },
+  overrides: [
+    {
+      files: ['*.spec.js', '*.config.js'],
+      rules: {
+        'max-lines-per-function': 'off',
+        'max-statements': 'off',
+        'max-nested-callbacks': 'off',
+        'complexity': 'off',
+      },
+    },
+  ],
   env: {
     browser: true,
   },

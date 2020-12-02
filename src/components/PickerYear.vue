@@ -9,20 +9,14 @@
       <span>
         {{ getPageDecade }}
       </span>
-      <slot
-        slot="nextIntervalBtn"
-        name="nextIntervalBtn"
-      />
-      <slot
-        slot="prevIntervalBtn"
-        name="prevIntervalBtn"
-      />
+      <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
+      <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
 
     <span
       v-for="year in years"
       :key="year.timestamp"
-      :class="{ 'selected': year.isSelected, 'disabled': year.isDisabled }"
+      :class="{ selected: year.isSelected, disabled: year.isDisabled }"
       class="cell year"
       @click.stop="selectYear(year)"
     >
@@ -37,9 +31,7 @@ import { isYearDisabled } from '~/utils/DisabledDatesUtils'
 
 export default {
   name: 'DatepickerYearView',
-  mixins: [
-    pickerMixin,
-  ],
+  mixins: [pickerMixin],
   props: {
     yearRange: {
       type: Number,
@@ -71,8 +63,10 @@ export default {
       const yearTo = this.utils.getFullYear(this.disabledDates.to)
       const yearPageDate = this.utils.getFullYear(this.pageDate)
 
-      return Math.floor(yearTo / this.yearRange) * this.yearRange
-        >= Math.floor(yearPageDate / this.yearRange) * this.yearRange
+      return (
+        Math.floor(yearTo / this.yearRange) * this.yearRange >=
+        Math.floor(yearPageDate / this.yearRange) * this.yearRange
+      )
     },
     /**
      * Get decade name on current page.
@@ -81,7 +75,8 @@ export default {
     getPageDecade() {
       const yearPageDate = this.utils.getFullYear(this.pageDate)
 
-      const decadeStart = Math.floor(yearPageDate / this.yearRange) * this.yearRange
+      const decadeStart =
+        Math.floor(yearPageDate / this.yearRange) * this.yearRange
       const decadeEnd = decadeStart + (this.yearRange - 1)
       const { yearSuffix } = this.translation
       return `${decadeStart} - ${decadeEnd}${yearSuffix}`
@@ -99,12 +94,14 @@ export default {
 
       // set up a new date object to the beginning of the current 'page'7
       const dObj = this.useUtc
-        ? new Date(
-          Date.UTC(year, d.getUTCMonth(), d.getUTCDate()),
-        )
+        ? new Date(Date.UTC(year, d.getUTCMonth(), d.getUTCDate()))
         : new Date(
-          year, d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(),
-        )
+            year,
+            d.getMonth(),
+            d.getDate(),
+            d.getHours(),
+            d.getMinutes(),
+          )
       for (let i = 0; i < this.yearRange; i += 1) {
         years.push({
           year: this.utils.getFullYear(dObj),
@@ -141,8 +138,11 @@ export default {
      * @return {Boolean}
      */
     isSelectedYear(date) {
-      return this.selectedDate
-        && this.utils.getFullYear(this.selectedDate) === this.utils.getFullYear(date)
+      return (
+        this.selectedDate &&
+        this.utils.getFullYear(this.selectedDate) ===
+          this.utils.getFullYear(date)
+      )
     },
     /**
      * Increments the decade

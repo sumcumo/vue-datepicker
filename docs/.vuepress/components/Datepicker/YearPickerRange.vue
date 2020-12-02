@@ -4,14 +4,12 @@
       <h5>Settings</h5>
       <div class="form-group">
         <label>Year picker range:</label>
-        <input v-model.number="yearPickerRange" type="number"/>
+        <input v-model.number="yearPickerRange" type="number" />
       </div>
       <pre>yearPickerRange: {{ yearPickerRange }}</pre>
     </div>
-    <Datepicker
-      :year-picker-range="yearPickerRange"
-    />
-    <hr>
+    <Datepicker :year-picker-range="yearPickerRange" />
+    <hr />
   </div>
 </template>
 
@@ -20,7 +18,7 @@ export default {
   name: 'DatepickerOpenDate',
   data() {
     return {
-      yearPickerRange: 10
+      yearPickerRange: 10,
     }
   },
 }
