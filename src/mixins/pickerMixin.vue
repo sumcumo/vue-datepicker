@@ -62,41 +62,41 @@ export default {
     }
   },
   computed: {
-    disabledFromExists() {
-      return this.disabledDates && this.disabledDates.from
-    },
     disabledFromDay() {
-      return this.disabledFromExists
+      return this.hasDisabledFrom
         ? this.utils.getDate(this.disabledDates.from)
         : null
     },
     disabledFromMonth() {
-      return this.disabledFromExists
+      return this.hasDisabledFrom
         ? this.utils.getMonth(this.disabledDates.from)
         : null
     },
     disabledFromYear() {
-      return this.disabledFromExists
+      return this.hasDisabledFrom
         ? this.utils.getFullYear(this.disabledDates.from)
         : null
     },
-    disabledToExists() {
-      return this.disabledDates && this.disabledDates.to
-    },
     disabledToDay() {
-      return this.disabledToExists
+      return this.hasDisabledTo
         ? this.utils.getDate(this.disabledDates.to)
         : null
     },
     disabledToMonth() {
-      return this.disabledToExists
+      return this.hasDisabledTo
         ? this.utils.getMonth(this.disabledDates.to)
         : null
     },
     disabledToYear() {
-      return this.disabledToExists
+      return this.hasDisabledTo
         ? this.utils.getFullYear(this.disabledDates.to)
         : null
+    },
+    hasDisabledFrom() {
+      return this.disabledDates && this.disabledDates.from
+    },
+    hasDisabledTo() {
+      return this.disabledDates && this.disabledDates.to
     },
     pageMonth() {
       return this.utils.getMonth(this.pageDate)

@@ -44,7 +44,7 @@ export default {
      * @return {Boolean}
      */
     isNextDisabled() {
-      if (!this.disabledFromExists) {
+      if (!this.hasDisabledFrom) {
         return false
       }
       return this.disabledFromYear <= this.pageDecadeEnd
@@ -54,7 +54,7 @@ export default {
      * @return {Boolean}
      */
     isPreviousDisabled() {
-      if (!this.disabledToExists) {
+      if (!this.hasDisabledTo) {
         return false
       }
       return this.disabledToYear >= this.pageDecadeStart
