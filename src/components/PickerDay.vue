@@ -44,7 +44,7 @@ export default {
   props: {
     dayCellContent: {
       type: Function,
-      default: (day) => day.date,
+      default: day => day.date,
     },
     highlighted: {
       type: Object,
@@ -248,7 +248,7 @@ export default {
       }
 
       if (typeof this.highlighted.dates !== 'undefined') {
-        this.highlighted.dates.forEach((d) => {
+        this.highlighted.dates.forEach(d => {
           if (this.utils.compareDates(dateWithoutTime, d)) {
             highlighted = true
           }

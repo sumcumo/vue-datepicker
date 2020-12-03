@@ -104,7 +104,7 @@ import PickerMonth from '~/components/PickerMonth.vue'
 import PickerYear from '~/components/PickerYear.vue'
 import Popup from '~/components/Popup.vue'
 
-const validDate = (val) =>
+const validDate = val =>
   val === null ||
   val instanceof Date ||
   typeof val === 'string' ||
@@ -131,7 +131,7 @@ export default {
     },
     dayCellContent: {
       type: Function,
-      default: (day) => day.date,
+      default: day => day.date,
     },
     disabledDates: {
       type: Object,
@@ -146,7 +146,7 @@ export default {
     fixedPosition: {
       type: String,
       default: '',
-      validator: (val) => {
+      validator: val => {
         const possibleValues = [
           '',
           'bottom',

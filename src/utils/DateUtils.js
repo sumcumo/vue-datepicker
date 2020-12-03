@@ -277,7 +277,7 @@ const utils = {
     }
 
     const REGEX_FORMAT = /y{4}|y{2}|M{1,4}(?![aäe])|d{1,2}|o{1}|E{1}(?![eéi])/g
-    return formatStr.replace(REGEX_FORMAT, (match) => matches[match] || match)
+    return formatStr.replace(REGEX_FORMAT, match => matches[match] || match)
   },
 
   /**
@@ -364,7 +364,7 @@ const utils = {
   },
 }
 
-export const makeDateUtils = (useUtc) => ({
+export const makeDateUtils = useUtc => ({
   ...utils,
   useUtc,
 })
