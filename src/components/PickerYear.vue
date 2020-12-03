@@ -40,46 +40,32 @@ export default {
   },
   computed: {
     /**
-     * Checks if the next decade is disabled or not
+     * Is the next decade disabled?
      * @return {Boolean}
      */
     isNextDisabled() {
-      if (!this.disabledDates || !this.disabledDates.from) {
+      if (!this.disabledFromExists) {
         return false
       }
-      const yearFrom = this.utils.getFullYear(this.disabledDates.from)
-      const lastCellYear = this.years[this.years.length - 1].year
-
-      return yearFrom <= lastCellYear
+      return this.disabledFromYear <= this.pageDecadeEnd
     },
     /**
-     * Checks if the previous decade is disabled or not
+     * Is the previous decade disabled?
      * @return {Boolean}
      */
     isPreviousDisabled() {
-      if (!this.disabledDates || !this.disabledDates.to) {
+      if (!this.disabledToExists) {
         return false
       }
-      const yearTo = this.utils.getFullYear(this.disabledDates.to)
-      const yearPageDate = this.utils.getFullYear(this.pageDate)
-
-      return (
-        Math.floor(yearTo / this.yearRange) * this.yearRange >=
-        Math.floor(yearPageDate / this.yearRange) * this.yearRange
-      )
+      return this.disabledToYear >= this.pageDecadeStart
     },
     /**
      * Get decade name on current page.
      * @return {String}
      */
     getPageDecade() {
-      const yearPageDate = this.utils.getFullYear(this.pageDate)
-
-      const decadeStart =
-        Math.floor(yearPageDate / this.yearRange) * this.yearRange
-      const decadeEnd = decadeStart + (this.yearRange - 1)
       const { yearSuffix } = this.translation
-      return `${decadeStart} - ${decadeEnd}${yearSuffix}`
+      return `${this.pageDecadeStart} - ${this.pageDecadeEnd}${yearSuffix}`
     },
     /**
      * Set an array with years for a decade

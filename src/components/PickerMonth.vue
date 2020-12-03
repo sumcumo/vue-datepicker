@@ -37,30 +37,24 @@ export default {
   mixins: [pickerMixin],
   computed: {
     /**
-     * Checks if the next year is disabled or not
+     * Is the next year disabled?
      * @return {Boolean}
      */
     isNextDisabled() {
-      if (!this.disabledDates || !this.disabledDates.from) {
+      if (!this.disabledFromExists) {
         return false
       }
-      return (
-        this.utils.getFullYear(this.disabledDates.from) <=
-        this.utils.getFullYear(this.pageDate)
-      )
+      return this.disabledFromYear <= this.pageYear
     },
     /**
-     * Checks if the previous year is disabled or not
+     * Is the previous year disabled?
      * @return {Boolean}
      */
     isPreviousDisabled() {
-      if (!this.disabledDates || !this.disabledDates.to) {
+      if (!this.disabledToExists) {
         return false
       }
-      return (
-        this.utils.getFullYear(this.disabledDates.to) >=
-        this.utils.getFullYear(this.pageDate)
-      )
+      return this.disabledToYear >= this.pageYear
     },
     /**
      * Set an array with all months

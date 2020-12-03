@@ -148,15 +148,12 @@ export default {
      * @return {Boolean}
      */
     isNextDisabled() {
-      if (!this.disabledDates || !this.disabledDates.from) {
+      if (!this.disabledFromExists) {
         return false
       }
-      const d = this.pageDate
       return (
-        this.utils.getMonth(this.disabledDates.from) <=
-          this.utils.getMonth(d) &&
-        this.utils.getFullYear(this.disabledDates.from) <=
-          this.utils.getFullYear(d)
+        this.disabledFromMonth <= this.pageMonth &&
+        this.disabledFromYear <= this.pageYear
       )
     },
     /**
@@ -164,14 +161,12 @@ export default {
      * @return {Boolean}
      */
     isPreviousDisabled() {
-      if (!this.disabledDates || !this.disabledDates.to) {
+      if (!this.disabledToExists) {
         return false
       }
-      const d = this.pageDate
       return (
-        this.utils.getMonth(this.disabledDates.to) >= this.utils.getMonth(d) &&
-        this.utils.getFullYear(this.disabledDates.to) >=
-          this.utils.getFullYear(d)
+        this.disabledToMonth >= this.pageMonth &&
+        this.disabledToYear >= this.pageYear
       )
     },
     /**
