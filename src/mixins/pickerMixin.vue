@@ -93,10 +93,10 @@ export default {
         : null
     },
     hasDisabledFrom() {
-      return this.disabledDates && this.disabledDates.from
+      return typeof this.disabledDates.from !== 'undefined'
     },
     hasDisabledTo() {
-      return this.disabledDates && this.disabledDates.to
+      return typeof this.disabledDates.to !== 'undefined'
     },
     pageMonth() {
       return this.utils.getMonth(this.pageDate)
