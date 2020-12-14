@@ -3,7 +3,23 @@
     <h1>Datepicker Examples</h1>
     <div class="example">
       <h3>Default datepicker...</h3>
-      <Datepicker placeholder="Select Date" :append-to-body="true" />
+      <Datepicker
+        placeholder="Select Date"
+        :inline="true"
+        :disabled-dates="{
+          ranges: [
+            {
+              // Disable dates in given ranges (exclusive).
+              from: new Date(2020, 11, 25),
+              to: new Date(2020, 11, 30),
+            },
+            {
+              from: new Date(2020, 10, 12),
+              to: new Date(2020, 11, 5),
+            },
+          ],
+        }"
+      />
       <code>
         &lt;datepicker placeholder="Select Date"&gt;&lt;/datepicker&gt;
       </code>

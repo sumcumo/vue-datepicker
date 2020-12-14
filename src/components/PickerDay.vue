@@ -224,6 +224,70 @@ export default {
     isDisabledDate(date) {
       return isDateDisabled(date, this.disabledDates, this.utils)
     },
+    // eslint-disable-next-line complexity
+    isDisabledDate2(date) {
+      if (!this.hasDisabledConfig) {
+        return false
+      }
+
+      return (
+        this.isDisabledViaToOrFrom(date) ||
+        this.isDisabledViaSpecificDate(date) ||
+        this.isDisabledViaRange(date) ||
+        this.isDisabledViaDaysOfWeek(date) ||
+        this.isDisabledViaDaysOfMonth(date) ||
+        this.isDisabledViaCustomPredictor(date)
+      )
+    },
+    isDisabledViaDaysOfWeek(date) {
+      return (
+        this.hasDisabledDaysOfWeek &&
+        this.disabledDates.days.indexOf(this.utils.getDay(date)) !== -1
+      )
+    },
+    isDisabledViaDaysOfMonth(date) {
+      return (
+        this.hasDisabledDaysOfMonth &&
+        this.disabledDates.daysOfMonth.indexOf(this.utils.getDate(date)) !== -1
+      )
+    },
+    isDisabledViaRange(date) {
+      if (!this.hasDisabledRanges) {
+        return false
+      }
+      const { ranges } = this.disabledDates
+      return ranges.some((range) => {
+        const hasFrom = this.hasDisabledFrom(range)
+        const hasTo = this.hasDisabledTo(range)
+
+        return hasFrom && hasTo && date < range.to && date > range.from
+      })
+    },
+    isDisabledViaSpecificDate(date) {
+      if (!this.hasDisabledSpecificDates) {
+        return false
+      }
+      const { dates } = this.disabledDates
+
+      return dates.some((d) => {
+        return this.utils.compareDates(date, d)
+      })
+    },
+    isDisabledViaToOrFrom(date) {
+      return this.isDisabledViaTo(date) && this.isDisabledViaFrom(date)
+    },
+    isDisabledViaFrom(date) {
+      return this.hasDisabledFrom && date > this.disabledDates.to
+    },
+    isDisabledViaTo(date) {
+      return this.hasDisabledTo && date < this.disabledDates.to
+    },
+    isDisabledViaCustomPredictor(date) {
+      return (
+        this.hasDisabledCustomPredictor &&
+        this.disabledDates.customPredictor(date)
+      )
+    },
     /**
      * Whether a day is highlighted
      * (only if it is not disabled already except when highlighted.includeDisabled is true)
@@ -345,7 +409,7 @@ export default {
         date: showDate ? this.utils.getDate(dObj) : '',
         timestamp: dObj.valueOf(),
         isSelected: this.isSelectedDate(dObj),
-        isDisabled: showDate ? this.isDisabledDate(dObj) : true,
+        isDisabled: showDate ? this.isDisabledDate2(dObj) : true,
         isHighlighted: this.isHighlightedDate(dObj),
         isHighlightStart: this.isHighlightStart(dObj),
         isHighlightEnd: this.isHighlightEnd(dObj),

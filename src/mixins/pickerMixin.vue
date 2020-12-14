@@ -92,11 +92,37 @@ export default {
         ? this.utils.getFullYear(this.disabledDates.to)
         : null
     },
+    hasDisabledConfig() {
+      return this.hasDisabledFrom || this.hasDisabledTo
+    },
+    hasDisabledCustomPredictor() {
+      return typeof this.disabledDates.customPredictor === 'function'
+    },
+    hasDisabledDaysOfMonth() {
+      return typeof this.disabledDates.daysOfMonth !== 'undefined'
+    },
+    hasDisabledDaysOfWeek() {
+      return typeof this.disabledDates.days !== 'undefined'
+    },
     hasDisabledFrom() {
-      return typeof this.disabledDates.from !== 'undefined'
+      return this.checkForDisabledFrom(this.disabledDates)
+    },
+    hasDisabledRanges() {
+      return (
+        this.disabledDates &&
+        typeof this.disabledDates.ranges !== 'undefined' &&
+        this.disabledDates.ranges.length
+      )
+    },
+    hasDisabledSpecificDates() {
+      return (
+        this.disabledDates &&
+        typeof this.disabledDates.dates !== 'undefined' &&
+        this.disabledDates.dates.length
+      )
     },
     hasDisabledTo() {
-      return typeof this.disabledDates.to !== 'undefined'
+      return this.checkForDisabledTo(this.disabledDates)
     },
     pageMonth() {
       return this.utils.getMonth(this.pageDate)
@@ -117,6 +143,12 @@ export default {
      */
     showPickerCalendar(type) {
       this.$emit(`show-${type}-calendar`)
+    },
+    checkForDisabledFrom(disabledDates) {
+      return disabledDates && typeof disabledDates.from !== 'undefined'
+    },
+    checkForDisabledTo(disabledDates) {
+      return disabledDates && typeof disabledDates.to !== 'undefined'
     },
   },
 }

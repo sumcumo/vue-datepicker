@@ -31,6 +31,7 @@
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import { isMonthDisabled } from '~/utils/DisabledDatesUtils'
+import { isDateDisabled } from '../utils/DisabledDatesUtils'
 
 export default {
   name: 'DatepickerMonthView',
@@ -78,7 +79,7 @@ export default {
           month: this.utils.getMonthName(i, this.translation.months),
           timestamp: dObj.valueOf(),
           isSelected: this.isSelectedMonth(dObj),
-          isDisabled: this.isDisabledMonth(dObj),
+          isDisabled: this.isDisabledMonth2(dObj),
         })
         this.utils.setMonth(dObj, this.utils.getMonth(dObj) + 1)
       }
@@ -111,17 +112,68 @@ export default {
     isDisabledMonth(date) {
       return isMonthDisabled(date, this.disabledDates, this.utils)
     },
+    // eslint-disable-next-line complexity,max-statements
+    isDisabledMonth2(date) {
+      if (!this.hasDisabledConfig) {
+        return false
+      }
+
+      const month = this.utils.getMonth(date)
+      const year = this.utils.getFullYear(date)
+
+      const isPastSameYearAndPastMonth =
+        this.hasDisabledTo &&
+        month < this.disabledToMonth &&
+        year <= this.disabledToYear
+
+      const isYearInPast = this.hasDisabledTo && year < this.disabledToYear
+
+      const isFutureSameYearAndFutureMonth =
+        this.hasDisabledFrom &&
+        month > this.disabledFromMonth &&
+        year >= this.disabledFromYear
+
+      const isYearInFuture =
+        this.hasDisabledFrom && year > this.disabledFromYear
+
+      // check if the whole month is disabled before checking each individual day
+      if (
+        (this.hasDisabledTo && isPastSameYearAndPastMonth) ||
+        isYearInPast ||
+        (this.hasDisabledFrom &&
+          isFutureSameYearAndFutureMonth &&
+          isYearInFuture)
+      ) {
+        return true
+      }
+
+      // now we have to check each day of the month
+      const daysInMonth = this.utils.daysInMonth(year, month)
+
+      for (let i = 1; i <= daysInMonth; i += 1) {
+        const dayDate = new Date(date)
+        dayDate.setDate(i)
+        // if at least one day of this month is NOT disabled,
+        // we can conclude that this month SHOULD be selectable
+        if (!isDateDisabled(dayDate, this.disabledDates, this.utils)) {
+          return false
+        }
+      }
+      return true
+    },
     /**
      * Whether the selected date is in this month
      * @param {Date} date
      * @return {Boolean}
      */
     isSelectedMonth(date) {
+      const month = this.utils.getMonth(date)
+      const year = this.utils.getFullYear(date)
+
       return (
         this.selectedDate &&
-        this.utils.getFullYear(this.selectedDate) ===
-          this.utils.getFullYear(date) &&
-        this.utils.getMonth(this.selectedDate) === this.utils.getMonth(date)
+        year === this.utils.getFullYear(this.selectedDate) &&
+        month === this.utils.getMonth(this.selectedDate)
       )
     },
     /**
