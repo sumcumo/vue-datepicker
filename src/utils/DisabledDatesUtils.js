@@ -1,7 +1,7 @@
-const checkForDisabledTo = disabledDates => {
+const checkForDisabledTo = (disabledDates) => {
   return typeof disabledDates.to !== 'undefined' && disabledDates.to
 }
-const checkForDisabledFrom = disabledDates => {
+const checkForDisabledFrom = (disabledDates) => {
   return typeof disabledDates.from !== 'undefined' && disabledDates.from
 }
 const checkDateSpecific = (date, disabledDates, utils) => {

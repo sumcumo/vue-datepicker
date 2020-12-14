@@ -141,7 +141,7 @@ describe('DateUtils', () => {
     const dates = DateUtils.createDateArray(start, end)
     expect(dates.length).toEqual(5)
     let day = 12
-    dates.forEach(date => {
+    dates.forEach((date) => {
       expect(date.getDate()).toEqual(day)
       day += 1
     })
@@ -213,7 +213,7 @@ describe('daysInMonth', () => {
   })
 })
 
-const getAmbiguousDate = _ => {
+const getAmbiguousDate = (_) => {
   const timezoneOffset = new Date().getTimezoneOffset() / 60
   const ambiguousHour = 25 - timezoneOffset
   const ambiguousDate = new Date(2018, 11, 31, ambiguousHour)

@@ -60,7 +60,7 @@ export default {
     openDate: {
       type: [String, Date, Number],
       default: null,
-      validator: val =>
+      validator: (val) =>
         val === null ||
         val instanceof Date ||
         typeof val === 'string' ||
