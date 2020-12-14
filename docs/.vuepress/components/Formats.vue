@@ -2,10 +2,7 @@
   <div class="form-group">
     <label>Format</label>
     <select v-model="format">
-      <option
-        v-for="format in formats"
-        :value="format.value"
-      >
+      <option v-for="format in formats" :value="format.value">
         {{ format.text }}
       </option>
     </select>
@@ -64,6 +61,5 @@ export default {
 </script>
 
 <style>
-  @import 'style.css';
+@import 'style.css';
 </style>
-

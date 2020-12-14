@@ -158,7 +158,8 @@
     &.muted {
       color: #757575;
 
-      &.selected, &.highlighted {
+      &.selected,
+      &.highlighted {
         color: #104756;
       }
 

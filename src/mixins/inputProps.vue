@@ -1,5 +1,5 @@
 <script>
-export default ({
+export default {
   props: {
     autofocus: {
       type: Boolean,
@@ -34,10 +34,7 @@ export default ({
       default: false,
     },
     format: {
-      type: [
-        String,
-        Function,
-      ],
+      type: [String, Function],
       default: 'dd MMM yyyy',
     },
     id: {
@@ -49,18 +46,11 @@ export default ({
       default: false,
     },
     inputClass: {
-      type: [
-        String,
-        Object,
-        Array,
-      ],
+      type: [String, Object, Array],
       default: null,
     },
     maxlength: {
-      type: [
-        Number,
-        String,
-      ],
+      type: [Number, String],
       default: null,
     },
     name: {
@@ -68,17 +58,13 @@ export default ({
       default: null,
     },
     openDate: {
-      type: [
-        String,
-        Date,
-        Number,
-      ],
+      type: [String, Date, Number],
       default: null,
-      validator:
-        (val) => val === null
-          || val instanceof Date
-          || typeof val === 'string'
-          || typeof val === 'number',
+      validator: (val) =>
+        val === null ||
+        val instanceof Date ||
+        typeof val === 'string' ||
+        typeof val === 'number',
     },
     parser: {
       type: Function,
@@ -109,10 +95,7 @@ export default ({
       default: false,
     },
     tabindex: {
-      type: [
-        Number,
-        String,
-      ],
+      type: [Number, String],
       default: null,
     },
     typeable: {
@@ -124,5 +107,5 @@ export default ({
       default: false,
     },
   },
-})
+}
 </script>

@@ -2,7 +2,7 @@
   <div
     ref="vdp-datepicker"
     class="vdp-datepicker"
-    :class="[wrapperClass, { 'rtl' : isRtl }]"
+    :class="[wrapperClass, { rtl: isRtl }]"
     @keyup.esc.prevent="closeAndClear"
   >
     <DateInput
@@ -43,16 +43,8 @@
       @show-calendar="showCalendar"
       @typed-date="setTypedDate"
     >
-      <slot
-        slot="beforeDateInput"
-        name="beforeDateInput"
-        @blur="$emit('check-focus')"
-      />
-      <slot
-        slot="afterDateInput"
-        name="afterDateInput"
-        @blur="$emit('check-focus')"
-      />
+      <slot slot="beforeDateInput" name="beforeDateInput" />
+      <slot slot="afterDateInput" name="afterDateInput" />
     </DateInput>
 
     <Popup
@@ -68,14 +60,10 @@
         ref="datepicker"
         :class="pickerClasses"
         @mousedown.prevent
-        @check-focus="checkFocus"
       >
         <template v-if="isOpen">
-          <slot
-            name="beforeCalendarHeader"
-            @check-focus="$emit('check-focus')"
-          />
-          <component
+          <slot name="beforeCalendarHeader" />
+          <Component
             :is="currentPicker"
             ref="PickerView"
             :allowed-to-show-view="allowedToShowView"
@@ -97,34 +85,22 @@
             :typeable="typeable"
             :use-utc="useUtc"
             :year-range="yearPickerRange"
-
             @select-date="selectDate"
             @changed-month="handleChangedMonthFromDayPicker"
             @selected-disabled="selectDisabledDate"
-
             @select-month="selectMonth"
             @changed-year="setPageDate"
             @show-month-calendar="showSpecificCalendar('Month')"
-
             @select-year="selectYear"
             @changed-decade="setPageDate"
             @show-year-calendar="showSpecificCalendar('Year')"
-            @check-focus="$emit('check-focus')"
+            @check-focus="checkFocus"
           >
-            <template
-              v-for="slotKey of calendarSlots"
-            >
-              <slot
-                :slot="slotKey"
-                :name="slotKey"
-                @blur="$emit('check-focus')"
-              />
+            <template v-for="slotKey of calendarSlots">
+              <slot :slot="slotKey" :name="slotKey" />
             </template>
-          </component>
-          <slot
-            name="calendarFooter"
-            @blur="$emit('check-focus')"
-          />
+          </Component>
+          <slot name="calendarFooter" />
         </template>
       </div>
     </Popup>
@@ -141,10 +117,11 @@ import PickerMonth from '~/components/PickerMonth.vue'
 import PickerYear from '~/components/PickerYear.vue'
 import Popup from '~/components/Popup.vue'
 
-const validDate = (val) => val === null
-  || val instanceof Date
-  || typeof val === 'string'
-  || typeof val === 'number'
+const validDate = (val) =>
+  val === null ||
+  val instanceof Date ||
+  typeof val === 'string' ||
+  typeof val === 'number'
 
 export default {
   name: 'Datepicker',
@@ -155,20 +132,14 @@ export default {
     PickerYear,
     Popup,
   },
-  mixins: [
-    inputProps,
-  ],
+  mixins: [inputProps],
   props: {
     appendToBody: {
       type: Boolean,
       default: false,
     },
     calendarClass: {
-      type: [
-        String,
-        Object,
-        Array,
-      ],
+      type: [String, Object, Array],
       default: '',
     },
     dayCellContent: {
@@ -188,13 +159,18 @@ export default {
     fixedPosition: {
       type: String,
       default: '',
-      validator: (val) => val === ''
-        || val === 'bottom'
-        || val === 'bottom-left'
-        || val === 'bottom-right'
-        || val === 'top'
-        || val === 'top-left'
-        || val === 'top-right',
+      validator: (val) => {
+        const possibleValues = [
+          '',
+          'bottom',
+          'bottom-left',
+          'bottom-right',
+          'top',
+          'top-left',
+          'top-right',
+        ]
+        return possibleValues.includes(val)
+      },
     },
     fullMonthName: {
       type: Boolean,
@@ -231,20 +207,12 @@ export default {
       default: true,
     },
     value: {
-      type: [
-        String,
-        Date,
-        Number,
-      ],
+      type: [String, Date, Number],
       default: '',
       validator: validDate,
     },
     wrapperClass: {
-      type: [
-        String,
-        Object,
-        Array,
-      ],
+      type: [String, Object, Array],
       default: '',
     },
     yearPickerRange: {
@@ -337,11 +305,7 @@ export default {
      * @return {Boolean}
      */
     allowedToShowView(view) {
-      const views = [
-        'day',
-        'month',
-        'year',
-      ]
+      const views = ['day', 'month', 'year']
       const minimumViewIndex = views.indexOf(this.minimumView)
       const maximumViewIndex = views.indexOf(this.maximumView)
       const viewIndex = views.indexOf(view)
@@ -464,7 +428,9 @@ export default {
     setInitialView() {
       const initialView = this.computedInitialView
       if (!this.allowedToShowView(initialView)) {
-        throw new Error(`initialView '${this.initialView}' cannot be rendered based on minimum '${this.minimumView}' and maximum '${this.maximumView}'`)
+        throw new Error(
+          `initialView '${this.initialView}' cannot be rendered based on minimum '${this.minimumView}' and maximum '${this.maximumView}'`,
+        )
       }
       switch (initialView) {
         case 'year':

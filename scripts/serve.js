@@ -18,10 +18,7 @@ export default {
   },
   plugins: [
     alias({
-      resolve: [
-        '.vue',
-        '.js',
-      ],
+      resolve: ['.vue', '.js'],
       entries: [
         {
           find: '~',

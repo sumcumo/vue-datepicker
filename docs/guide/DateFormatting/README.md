@@ -5,7 +5,7 @@
 NB. This is not very robust at all - use at your own risk! Needs a better implementation.
 
 | Token | Desc                   | Example     |
-|-------|------------------------|-------------|
+| ----- | ---------------------- | ----------- |
 | d     | day                    | 1           |
 | dd    | 0 prefixed day         | 01          |
 | E     | abbr day               | Mon         |
@@ -27,26 +27,27 @@ triggered on every input change.
 The function formatter needs a custom parser to parse the formatted date back to date object.
 
 Here is an example for date-fns:
+
 ```vue
 <template>
   <DatePicker :format="customFormatter" :parser="customParser"></DatePicker>
 </template>
 <script>
-import { format, parse } from "date-fns";
+import { format, parse } from 'date-fns'
 export default {
   data() {
-      return {
-        format: 'dd.MM.yyyy',
-      }
+    return {
+      format: 'dd.MM.yyyy',
+    }
+  },
+  methods: {
+    customFormatter(date) {
+      return format(date, this.format)
     },
-    methods: {
-      customFormatter(date) {
-        return format(date, this.format)
-      },
-      customParser(date) {
-        return parse(date, this.format, new Date())
-      }
+    customParser(date) {
+      return parse(date, this.format, new Date())
     },
+  },
 }
 </script>
 ```

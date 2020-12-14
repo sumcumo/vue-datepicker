@@ -1,5 +1,32 @@
 import en from '~/locale/translations/en'
 
+// eslint-disable-next-line complexity,max-statements
+const getParsedDate = ({ formatStr, dateStr, translation }) => {
+  const splitter = formatStr.match(/-|\/|\s|\./) || ['-']
+  const df = formatStr.split(splitter[0])
+  const ds = dateStr.split(splitter[0])
+  const ymd = [0, 0, 0]
+  for (let i = 0; i < df.length; i += 1) {
+    if (/yyyy/i.test(df[i])) {
+      ymd[0] = ds[i]
+    } else if (/mmmm/i.test(df[i])) {
+      ymd[1] = translation.getMonthByName(ds[i])
+    } else if (/mmm/i.test(df[i])) {
+      ymd[1] = translation.getMonthByAbbrName(ds[i])
+    } else if (/mm/i.test(df[i])) {
+      ymd[1] = ds[i]
+    } else if (/m/i.test(df[i])) {
+      ymd[1] = ds[i]
+    } else if (/dd/i.test(df[i])) {
+      ymd[2] = ds[i]
+    } else if (/d/i.test(df[i])) {
+      const tmp = ds[i].replace(/st|rd|nd|th/g, '')
+      ymd[2] = tmp < 10 ? `0${tmp}` : `${tmp}`
+    }
+  }
+  return ymd
+}
+
 const utils = {
   /**
    * @type {Boolean}
@@ -186,9 +213,15 @@ const utils = {
    * @param {Number} month
    * @return {Number}
    */
+  // eslint-disable-next-line complexity
   daysInMonth(year, month) {
-    /* eslint-disable-next-line no-nested-ternary */
-    return /8|3|5|10/.test(month) ? 30 : month === 1 ? (!(year % 4) && year % 100) || !(year % 400) ? 29 : 28 : 31
+    if (/8|3|5|10/.test(month)) {
+      return 30
+    }
+    if (month === 1) {
+      return (!(year % 4) && year % 100) || !(year % 400) ? 29 : 28
+    }
+    return 31
   },
 
   /**
@@ -196,6 +229,7 @@ const utils = {
    * @param {Number} day
    * @return {String}
    */
+  // eslint-disable-next-line complexity
   getNthSuffix(day) {
     switch (day) {
       case 1:
@@ -221,19 +255,22 @@ const utils = {
    * @return {String}
    */
   formatDate(date, formatStr, translation) {
-    const translationTemp = (!translation) ? en : translation
+    const translationTemp = !translation ? en : translation
     const year = this.getFullYear(date)
     const month = this.getMonth(date) + 1
     const day = this.getDate(date)
 
     const matches = {
-      dd: (`0${day}`).slice(-2),
+      dd: `0${day}`.slice(-2),
       d: day,
       yyyy: year,
       yy: String(year).slice(2),
       MMMM: this.getMonthName(this.getMonth(date), translationTemp.months),
-      MMM: this.getMonthNameAbbr(this.getMonth(date), translationTemp.monthsAbbr),
-      MM: (`0${month}`).slice(-2),
+      MMM: this.getMonthNameAbbr(
+        this.getMonth(date),
+        translationTemp.monthsAbbr,
+      ),
+      MM: `0${month}`.slice(-2),
       M: month,
       o: this.getNthSuffix(this.getDate(date)),
       E: this.getDayNameAbbr(date, translationTemp.days),
@@ -252,43 +289,25 @@ const utils = {
    * @param {Function} parser
    * @return {Date | String}
    */
+  // eslint-disable-next-line max-params,complexity,max-statements
   parseDate(dateStr, formatStr, translation, parser) {
-    const translationTemp = (!translation) ? en : translation
     if (!(dateStr && formatStr)) {
       return dateStr
     }
     if (typeof formatStr === 'function') {
       if (!parser || typeof parser !== 'function') {
-        throw new Error('Parser need to be a function if you are using a custom formatter')
+        throw new Error(
+          'Parser need to be a function if you are using a custom formatter',
+        )
       }
       return parser(dateStr)
     }
-    const splitter = formatStr.match(/-|\/|\s|\./) || ['-']
-    const df = formatStr.split(splitter[0])
-    const ds = dateStr.split(splitter[0])
-    const ymd = [
-      0,
-      0,
-      0,
-    ]
-    for (let i = 0; i < df.length; i += 1) {
-      if (/yyyy/i.test(df[i])) {
-        ymd[0] = ds[i]
-      } else if (/mmmm/i.test(df[i])) {
-        ymd[1] = translationTemp.getMonthByName(ds[i])
-      } else if (/mmm/i.test(df[i])) {
-        ymd[1] = translationTemp.getMonthByAbbrName(ds[i])
-      } else if (/mm/i.test(df[i])) {
-        ymd[1] = ds[i]
-      } else if (/m/i.test(df[i])) {
-        ymd[1] = ds[i]
-      } else if (/dd/i.test(df[i])) {
-        ymd[2] = ds[i]
-      } else if (/d/i.test(df[i])) {
-        const tmp = ds[i].replace(/st|rd|nd|th/g, '')
-        ymd[2] = tmp < 10 ? `0${tmp}` : `${tmp}`
-      }
-    }
+    const ymd = getParsedDate({
+      formatStr,
+      dateStr,
+      translation: !translation ? en : translation,
+    })
+
     const dat = `${ymd.join('-')}${this.getTime()}`
     if (Number.isNaN(Date.parse(dat))) {
       return dateStr
@@ -315,7 +334,10 @@ const utils = {
     let startTemp = start
     while (startTemp <= end) {
       dates.push(new Date(startTemp))
-      startTemp = this.setDate(new Date(startTemp), this.getDate(new Date(startTemp)) + 1)
+      startTemp = this.setDate(
+        new Date(startTemp),
+        this.getDate(new Date(startTemp)) + 1,
+      )
     }
     return dates
   },
@@ -326,7 +348,9 @@ const utils = {
    * @return {Date}
    */
   resetDateTime(date) {
-    return new Date(this.useUtc ? date.setUTCHours(0, 0, 0, 0) : date.setHours(0, 0, 0, 0))
+    return new Date(
+      this.useUtc ? date.setUTCHours(0, 0, 0, 0) : date.setHours(0, 0, 0, 0),
+    )
   },
 
   /**
@@ -334,7 +358,9 @@ const utils = {
    * @return {Date}
    */
   getNewDateObject(date) {
-    return date ? this.resetDateTime(new Date(date)) : this.resetDateTime(new Date())
+    return date
+      ? this.resetDateTime(new Date(date))
+      : this.resetDateTime(new Date())
   },
 }
 

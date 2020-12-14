@@ -58,7 +58,8 @@ describe('PickerDay: mount', () => {
   })
 
   it('emits show-month-calendar event when the month is clicked', () => {
-    wrapper.find('.day__month_btn').trigger('click')
+    const yearBtn = wrapper.find('.day__month_btn')
+    yearBtn.trigger('click')
     expect(wrapper.emitted()['show-month-calendar']).toBeTruthy()
   })
 })

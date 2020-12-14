@@ -1,5 +1,14 @@
 export default class Language {
-  constructor(language, months, monthsAbbr, days, rtl = false, ymd = false, yearSuffix = '') {
+  // eslint-disable-next-line max-params
+  constructor(
+    language,
+    months,
+    monthsAbbr,
+    days,
+    rtl = false,
+    ymd = false,
+    yearSuffix = '',
+  ) {
     this.language = language
     this.months = months
     this.monthsAbbr = monthsAbbr
@@ -27,7 +36,9 @@ export default class Language {
 
   set months(months) {
     if (months.length !== 12) {
-      throw new RangeError(`There must be 12 months for ${this.language} language`)
+      throw new RangeError(
+        `There must be 12 months for ${this.language} language`,
+      )
     }
     this._months = months
   }
@@ -38,7 +49,9 @@ export default class Language {
 
   set monthsAbbr(monthsAbbr) {
     if (monthsAbbr.length !== 12) {
-      throw new RangeError(`There must be 12 abbreviated months for ${this.language} language`)
+      throw new RangeError(
+        `There must be 12 abbreviated months for ${this.language} language`,
+      )
     }
     this._monthsAbbr = monthsAbbr
   }

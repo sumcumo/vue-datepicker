@@ -2,7 +2,7 @@
   <div>
     <div class="example">
       <h3>With minimum and maximum date range</h3>
-      <Datepicker :disabled-dates="disabledDates"/>
+      <Datepicker :disabled-dates="disabledDates" />
       <code>
         &lt;datepicker :disabled-dates="disabledDates"&gt;&lt;/datepicker&gt;
       </code>
@@ -10,11 +10,11 @@
         <h5>Settings</h5>
         <div class="form-group">
           <label>Disabled to:</label>
-          <Datepicker @selected="disableTo"/>
+          <Datepicker @selected="disableTo" />
         </div>
         <div class="form-group">
           <label>Disabled from:</label>
-          <Datepicker @selected="disableFrom"/>
+          <Datepicker @selected="disableFrom" />
         </div>
         <div class="form-group">
           <label>Disabled Days of Month:</label>
@@ -23,7 +23,7 @@
             value=""
             placeholder="5,6,12,13"
             @change="setDisabledDays"
-          >
+          />
         </div>
         <pre>disabled: {{ disabledDates }}</pre>
       </div>
@@ -31,7 +31,7 @@
 
     <div class="example">
       <h3>Disabled dates</h3>
-      <Datepicker :disabled-dates="disabledFn"/>
+      <Datepicker :disabled-dates="disabledFn" />
       <code>
         &lt;datepicker :disabled-dates="disabledFn"&gt;&lt;/datepicker&gt;
       </code>
@@ -83,8 +83,7 @@ export default {
             return true
           }
           // disable first half of the month when it is a multiple of 2
-          return month % 2 !== 0 && day < 15;
-
+          return month % 2 !== 0 && day < 15
         },
       },
       disabledFnContent: ``,
@@ -95,7 +94,9 @@ export default {
       if (elem.target.value === 'undefined') {
         return
       }
-      const disabledDays = elem.target.value.split(',').map(day => parseInt(day, 10))
+      const disabledDays = elem.target.value
+        .split(',')
+        .map((day) => parseInt(day, 10))
       this.disabledDates = {
         from: this.disabledDates.from,
         to: this.disabledDates.to,
@@ -127,5 +128,5 @@ export default {
 </script>
 
 <style>
-  @import 'style.css';
+@import 'style.css';
 </style>

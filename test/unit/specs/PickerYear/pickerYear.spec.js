@@ -54,8 +54,7 @@ describe('PickerYear: shallowMount', () => {
     })
     await wrapper.vm.$nextTick()
     expect(wrapper.vm.getPageDecade).toEqual('2016 - 2027')
-    expect(wrapper.vm.$el.querySelectorAll('.cell.year').length)
-      .toEqual(12)
+    expect(wrapper.vm.$el.querySelectorAll('.cell.year').length).toEqual(12)
   })
 })
 

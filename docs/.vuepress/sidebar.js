@@ -3,10 +3,7 @@ module.exports = [
     title: 'Guide',
     collapsable: false,
     children: [
-      [
-        '/guide/',
-        'Getting started',
-      ],
+      ['/guide/', 'Getting started'],
       '/guide/Migration/',
       '/guide/DateFormatting/',
       '/guide/DisabledDates/',
@@ -22,10 +19,7 @@ module.exports = [
     title: 'Demo',
     collapsable: false,
     children: [
-      [
-        '/demo/',
-        'Demo',
-      ],
+      ['/demo/', 'Demo'],
       '/demo/Disabled/',
       '/demo/Highlighted/',
       '/demo/Language/',
@@ -35,4 +29,3 @@ module.exports = [
     ],
   },
 ]
-

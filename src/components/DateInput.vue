@@ -1,22 +1,23 @@
 <template>
-  <div :class="{'input-group' : bootstrapStyling}">
+  <div :class="{ 'input-group': bootstrapStyling }">
     <slot name="beforeDateInput" />
     <!-- Calendar Button -->
     <button
       v-if="calendarButton"
       ref="calendarButton"
-      :class="{'input-group-prepend' : bootstrapStyling, 'calendar-btn-disabled': disabled}"
+      :class="{
+        'input-group-prepend': bootstrapStyling,
+        'calendar-btn-disabled': disabled,
+      }"
       class="vdp-datepicker__calendar-button"
       :disabled="disabled"
       @blur="$emit('check-focus')"
       @click="toggleCalendarFromButton"
     >
-      <span :class="{'input-group-text' : bootstrapStyling}">
+      <span :class="{ 'input-group-text': bootstrapStyling }">
         <i :class="calendarButtonIcon">
           {{ calendarButtonIconContent }}
-          <span v-if="!calendarButtonIcon">
-            &hellip;
-          </span>
+          <span v-if="!calendarButtonIcon">&hellip;</span>
         </i>
       </span>
     </button>
@@ -45,21 +46,19 @@
       @keydown.esc.prevent="clearDate"
       @focus="showCalendarByFocus"
       @keyup="parseTypedDate"
-    >
+    />
     <!-- Clear Button -->
     <button
       v-if="clearButton && selectedDate"
-      :class="{'input-group-append' : bootstrapStyling}"
+      :class="{ 'input-group-append': bootstrapStyling }"
       class="vdp-datepicker__clear-button"
       :disabled="disabled"
       @blur="$emit('check-focus')"
       @click="clearDate()"
     >
-      <span :class="{'input-group-text' : bootstrapStyling}">
+      <span :class="{ 'input-group-text': bootstrapStyling }">
         <i :class="clearButtonIcon">
-          <span v-if="!clearButtonIcon">
-            &times;
-          </span>
+          <span v-if="!clearButtonIcon">&times;</span>
         </i>
       </span>
     </button>
@@ -72,9 +71,7 @@ import inputProps from '~/mixins/inputProps.vue'
 
 export default {
   name: 'DateInput',
-  mixins: [
-    inputProps,
-  ],
+  mixins: [inputProps],
   props: {
     isOpen: {
       type: Boolean,
@@ -107,10 +104,7 @@ export default {
     computedInputClass() {
       if (this.bootstrapStyling) {
         if (typeof this.inputClass === 'string') {
-          return [
-            this.inputClass,
-            'form-control',
-          ].join(' ')
+          return [this.inputClass, 'form-control'].join(' ')
         }
         return { 'form-control': true, ...this.inputClass }
       }
@@ -128,7 +122,11 @@ export default {
     formattedDate() {
       return typeof this.format === 'function'
         ? this.format(new Date(this.selectedDate))
-        : this.utils.formatDate(new Date(this.selectedDate), this.format, this.translation)
+        : this.utils.formatDate(
+            new Date(this.selectedDate),
+            this.format,
+            this.translation,
+          )
     },
   },
   watch: {
@@ -152,8 +150,7 @@ export default {
      */
     inputBlurred() {
       if (this.typeable) {
-        const parsableDate = this.parseDate(this.input.value)
-        const parsedDate = Date.parse(parsableDate)
+        const parsedDate = Date.parse(this.parseDate(this.input.value))
 
         if (Number.isNaN(parsedDate)) {
           this.clearDate()

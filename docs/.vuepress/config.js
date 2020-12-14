@@ -25,5 +25,4 @@ module.exports = {
     // if your docs are not at the root of the repo:
     docsDir: 'docs',
   },
-
 }

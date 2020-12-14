@@ -3,9 +3,7 @@ import Cleave from 'cleave.js'
 import * as lang from '../../dist/locale'
 import Datepicker from '../../dist/Datepicker'
 
-export default ({
-  Vue,
-}) => {
+export default ({ Vue }) => {
   const config = {
     aria: true,
     classNames: {},
@@ -23,7 +21,6 @@ export default ({
     useConstraintAttrs: true,
   }
 
-
   Vue.use(VeeValidate, config)
   Vue.component('Datepicker', Datepicker)
   Vue.prototype.$datepickerLocals = lang
@@ -37,9 +34,9 @@ export default ({
       }
       // only apply cleave if it is an input field and the options are set
       if (
-        el.tagName === 'INPUT'
-        && Object.keys(binding.value).length !== 0
-        && binding.value.constructor === Object
+        el.tagName === 'INPUT' &&
+        Object.keys(binding.value).length !== 0 &&
+        binding.value.constructor === Object
       ) {
         new Cleave(el, binding.value)
       }

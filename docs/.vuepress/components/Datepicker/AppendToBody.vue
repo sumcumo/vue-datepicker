@@ -3,9 +3,7 @@
     <h3>Don't append datepicker to body</h3>
     <Datepicker />
     <h3>Append to body</h3>
-    <Datepicker
-      :append-to-body="true"
-    />
+    <Datepicker :append-to-body="true" />
   </div>
 </template>
 
@@ -14,7 +12,7 @@ export default {
   name: 'DatepickerOpenDate',
   data() {
     return {
-      openDate: null
+      openDate: null,
     }
   },
 }
@@ -22,6 +20,6 @@ export default {
 
 <style>
 .overflow-scroll {
-  overflow: scroll
+  overflow: scroll;
 }
 </style>

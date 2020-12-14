@@ -2,14 +2,13 @@
 import PickerHeader from '~/components/PickerHeader.vue'
 import { makeDateUtils } from '~/utils/DateUtils'
 
-export default ({
+export default {
   components: { PickerHeader },
   inheritAttrs: false,
   props: {
     allowedToShowView: {
       type: Function,
-      default() {
-      },
+      default() {},
     },
     disabledDates: {
       type: Object,
@@ -80,14 +79,59 @@ export default ({
     currentView() {
       return this.$options.name.replace('Picker', '').toLowerCase()
     },
-    disabledFromDateNotUsed() {
-      return !this.disabledDates || !this.disabledDates.from
+    disabledFromExists() {
+      return this.disabledDates && this.disabledDates.from
     },
-    disabledToDateNotUsed() {
-      return !this.disabledDates || !this.disabledDates.to
+    disabledFromDay() {
+      return this.disabledFromExists
+        ? this.utils.getDate(this.disabledDates.from)
+        : null
+    },
+    disabledFromMonth() {
+      return this.disabledFromExists
+        ? this.utils.getMonth(this.disabledDates.from)
+        : null
+    },
+    disabledFromYear() {
+      return this.disabledFromExists
+        ? this.utils.getFullYear(this.disabledDates.from)
+        : null
+    },
+    disabledToExists() {
+      return this.disabledDates && this.disabledDates.to
+    },
+    disabledToDay() {
+      return this.disabledToExists
+        ? this.utils.getDate(this.disabledDates.to)
+        : null
+    },
+    disabledToMonth() {
+      return this.disabledToExists
+        ? this.utils.getMonth(this.disabledDates.to)
+        : null
+    },
+    disabledToYear() {
+      return this.disabledToExists
+        ? this.utils.getFullYear(this.disabledDates.to)
+        : null
+    },
+    focusedId() {
+      return this.focusedCell.id
     },
     isUpDisabled() {
       return !this.allowedToShowView(this.nextViewUp)
+    },
+    pageMonth() {
+      return this.utils.getMonth(this.pageDate)
+    },
+    pageYear() {
+      return this.utils.getFullYear(this.pageDate)
+    },
+    pageDecadeStart() {
+      return Math.floor(this.pageYear / this.yearRange) * this.yearRange
+    },
+    pageDecadeEnd() {
+      return this.pageDecadeStart + this.yearRange - 1
     },
     nextViewUp() {
       switch (this.currentView) {
@@ -109,6 +153,7 @@ export default ({
     this.defaultFocus()
   },
   methods: {
+    // eslint-disable-next-line max-statements,complexity
     defaultFocus() {
       if (this.typeable || (this.isInline && !this.hasBeenFocused)) {
         return
@@ -213,6 +258,7 @@ export default ({
       }
       return false
     },
+    // eslint-disable-next-line max-statements
     setFocusOnNextPage(delta) {
       if (delta === 1) {
         const newId = this.focusedCell.isNextMonth ? this.cols : 0
@@ -225,7 +271,9 @@ export default ({
 
       let cellsToSkip = 0
       if (this.currentView === 'day') {
-        cellsToSkip = this.cells[this.cellsCount - 1].isNextMonth ? this.cols : 0
+        cellsToSkip = this.cells[this.cellsCount - 1].isNextMonth
+          ? this.cols
+          : 0
       }
       const newId = this.focusedCell.id + delta + cellsToSkip - this.cellsCount
 
@@ -234,6 +282,7 @@ export default ({
         this.focus(newId)
       })
     },
+    // eslint-disable-next-line complexity,max-statements
     setFocusOnPreviousPage(delta) {
       if (delta === -1) {
         const cellsToSkip = this.cells[0].isPreviousMonth ? this.cols : 0
@@ -259,7 +308,7 @@ export default ({
       this[`previous${this.ucFirst(this.nextViewUp)}`]()
       this.$nextTick(() => {
         const row = this.rows - rowsToSkip - 1
-        const newId = (row * this.cols) + column
+        const newId = row * this.cols + column
         this.focus(newId)
       })
     },
@@ -289,5 +338,5 @@ export default ({
       this.focus(newId)
     },
   },
-})
+}
 </script>

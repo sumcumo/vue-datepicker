@@ -23,11 +23,7 @@ export default {
       options: {
         delimiter: '.',
         date: true,
-        datePattern: [
-          'd',
-          'm',
-          'Y',
-        ],
+        datePattern: ['d', 'm', 'Y'],
       },
     }
   },
@@ -35,5 +31,5 @@ export default {
 }
 </script>
 <style>
-  @import 'style.css';
+@import 'style.css';
 </style>

@@ -6,14 +6,12 @@
       :format="format"
     />
     <code>
-      &lt;datepicker placeholder="Type or select date" :typeable="true"&gt;&lt;/datepicker&gt;
+      &lt;datepicker placeholder="Type or select date"
+      :typeable="true"&gt;&lt;/datepicker&gt;
     </code>
     <div class="settings">
       <h5>Settings</h5>
-      <Format
-        @selected="selected"
-        :format-init="format"
-      />
+      <Format @selected="selected" :format-init="format" />
     </div>
   </div>
 </template>
@@ -40,5 +38,5 @@ export default {
 </script>
 
 <style>
-  @import 'style.css';
+@import 'style.css';
 </style>

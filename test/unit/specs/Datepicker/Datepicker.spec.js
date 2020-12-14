@@ -1,7 +1,4 @@
-import {
-  mount,
-  shallowMount,
-} from '@vue/test-utils'
+import { mount, shallowMount } from '@vue/test-utils'
 import DateInput from '~/components/DateInput.vue'
 import Datepicker from '~/components/Datepicker.vue'
 
@@ -89,8 +86,12 @@ describe('Datepicker mounted', () => {
     const dateTemp = new Date(2016, 9, 9)
     wrapper.vm.selectMonth({ timestamp: dateTemp.valueOf() })
     expect(wrapper.emitted()['changed-month']).toBeTruthy()
-    expect(wrapper.emitted()['changed-month'][0][0].timestamp).toEqual(dateTemp.valueOf())
-    expect(new Date(wrapper.vm.pageTimestamp).getMonth()).toEqual(dateTemp.getMonth())
+    expect(wrapper.emitted()['changed-month'][0][0].timestamp).toEqual(
+      dateTemp.valueOf(),
+    )
+    expect(new Date(wrapper.vm.pageTimestamp).getMonth()).toEqual(
+      dateTemp.getMonth(),
+    )
     expect(wrapper.vm.currentPicker).toEqual('PickerDay')
   })
 
@@ -98,8 +99,12 @@ describe('Datepicker mounted', () => {
     const dateTemp = new Date(2018, 9, 9)
     wrapper.vm.selectYear({ timestamp: dateTemp.valueOf() })
     expect(wrapper.emitted()['changed-year']).toBeTruthy()
-    expect(wrapper.emitted()['changed-year'][0][0].timestamp).toEqual(dateTemp.valueOf())
-    expect(new Date(wrapper.vm.pageTimestamp).getFullYear()).toEqual(dateTemp.getFullYear())
+    expect(wrapper.emitted()['changed-year'][0][0].timestamp).toEqual(
+      dateTemp.valueOf(),
+    )
+    expect(new Date(wrapper.vm.pageTimestamp).getFullYear()).toEqual(
+      dateTemp.getFullYear(),
+    )
     expect(wrapper.vm.currentPicker).toEqual('PickerMonth')
   })
 })
@@ -193,7 +198,9 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapperTemp.vm.pageDate.getDate()).toEqual(1)
     wrapperTemp.vm.setDate(pastDate.valueOf())
     wrapperTemp.vm.resetDefaultPageDate()
-    expect(wrapperTemp.vm.pageDate.getFullYear()).toEqual(pastDate.getFullYear())
+    expect(wrapperTemp.vm.pageDate.getFullYear()).toEqual(
+      pastDate.getFullYear(),
+    )
     expect(wrapperTemp.vm.pageDate.getMonth()).toEqual(pastDate.getMonth())
     expect(wrapperTemp.vm.pageDate.getDate()).toEqual(1)
   })
@@ -243,7 +250,9 @@ describe('Datepicker shallowMounted', () => {
 
   it('should emit changedMonth on a month change received from PickerDay', () => {
     const dateTemp = new Date(2016, 9, 1)
-    wrapper.vm.handleChangedMonthFromDayPicker({ timestamp: dateTemp.valueOf() })
+    wrapper.vm.handleChangedMonthFromDayPicker({
+      timestamp: dateTemp.valueOf(),
+    })
     expect(wrapper.emitted()['changed-month']).toBeTruthy()
   })
 })
@@ -291,14 +300,14 @@ describe('Datepicker.vue set by timestamp', () => {
 describe('Datepicker.vue using UTC', () => {
   let wrapper
   it('correctly sets the value using UTC', async () => {
-    const timezoneOffset = ((new Date()).getTimezoneOffset() / 60)
+    const timezoneOffset = new Date().getTimezoneOffset() / 60
 
     // this is ambiguous because localzone differs by one day than UTC
     const ambiguousHour = 25 - timezoneOffset
     const ambiguousDate = new Date(2018, 3, 15, ambiguousHour)
     const ambiguousYear = ambiguousDate.getUTCFullYear()
-    const ambiguousMonth = (`0${ambiguousDate.getUTCMonth() + 1}`).slice(-2)
-    const ambiguousDay = (`0${ambiguousDate.getUTCDate()}`).slice(-2)
+    const ambiguousMonth = `0${ambiguousDate.getUTCMonth() + 1}`.slice(-2)
+    const ambiguousDay = `0${ambiguousDate.getUTCDate()}`.slice(-2)
     const UTCString = `${ambiguousYear} ${ambiguousMonth} ${ambiguousDay}`
 
     // It's important to use the `mount` helper here
@@ -311,7 +320,9 @@ describe('Datepicker.vue using UTC', () => {
     })
     // It's important to assert the input rendered output
     await wrapper.vm.$nextTick()
-    expect(wrapper.findComponent(DateInput).vm.formattedValue).toEqual(UTCString)
+    expect(wrapper.findComponent(DateInput).vm.formattedValue).toEqual(
+      UTCString,
+    )
   })
 })
 

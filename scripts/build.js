@@ -9,12 +9,7 @@ import vue from 'rollup-plugin-vue'
 import postcss from 'rollup-plugin-postcss'
 import { terser } from 'rollup-plugin-terser'
 
-const {
-  author,
-  name,
-  version,
-  license,
-} = require('../package.json')
+const { author, name, version, license } = require('../package.json')
 
 const banner = `/*
 * ${name} v${version}
@@ -23,11 +18,7 @@ const banner = `/*
 */`
 
 let generateCounter = 0
-const generateConfig = ({
-  type,
-  extraPlugins = [],
-  extraName = '',
-}) => {
+const generateConfig = ({ type, extraPlugins = [], extraName = '' }) => {
   let babelrc = true
   const output = {
     dir: 'dist/',
@@ -86,9 +77,7 @@ const generateConfig = ({
       postcss({
         extract: 'Datepicker.css',
         minimize: true,
-        plugins: [
-          autoprefixer(),
-        ],
+        plugins: [autoprefixer()],
       }),
       babel({
         extensions: ['.js'],

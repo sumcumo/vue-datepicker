@@ -9,14 +9,14 @@ export function getPopupElementSize(element) {
   element.style.display = 'block'
   element.style.visibility = 'hidden'
   const styles = window.getComputedStyle(element)
-  const width = element.offsetWidth + parseInt(styles.marginLeft, 10) + parseInt(
-    styles.marginRight,
-    10,
-  )
-  const height = element.offsetHeight + parseInt(
-    styles.marginTop,
-    10,
-  ) + parseInt(styles.marginBottom, 10)
+  const width =
+    element.offsetWidth +
+    parseInt(styles.marginLeft, 10) +
+    parseInt(styles.marginRight, 10)
+  const height =
+    element.offsetHeight +
+    parseInt(styles.marginTop, 10) +
+    parseInt(styles.marginBottom, 10)
   element.style.display = originalDisplay
   element.style.visibility = originalVisibility
 
@@ -36,6 +36,7 @@ export function getPopupElementSize(element) {
  * @param {String} fixedPosition
  * @param {Boolean} rtl
  */
+// eslint-disable-next-line complexity,max-statements
 export function getRelativePosition({
   el,
   elRelative,
@@ -61,7 +62,8 @@ export function getRelativePosition({
   const outOfBoundsRight = calendarBounding.right > window.innerWidth
   const outOfBoundsBottom = calendarBounding.bottom > window.innerHeight
 
-  const fixedPositionRight = fixedPosition && fixedPosition.indexOf('right') !== -1
+  const fixedPositionRight =
+    fixedPosition && fixedPosition.indexOf('right') !== -1
   const fixedPositionTop = fixedPosition && fixedPosition.indexOf('top') !== -1
 
   const setLeft = () => {
@@ -90,11 +92,13 @@ export function getRelativePosition({
       setBottom()
     }
 
-    const hasRelativWidth = documentWidth - relativeRect.left < targetWidth
-      && relativeRect.right < targetWidth
+    const hasRelativWidth =
+      documentWidth - relativeRect.left < targetWidth &&
+      relativeRect.right < targetWidth
 
-    const hasRelativHeight = relativeRect.top <= targetHeight
-      && documentHeight - relativeRect.bottom <= targetHeight
+    const hasRelativHeight =
+      relativeRect.top <= targetHeight &&
+      documentHeight - relativeRect.bottom <= targetHeight
 
     if (hasRelativWidth) {
       left = offsetX - relativeRect.left + 1

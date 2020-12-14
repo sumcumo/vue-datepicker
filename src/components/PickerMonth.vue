@@ -26,29 +26,23 @@
       >
         {{ pageYearName }}
       </UpButton>
-      <slot
-        slot="nextIntervalBtn"
-        name="nextIntervalBtn"
-      />
-      <slot
-        slot="prevIntervalBtn"
-        name="prevIntervalBtn"
-      />
+      <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
+      <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
     <button
       v-for="cell in cells"
       :ref="cell.id"
       :key="cell.id"
-      :class="{ 'selected': cell.isSelected }"
+      :class="{ selected: cell.isSelected }"
       class="cell month"
       :disabled="cell.isDisabled"
       @blur="$emit('check-focus')"
       @click.stop="selectMonth(cell)"
       @focus="focusedCell = cell"
-      @keydown.up.prevent="updateCellFocus(keyUpChange)"
-      @keydown.down.prevent="updateCellFocus(keyDownChange)"
-      @keydown.left.prevent="updateCellFocus(keyLeftChange)"
-      @keydown.right.prevent="updateCellFocus(keyRightChange)"
+      @keydown.up.prevent="updateCellFocus(keyUpDelta)"
+      @keydown.down.prevent="updateCellFocus(keyDownDelta)"
+      @keydown.left.prevent="updateCellFocus(keyLeftDelta)"
+      @keydown.right.prevent="updateCellFocus(keyRightDelta)"
       @keyup.esc="$emit('close')"
     >
       {{ cell.month }}
@@ -64,9 +58,7 @@ import UpButton from '~/components/UpButton.vue'
 export default {
   name: 'PickerMonth',
   components: { UpButton },
-  mixins: [
-    pickerMixin,
-  ],
+  mixins: [pickerMixin],
   computed: {
     /**
      * Sets an array with all months
@@ -94,27 +86,59 @@ export default {
     disabledMonthTo() {
       return this.utils.getMonth(this.disabledDates.to)
     },
+    // canFocusUp() {},
+    // canFocusDown() {},
+    canFocusLeft() {
+      if (this.isRtl) {
+        return this.isNextDisabled && this.focusedId >= this.disabledMonthFrom
+      }
+      return !this.isPreviousDisabled && this.focusedId > this.disabledMonthTo
+    },
+    canFocusRight() {
+      if (this.isRtl) {
+        return this.isPreviousDisabled && this.focusedId <= this.disabledMonthTo
+      }
+      return !this.isNextDisabled && this.focusedId < this.disabledMonthFrom
+    },
     /**
      * Is the next year disabled?
      * @return {Boolean}
      */
     isNextDisabled() {
-      if (this.disabledFromDateNotUsed) {
+      if (!this.disabledFromExists) {
         return false
       }
-      return this.utils.getFullYear(
-        this.disabledDates.from,
-      ) <= this.utils.getFullYear(this.pageDate)
+      return this.disabledFromYear <= this.pageYear
     },
     /**
      * Is the previous year disabled?
      * @return {Boolean}
      */
     isPreviousDisabled() {
-      if (this.disabledToDateNotUsed) {
+      if (!this.disabledToExists) {
         return false
       }
-      return this.utils.getFullYear(this.disabledDates.to) >= this.utils.getFullYear(this.pageDate)
+      return this.disabledToYear >= this.pageYear
+    },
+    keyDownDelta() {
+      const isLastRow = this.focusedId >= this.cells.length - this.cols
+      return this.isNextDisabled && isLastRow ? 0 : 3
+    },
+    keyUpDelta() {
+      const isFirstRow = this.focusedId < this.cols
+      return this.isPreviousDisabled && isFirstRow ? 0 : -3
+    },
+    keyRightDelta() {
+      if (!this.canFocusRight) {
+        return 0
+      }
+      return this.isRtl ? -1 : 1
+    },
+    keyLeftDelta() {
+      if (!this.canFocusLeft) {
+        return 0
+      }
+      return this.isRtl ? 1 : -1
     },
     /**
      * Get year name on current page.
@@ -133,26 +157,6 @@ export default {
       }
       return null
     },
-    keyDownChange() {
-      const isLastRow = this.focusedCell.id >= this.cells.length - this.cols
-      return this.isNextDisabled && isLastRow ? 0 : 3
-    },
-    keyUpChange() {
-      const isFirstRow = this.focusedCell.id < this.cols
-      return this.isPreviousDisabled && isFirstRow ? 0 : -3
-    },
-    keyRightChange() {
-      if (this.isRtl) {
-        return this.isPreviousDisabled && this.focusedCell.id <= this.disabledMonthTo ? 0 : -1
-      }
-      return this.isNextDisabled && this.focusedCell.id >= this.disabledMonthFrom ? 0 : 1
-    },
-    keyLeftChange() {
-      if (this.isRtl) {
-        return this.isNextDisabled && this.focusedCell.id >= this.disabledMonthFrom ? 0 : 1
-      }
-      return this.isPreviousDisabled && this.focusedCell.id <= this.disabledMonthTo ? 0 : -1
-    },
   },
   methods: {
     /**
@@ -163,7 +167,13 @@ export default {
       const d = this.pageDate
       return this.useUtc
         ? new Date(Date.UTC(d.getUTCFullYear(), 0, d.getUTCDate()))
-        : new Date(d.getFullYear(), 0, d.getDate(), d.getHours(), d.getMinutes())
+        : new Date(
+            d.getFullYear(),
+            0,
+            d.getDate(),
+            d.getHours(),
+            d.getMinutes(),
+          )
     },
     /**
      * Changes the year up or down
@@ -188,9 +198,12 @@ export default {
      * @return {Boolean}
      */
     isSelectedMonth(date) {
-      return (this.selectedDate
-        && this.utils.getFullYear(this.selectedDate) === this.utils.getFullYear(date)
-        && this.utils.getMonth(this.selectedDate) === this.utils.getMonth(date))
+      return (
+        this.selectedDate &&
+        this.utils.getFullYear(this.selectedDate) ===
+          this.utils.getFullYear(date) &&
+        this.utils.getMonth(this.selectedDate) === this.utils.getMonth(date)
+      )
     },
     /**
      * Increments the year
