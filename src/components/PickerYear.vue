@@ -27,8 +27,7 @@
 </template>
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
-import { isYearDisabled } from '~/utils/DisabledDatesUtils'
-import { isMonthDisabled } from '../utils/DisabledDatesUtils'
+import { isMonthDisabled, isYearDisabled } from '~/utils/DisabledDatesUtils'
 
 export default {
   name: 'DatepickerYearView',
@@ -119,6 +118,7 @@ export default {
     isDisabledYear(date) {
       return isYearDisabled(date, this.disabledDates, this.utils)
     },
+    // eslint-disable-next-line complexity,max-statements
     isYearDisabled2(date) {
       if (!this.hasDisabledConfig) {
         return false

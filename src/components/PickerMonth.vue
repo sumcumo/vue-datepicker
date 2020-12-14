@@ -30,8 +30,7 @@
 </template>
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
-import { isMonthDisabled } from '~/utils/DisabledDatesUtils'
-import { isDateDisabled } from '../utils/DisabledDatesUtils'
+import { isDateDisabled, isMonthDisabled } from '~/utils/DisabledDatesUtils'
 
 export default {
   name: 'DatepickerMonthView',
