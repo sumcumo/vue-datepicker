@@ -152,12 +152,12 @@ export default {
      * @return {Boolean}
      */
     isNextDisabled() {
-      if (!this.hasDisabledFrom) {
+      if (!this.disabledConfig.has.from) {
         return false
       }
       return (
-        this.disabledFromMonth <= this.pageMonth &&
-        this.disabledFromYear <= this.pageYear
+        this.disabledConfig.from.month <= this.pageMonth &&
+        this.disabledConfig.from.year <= this.pageYear
       )
     },
     /**
@@ -165,12 +165,12 @@ export default {
      * @return {Boolean}
      */
     isPreviousDisabled() {
-      if (!this.hasDisabledTo) {
+      if (!this.disabledConfig.has.to) {
         return false
       }
       return (
-        this.disabledToMonth >= this.pageMonth &&
-        this.disabledToYear >= this.pageYear
+        this.disabledConfig.to.month >= this.pageMonth &&
+        this.disabledConfig.to.year >= this.pageYear
       )
     },
     /**
@@ -226,12 +226,7 @@ export default {
      * @return {Boolean}
      */
     isDisabledDate(date) {
-      return isDateDisabled(
-        date,
-        this.disabledDates,
-        this.utils,
-        this.disabledConfig,
-      )
+      return isDateDisabled(date, this.utils, this.disabledConfig)
     },
     /**
      * Whether a day is highlighted

@@ -10,17 +10,20 @@
         :disabled-dates="{
           // to: new Date(2020, 2, 15),
           // from: new Date(2021, 5, 15),
-          ranges: [
-            {
-              // Disable dates in given ranges (exclusive).
-              from: new Date(2020, 9, 31),
-              to: new Date(2021, 0, 1),
-            },
-            // {
-            //   to: new Date(2020, 11, 5),
-            //   from: new Date(2020, 10, 30),
-            // },
-          ],
+          // ranges: [
+          //   {
+          //     // Disable dates in given ranges (exclusive).
+          //     from: new Date(2020, 9, 31),
+          //     to: new Date(2021, 0, 1),
+          //   },
+          // {
+          //   to: new Date(2020, 11, 5),
+          //   from: new Date(2020, 10, 30),
+          // },
+          // ],
+          customPredictor: (date) => {
+            return date.getDate() % 3 === 0
+          },
         }"
       />
       <code>

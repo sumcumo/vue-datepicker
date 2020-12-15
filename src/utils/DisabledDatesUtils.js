@@ -6,19 +6,19 @@ export const hasDisabledTo = (disabledDates) => {
   return disabledDates && typeof disabledDates.to !== 'undefined'
 }
 
-const from = (date, disabledDates, config) => {
-  return config.hasFrom && date > disabledDates.from
+const from = (date, config) => {
+  return config.has.from && date > config.disabledDates.from
 }
 
-const to = (date, disabledDates, config) => {
-  return config.hasTo && date < disabledDates.to
+const to = (date, config) => {
+  return config.has.to && date < config.disabledDates.to
 }
 
-const range = (date, disabledDates, config) => {
-  if (!config.hasRanges) {
+const range = (date, config) => {
+  if (!config.has.ranges) {
     return false
   }
-  const { ranges } = disabledDates
+  const { ranges } = config.disabledDates
 
   return ranges.some((thisRange) => {
     const hasFrom = hasDisabledFrom(thisRange)
@@ -28,78 +28,70 @@ const range = (date, disabledDates, config) => {
   })
 }
 
-const customPredictor = (date, disabledDates, config) => {
-  return config.hasCustomPredictor && disabledDates.customPredictor(date)
+const customPredictor = (date, config) => {
+  return (
+    config.has.customPredictor && config.disabledDates.customPredictor(date)
+  )
 }
 
-// eslint-disable-next-line max-params
-const specificDate = (date, disabledDates, utils, config) => {
-  if (!config.hasSpecificDates) {
+const specificDate = (date, utils, config) => {
+  if (!config.has.specificDates) {
     return false
   }
-  const { dates } = disabledDates
+  const { dates } = config.disabledDates
 
   return dates.some((d) => {
     return utils.compareDates(date, d)
   })
 }
 
-// eslint-disable-next-line max-params
-const daysOfWeek = (date, disabledDates, utils, config) => {
+const daysOfWeek = (date, utils, config) => {
   return (
-    config.hasDaysOfWeek &&
-    disabledDates.days.indexOf(utils.getDay(date)) !== -1
+    config.has.daysOfWeek &&
+    config.disabledDates.days.indexOf(utils.getDay(date)) !== -1
   )
 }
 
-// eslint-disable-next-line max-params
-const daysOfMonth = (date, disabledDates, utils, config) => {
+const daysOfMonth = (date, utils, config) => {
   return (
-    config.hasDaysOfMonth &&
-    disabledDates.daysOfMonth.indexOf(utils.getDate(date)) !== -1
+    config.has.daysOfMonth &&
+    config.disabledDates.daysOfMonth.indexOf(utils.getDate(date)) !== -1
   )
 }
 
 const isMonthDisabledViaTo = (month, year, config) => {
-  const isYearInPast = config.hasDisabledTo && year < config.disabledToYear
+  const isYearInPast = config.has.to && year < config.to.year
 
   if (isYearInPast) {
     return true
   }
 
-  return (
-    config.hasDisabledTo &&
-    month < config.disabledToMonth &&
-    year <= config.disabledToYear
-  )
+  return config.has.to && month < config.to.month && year <= config.to.year
 }
 
 const isMonthDisabledViaFrom = (month, year, config) => {
-  const isYearInFuture =
-    config.hasDisabledFrom && year > config.disabledFromYear
+  const isYearInFuture = config.has.from && year > config.from.year
 
   if (isYearInFuture) {
     return true
   }
 
   return (
-    config.hasDisabledFrom &&
-    month > config.disabledFromMonth &&
-    year >= config.disabledFromYear
+    config.has.from && month > config.from.month && year >= config.from.year
   )
 }
 
 const isYearDisabledViaTo = (year, config) => {
-  return config.hasDisabledTo && year < config.disabledToYear
+  return config.has.to && year < config.to.year
 }
 
 const isYearDisabledViaFrom = (year, config) => {
-  return config.hasDisabledFrom && year > config.disabledFromYear
+  return config.has.from && year > config.from.year
 }
 
 export const isDateDisabledVia = {
-  from,
   to,
+  from,
   range,
   customPredictor,
   specificDate,

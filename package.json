@@ -36,6 +36,7 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
+    "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --no-cache --runInBand",
     "release": "standard-version",
     "prerelease": "standard-version --dry-run",
     "docs:dev": "vuepress dev docs",

@@ -64,10 +64,7 @@ describe('PickerYear', () => {
     wrapper.setProps({
       disabledDates: {
         customPredictor(date) {
-          if (date.getFullYear() % 3 === 0) {
-            return true
-          }
-          return false
+          return date.getFullYear() % 3 === 0
         },
       },
     })

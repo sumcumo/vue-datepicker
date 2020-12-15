@@ -1,7 +1,6 @@
 <script>
 import PickerHeader from '~/components/PickerHeader.vue'
 import { makeDateUtils } from '~/utils/DateUtils'
-import { hasDisabledFrom, hasDisabledTo } from '~/utils/DisabledDatesUtils'
 
 export default {
   components: { PickerHeader },
@@ -63,87 +62,40 @@ export default {
     }
   },
   computed: {
-    disabledFromDay() {
-      return this.hasDisabledFrom
-        ? this.utils.getDate(this.disabledDates.from)
-        : null
-    },
-    disabledFromMonth() {
-      return this.hasDisabledFrom
-        ? this.utils.getMonth(this.disabledDates.from)
-        : null
-    },
-    disabledFromYear() {
-      return this.hasDisabledFrom
-        ? this.utils.getFullYear(this.disabledDates.from)
-        : null
-    },
-    disabledToDay() {
-      return this.hasDisabledTo
-        ? this.utils.getDate(this.disabledDates.to)
-        : null
-    },
-    disabledToMonth() {
-      return this.hasDisabledTo
-        ? this.utils.getMonth(this.disabledDates.to)
-        : null
-    },
-    disabledToYear() {
-      return this.hasDisabledTo
-        ? this.utils.getFullYear(this.disabledDates.to)
-        : null
-    },
+    // eslint-disable-next-line complexity
     disabledConfig() {
-      return {
-        exists: this.hasDisabledConfig,
-        hasCustomPredictor: this.hasDisabledCustomPredictor,
-        hasDaysOfMonth: this.hasDisabledDaysOfMonth,
-        hasDaysOfWeek: this.hasDisabledDaysOfWeek,
-        hasFrom: this.hasDisabledFrom,
-        hasRanges: this.hasDisabledRanges,
-        hasSpecificDates: this.hasDisabledSpecificDates,
-        hasTo: this.hasDisabledTo,
+      const dd = this.disabledDates
+      const exists = typeof dd !== 'undefined' && Object.keys(dd).length > 0
+      const isDefined = (prop) => {
+        return exists && typeof dd[prop] !== 'undefined'
       }
-    },
-    hasDisabledConfig() {
-      return this.disabledDates && Object.keys(this.disabledDates).length > 0
-    },
-    hasDisabledCustomPredictor() {
-      return (
-        this.hasDisabledConfig &&
-        typeof this.disabledDates.customPredictor === 'function'
-      )
-    },
-    hasDisabledDaysOfMonth() {
-      return (
-        this.hasDisabledConfig &&
-        typeof this.disabledDates.daysOfMonth !== 'undefined'
-      )
-    },
-    hasDisabledDaysOfWeek() {
-      return (
-        this.hasDisabledConfig && typeof this.disabledDates.days !== 'undefined'
-      )
-    },
-    hasDisabledFrom() {
-      return hasDisabledFrom(this.disabledDates)
-    },
-    hasDisabledRanges() {
-      return (
-        this.hasDisabledConfig &&
-        typeof this.disabledDates.ranges !== 'undefined' &&
-        this.disabledDates.ranges.length > 0
-      )
-    },
-    hasDisabledSpecificDates() {
-      return (
-        this.hasDisabledConfig &&
-        typeof this.disabledDates.dates !== 'undefined' &&
-        this.disabledDates.dates.length > 0
-      )
-    },
-    hasDisabledTo() {
-      return hasDisabledTo(this.disabledDates)
+      const hasFrom = isDefined('from')
+      const hasTo = isDefined('to')
+
+      return {
+        exists,
+        disabledDates: dd,
+        to: {
+          day: hasTo ? this.utils.getDate(dd.to) : null,
+          month: hasTo ? this.utils.getMonth(dd.to) : null,
+          year: hasTo ? this.utils.getFullYear(dd.to) : null,
+        },
+        from: {
+          day: hasFrom ? this.utils.getDate(dd.from) : null,
+          month: hasFrom ? this.utils.getMonth(dd.from) : null,
+          year: hasFrom ? this.utils.getFullYear(dd.from) : null,
+        },
+        has: {
+          customPredictor: isDefined('customPredictor'),
+          daysOfMonth: isDefined('daysOfMonth'),
+          daysOfWeek: isDefined('days'),
+          from: hasFrom,
+          ranges: isDefined('ranges') && dd.ranges.length > 0,
+          specificDates: isDefined('dates') && dd.dates.length > 0,
+          to: hasTo,
+        },
+        utils: this.utils,
+      }
     },
     pageMonth() {
       return this.utils.getMonth(this.pageDate)

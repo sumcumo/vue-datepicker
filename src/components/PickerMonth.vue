@@ -41,20 +41,20 @@ export default {
      * @return {Boolean}
      */
     isNextDisabled() {
-      if (!this.hasDisabledFrom) {
+      if (!this.disabledConfig.has.from) {
         return false
       }
-      return this.disabledFromYear <= this.pageYear
+      return this.disabledConfig.from.year <= this.pageYear
     },
     /**
      * Is the previous year disabled?
      * @return {Boolean}
      */
     isPreviousDisabled() {
-      if (!this.hasDisabledTo) {
+      if (!this.disabledConfig.has.to) {
         return false
       }
-      return this.disabledToYear >= this.pageYear
+      return this.disabledConfig.to.year >= this.pageYear
     },
     /**
      * Set an array with all months
@@ -109,12 +109,7 @@ export default {
      * @return {Boolean}
      */
     isDisabledMonth(date) {
-      return isMonthDisabled(
-        date,
-        this.disabledDates,
-        this.utils,
-        this.disabledConfig,
-      )
+      return isMonthDisabled(date, this.utils, this.disabledConfig)
     },
     // eslint-disable-next-line complexity,max-statements
     /**

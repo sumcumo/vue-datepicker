@@ -44,20 +44,20 @@ export default {
      * @return {Boolean}
      */
     isNextDisabled() {
-      if (!this.hasDisabledFrom) {
+      if (!this.disabledConfig.has.from) {
         return false
       }
-      return this.disabledFromYear <= this.pageDecadeEnd
+      return this.disabledConfig.from.year <= this.pageDecadeEnd
     },
     /**
      * Is the previous decade disabled?
      * @return {Boolean}
      */
     isPreviousDisabled() {
-      if (!this.hasDisabledTo) {
+      if (!this.disabledConfig.has.to) {
         return false
       }
-      return this.disabledToYear >= this.pageDecadeStart
+      return this.disabledConfig.to.year >= this.pageDecadeStart
     },
     /**
      * Get decade name on current page.
@@ -116,12 +116,7 @@ export default {
      * @return {Boolean}
      */
     isDisabledYear(date) {
-      return isYearDisabled(
-        date,
-        this.disabledDates,
-        this.utils,
-        this.disabledConfig,
-      )
+      return isYearDisabled(date, this.utils, this.disabledConfig)
     },
     // eslint-disable-next-line complexity,max-statements
     /**
