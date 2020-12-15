@@ -10,6 +10,7 @@
         :disabled-dates="{
           // to: new Date(2020, 2, 15),
           // from: new Date(2021, 5, 15),
+          dates: [new Date(2021, 11, 25)],
           // ranges: [
           //   {
           //     // Disable dates in given ranges (exclusive).
@@ -24,6 +25,11 @@
           customPredictor: (date) => {
             return date.getDate() % 3 === 0
           },
+        }"
+        :highlighted="{
+          to: new Date(2020, 11, 30),
+          from: new Date(2020, 11, 20),
+          includeDisabled: true,
         }"
       />
       <code>
