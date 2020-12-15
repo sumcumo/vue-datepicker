@@ -6,17 +6,20 @@
       <Datepicker
         placeholder="Select Date"
         :inline="true"
+        minimum-view="day"
         :disabled-dates="{
+          // to: new Date(2020, 2, 15),
+          // from: new Date(2021, 5, 15),
           ranges: [
             {
               // Disable dates in given ranges (exclusive).
-              from: new Date(2020, 11, 25),
-              to: new Date(2020, 11, 30),
+              from: new Date(2020, 9, 31),
+              to: new Date(2021, 0, 1),
             },
-            {
-              from: new Date(2020, 10, 12),
-              to: new Date(2020, 11, 5),
-            },
+            // {
+            //   to: new Date(2020, 11, 5),
+            //   from: new Date(2020, 10, 30),
+            // },
           ],
         }"
       />

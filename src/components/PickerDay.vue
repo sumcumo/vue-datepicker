@@ -36,7 +36,7 @@
 </template>
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
-import { isDateDisabled } from '~/utils/DisabledDatesUtils'
+import { isDateDisabled } from '~/utils/DisabledDates'
 
 export default {
   name: 'DatepickerDayView',
@@ -92,6 +92,7 @@ export default {
      * @return {Array}
      */
     days() {
+      // let t0 = performance.now()
       const days = []
       const daysInCalendar =
         this.daysFromPrevMonth + this.daysInMonth + this.daysFromNextMonth
@@ -103,6 +104,9 @@ export default {
         days.push(this.makeDay(i, dObj))
         this.utils.setDate(dObj, this.utils.getDate(dObj) + 1)
       }
+
+      // const t1 = performance.now()
+      // console.log(`Time taken: ${t1 - t0} milliseconds`)
       return days
     },
     /**
@@ -222,70 +226,11 @@ export default {
      * @return {Boolean}
      */
     isDisabledDate(date) {
-      return isDateDisabled(date, this.disabledDates, this.utils)
-    },
-    // eslint-disable-next-line complexity
-    isDisabledDate2(date) {
-      if (!this.hasDisabledConfig) {
-        return false
-      }
-
-      return (
-        this.isDisabledViaToOrFrom(date) ||
-        this.isDisabledViaSpecificDate(date) ||
-        this.isDisabledViaRange(date) ||
-        this.isDisabledViaDaysOfWeek(date) ||
-        this.isDisabledViaDaysOfMonth(date) ||
-        this.isDisabledViaCustomPredictor(date)
-      )
-    },
-    isDisabledViaDaysOfWeek(date) {
-      return (
-        this.hasDisabledDaysOfWeek &&
-        this.disabledDates.days.indexOf(this.utils.getDay(date)) !== -1
-      )
-    },
-    isDisabledViaDaysOfMonth(date) {
-      return (
-        this.hasDisabledDaysOfMonth &&
-        this.disabledDates.daysOfMonth.indexOf(this.utils.getDate(date)) !== -1
-      )
-    },
-    isDisabledViaRange(date) {
-      if (!this.hasDisabledRanges) {
-        return false
-      }
-      const { ranges } = this.disabledDates
-      return ranges.some((range) => {
-        const hasFrom = this.hasDisabledFrom(range)
-        const hasTo = this.hasDisabledTo(range)
-
-        return hasFrom && hasTo && date < range.to && date > range.from
-      })
-    },
-    isDisabledViaSpecificDate(date) {
-      if (!this.hasDisabledSpecificDates) {
-        return false
-      }
-      const { dates } = this.disabledDates
-
-      return dates.some((d) => {
-        return this.utils.compareDates(date, d)
-      })
-    },
-    isDisabledViaToOrFrom(date) {
-      return this.isDisabledViaTo(date) && this.isDisabledViaFrom(date)
-    },
-    isDisabledViaFrom(date) {
-      return this.hasDisabledFrom && date > this.disabledDates.to
-    },
-    isDisabledViaTo(date) {
-      return this.hasDisabledTo && date < this.disabledDates.to
-    },
-    isDisabledViaCustomPredictor(date) {
-      return (
-        this.hasDisabledCustomPredictor &&
-        this.disabledDates.customPredictor(date)
+      return isDateDisabled(
+        date,
+        this.disabledDates,
+        this.utils,
+        this.disabledConfig,
       )
     },
     /**
@@ -409,7 +354,7 @@ export default {
         date: showDate ? this.utils.getDate(dObj) : '',
         timestamp: dObj.valueOf(),
         isSelected: this.isSelectedDate(dObj),
-        isDisabled: showDate ? this.isDisabledDate2(dObj) : true,
+        isDisabled: showDate ? this.isDisabledDate(dObj) : true,
         isHighlighted: this.isHighlightedDate(dObj),
         isHighlightStart: this.isHighlightStart(dObj),
         isHighlightEnd: this.isHighlightEnd(dObj),

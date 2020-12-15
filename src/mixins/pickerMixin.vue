@@ -1,6 +1,7 @@
 <script>
 import PickerHeader from '~/components/PickerHeader.vue'
 import { makeDateUtils } from '~/utils/DateUtils'
+import { hasDisabledFrom, hasDisabledTo } from '~/utils/DisabledDatesUtils'
 
 export default {
   components: { PickerHeader },
@@ -92,37 +93,57 @@ export default {
         ? this.utils.getFullYear(this.disabledDates.to)
         : null
     },
+    disabledConfig() {
+      return {
+        exists: this.hasDisabledConfig,
+        hasCustomPredictor: this.hasDisabledCustomPredictor,
+        hasDaysOfMonth: this.hasDisabledDaysOfMonth,
+        hasDaysOfWeek: this.hasDisabledDaysOfWeek,
+        hasFrom: this.hasDisabledFrom,
+        hasRanges: this.hasDisabledRanges,
+        hasSpecificDates: this.hasDisabledSpecificDates,
+        hasTo: this.hasDisabledTo,
+      }
+    },
     hasDisabledConfig() {
-      return this.hasDisabledFrom || this.hasDisabledTo
+      return this.disabledDates && Object.keys(this.disabledDates).length > 0
     },
     hasDisabledCustomPredictor() {
-      return typeof this.disabledDates.customPredictor === 'function'
+      return (
+        this.hasDisabledConfig &&
+        typeof this.disabledDates.customPredictor === 'function'
+      )
     },
     hasDisabledDaysOfMonth() {
-      return typeof this.disabledDates.daysOfMonth !== 'undefined'
+      return (
+        this.hasDisabledConfig &&
+        typeof this.disabledDates.daysOfMonth !== 'undefined'
+      )
     },
     hasDisabledDaysOfWeek() {
-      return typeof this.disabledDates.days !== 'undefined'
+      return (
+        this.hasDisabledConfig && typeof this.disabledDates.days !== 'undefined'
+      )
     },
     hasDisabledFrom() {
-      return this.checkForDisabledFrom(this.disabledDates)
+      return hasDisabledFrom(this.disabledDates)
     },
     hasDisabledRanges() {
       return (
-        this.disabledDates &&
+        this.hasDisabledConfig &&
         typeof this.disabledDates.ranges !== 'undefined' &&
-        this.disabledDates.ranges.length
+        this.disabledDates.ranges.length > 0
       )
     },
     hasDisabledSpecificDates() {
       return (
-        this.disabledDates &&
+        this.hasDisabledConfig &&
         typeof this.disabledDates.dates !== 'undefined' &&
-        this.disabledDates.dates.length
+        this.disabledDates.dates.length > 0
       )
     },
     hasDisabledTo() {
-      return this.checkForDisabledTo(this.disabledDates)
+      return hasDisabledTo(this.disabledDates)
     },
     pageMonth() {
       return this.utils.getMonth(this.pageDate)
@@ -143,12 +164,6 @@ export default {
      */
     showPickerCalendar(type) {
       this.$emit(`show-${type}-calendar`)
-    },
-    checkForDisabledFrom(disabledDates) {
-      return disabledDates && typeof disabledDates.from !== 'undefined'
-    },
-    checkForDisabledTo(disabledDates) {
-      return disabledDates && typeof disabledDates.to !== 'undefined'
     },
   },
 }

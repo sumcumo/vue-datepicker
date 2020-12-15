@@ -27,7 +27,7 @@
 </template>
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
-import { isMonthDisabled, isYearDisabled } from '~/utils/DisabledDatesUtils'
+import { isYearDisabled } from '~/utils/DisabledDates'
 
 export default {
   name: 'DatepickerYearView',
@@ -116,36 +116,14 @@ export default {
      * @return {Boolean}
      */
     isDisabledYear(date) {
-      return isYearDisabled(date, this.disabledDates, this.utils)
+      return isYearDisabled(
+        date,
+        this.disabledDates,
+        this.utils,
+        this.disabledConfig,
+      )
     },
     // eslint-disable-next-line complexity,max-statements
-    isYearDisabled2(date) {
-      if (!this.hasDisabledConfig) {
-        return false
-      }
-
-      const year = this.utils.getFullYear(date)
-      const isDisabledTo = this.hasDisabledTo && year < this.disabledToYear
-      const isDisabledFrom =
-        this.hasDisabledFrom && year > this.disabledFromYear
-
-      // check if the whole year is disabled before checking each individual month
-      if (isDisabledTo || isDisabledFrom) {
-        return true
-      }
-
-      // now we have to check each month of the year
-      for (let i = 0; i < 12; i += 1) {
-        const monthDate = new Date(date)
-        monthDate.setMonth(i)
-        // if at least one month of this year is NOT disabled,
-        // we can conclude that this year SHOULD be selectable
-        if (!isMonthDisabled(monthDate, this.disabledDates, this.utils)) {
-          return false
-        }
-      }
-      return true
-    },
     /**
      * Whether the selected date is in this year
      * @param {Date} date
