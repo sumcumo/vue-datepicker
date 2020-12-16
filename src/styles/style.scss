@@ -150,21 +150,21 @@
       background: #cae5ed;
       color: #104756;
 
-      &:disabled {
-        color: #104756;
+      &:disabled:not(.selected) {
+        color: #accad2;
       }
     }
 
     &.muted {
       color: #757575;
 
-      &.selected,
-      &.highlighted {
-        color: #104756;
+      &:disabled {
+        color: #ddd;
       }
 
-      &:disabled:not(.selected) {
-        color: #ddd;
+      &.selected,
+      &.highlighted {
+        color: #114e5e;
       }
     }
   }
