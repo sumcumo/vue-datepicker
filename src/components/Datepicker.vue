@@ -95,7 +95,7 @@
 </template>
 <script>
 import en from '~/locale/translations/en'
-import { makeDateUtils } from '~/utils/DateUtils'
+import makeDateUtils from '~/utils/DateUtils'
 import calendarSlots from '~/utils/calendarSlots'
 import DateInput from '~/components/DateInput.vue'
 import inputProps from '~/mixins/inputProps.vue'
