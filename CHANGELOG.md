@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [3.0.0](https://github.com/sumcumo/vue-datepicker/compare/v2.1.2...v3.0.0) (2020-12-16)
 
+### Breaking Changes
+
+* Checkout the [Migration Guide](https://sumcumo.github.io/vue-datepicker/guide/migration#_2-x-x-to-3-x-x)
 
 ### Features
 
