@@ -43,7 +43,7 @@
 </template>
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
-import { isYearDisabled } from '~/utils/DisabledDatesUtils'
+import { isYearDisabled } from '~/utils/DisabledDates'
 
 export default {
   name: 'PickerYear',
@@ -113,13 +113,8 @@ export default {
      * @return {String}
      */
     getPageDecade() {
-      const yearPageDate = this.utils.getFullYear(this.pageDate)
-
-      const decadeStart =
-        Math.floor(yearPageDate / this.yearRange) * this.yearRange
-      const decadeEnd = decadeStart + (this.yearRange - 1)
       const { yearSuffix } = this.translation
-      return `${decadeStart} - ${decadeEnd}${yearSuffix}`
+      return `${this.pageDecadeStart} - ${this.pageDecadeEnd}${yearSuffix}`
     },
     isFocusOnFirstRow() {
       return this.focusedId < this.cols
@@ -159,20 +154,20 @@ export default {
      * @return {Boolean}
      */
     isNextDisabled() {
-      if (!this.disabledFromExists) {
+      if (!this.disabledConfig.has.from) {
         return false
       }
-      return this.disabledYearFrom <= this.pageDecadeEnd
+      return this.disabledConfig.from.year <= this.pageDecadeEnd
     },
     /**
      * Is the previous decade disabled?
      * @return {Boolean}
      */
     isPreviousDisabled() {
-      if (!this.disabledToExists) {
+      if (!this.disabledConfig.has.to) {
         return false
       }
-      return this.disabledYearTo >= this.pageDecadeStart
+      return this.disabledConfig.to.year >= this.pageDecadeStart
     },
     keyUpDelta() {
       if (this.isFocusUpForbidden) {
@@ -237,7 +232,7 @@ export default {
      * @return {Boolean}
      */
     isDisabledYear(date) {
-      return isYearDisabled(date, this.disabledDates, this.utils)
+      return isYearDisabled(date, this.utils, this.disabledConfig)
     },
     /**
      * Whether the selected date is in this year
@@ -245,10 +240,10 @@ export default {
      * @return {Boolean}
      */
     isSelectedYear(date) {
+      const year = this.utils.getFullYear(date)
+
       return (
-        this.selectedDate &&
-        this.utils.getFullYear(this.selectedDate) ===
-          this.utils.getFullYear(date)
+        this.selectedDate && year === this.utils.getFullYear(this.selectedDate)
       )
     },
     /**

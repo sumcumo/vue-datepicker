@@ -79,41 +79,40 @@ export default {
     currentView() {
       return this.$options.name.replace('Picker', '').toLowerCase()
     },
-    disabledFromExists() {
-      return this.disabledDates && this.disabledDates.from
-    },
-    disabledFromDay() {
-      return this.disabledFromExists
-        ? this.utils.getDate(this.disabledDates.from)
-        : null
-    },
-    disabledFromMonth() {
-      return this.disabledFromExists
-        ? this.utils.getMonth(this.disabledDates.from)
-        : null
-    },
-    disabledFromYear() {
-      return this.disabledFromExists
-        ? this.utils.getFullYear(this.disabledDates.from)
-        : null
-    },
-    disabledToExists() {
-      return this.disabledDates && this.disabledDates.to
-    },
-    disabledToDay() {
-      return this.disabledToExists
-        ? this.utils.getDate(this.disabledDates.to)
-        : null
-    },
-    disabledToMonth() {
-      return this.disabledToExists
-        ? this.utils.getMonth(this.disabledDates.to)
-        : null
-    },
-    disabledToYear() {
-      return this.disabledToExists
-        ? this.utils.getFullYear(this.disabledDates.to)
-        : null
+    // eslint-disable-next-line complexity
+    disabledConfig() {
+      const dd = this.disabledDates
+      const exists = typeof dd !== 'undefined' && Object.keys(dd).length > 0
+      const isDefined = (prop) => {
+        return exists && typeof dd[prop] !== 'undefined'
+      }
+      const hasFrom = isDefined('from')
+      const hasTo = isDefined('to')
+
+      return {
+        exists,
+        disabledDates: dd,
+        to: {
+          day: hasTo ? this.utils.getDate(dd.to) : null,
+          month: hasTo ? this.utils.getMonth(dd.to) : null,
+          year: hasTo ? this.utils.getFullYear(dd.to) : null,
+        },
+        from: {
+          day: hasFrom ? this.utils.getDate(dd.from) : null,
+          month: hasFrom ? this.utils.getMonth(dd.from) : null,
+          year: hasFrom ? this.utils.getFullYear(dd.from) : null,
+        },
+        has: {
+          customPredictor: isDefined('customPredictor'),
+          daysOfMonth: isDefined('daysOfMonth'),
+          daysOfWeek: isDefined('days'),
+          from: hasFrom,
+          ranges: isDefined('ranges') && dd.ranges.length > 0,
+          specificDates: isDefined('dates') && dd.dates.length > 0,
+          to: hasTo,
+        },
+        utils: this.utils,
+      }
     },
     focusedId() {
       return this.focusedCell.id

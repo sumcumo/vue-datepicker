@@ -63,8 +63,9 @@
 </template>
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
-import { isDateDisabled } from '~/utils/DisabledDatesUtils'
 import UpButton from '~/components/UpButton.vue'
+import { isDateDisabled } from '~/utils/DisabledDates'
+import { isDateHighlighted } from '~/utils/HighlightedDates'
 
 export default {
   name: 'PickerDay',
@@ -172,17 +173,52 @@ export default {
     firstDayOfWeekNumber() {
       return this.utils.getDayFromAbbr(this.firstDayOfWeek)
     },
+    // eslint-disable-next-line complexity
+    highlightedConfig() {
+      const hi = this.highlighted
+      const exists = typeof hi !== 'undefined' && Object.keys(hi).length > 0
+      const isDefined = (prop) => {
+        return exists && typeof hi[prop] !== 'undefined'
+      }
+
+      const hasFrom = isDefined('from')
+      const hasTo = isDefined('to')
+
+      return {
+        exists,
+        highlighted: hi,
+        to: {
+          day: hasTo ? this.utils.getDate(hi.to) : null,
+          month: hasTo ? this.utils.getMonth(hi.to) : null,
+          year: hasTo ? this.utils.getFullYear(hi.to) : null,
+        },
+        from: {
+          day: hasFrom ? this.utils.getDate(hi.from) : null,
+          month: hasFrom ? this.utils.getMonth(hi.from) : null,
+          year: hasFrom ? this.utils.getFullYear(hi.from) : null,
+        },
+        has: {
+          customPredictor: isDefined('customPredictor'),
+          daysOfMonth: isDefined('daysOfMonth'),
+          daysOfWeek: isDefined('days'),
+          from: hasFrom,
+          specificDates: isDefined('dates') && hi.dates.length > 0,
+          to: hasTo,
+          includeDisabled: isDefined('includeDisabled') && hi.includeDisabled,
+        },
+      }
+    },
     /**
      * Is the next month disabled?
      * @return {Boolean}
      */
     isNextDisabled() {
-      if (!this.disabledFromExists) {
+      if (!this.disabledConfig.has.from) {
         return false
       }
       return (
-        this.disabledFromMonth <= this.pageMonth &&
-        this.disabledFromYear <= this.pageYear
+        this.disabledConfig.from.month <= this.pageMonth &&
+        this.disabledConfig.from.year <= this.pageYear
       )
     },
     isPreviousWeekBlank() {
@@ -201,12 +237,12 @@ export default {
      * @return {Boolean}
      */
     isPreviousDisabled() {
-      if (!this.disabledToExists) {
+      if (!this.disabledConfig.has.to) {
         return false
       }
       return (
-        this.disabledToMonth >= this.pageMonth &&
-        this.disabledToYear >= this.pageYear
+        this.disabledConfig.to.month >= this.pageMonth &&
+        this.disabledConfig.to.year >= this.pageYear
       )
     },
     /**
@@ -346,7 +382,7 @@ export default {
      * @return {Boolean}
      */
     isDisabledDate(date) {
-      return isDateDisabled(date, this.disabledDates, this.utils)
+      return isDateDisabled(date, this.utils, this.disabledConfig)
     },
     /**
      * Whether a day is highlighted
@@ -356,56 +392,14 @@ export default {
      */
     // eslint-disable-next-line complexity,max-statements
     isHighlightedDate(date) {
-      let highlighted = false
       const dateWithoutTime = this.utils.resetDateTime(date)
-      if (
-        typeof this.highlighted === 'undefined' ||
-        (!(this.highlighted && this.highlighted.includeDisabled) &&
-          this.isDisabledDate(dateWithoutTime))
-      ) {
-        return false
-      }
 
-      if (typeof this.highlighted.dates !== 'undefined') {
-        this.highlighted.dates.forEach((d) => {
-          if (this.utils.compareDates(dateWithoutTime, d)) {
-            highlighted = true
-          }
-        })
-      }
-
-      const hasHighlightedTo =
-        typeof this.highlighted.to !== 'undefined' &&
-        dateWithoutTime <= this.highlighted.to
-
-      const hasHighlightedFrom =
-        typeof this.highlighted.from !== 'undefined' &&
-        dateWithoutTime >= this.highlighted.from
-
-      const hasHighlightedDays =
-        typeof this.highlighted.days !== 'undefined' &&
-        this.highlighted.days.indexOf(this.utils.getDay(dateWithoutTime)) !== -1
-
-      const hasHighlightedDaysOfMonth =
-        typeof this.highlighted.daysOfMonth !== 'undefined' &&
-        this.highlighted.daysOfMonth.indexOf(
-          this.utils.getDate(dateWithoutTime),
-        ) !== -1
-
-      const hasCustomPredictor =
-        typeof this.highlighted.customPredictor === 'function' &&
-        this.highlighted.customPredictor(dateWithoutTime)
-
-      if (
-        hasHighlightedDays ||
-        hasHighlightedDaysOfMonth ||
-        hasCustomPredictor ||
-        (hasHighlightedTo && hasHighlightedFrom)
-      ) {
-        highlighted = true
-      }
-
-      return highlighted
+      return isDateHighlighted(
+        dateWithoutTime,
+        this.utils,
+        this.highlightedConfig,
+        this.disabledConfig,
+      )
     },
     /**
      * Whether a day is highlighted and it is the last date

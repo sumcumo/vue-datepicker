@@ -5,15 +5,32 @@
       <h3>Default datepicker...</h3>
       <Datepicker
         placeholder="Select Date"
-        :append-to-body="false"
-        :disabled-dates="{
-          to: new Date(1991, 11, 31),
-          from: new Date(2040, 0, 1),
-        }"
-        minimum-view="day"
-        first-day-of-week="mon"
-        :year-picker-range="12"
         :inline="true"
+        minimum-view="day"
+        :disabled-dates="{
+          // to: new Date(2020, 2, 15),
+          // from: new Date(2021, 5, 15),
+          dates: [new Date(2021, 11, 25)],
+          // ranges: [
+          //   {
+          //     // Disable dates in given ranges (exclusive).
+          //     from: new Date(2020, 9, 31),
+          //     to: new Date(2021, 0, 1),
+          //   },
+          // {
+          //   to: new Date(2020, 11, 5),
+          //   from: new Date(2020, 10, 30),
+          // },
+          // ],
+          customPredictor: (date) => {
+            return date.getDate() % 3 === 0
+          },
+        }"
+        :highlighted="{
+          to: new Date(2020, 11, 30),
+          from: new Date(2020, 11, 20),
+          includeDisabled: true,
+        }"
       />
       <code>
         &lt;datepicker placeholder="Select Date"&gt;&lt;/datepicker&gt;

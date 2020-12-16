@@ -52,8 +52,8 @@
 </template>
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
-import { isMonthDisabled } from '~/utils/DisabledDatesUtils'
 import UpButton from '~/components/UpButton.vue'
+import { isMonthDisabled } from '~/utils/DisabledDates'
 
 export default {
   name: 'PickerMonth',
@@ -61,7 +61,7 @@ export default {
   mixins: [pickerMixin],
   computed: {
     /**
-     * Sets an array with all months
+     * Set an array with all months
      * @return {Array}
      */
     cells() {
@@ -101,24 +101,25 @@ export default {
       return !this.isNextDisabled && this.focusedId < this.disabledMonthFrom
     },
     /**
+     * Sets an array with all months
      * Is the next year disabled?
      * @return {Boolean}
      */
     isNextDisabled() {
-      if (!this.disabledFromExists) {
+      if (!this.disabledConfig.has.from) {
         return false
       }
-      return this.disabledFromYear <= this.pageYear
+      return this.disabledConfig.from.year <= this.pageYear
     },
     /**
      * Is the previous year disabled?
      * @return {Boolean}
      */
     isPreviousDisabled() {
-      if (!this.disabledToExists) {
+      if (!this.disabledConfig.has.to) {
         return false
       }
-      return this.disabledToYear >= this.pageYear
+      return this.disabledConfig.to.year >= this.pageYear
     },
     keyDownDelta() {
       const isLastRow = this.focusedId >= this.cells.length - this.cols
@@ -190,7 +191,7 @@ export default {
      * @return {Boolean}
      */
     isDisabledMonth(date) {
-      return isMonthDisabled(date, this.disabledDates, this.utils)
+      return isMonthDisabled(date, this.utils, this.disabledConfig)
     },
     /**
      * Whether the selected date is in this month
@@ -198,11 +199,13 @@ export default {
      * @return {Boolean}
      */
     isSelectedMonth(date) {
+      const month = this.utils.getMonth(date)
+      const year = this.utils.getFullYear(date)
+
       return (
         this.selectedDate &&
-        this.utils.getFullYear(this.selectedDate) ===
-          this.utils.getFullYear(date) &&
-        this.utils.getMonth(this.selectedDate) === this.utils.getMonth(date)
+        year === this.utils.getFullYear(this.selectedDate) &&
+        month === this.utils.getMonth(this.selectedDate)
       )
     },
     /**
