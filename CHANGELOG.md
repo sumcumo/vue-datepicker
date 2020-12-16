@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/sumcumo/vue-datepicker/compare/v2.1.2...v2.2.0) (2020-12-16)
+
+
+### Features
+
+* **dateinput:** format typeable inputs on blur ([#44](https://github.com/sumcumo/vue-datepicker/issues/44)) ([53f1e8f](https://github.com/sumcumo/vue-datepicker/commit/53f1e8fb9b429134e35676a01eabaf2bcfe667f8))
+* **datepicker:** Add prop to append calendar to body ([#37](https://github.com/sumcumo/vue-datepicker/issues/37)) ([ca8d021](https://github.com/sumcumo/vue-datepicker/commit/ca8d0210522c06903c9f7c5ea3792403e5f1fec3))
+* **datepicker:** Add prop to determine first-day-of-week ([#41](https://github.com/sumcumo/vue-datepicker/issues/41)) ([78abc56](https://github.com/sumcumo/vue-datepicker/commit/78abc562615eebac365d93c62be2175245b804f8))
+* **picker:** Replace blank days with dates from previous / next months ([#46](https://github.com/sumcumo/vue-datepicker/issues/46)) ([b14b611](https://github.com/sumcumo/vue-datepicker/commit/b14b611b506665b67dfd85c3f258869256abd969))
+* **pickeryear:** add yearPickerRange prop ([fe5d305](https://github.com/sumcumo/vue-datepicker/commit/fe5d305146f2cb98c7d985a1259104a32a0e9623))
+
+
+### Bug Fixes
+
+* **picker:** Make highlighted disabled text blue ([#62](https://github.com/sumcumo/vue-datepicker/issues/62)) ([feb32b1](https://github.com/sumcumo/vue-datepicker/commit/feb32b1f7932a466768f44c80148dedb8b6d2525))
+* **picker:** Next decade button is disabled ([#52](https://github.com/sumcumo/vue-datepicker/issues/52)) ([ea6e793](https://github.com/sumcumo/vue-datepicker/commit/ea6e7939b6dcf08af781feb8bb64e63609f53a31))
+* **picker:** Style/tweak stylesheet colours ([#47](https://github.com/sumcumo/vue-datepicker/issues/47)) ([78f331e](https://github.com/sumcumo/vue-datepicker/commit/78f331e95909ef4ad8703ff087af7468bcc986b9))
+
 ### [2.1.3](https://github.com/sumcumo/vue-datepicker/compare/v2.1.2...v2.1.3) (2020-11-16)
 
 ### Bug Fixes
