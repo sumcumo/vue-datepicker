@@ -32,6 +32,7 @@ const utils = {
    * @type {Boolean}
    */
   useUtc: false,
+
   /**
    * Returns the full year, using UTC or not
    * @param {Date} date
@@ -364,11 +365,7 @@ const utils = {
   },
 }
 
-export const makeDateUtils = (useUtc) => ({
+export default (useUtc) => ({
   ...utils,
   useUtc,
 })
-
-export default {
-  ...utils,
-}
