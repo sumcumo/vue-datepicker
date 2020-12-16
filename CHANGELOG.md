@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Breaking Changes
 
-* Checkout the [Migration Guide](https://sumcumo.github.io/vue-datepicker/guide/migration#_2-x-x-to-3-x-x)
+* Checkout the [Migration Guide](https://sumcumo.github.io/vue-datepicker/guide/Migration/#_2-x-x-to-3-x-x)
 
 ### Features
 

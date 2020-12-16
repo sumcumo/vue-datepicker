@@ -31,7 +31,7 @@ A datepicker Vue component. Compatible with Vue 2.x.
 
 Checkout the vuepress [Documentation](https://sumcumo.github.io/vue-datepicker/).
 There you will also find the [Demo](https://sumcumo.github.io/vue-datepicker/demo/) pages
-and the [Migration](https://sumcumo.github.io/vue-datepicker/guide/migration) guide.
+and the [Migration](https://sumcumo.github.io/vue-datepicker/guide/Migration) guide.
 
 ## Contribution
 
