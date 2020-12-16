@@ -149,20 +149,23 @@
       color: #104756;
 
       &.disabled {
-        color: #104756;
+        color: #accad2;
       }
     }
 
     &.muted {
       color: #757575;
 
-      &.selected,
-      &.highlighted {
+      &.selected {
         color: #104756;
       }
 
       &.disabled:not(.selected) {
         color: #ddd;
+
+        &.highlighted {
+          color: #accad2;
+        }
       }
     }
 
