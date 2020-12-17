@@ -126,12 +126,6 @@ export default {
     pageYear() {
       return this.utils.getFullYear(this.pageDate)
     },
-    pageDecadeStart() {
-      return Math.floor(this.pageYear / this.yearRange) * this.yearRange
-    },
-    pageDecadeEnd() {
-      return this.pageDecadeStart + this.yearRange - 1
-    },
     nextViewUp() {
       switch (this.currentView) {
         case 'day':

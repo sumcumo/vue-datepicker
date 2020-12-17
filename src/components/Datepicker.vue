@@ -317,9 +317,7 @@ export default {
      */
     checkFocus() {
       this.$nextTick(() => {
-        // N.B. During testing: wrap in a try/catch block to avoid the following error
-        // [Vue warn]: Error in nextTick: "SyntaxError: ':focus-within' is not a valid selector"
-
+        // Wrap in a try/catch block to avoid an error when running tests
         try {
           if (this.$refs['vdp-datepicker'].matches(':focus-within')) {
             this.hasBeenFocused = true

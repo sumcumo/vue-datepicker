@@ -206,6 +206,12 @@ export default {
       }
       return this.isRtl ? 1 : -1
     },
+    pageDecadeStart() {
+      return Math.floor(this.pageYear / this.yearRange) * this.yearRange
+    },
+    pageDecadeEnd() {
+      return this.pageDecadeStart + this.yearRange - 1
+    },
     todayCell() {
       const today = this.utils.getNewDateObject()
       for (let i = 0; i < this.cells.length; i += 1) {
