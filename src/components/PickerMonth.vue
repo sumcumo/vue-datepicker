@@ -11,7 +11,7 @@
         :class="allowedToShowView('year') ? 'up' : ''"
         @click="showPickerCalendar('year')"
       >
-        {{ pageYearName }}
+        {{ pageTitleYear }}
       </span>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
@@ -30,7 +30,7 @@
 </template>
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
-import { isMonthDisabled } from '~/utils/DisabledDates'
+import CellDisabled from '~/utils/CellDisabled'
 
 export default {
   name: 'DatepickerMonthView',
@@ -85,12 +85,12 @@ export default {
       return months
     },
     /**
-     * Get year name on current page.
+     * Which year to display on the current page.
      * @return {String}
      */
-    pageYearName() {
+    pageTitleYear() {
       const { yearSuffix } = this.translation
-      return `${this.utils.getFullYear(this.pageDate)}${yearSuffix}`
+      return `${this.pageYear}${yearSuffix}`
     },
   },
   methods: {
@@ -109,7 +109,10 @@ export default {
      * @return {Boolean}
      */
     isDisabledMonth(date) {
-      return isMonthDisabled(date, this.utils, this.disabledConfig)
+      return CellDisabled(this.utils, this.disabledDates).isMonthDisabled(
+        date,
+        this.utils,
+      )
     },
     // eslint-disable-next-line complexity,max-statements
     /**

@@ -1,8 +1,8 @@
-export const hasDisabledFrom = (disabledDates) => {
+const hasDisabledFrom = (disabledDates) => {
   return disabledDates && typeof disabledDates.from !== 'undefined'
 }
 
-export const hasDisabledTo = (disabledDates) => {
+const hasDisabledTo = (disabledDates) => {
   return disabledDates && typeof disabledDates.to !== 'undefined'
 }
 

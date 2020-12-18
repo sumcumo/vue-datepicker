@@ -7,7 +7,7 @@
       :previous="previousDecade"
     >
       <span>
-        {{ getPageDecade }}
+        {{ pageTitleDecade }}
       </span>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
@@ -27,7 +27,7 @@
 </template>
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
-import { isYearDisabled } from '~/utils/DisabledDates'
+import CellDisabled from '~/utils/CellDisabled'
 
 export default {
   name: 'DatepickerYearView',
@@ -60,10 +60,24 @@ export default {
       return this.disabledConfig.to.year >= this.pageDecadeStart
     },
     /**
+     * The year at which the current yearRange starts
+     * @return {Number}
+     */
+    pageDecadeStart() {
+      return Math.floor(this.pageYear / this.yearRange) * this.yearRange
+    },
+    /**
+     * The year at which the current yearRange ends
+     * @return {Number}
+     */
+    pageDecadeEnd() {
+      return this.pageDecadeStart + this.yearRange - 1
+    },
+    /**
      * Get decade name on current page.
      * @return {String}
      */
-    getPageDecade() {
+    pageTitleDecade() {
       const { yearSuffix } = this.translation
       return `${this.pageDecadeStart} - ${this.pageDecadeEnd}${yearSuffix}`
     },
@@ -116,7 +130,10 @@ export default {
      * @return {Boolean}
      */
     isDisabledYear(date) {
-      return isYearDisabled(date, this.utils, this.disabledConfig)
+      return CellDisabled(this.utils, this.disabledDates).isYearDisabled(
+        date,
+        this.utils,
+      )
     },
     // eslint-disable-next-line complexity,max-statements
     /**
