@@ -30,7 +30,7 @@
 </template>
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
-import CellDisabled from '~/utils/CellDisabled'
+import DisabledDate from '~/utils/DisabledDate'
 
 export default {
   name: 'DatepickerMonthView',
@@ -109,9 +109,8 @@ export default {
      * @return {Boolean}
      */
     isDisabledMonth(date) {
-      return CellDisabled(this.utils, this.disabledDates).isMonthDisabled(
+      return new DisabledDate(this.utils, this.disabledDates).isMonthDisabled(
         date,
-        this.utils,
       )
     },
     // eslint-disable-next-line complexity,max-statements

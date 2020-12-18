@@ -27,7 +27,7 @@
 </template>
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
-import CellDisabled from '~/utils/CellDisabled'
+import DisabledDate from '~/utils/DisabledDate'
 
 export default {
   name: 'DatepickerYearView',
@@ -130,9 +130,8 @@ export default {
      * @return {Boolean}
      */
     isDisabledYear(date) {
-      return CellDisabled(this.utils, this.disabledDates).isYearDisabled(
+      return new DisabledDate(this.utils, this.disabledDates).isYearDisabled(
         date,
-        this.utils,
       )
     },
     // eslint-disable-next-line complexity,max-statements

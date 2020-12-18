@@ -35,8 +35,8 @@
 </template>
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
-import CellDisabled from '~/utils/CellDisabled'
-import CellHighlighted from '~/utils/CellHighlighted'
+import DisabledDate from '~/utils/DisabledDate'
+import HighlightedDate from '~/utils/HighlightedDate'
 
 export default {
   name: 'DatepickerDayView',
@@ -196,8 +196,11 @@ export default {
       return new Date(this.utils.setMonth(d, this.utils.getMonth(d) + 1))
     },
     highlightedConfig() {
-      return CellHighlighted(this.utils, this.disabledDates, this.highlighted)
-        .highlightedConfig
+      return new HighlightedDate(
+        this.utils,
+        this.disabledDates,
+        this.highlighted,
+      ).config
     },
   },
   methods: {
@@ -241,9 +244,8 @@ export default {
      * @return {Boolean}
      */
     isDisabledDate(date) {
-      return CellDisabled(this.utils, this.disabledDates).isDateDisabled(
+      return new DisabledDate(this.utils, this.disabledDates).isDateDisabled(
         date,
-        this.utils,
       )
     },
     /**
@@ -255,11 +257,11 @@ export default {
     isHighlightedDate(date) {
       const dateWithoutTime = this.utils.resetDateTime(date)
 
-      return CellHighlighted(
+      return new HighlightedDate(
         this.utils,
         this.disabledDates,
         this.highlighted,
-      ).isDateHighlighted(dateWithoutTime, this.utils)
+      ).isDateHighlighted(dateWithoutTime)
     },
     /**
      * Whether a day is highlighted and it is the last date
