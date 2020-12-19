@@ -1,6 +1,7 @@
 <script>
 import PickerHeader from '~/components/PickerHeader.vue'
 import makeDateUtils from '~/utils/DateUtils'
+import DisabledDate from '~/utils/DisabledDate'
 
 export default {
   components: { PickerHeader },
@@ -80,39 +81,12 @@ export default {
       return this.$options.name.replace('Picker', '').toLowerCase()
     },
     // eslint-disable-next-line complexity
+    /**
+     * A look-up object created from 'disabledDates' prop
+     * @return {Object}
+     */
     disabledConfig() {
-      const dd = this.disabledDates
-      const exists = typeof dd !== 'undefined' && Object.keys(dd).length > 0
-      const isDefined = (prop) => {
-        return exists && typeof dd[prop] !== 'undefined'
-      }
-      const hasFrom = isDefined('from')
-      const hasTo = isDefined('to')
-
-      return {
-        exists,
-        disabledDates: dd,
-        to: {
-          day: hasTo ? this.utils.getDate(dd.to) : null,
-          month: hasTo ? this.utils.getMonth(dd.to) : null,
-          year: hasTo ? this.utils.getFullYear(dd.to) : null,
-        },
-        from: {
-          day: hasFrom ? this.utils.getDate(dd.from) : null,
-          month: hasFrom ? this.utils.getMonth(dd.from) : null,
-          year: hasFrom ? this.utils.getFullYear(dd.from) : null,
-        },
-        has: {
-          customPredictor: isDefined('customPredictor'),
-          daysOfMonth: isDefined('daysOfMonth'),
-          daysOfWeek: isDefined('days'),
-          from: hasFrom,
-          ranges: isDefined('ranges') && dd.ranges.length > 0,
-          specificDates: isDefined('dates') && dd.dates.length > 0,
-          to: hasTo,
-        },
-        utils: this.utils,
-      }
+      return new DisabledDate(this.utils, this.disabledDates).config
     },
     focusedId() {
       return this.focusedCell.id
@@ -120,9 +94,10 @@ export default {
     isUpDisabled() {
       return !this.allowedToShowView(this.nextViewUp)
     },
-    pageMonth() {
-      return this.utils.getMonth(this.pageDate)
-    },
+    /**
+     * Returns the current page's full year as an integer.
+     * @return {Number}
+     */
     pageYear() {
       return this.utils.getFullYear(this.pageDate)
     },

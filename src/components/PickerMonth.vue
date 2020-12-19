@@ -24,7 +24,7 @@
         @focus-nav="focusNav($event)"
         @next-view-up="showPickerCalendar(nextViewUp)"
       >
-        {{ pageYearName }}
+        {{ pageTitleYear }}
       </UpButton>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
@@ -53,7 +53,7 @@
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import UpButton from '~/components/UpButton.vue'
-import { isMonthDisabled } from '~/utils/DisabledDates'
+import DisabledDate from '~/utils/DisabledDate'
 
 export default {
   name: 'PickerMonth',
@@ -191,7 +191,9 @@ export default {
      * @return {Boolean}
      */
     isDisabledMonth(date) {
-      return isMonthDisabled(date, this.utils, this.disabledConfig)
+      return new DisabledDate(this.utils, this.disabledDates).isMonthDisabled(
+        date,
+      )
     },
     /**
      * Whether the selected date is in this month
@@ -216,6 +218,14 @@ export default {
         this.changeYear(1)
         this.focusIntervalButton(this.isRtl ? 'prev' : 'next')
       }
+    },
+    /**
+     * Which year to display on the current page.
+     * @return {String}
+     */
+    pageTitleYear() {
+      const { yearSuffix } = this.translation
+      return `${this.pageYear}${yearSuffix}`
     },
     /**
      * Decrements the year

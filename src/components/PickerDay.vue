@@ -25,8 +25,7 @@
         @focus-nav="focusNav($event)"
         @next-view-up="showPickerCalendar(nextViewUp)"
       >
-        {{ isYmd ? currYearName : currMonthName }}
-        {{ isYmd ? currMonthName : currYearName }}
+        {{ pageTitleMonth }}
       </UpButton>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
@@ -64,8 +63,8 @@
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import UpButton from '~/components/UpButton.vue'
-import { isDateDisabled } from '~/utils/DisabledDates'
-import { isDateHighlighted } from '~/utils/HighlightedDates'
+import DisabledDate from '~/utils/DisabledDate'
+import HighlightedDate from '~/utils/HighlightedDate'
 
 export default {
   name: 'PickerDay',
@@ -122,18 +121,16 @@ export default {
       const monthName = this.showFullMonthName
         ? this.translation.months
         : this.translation.monthsAbbr
-      return this.utils.getMonthNameAbbr(
-        this.utils.getMonth(this.pageDate),
-        monthName,
-      )
+
+      return this.utils.getMonthNameAbbr(this.pageMonth, monthName)
     },
     /**
      * Gets the name of the year that current page is on
-     * @return {Number}
+     * @return {String}
      */
     currYearName() {
       const { yearSuffix } = this.translation
-      return `${this.utils.getFullYear(this.pageDate)}${yearSuffix}`
+      return `${this.pageYear}${yearSuffix}`
     },
     /**
      * Returns an array of day names
@@ -173,40 +170,12 @@ export default {
     firstDayOfWeekNumber() {
       return this.utils.getDayFromAbbr(this.firstDayOfWeek)
     },
-    // eslint-disable-next-line complexity
     highlightedConfig() {
-      const hi = this.highlighted
-      const exists = typeof hi !== 'undefined' && Object.keys(hi).length > 0
-      const isDefined = (prop) => {
-        return exists && typeof hi[prop] !== 'undefined'
-      }
-
-      const hasFrom = isDefined('from')
-      const hasTo = isDefined('to')
-
-      return {
-        exists,
-        highlighted: hi,
-        to: {
-          day: hasTo ? this.utils.getDate(hi.to) : null,
-          month: hasTo ? this.utils.getMonth(hi.to) : null,
-          year: hasTo ? this.utils.getFullYear(hi.to) : null,
-        },
-        from: {
-          day: hasFrom ? this.utils.getDate(hi.from) : null,
-          month: hasFrom ? this.utils.getMonth(hi.from) : null,
-          year: hasFrom ? this.utils.getFullYear(hi.from) : null,
-        },
-        has: {
-          customPredictor: isDefined('customPredictor'),
-          daysOfMonth: isDefined('daysOfMonth'),
-          daysOfWeek: isDefined('days'),
-          from: hasFrom,
-          specificDates: isDefined('dates') && hi.dates.length > 0,
-          to: hasTo,
-          includeDisabled: isDefined('includeDisabled') && hi.includeDisabled,
-        },
-      }
+      return new HighlightedDate(
+        this.utils,
+        this.disabledDates,
+        this.highlighted,
+      ).config
     },
     /**
      * Is the next month disabled?
@@ -246,11 +215,20 @@ export default {
       )
     },
     /**
-     * Is this translation using year/month/day format?
-     * @return {Boolean}
+     * Returns the current page's month as an integer.
+     * @return {Number}
      */
-    isYmd() {
-      return this.translation.ymd && this.translation.ymd === true
+    pageMonth() {
+      return this.utils.getMonth(this.pageDate)
+    },
+    /**
+     * Get the current page's month & year.
+     * @return {String}
+     */
+    pageTitleMonth() {
+      return this.translation.ymd
+        ? `${this.currYearName} ${this.currMonthName}`
+        : `${this.currMonthName} ${this.currYearName}`
     },
     keyUpDelta() {
       if (this.showEdgeDates) {
@@ -328,6 +306,10 @@ export default {
       // return this.isRtl ? -1 : 1
       return 1
     },
+    /**
+     * The first day of the next page's month.
+     * @return {Date}
+     */
     nextPageDate() {
       const d = new Date(this.pageTimestamp)
       return new Date(this.utils.setMonth(d, this.utils.getMonth(d) + 1))
@@ -382,7 +364,9 @@ export default {
      * @return {Boolean}
      */
     isDisabledDate(date) {
-      return isDateDisabled(date, this.utils, this.disabledConfig)
+      return new DisabledDate(this.utils, this.disabledDates).isDateDisabled(
+        date,
+      )
     },
     /**
      * Whether a day is highlighted
@@ -390,16 +374,14 @@ export default {
      * @param {Date} date to check if highlighted
      * @return {Boolean}
      */
-    // eslint-disable-next-line complexity,max-statements
     isHighlightedDate(date) {
       const dateWithoutTime = this.utils.resetDateTime(date)
 
-      return isDateHighlighted(
-        dateWithoutTime,
+      return new HighlightedDate(
         this.utils,
-        this.highlightedConfig,
-        this.disabledConfig,
-      )
+        this.disabledDates,
+        this.highlighted,
+      ).isDateHighlighted(dateWithoutTime)
     },
     /**
      * Whether a day is highlighted and it is the last date
@@ -408,14 +390,13 @@ export default {
      * @return {Boolean}
      */
     isHighlightEnd(date) {
+      const config = this.highlightedConfig
+
       return (
         this.isHighlightedDate(date) &&
-        this.highlighted.to instanceof Date &&
-        this.utils.getFullYear(this.highlighted.to) ===
-          this.utils.getFullYear(date) &&
-        this.utils.getMonth(this.highlighted.to) ===
-          this.utils.getMonth(date) &&
-        this.utils.getDate(this.highlighted.to) === this.utils.getDate(date)
+        config.to.year === this.utils.getFullYear(date) &&
+        config.to.month === this.utils.getMonth(date) &&
+        config.to.day === this.utils.getDate(date)
       )
     },
     /**
@@ -425,14 +406,13 @@ export default {
      * @return {Boolean}
      */
     isHighlightStart(date) {
+      const config = this.highlightedConfig
+
       return (
         this.isHighlightedDate(date) &&
-        this.highlighted.from instanceof Date &&
-        this.utils.getFullYear(this.highlighted.from) ===
-          this.utils.getFullYear(date) &&
-        this.utils.getMonth(this.highlighted.from) ===
-          this.utils.getMonth(date) &&
-        this.utils.getDate(this.highlighted.from) === this.utils.getDate(date)
+        config.from.year === this.utils.getFullYear(date) &&
+        config.from.month === this.utils.getMonth(date) &&
+        config.from.day === this.utils.getDate(date)
       )
     },
     /**

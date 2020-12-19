@@ -14,7 +14,7 @@
       @focus-first-cell="focusFirstNonDisabledCell"
     >
       <span class="decade">
-        {{ getPageDecade }}
+        {{ pageTitleDecade }}
       </span>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
@@ -43,7 +43,7 @@
 </template>
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
-import { isYearDisabled } from '~/utils/DisabledDates'
+import DisabledDate from '~/utils/DisabledDate'
 
 export default {
   name: 'PickerYear',
@@ -206,11 +206,27 @@ export default {
       }
       return this.isRtl ? 1 : -1
     },
+    /**
+     * The year at which the current yearRange starts
+     * @return {Number}
+     */
     pageDecadeStart() {
       return Math.floor(this.pageYear / this.yearRange) * this.yearRange
     },
+    /**
+     * The year at which the current yearRange ends
+     * @return {Number}
+     */
     pageDecadeEnd() {
       return this.pageDecadeStart + this.yearRange - 1
+    },
+    /**
+     * Get decade name on current page.
+     * @return {String}
+     */
+    pageTitleDecade() {
+      const { yearSuffix } = this.translation
+      return `${this.pageDecadeStart} - ${this.pageDecadeEnd}${yearSuffix}`
     },
     todayCell() {
       const today = this.utils.getNewDateObject()
@@ -238,7 +254,9 @@ export default {
      * @return {Boolean}
      */
     isDisabledYear(date) {
-      return isYearDisabled(date, this.utils, this.disabledConfig)
+      return new DisabledDate(this.utils, this.disabledDates).isYearDisabled(
+        date,
+      )
     },
     /**
      * Whether the selected date is in this year

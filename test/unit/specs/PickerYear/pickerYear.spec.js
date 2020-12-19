@@ -34,12 +34,12 @@ describe('PickerYear: shallowMount', () => {
       pageDate: new Date(2021, 1, 1),
     })
     await wrapper.vm.$nextTick()
-    expect(wrapper.vm.getPageDecade).toEqual('2020 - 2029')
+    expect(wrapper.vm.pageTitleDecade).toEqual('2020 - 2029')
     wrapper.setProps({
       pageDate: new Date(2001, 1, 1),
     })
     await wrapper.vm.$nextTick()
-    expect(wrapper.vm.getPageDecade).toEqual('2000 - 2009')
+    expect(wrapper.vm.pageTitleDecade).toEqual('2000 - 2009')
   })
 
   it('emits an event when selected', () => {
@@ -53,7 +53,7 @@ describe('PickerYear: shallowMount', () => {
       yearRange: 12,
     })
     await wrapper.vm.$nextTick()
-    expect(wrapper.vm.getPageDecade).toEqual('2016 - 2027')
+    expect(wrapper.vm.pageTitleDecade).toEqual('2016 - 2027')
     expect(wrapper.vm.$el.querySelectorAll('.cell.year').length).toEqual(12)
   })
 })
