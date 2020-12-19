@@ -13,9 +13,7 @@
       @check-focus="$emit('check-focus')"
       @focus-first-cell="focusFirstNonDisabledCell"
     >
-      <span class="decade">
-        {{ pageTitleDecade }}
-      </span>
+      <span class="decade">{{ pageTitleDecade }}</span>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>

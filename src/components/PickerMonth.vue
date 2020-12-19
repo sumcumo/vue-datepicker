@@ -142,12 +142,12 @@ export default {
       return this.isRtl ? 1 : -1
     },
     /**
-     * Get year name on current page.
+     * Which year to display on the current page.
      * @return {String}
      */
-    pageYearName() {
+    pageTitleYear() {
       const { yearSuffix } = this.translation
-      return `${this.utils.getFullYear(this.pageDate)}${yearSuffix}`
+      return `${this.pageYear}${yearSuffix}`
     },
     todayCell() {
       const today = this.utils.getNewDateObject()
@@ -218,14 +218,6 @@ export default {
         this.changeYear(1)
         this.focusIntervalButton(this.isRtl ? 'prev' : 'next')
       }
-    },
-    /**
-     * Which year to display on the current page.
-     * @return {String}
-     */
-    pageTitleYear() {
-      const { yearSuffix } = this.translation
-      return `${this.pageYear}${yearSuffix}`
     },
     /**
      * Decrements the year

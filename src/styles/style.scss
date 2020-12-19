@@ -36,7 +36,6 @@
     display: flex;
     height: 40px;
     justify-content: space-between;
-    line-height: 40px;
 
     button {
       border: none;
@@ -106,9 +105,10 @@
     }
 
     .decade {
-      display: inline-block;
+      align-items: center;
+      display: flex;
       flex-grow: 5;
-      text-align: center;
+      justify-content: center;
     }
   }
 
