@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 
-import { configExists, isDefined, isDefinedAsDate } from './CellUtils'
+import makeCellUtils from './cellUtils'
 
 export default class DisabledDate {
   constructor(utils, disabledDates) {
@@ -23,46 +23,27 @@ export default class DisabledDate {
     this._disabledDates = disabledDates
   }
 
-  // eslint-disable-next-line complexity
   get config() {
     const dd = this._disabledDates
-    const utils = this._utils
-    const hasFrom = isDefinedAsDate(dd, 'from')
-    const hasTo = isDefinedAsDate(dd, 'to')
+    const u = makeCellUtils(this._utils)
 
     return {
-      exists: configExists(dd),
-      to: {
-        day: hasTo ? utils.getDate(dd.to) : null,
-        month: hasTo ? utils.getMonth(dd.to) : null,
-        year: hasTo ? utils.getFullYear(dd.to) : null,
-      },
-      from: {
-        day: hasFrom ? utils.getDate(dd.from) : null,
-        month: hasFrom ? utils.getMonth(dd.from) : null,
-        year: hasFrom ? utils.getFullYear(dd.from) : null,
-      },
+      exists: u.configExists(dd),
+      to: u.dayMonthYear(dd, 'to'),
+      from: u.dayMonthYear(dd, 'from'),
       has: {
-        customPredictor: isDefined(dd, 'customPredictor'),
-        daysOfMonth: isDefined(dd, 'daysOfMonth'),
-        daysOfWeek: isDefined(dd, 'days'),
-        from: hasFrom,
-        ranges: isDefined(dd, 'ranges') && dd.ranges.length > 0,
-        specificDates: isDefined(dd, 'dates') && dd.dates.length > 0,
-        to: hasTo,
+        customPredictor: u.isDefined(dd, 'customPredictor'),
+        daysOfMonth: u.hasArray(dd, 'daysOfMonth'),
+        daysOfWeek: u.hasArray(dd, 'days'),
+        from: u.hasDate(dd, 'from'),
+        ranges: u.hasArray(dd, 'ranges'),
+        specificDates: u.hasArray(dd, 'dates'),
+        to: u.hasDate(dd, 'to'),
       },
     }
   }
 
-  hasDisabledFrom = (disabledDates) => {
-    return disabledDates && typeof disabledDates.from !== 'undefined'
-  }
-
-  hasDisabledTo = (disabledDates) => {
-    return disabledDates && typeof disabledDates.to !== 'undefined'
-  }
-
-  daysInMonth = (date) => {
+  daysInMonth(date) {
     const utils = this._utils
     const month = utils.getMonth(date)
     const year = utils.getFullYear(date)
@@ -85,10 +66,11 @@ export default class DisabledDate {
         if (!has.ranges) return false
 
         const { ranges } = dd
+        const u = makeCellUtils(this._utils)
 
         return ranges.some((thisRange) => {
-          const hasFrom = this.hasDisabledFrom(thisRange)
-          const hasTo = this.hasDisabledTo(thisRange)
+          const hasFrom = u.isDefined(thisRange, 'from')
+          const hasTo = u.isDefined(thisRange, 'to')
 
           return (
             hasFrom && hasTo && date < thisRange.to && date > thisRange.from
@@ -225,9 +207,7 @@ export default class DisabledDate {
     }
 
     // now we have to check each day of the month
-    const daysInMonth = this.daysInMonth(date)
-
-    for (let i = 1; i <= daysInMonth; i += 1) {
+    for (let i = 1; i <= this.daysInMonth(date); i += 1) {
       const dayDate = new Date(date)
       dayDate.setDate(i)
       // if at least one day of this month is NOT disabled,

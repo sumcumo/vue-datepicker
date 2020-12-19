@@ -9,8 +9,8 @@
         placeholder="Select Date"
         :inline="true"
         :disabled-dates="{
-          // to: new Date(2020, 10, 15),
-          // from: new Date(2021, 0, 15),
+          to: new Date(2020, 10, 15),
+          from: new Date(2021, 0, 15),
           dates: [new Date(2020, 11, temp)],
           // ranges: [
           //   {

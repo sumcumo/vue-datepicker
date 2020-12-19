@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 
-import { configExists, isDefined, isDefinedAsDate } from './CellUtils'
+import makeCellUtils from './cellUtils'
 import DisabledDate from './DisabledDate'
 
 export default class HighlightedDate {
@@ -32,33 +32,23 @@ export default class HighlightedDate {
     this._highlighted = highlighted
   }
 
-  // eslint-disable-next-line complexity
   get config() {
     const hi = this._highlighted
-    const utils = this._utils
-    const hasFrom = isDefinedAsDate(hi, 'from')
-    const hasTo = isDefinedAsDate(hi, 'to')
+    const u = makeCellUtils(this._utils)
 
     return {
-      exists: configExists(hi),
-      to: {
-        day: hasTo ? utils.getDate(hi.to) : null,
-        month: hasTo ? utils.getMonth(hi.to) : null,
-        year: hasTo ? utils.getFullYear(hi.to) : null,
-      },
-      from: {
-        day: hasFrom ? utils.getDate(hi.from) : null,
-        month: hasFrom ? utils.getMonth(hi.from) : null,
-        year: hasFrom ? utils.getFullYear(hi.from) : null,
-      },
+      exists: u.configExists(hi),
+      to: u.dayMonthYear(hi, 'to'),
+      from: u.dayMonthYear(hi, 'from'),
       has: {
-        customPredictor: isDefined(hi, 'customPredictor'),
-        daysOfMonth: isDefined(hi, 'daysOfMonth'),
-        daysOfWeek: isDefined(hi, 'days'),
-        from: hasFrom,
-        specificDates: isDefined(hi, 'dates') && hi.dates.length > 0,
-        to: hasTo,
-        includeDisabled: isDefined(hi, 'includeDisabled') && hi.includeDisabled,
+        customPredictor: u.isDefined(hi, 'customPredictor'),
+        daysOfMonth: u.hasArray(hi, 'daysOfMonth'),
+        daysOfWeek: u.hasArray(hi, 'days'),
+        from: u.hasDate(hi, 'from'),
+        specificDates: u.hasArray(hi, 'dates'),
+        to: u.hasDate(hi, 'to'),
+        includeDisabled:
+          u.isDefined(hi, 'includeDisabled') && hi.includeDisabled,
       },
     }
   }
@@ -70,7 +60,7 @@ export default class HighlightedDate {
     return new DisabledDate(utils, disabledDates).isDateDisabled(date)
   }
 
-  isHighlightingNotPossible = (date) => {
+  isHighlightingNotPossible(date) {
     const { config } = this
 
     if (!config.exists) return false
