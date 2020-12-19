@@ -89,30 +89,12 @@ export default {
     cellsOnLastRow() {
       return this.yearRange - this.fullRowCells
     },
-    disabledYearFrom() {
-      return this.disabledDates.from
-        ? this.utils.getFullYear(this.disabledDates.from)
-        : null
-    },
-    disabledYearTo() {
-      return this.disabledDates.to
-        ? this.utils.getFullYear(this.disabledDates.to)
-        : null
-    },
     /**
      * The number of cells which are not on the last row
      * @return {Number}
      */
     fullRowCells() {
       return Math.floor(this.yearRange / this.cols) * this.cols
-    },
-    /**
-     * Get decade name on current page.
-     * @return {String}
-     */
-    getPageDecade() {
-      const { yearSuffix } = this.translation
-      return `${this.pageDecadeStart} - ${this.pageDecadeEnd}${yearSuffix}`
     },
     isFocusOnFirstRow() {
       return this.focusedId < this.cols
@@ -127,16 +109,18 @@ export default {
       )
     },
     isFocusLeftForbidden() {
+      const disabled = this.disabledConfig
       if (this.isRtl) {
-        return this.focusedCell.year >= this.disabledYearFrom
+        return this.focusedCell.year >= disabled.from.year
       }
-      return this.focusedCell.year <= this.disabledYearTo
+      return this.focusedCell.year <= disabled.to.year
     },
     isFocusRightForbidden() {
+      const disabled = this.disabledConfig
       if (this.isRtl) {
-        return this.focusedCell.year <= this.disabledYearTo
+        return this.focusedCell.year <= disabled.to.year
       }
-      return this.focusedCell.year >= this.disabledYearFrom
+      return this.focusedCell.year >= disabled.from.year
     },
     isFocusUpForbidden() {
       return this.isPreviousDisabled && this.isFocusOnFirstRow

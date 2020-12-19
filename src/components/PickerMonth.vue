@@ -80,25 +80,21 @@ export default {
       }
       return months
     },
-    disabledMonthFrom() {
-      return this.utils.getMonth(this.disabledDates.from)
-    },
-    disabledMonthTo() {
-      return this.utils.getMonth(this.disabledDates.to)
-    },
     // canFocusUp() {},
     // canFocusDown() {},
     canFocusLeft() {
+      const config = this.disabledConfig
       if (this.isRtl) {
-        return this.isNextDisabled && this.focusedId >= this.disabledMonthFrom
+        return this.isNextDisabled && this.focusedId >= config.from.month
       }
-      return !this.isPreviousDisabled && this.focusedId > this.disabledMonthTo
+      return !this.isPreviousDisabled && this.focusedId > config.to.month
     },
     canFocusRight() {
+      const config = this.disabledConfig
       if (this.isRtl) {
-        return this.isPreviousDisabled && this.focusedId <= this.disabledMonthTo
+        return this.isPreviousDisabled && this.focusedId <= config.to.month
       }
-      return !this.isNextDisabled && this.focusedId < this.disabledMonthFrom
+      return !this.isNextDisabled && this.focusedId < config.from.month
     },
     /**
      * Sets an array with all months

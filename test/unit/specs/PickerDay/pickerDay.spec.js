@@ -35,7 +35,7 @@ describe('PickerDay: shallowMount', () => {
   })
 
   it('knows the current page month', () => {
-    expect(wrapper.vm.getPageMonth()).toEqual(1)
+    expect(wrapper.vm.pageMonth).toEqual(1)
   })
 })
 

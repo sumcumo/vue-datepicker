@@ -8,6 +8,7 @@
       <Datepicker
         placeholder="Select Date"
         :inline="true"
+        :language="languages['he']"
         :disabled-dates="{
           to: new Date(2020, 10, 15),
           from: new Date(2021, 0, 15),

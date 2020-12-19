@@ -285,8 +285,8 @@ export default {
           this.focus(newId)
         })
       }
-      // return this.isRtl ? 1 : -1
-      return -1
+      return this.isRtl ? 1 : -1
+      // return -1
     },
     keyRightDelta() {
       if (this.showEdgeDates) {
@@ -303,8 +303,8 @@ export default {
           this.focus(newId)
         })
       }
-      // return this.isRtl ? -1 : 1
-      return 1
+      return this.isRtl ? -1 : 1
+      // return 1
     },
     /**
      * The first day of the next page's month.
@@ -351,12 +351,6 @@ export default {
         'highlight-start': day.isHighlightStart,
         'highlight-end': day.isHighlightEnd,
       }
-    },
-    /**
-     * @return {Number}
-     */
-    getPageMonth() {
-      return this.utils.getMonth(this.pageDate)
     },
     /**
      * Whether a day is disabled
