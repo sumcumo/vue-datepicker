@@ -11,24 +11,14 @@ export default class HighlightedDate {
   }
 
   set utils(utils) {
-    if (typeof utils !== 'object') {
-      throw new TypeError('utils must be an object')
-    }
-
     this._utils = utils
   }
 
   set disabledDates(disabledDates) {
-    if (typeof disabledDates !== 'object') {
-      this._disabledDates = undefined
-    }
     this._disabledDates = disabledDates
   }
 
   set highlighted(highlighted) {
-    if (typeof highlighted !== 'object') {
-      this._highlighted = undefined
-    }
     this._highlighted = highlighted
   }
 

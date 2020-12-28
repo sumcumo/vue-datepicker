@@ -80,8 +80,6 @@ export default {
       }
       return months
     },
-    // canFocusUp() {},
-    // canFocusDown() {},
     canFocusLeft() {
       const config = this.disabledConfig
       if (this.isRtl) {
