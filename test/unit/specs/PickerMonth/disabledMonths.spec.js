@@ -28,6 +28,16 @@ describe('PickerMonth', () => {
     expect(wrapper.emitted['select-month']).toBeFalsy()
   })
 
+  it('should detect a disabled month when the `to` year is in the past', () => {
+    wrapper.setProps({
+      disabledDates: {
+        to: new Date(2017, 0, 1),
+      },
+    })
+
+    expect(wrapper.vm.isDisabledMonth(new Date(2016, 0, 1))).toEqual(true)
+  })
+
   it('should close without warning when its undefined', () => {
     wrapper.setProps({
       disabledDates: undefined,

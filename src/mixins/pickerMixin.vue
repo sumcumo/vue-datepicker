@@ -1,6 +1,7 @@
 <script>
 import PickerHeader from '~/components/PickerHeader.vue'
 import makeDateUtils from '~/utils/DateUtils'
+import DisabledDate from '~/utils/DisabledDate'
 
 export default {
   components: { PickerHeader },
@@ -60,6 +61,22 @@ export default {
       },
       utils: makeDateUtils(this.useUtc),
     }
+  },
+  computed: {
+    /**
+     * A look-up object created from 'disabledDates' prop
+     * @return {Object}
+     */
+    disabledConfig() {
+      return new DisabledDate(this.utils, this.disabledDates).config
+    },
+    /**
+     * Returns the current page's full year as an integer.
+     * @return {Number}
+     */
+    pageYear() {
+      return this.utils.getFullYear(this.pageDate)
+    },
   },
   methods: {
     /**
