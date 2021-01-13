@@ -107,6 +107,12 @@ describe('Datepicker mounted', () => {
     )
     expect(wrapper.vm.currentPicker).toEqual('PickerMonth')
   })
+
+  it('closes and clears the date when the escape key is pressed', () => {
+    wrapper.trigger('keyup.esc')
+    expect(wrapper.emitted('closed')).toHaveLength(1)
+    expect(wrapper.emitted('cleared')).toHaveLength(1)
+  })
 })
 
 describe('Datepicker shallowMounted', () => {
@@ -130,7 +136,7 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapper.vm.value).toEqual(date)
   })
 
-  it('correctly sets the value from method', () => {
+  it('correctly sets the value via the `setValue` method', () => {
     const newDate = new Date(2016, 9, 15)
     expect(typeof wrapper.vm.setValue).toEqual('function')
     wrapper.vm.setValue(newDate)
@@ -156,11 +162,8 @@ describe('Datepicker shallowMounted', () => {
   })
 
   it('clears the date', () => {
-    const dateTemp = new Date(2016, 9, 9)
-    const wrapperTemp = shallowMount(Datepicker)
-    wrapperTemp.vm.setDate(dateTemp.valueOf())
-    wrapperTemp.vm.clearDate()
-    expect(wrapperTemp.vm.selectedDate).toEqual(null)
+    wrapper.vm.clearDate()
+    expect(wrapper.vm.selectedDate).toEqual(null)
   })
 
   it('should set pageTimestamp to be now', () => {
