@@ -5,11 +5,11 @@
       <h3>Default datepicker...</h3>
       <Datepicker
         placeholder="Select Date"
-        :inline="true"
+        :inline="false"
         :language="languages['de']"
         :disabled-dates="{
-          to: new Date(2020, 10, 15),
-          from: new Date(2021, 0, 15),
+          // to: new Date(2020, 10, 15),
+          // from: new Date(2021, 0, 15),
           // ranges: [
           //   {
           //     // Disable dates in given ranges (exclusive).

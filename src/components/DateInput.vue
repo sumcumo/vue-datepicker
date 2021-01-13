@@ -196,11 +196,6 @@ export default {
         }
       })
     },
-    showCalendarByButton() {
-      if (!this.typeable) {
-        this.toggleCalendar()
-      }
-    },
     showCalendarByClick() {
       if (!this.showCalendarOnButtonClick) {
         this.toggleCalendar()
