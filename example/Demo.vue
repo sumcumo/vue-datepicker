@@ -1,18 +1,15 @@
 <template>
   <div id="app">
-    <button @click="temp--">Decrease</button>
-    <button @click="temp++">Increase {{ temp }}</button>
     <h1>Datepicker Examples</h1>
     <div class="example">
       <h3>Default datepicker...</h3>
       <Datepicker
         placeholder="Select Date"
         :inline="true"
-        :language="languages['ar']"
+        :language="languages['de']"
         :disabled-dates="{
           to: new Date(2020, 10, 15),
           from: new Date(2021, 0, 15),
-          dates: [new Date(2020, 11, temp)],
           // ranges: [
           //   {
           //     // Disable dates in given ranges (exclusive).
@@ -383,7 +380,6 @@ export default {
       format: 'd MMMM yyyy',
       disabledDates: {},
       openDate: null,
-      temp: 25,
       disabledFn: {
         customPredictor(date) {
           const year = date.getFullYear()

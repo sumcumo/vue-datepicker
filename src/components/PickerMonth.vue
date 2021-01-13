@@ -14,18 +14,18 @@
       @focus-first-cell="focusFirstNonDisabledCell"
       @focus-up-button="focusUpButton"
     >
-      <UpButton
+      <button
         ref="up"
-        class="month__year_btn"
-        :is-disabled="isUpDisabled"
-        :is-rtl="isRtl"
-        @check-focus="$emit('check-focus')"
-        @focus-first-cell="focusFirstNonDisabledCell"
-        @focus-nav="focusNav($event)"
-        @next-view-up="showPickerCalendar(nextViewUp)"
+        class="up month__year_btn"
+        :disabled="isUpDisabled"
+        @blur="emitCheckFocus"
+        @click="showPickerCalendar(nextViewUp)"
+        @keydown.down.prevent="focusFirstNonDisabledCell"
+        @keydown.left.prevent="focusNav(isRtl ? 'next' : 'prev')"
+        @keydown.right.prevent="focusNav(isRtl ? 'prev' : 'next')"
       >
         {{ pageTitleYear }}
-      </UpButton>
+      </button>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
@@ -52,12 +52,10 @@
 </template>
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
-import UpButton from '~/components/UpButton.vue'
 import DisabledDate from '~/utils/DisabledDate'
 
 export default {
   name: 'PickerMonth',
-  components: { UpButton },
   mixins: [pickerMixin],
   computed: {
     /**

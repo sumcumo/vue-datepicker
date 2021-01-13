@@ -143,6 +143,11 @@ export default {
       }
       this.focusFirstNonDisabledCell()
     },
+    emitCheckFocus() {
+      if (!this.typeable) {
+        this.$emit('check-focus')
+      }
+    },
     focus(id) {
       if (this.typeable) {
         return
@@ -221,7 +226,7 @@ export default {
     },
     focusUpButton() {
       if (this.$refs.up) {
-        this.$refs.up.$el.focus()
+        this.$refs.up.focus()
         return true
       }
       return false

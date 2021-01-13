@@ -83,7 +83,7 @@ export default {
   },
   methods: {
     /**
-     * Focus the up button, or if its disabled, skip to the other prev/next button
+     * Focus the up button, or if it is disabled, skip to the prev/next button
      */
     focusUp(fromButton) {
       if (!this.isUpDisabled) {
