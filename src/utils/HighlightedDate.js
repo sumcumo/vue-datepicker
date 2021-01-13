@@ -5,26 +5,8 @@ import DisabledDate from './DisabledDate'
 
 export default class HighlightedDate {
   constructor(utils, disabledDates, highlighted) {
-    this.utils = utils
-    this.disabledDates = disabledDates
-    this.highlighted = highlighted
-  }
-
-  set utils(utils) {
     this._utils = utils
-  }
-
-  set disabledDates(disabledDates) {
-    if (typeof disabledDates !== 'object') {
-      this._disabledDates = undefined
-    }
     this._disabledDates = disabledDates
-  }
-
-  set highlighted(highlighted) {
-    if (typeof highlighted !== 'object') {
-      this._highlighted = undefined
-    }
     this._highlighted = highlighted
   }
 

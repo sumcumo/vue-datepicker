@@ -4,18 +4,7 @@ import makeCellUtils from './cellUtils'
 
 export default class DisabledDate {
   constructor(utils, disabledDates) {
-    this.utils = utils
-    this.disabledDates = disabledDates
-  }
-
-  set utils(utils) {
     this._utils = utils
-  }
-
-  set disabledDates(disabledDates) {
-    if (typeof disabledDates !== 'object') {
-      this._disabledDates = undefined
-    }
     this._disabledDates = disabledDates
   }
 
