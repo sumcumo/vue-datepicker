@@ -108,28 +108,47 @@ describe('dateUtils', () => {
   })
 
   it('should parse english dates', () => {
-    expect(
-      dateUtils.parseDate('16 April 2020', 'd MMMM yyyy', en, null),
-    ).toEqual('2020-04-16T00:00:00')
-    expect(
-      dateUtils.parseDate('16th Apr 2020', 'do MMM yyyy', en, null),
-    ).toEqual('2020-04-16T00:00:00')
-    expect(
-      dateUtils.parseDate('Thu 16th Apr 2020', 'E do MMM yyyy', en, null),
-    ).toEqual('2020-04-16T00:00:00')
-    expect(dateUtils.parseDate('16.04.2020', 'dd.MM.yyyy', en, null)).toEqual(
+    expect(dateUtils.parseDate('16 April 2020', 'd MMMM yyyy')).toEqual(
       '2020-04-16T00:00:00',
     )
-    expect(dateUtils.parseDate('04.16.2020', 'MM.dd.yyyy', en, null)).toEqual(
+    expect(dateUtils.parseDate('16th Apr 2020', 'do MMM yyyy')).toEqual(
+      '2020-04-16T00:00:00',
+    )
+    expect(dateUtils.parseDate('Thu 16th Apr 2020', 'E do MMM yyyy')).toEqual(
+      '2020-04-16T00:00:00',
+    )
+    expect(dateUtils.parseDate('16.04.2020', 'dd.MM.yyyy')).toEqual(
+      '2020-04-16T00:00:00',
+    )
+    expect(dateUtils.parseDate('04.16.2020', 'MM.dd.yyyy')).toEqual(
       '2020-04-16T00:00:00',
     )
   })
 
   it('should fail to parse because of missing parser', () => {
     expect(() => {
-      dateUtils.parseDate('16 April 2020', () => {}, en, null)
+      dateUtils.parseDate('16 April 2020', () => {})
     }).toThrowError(
       'Parser need to be a function if you are using a custom formatter',
+    )
+  })
+
+  it('should parse formats without day', () => {
+    expect(dateUtils.parseDate('April 2020', 'MMMM yyyy')).toEqual(
+      '2020-04-01T00:00:00',
+    )
+  })
+
+  it('should parse formats without month', () => {
+    expect(dateUtils.parseDate('15 2020', 'dd yyyy')).toEqual(
+      '2020-01-15T00:00:00',
+    )
+  })
+
+  it('should parse formats without year', () => {
+    const currentYear = new Date().getFullYear()
+    expect(dateUtils.parseDate('15 April', 'dd MMMM')).toEqual(
+      `${currentYear}-04-15T00:00:00`,
     )
   })
 

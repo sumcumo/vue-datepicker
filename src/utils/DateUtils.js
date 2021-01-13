@@ -5,7 +5,7 @@ const getParsedDate = ({ formatStr, dateStr, translation }) => {
   const splitter = formatStr.match(/-|\/|\s|\./) || ['-']
   const df = formatStr.split(splitter[0])
   const ds = dateStr.split(splitter[0])
-  const ymd = [0, 0, 0]
+  const ymd = [new Date().getFullYear(), '01', '01']
   for (let i = 0; i < df.length; i += 1) {
     if (/yyyy/i.test(df[i])) {
       ymd[0] = ds[i]
@@ -255,8 +255,7 @@ const utils = {
    * @param {Object} translation
    * @return {String}
    */
-  formatDate(date, formatStr, translation) {
-    const translationTemp = !translation ? en : translation
+  formatDate(date, formatStr, translation = en) {
     const year = this.getFullYear(date)
     const month = this.getMonth(date) + 1
     const day = this.getDate(date)
@@ -266,15 +265,12 @@ const utils = {
       d: day,
       yyyy: year,
       yy: String(year).slice(2),
-      MMMM: this.getMonthName(this.getMonth(date), translationTemp.months),
-      MMM: this.getMonthNameAbbr(
-        this.getMonth(date),
-        translationTemp.monthsAbbr,
-      ),
+      MMMM: this.getMonthName(this.getMonth(date), translation.months),
+      MMM: this.getMonthNameAbbr(this.getMonth(date), translation.monthsAbbr),
       MM: `0${month}`.slice(-2),
       M: month,
       o: this.getNthSuffix(this.getDate(date)),
-      E: this.getDayNameAbbr(date, translationTemp.days),
+      E: this.getDayNameAbbr(date, translation.days),
     }
 
     const REGEX_FORMAT = /y{4}|y{2}|M{1,4}(?![aäe])|d{1,2}|o{1}|E{1}(?![eéi])/g
@@ -291,7 +287,7 @@ const utils = {
    * @return {Date | String}
    */
   // eslint-disable-next-line max-params,complexity,max-statements
-  parseDate(dateStr, formatStr, translation, parser) {
+  parseDate(dateStr, formatStr, translation = en, parser = null) {
     if (!(dateStr && formatStr)) {
       return dateStr
     }
@@ -306,7 +302,7 @@ const utils = {
     const ymd = getParsedDate({
       formatStr,
       dateStr,
-      translation: !translation ? en : translation,
+      translation,
     })
 
     const dat = `${ymd.join('-')}${this.getTime()}`
