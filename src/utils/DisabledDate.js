@@ -9,21 +9,21 @@ export default class DisabledDate {
   }
 
   get config() {
-    const dd = this._disabledDates
-    const u = makeCellUtils(this._utils)
+    const disabledDates = this._disabledDates
+    const utils = makeCellUtils(this._utils)
 
     return {
-      exists: u.configExists(dd),
-      to: u.dayMonthYear(dd, 'to'),
-      from: u.dayMonthYear(dd, 'from'),
+      exists: utils.configExists(disabledDates),
+      to: utils.dayMonthYear(disabledDates, 'to'),
+      from: utils.dayMonthYear(disabledDates, 'from'),
       has: {
-        customPredictor: u.isDefined(dd, 'customPredictor'),
-        daysOfMonth: u.hasArray(dd, 'daysOfMonth'),
-        daysOfWeek: u.hasArray(dd, 'days'),
-        from: u.hasDate(dd, 'from'),
-        ranges: u.hasArray(dd, 'ranges'),
-        specificDates: u.hasArray(dd, 'dates'),
-        to: u.hasDate(dd, 'to'),
+        customPredictor: utils.isDefined(disabledDates, 'customPredictor'),
+        daysOfMonth: utils.hasArray(disabledDates, 'daysOfMonth'),
+        daysOfWeek: utils.hasArray(disabledDates, 'days'),
+        from: utils.hasDate(disabledDates, 'from'),
+        ranges: utils.hasArray(disabledDates, 'ranges'),
+        specificDates: utils.hasArray(disabledDates, 'dates'),
+        to: utils.hasDate(disabledDates, 'to'),
       },
     }
   }
@@ -37,20 +37,20 @@ export default class DisabledDate {
   }
 
   isDateDisabledVia(date) {
-    const dd = this._disabledDates
+    const disabledDates = this._disabledDates
     const { has } = this.config
 
     return {
       to: () => {
-        return has.to && date < dd.to
+        return has.to && date < disabledDates.to
       },
       from: () => {
-        return has.from && date > dd.from
+        return has.from && date > disabledDates.from
       },
       range: () => {
         if (!has.ranges) return false
 
-        const { ranges } = dd
+        const { ranges } = disabledDates
         const u = makeCellUtils(this._utils)
 
         return ranges.some((thisRange) => {
@@ -63,33 +63,32 @@ export default class DisabledDate {
         })
       },
       customPredictor: () => {
-        return has.customPredictor && dd.customPredictor(date)
+        return has.customPredictor && disabledDates.customPredictor(date)
       },
       specificDate: () => {
         if (!has.specificDates) return false
 
-        return dd.dates.some((d) => {
+        return disabledDates.dates.some((d) => {
           return this._utils.compareDates(date, d)
         })
       },
       daysOfWeek: () => {
         if (!has.daysOfWeek) return false
 
-        return dd.days.indexOf(this._utils.getDay(date)) !== -1
+        return disabledDates.days.indexOf(this._utils.getDay(date)) !== -1
       },
       daysOfMonth: () => {
         if (!has.daysOfMonth) return false
 
-        return dd.daysOfMonth.indexOf(this._utils.getDate(date)) !== -1
+        return (
+          disabledDates.daysOfMonth.indexOf(this._utils.getDate(date)) !== -1
+        )
       },
     }
   }
 
   isMonthDisabledVia(date) {
-    const { config } = this
-    const { has } = config
-    const { to } = config
-    const { from } = config
+    const { from, has, to } = this.config
     const month = this._utils.getMonth(date)
     const year = this._utils.getFullYear(date)
 
@@ -116,9 +115,7 @@ export default class DisabledDate {
   }
 
   isYearDisabledVia(date) {
-    const { has } = this.config
-    const { to } = this.config
-    const { from } = this.config
+    const { from, has, to } = this.config
     const year = this._utils.getFullYear(date)
 
     return {
@@ -142,31 +139,15 @@ export default class DisabledDate {
 
     const isDisabledVia = this.isDateDisabledVia(date)
 
-    if (isDisabledVia.to()) {
-      return true
-    }
-
-    if (isDisabledVia.from()) {
-      return true
-    }
-
-    if (isDisabledVia.range()) {
-      return true
-    }
-
-    if (isDisabledVia.specificDate()) {
-      return true
-    }
-
-    if (isDisabledVia.daysOfWeek()) {
-      return true
-    }
-
-    if (isDisabledVia.daysOfMonth()) {
-      return true
-    }
-
-    return isDisabledVia.customPredictor()
+    return (
+      isDisabledVia.to() ||
+      isDisabledVia.from() ||
+      isDisabledVia.range() ||
+      isDisabledVia.specificDate() ||
+      isDisabledVia.daysOfWeek() ||
+      isDisabledVia.daysOfMonth() ||
+      isDisabledVia.customPredictor()
+    )
   }
 
   /**
@@ -183,11 +164,7 @@ export default class DisabledDate {
       return false
     }
 
-    if (isDisabledVia.to()) {
-      return true
-    }
-
-    if (isDisabledVia.from()) {
+    if (isDisabledVia.to() || isDisabledVia.from()) {
       return true
     }
 
@@ -219,11 +196,7 @@ export default class DisabledDate {
       return false
     }
 
-    if (isDisabledVia.to()) {
-      return true
-    }
-
-    if (isDisabledVia.from()) {
+    if (isDisabledVia.to() || isDisabledVia.from()) {
       return true
     }
 
