@@ -27,7 +27,7 @@
 </template>
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
-import { isYearDisabled } from '~/utils/DisabledDatesUtils'
+import DisabledDate from '~/utils/DisabledDate'
 
 export default {
   name: 'DatepickerYearView',
@@ -40,46 +40,46 @@ export default {
   },
   computed: {
     /**
-     * Checks if the next decade is disabled or not
+     * Is the next decade disabled?
      * @return {Boolean}
      */
     isNextDisabled() {
-      if (!this.disabledDates || !this.disabledDates.from) {
+      if (!this.disabledConfig.has.from) {
         return false
       }
-      const yearFrom = this.utils.getFullYear(this.disabledDates.from)
-      const lastCellYear = this.years[this.years.length - 1].year
-
-      return yearFrom <= lastCellYear
+      return this.disabledConfig.from.year <= this.pageDecadeEnd
     },
     /**
-     * Checks if the previous decade is disabled or not
+     * Is the previous decade disabled?
      * @return {Boolean}
      */
     isPreviousDisabled() {
-      if (!this.disabledDates || !this.disabledDates.to) {
+      if (!this.disabledConfig.has.to) {
         return false
       }
-      const yearTo = this.utils.getFullYear(this.disabledDates.to)
-      const yearPageDate = this.utils.getFullYear(this.pageDate)
-
-      return (
-        Math.floor(yearTo / this.yearRange) * this.yearRange >=
-        Math.floor(yearPageDate / this.yearRange) * this.yearRange
-      )
+      return this.disabledConfig.to.year >= this.pageDecadeStart
+    },
+    /**
+     * The year at which the current yearRange starts
+     * @return {Number}
+     */
+    pageDecadeStart() {
+      return Math.floor(this.pageYear / this.yearRange) * this.yearRange
+    },
+    /**
+     * The year at which the current yearRange ends
+     * @return {Number}
+     */
+    pageDecadeEnd() {
+      return this.pageDecadeStart + this.yearRange - 1
     },
     /**
      * Get decade name on current page.
      * @return {String}
      */
     getPageDecade() {
-      const yearPageDate = this.utils.getFullYear(this.pageDate)
-
-      const decadeStart =
-        Math.floor(yearPageDate / this.yearRange) * this.yearRange
-      const decadeEnd = decadeStart + (this.yearRange - 1)
       const { yearSuffix } = this.translation
-      return `${decadeStart} - ${decadeEnd}${yearSuffix}`
+      return `${this.pageDecadeStart} - ${this.pageDecadeEnd}${yearSuffix}`
     },
     /**
      * Set an array with years for a decade
@@ -130,18 +130,21 @@ export default {
      * @return {Boolean}
      */
     isDisabledYear(date) {
-      return isYearDisabled(date, this.disabledDates, this.utils)
+      return new DisabledDate(this.utils, this.disabledDates).isYearDisabled(
+        date,
+      )
     },
+    // eslint-disable-next-line complexity,max-statements
     /**
      * Whether the selected date is in this year
      * @param {Date} date
      * @return {Boolean}
      */
     isSelectedYear(date) {
+      const year = this.utils.getFullYear(date)
+
       return (
-        this.selectedDate &&
-        this.utils.getFullYear(this.selectedDate) ===
-          this.utils.getFullYear(date)
+        this.selectedDate && year === this.utils.getFullYear(this.selectedDate)
       )
     },
     /**

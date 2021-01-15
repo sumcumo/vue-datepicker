@@ -30,37 +30,31 @@
 </template>
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
-import { isMonthDisabled } from '~/utils/DisabledDatesUtils'
+import DisabledDate from '~/utils/DisabledDate'
 
 export default {
   name: 'DatepickerMonthView',
   mixins: [pickerMixin],
   computed: {
     /**
-     * Checks if the next year is disabled or not
+     * Is the next year disabled?
      * @return {Boolean}
      */
     isNextDisabled() {
-      if (!this.disabledDates || !this.disabledDates.from) {
+      if (!this.disabledConfig.has.from) {
         return false
       }
-      return (
-        this.utils.getFullYear(this.disabledDates.from) <=
-        this.utils.getFullYear(this.pageDate)
-      )
+      return this.disabledConfig.from.year <= this.pageYear
     },
     /**
-     * Checks if the previous year is disabled or not
+     * Is the previous year disabled?
      * @return {Boolean}
      */
     isPreviousDisabled() {
-      if (!this.disabledDates || !this.disabledDates.to) {
+      if (!this.disabledConfig.has.to) {
         return false
       }
-      return (
-        this.utils.getFullYear(this.disabledDates.to) >=
-        this.utils.getFullYear(this.pageDate)
-      )
+      return this.disabledConfig.to.year >= this.pageYear
     },
     /**
      * Set an array with all months
@@ -96,7 +90,7 @@ export default {
      */
     pageYearName() {
       const { yearSuffix } = this.translation
-      return `${this.utils.getFullYear(this.pageDate)}${yearSuffix}`
+      return `${this.pageYear}${yearSuffix}`
     },
   },
   methods: {
@@ -115,7 +109,9 @@ export default {
      * @return {Boolean}
      */
     isDisabledMonth(date) {
-      return isMonthDisabled(date, this.disabledDates, this.utils)
+      return new DisabledDate(this.utils, this.disabledDates).isMonthDisabled(
+        date,
+      )
     },
     /**
      * Whether the selected date is in this month
@@ -123,11 +119,13 @@ export default {
      * @return {Boolean}
      */
     isSelectedMonth(date) {
+      const month = this.utils.getMonth(date)
+      const year = this.utils.getFullYear(date)
+
       return (
         this.selectedDate &&
-        this.utils.getFullYear(this.selectedDate) ===
-          this.utils.getFullYear(date) &&
-        this.utils.getMonth(this.selectedDate) === this.utils.getMonth(date)
+        year === this.utils.getFullYear(this.selectedDate) &&
+        month === this.utils.getMonth(this.selectedDate)
       )
     },
     /**

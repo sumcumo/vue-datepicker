@@ -36,7 +36,8 @@
 </template>
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
-import { isDateDisabled } from '~/utils/DisabledDatesUtils'
+import DisabledDate from '~/utils/DisabledDate'
+import HighlightedDate from '~/utils/HighlightedDate'
 
 export default {
   name: 'DatepickerDayView',
@@ -74,18 +75,16 @@ export default {
       const monthName = this.showFullMonthName
         ? this.translation.months
         : this.translation.monthsAbbr
-      return this.utils.getMonthNameAbbr(
-        this.utils.getMonth(this.pageDate),
-        monthName,
-      )
+
+      return this.utils.getMonthNameAbbr(this.pageMonth, monthName)
     },
     /**
      * Gets the name of the year that current page is on
-     * @return {Number}
+     * @return {String}
      */
     currYearName() {
       const { yearSuffix } = this.translation
-      return `${this.utils.getFullYear(this.pageDate)}${yearSuffix}`
+      return `${this.pageYear}${yearSuffix}`
     },
     /**
      * Sets an array with all days to show this month
@@ -148,15 +147,12 @@ export default {
      * @return {Boolean}
      */
     isNextDisabled() {
-      if (!this.disabledDates || !this.disabledDates.from) {
+      if (!this.disabledConfig.has.from) {
         return false
       }
-      const d = this.pageDate
       return (
-        this.utils.getMonth(this.disabledDates.from) <=
-          this.utils.getMonth(d) &&
-        this.utils.getFullYear(this.disabledDates.from) <=
-          this.utils.getFullYear(d)
+        this.disabledConfig.from.month <= this.pageMonth &&
+        this.disabledConfig.from.year <= this.pageYear
       )
     },
     /**
@@ -164,14 +160,12 @@ export default {
      * @return {Boolean}
      */
     isPreviousDisabled() {
-      if (!this.disabledDates || !this.disabledDates.to) {
+      if (!this.disabledConfig.has.to) {
         return false
       }
-      const d = this.pageDate
       return (
-        this.utils.getMonth(this.disabledDates.to) >= this.utils.getMonth(d) &&
-        this.utils.getFullYear(this.disabledDates.to) >=
-          this.utils.getFullYear(d)
+        this.disabledConfig.to.month >= this.pageMonth &&
+        this.disabledConfig.to.year >= this.pageYear
       )
     },
     /**
@@ -181,9 +175,23 @@ export default {
     isYmd() {
       return this.translation.ymd && this.translation.ymd === true
     },
+    /**
+     * Returns the current page's month as an integer.
+     * @return {Number}
+     */
+    pageMonth() {
+      return this.utils.getMonth(this.pageDate)
+    },
     nextPageDate() {
       const d = new Date(this.pageTimestamp)
       return new Date(this.utils.setMonth(d, this.utils.getMonth(d) + 1))
+    },
+    highlightedConfig() {
+      return new HighlightedDate(
+        this.utils,
+        this.disabledDates,
+        this.highlighted,
+      ).config
     },
   },
   methods: {
@@ -227,7 +235,9 @@ export default {
      * @return {Boolean}
      */
     isDisabledDate(date) {
-      return isDateDisabled(date, this.disabledDates, this.utils)
+      return new DisabledDate(this.utils, this.disabledDates).isDateDisabled(
+        date,
+      )
     },
     /**
      * Whether a day is highlighted
@@ -235,58 +245,14 @@ export default {
      * @param {Date} date to check if highlighted
      * @return {Boolean}
      */
-    // eslint-disable-next-line complexity,max-statements
     isHighlightedDate(date) {
-      let highlighted = false
       const dateWithoutTime = this.utils.resetDateTime(date)
-      if (
-        typeof this.highlighted === 'undefined' ||
-        (!(this.highlighted && this.highlighted.includeDisabled) &&
-          this.isDisabledDate(dateWithoutTime))
-      ) {
-        return false
-      }
 
-      if (typeof this.highlighted.dates !== 'undefined') {
-        this.highlighted.dates.forEach((d) => {
-          if (this.utils.compareDates(dateWithoutTime, d)) {
-            highlighted = true
-          }
-        })
-      }
-
-      const hasHighlightedTo =
-        typeof this.highlighted.to !== 'undefined' &&
-        dateWithoutTime <= this.highlighted.to
-
-      const hasHighlightedFrom =
-        typeof this.highlighted.from !== 'undefined' &&
-        dateWithoutTime >= this.highlighted.from
-
-      const hasHighlightedDays =
-        typeof this.highlighted.days !== 'undefined' &&
-        this.highlighted.days.indexOf(this.utils.getDay(dateWithoutTime)) !== -1
-
-      const hasHighlightedDaysOfMonth =
-        typeof this.highlighted.daysOfMonth !== 'undefined' &&
-        this.highlighted.daysOfMonth.indexOf(
-          this.utils.getDate(dateWithoutTime),
-        ) !== -1
-
-      const hasCustomPredictor =
-        typeof this.highlighted.customPredictor === 'function' &&
-        this.highlighted.customPredictor(dateWithoutTime)
-
-      if (
-        hasHighlightedDays ||
-        hasHighlightedDaysOfMonth ||
-        hasCustomPredictor ||
-        (hasHighlightedTo && hasHighlightedFrom)
-      ) {
-        highlighted = true
-      }
-
-      return highlighted
+      return new HighlightedDate(
+        this.utils,
+        this.disabledDates,
+        this.highlighted,
+      ).isDateHighlighted(dateWithoutTime)
     },
     /**
      * Whether a day is highlighted and it is the last date
@@ -295,14 +261,13 @@ export default {
      * @return {Boolean}
      */
     isHighlightEnd(date) {
+      const config = this.highlightedConfig
+
       return (
         this.isHighlightedDate(date) &&
-        this.highlighted.to instanceof Date &&
-        this.utils.getFullYear(this.highlighted.to) ===
-          this.utils.getFullYear(date) &&
-        this.utils.getMonth(this.highlighted.to) ===
-          this.utils.getMonth(date) &&
-        this.utils.getDate(this.highlighted.to) === this.utils.getDate(date)
+        config.to.year === this.utils.getFullYear(date) &&
+        config.to.month === this.utils.getMonth(date) &&
+        config.to.day === this.utils.getDate(date)
       )
     },
     /**
@@ -312,14 +277,13 @@ export default {
      * @return {Boolean}
      */
     isHighlightStart(date) {
+      const config = this.highlightedConfig
+
       return (
         this.isHighlightedDate(date) &&
-        this.highlighted.from instanceof Date &&
-        this.utils.getFullYear(this.highlighted.from) ===
-          this.utils.getFullYear(date) &&
-        this.utils.getMonth(this.highlighted.from) ===
-          this.utils.getMonth(date) &&
-        this.utils.getDate(this.highlighted.from) === this.utils.getDate(date)
+        config.from.year === this.utils.getFullYear(date) &&
+        config.from.month === this.utils.getMonth(date) &&
+        config.from.day === this.utils.getDate(date)
       )
     },
     /**
