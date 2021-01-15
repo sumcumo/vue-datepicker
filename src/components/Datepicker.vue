@@ -103,6 +103,7 @@ import PickerDay from '~/components/PickerDay.vue'
 import PickerMonth from '~/components/PickerMonth.vue'
 import PickerYear from '~/components/PickerYear.vue'
 import Popup from '~/components/Popup.vue'
+import DisabledDate from '~/utils/DisabledDate'
 
 const validDate = (val) =>
   val === null ||
@@ -266,6 +267,9 @@ export default {
     translation() {
       return this.language
     },
+    disabledDatesClass() {
+      return new DisabledDate(this.utils, this.disabledDates)
+    },
   },
   watch: {
     initialView() {
@@ -275,7 +279,8 @@ export default {
       this.setPageDate()
     },
     value(value) {
-      this.setValue(value)
+      const parsedValue = this.parseValue(value)
+      this.setValue(parsedValue)
     },
   },
   mounted() {
@@ -326,7 +331,14 @@ export default {
      */
     init() {
       if (this.value) {
-        this.setValue(this.value)
+        let parsedValue = this.parseValue(this.value)
+        const isDateDisabled =
+          parsedValue && this.disabledDatesClass.isDateDisabled(parsedValue)
+        if (isDateDisabled) {
+          parsedValue = null
+          this.$emit('input', parsedValue)
+        }
+        this.setValue(parsedValue)
       }
       if (this.isInline) {
         this.setInitialView()
@@ -414,18 +426,25 @@ export default {
      * @param {Date|String|Number|null} date
      */
     setValue(date) {
+      if (!date) {
+        this.setPageDate()
+        this.selectedDate = null
+        return
+      }
+      this.selectedDate = date
+      this.setPageDate(date)
+    },
+    /**
+     * parse a datepicker value from string/number to date
+     * @param {Date|String|Number|null} date
+     */
+    parseValue(date) {
       let dateTemp = date
       if (typeof dateTemp === 'string' || typeof dateTemp === 'number') {
         const parsed = new Date(dateTemp)
         dateTemp = Number.isNaN(parsed.valueOf()) ? null : parsed
       }
-      if (!dateTemp) {
-        this.setPageDate()
-        this.selectedDate = null
-        return
-      }
-      this.selectedDate = dateTemp
-      this.setPageDate(dateTemp)
+      return dateTemp
     },
     /**
      * @param {Object} date
