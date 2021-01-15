@@ -11,8 +11,7 @@
         class="day__month_btn"
         @click="showPickerCalendar('month')"
       >
-        {{ isYmd ? currYearName : currMonthName }}
-        {{ isYmd ? currMonthName : currYearName }}
+        {{ pageTitleDay }}
       </span>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
@@ -169,19 +168,25 @@ export default {
       )
     },
     /**
-     * Is this translation using year/month/day format?
-     * @return {Boolean}
-     */
-    isYmd() {
-      return this.translation.ymd && this.translation.ymd === true
-    },
-    /**
      * Returns the current page's month as an integer.
      * @return {Number}
      */
     pageMonth() {
       return this.utils.getMonth(this.pageDate)
     },
+    /**
+     * Display the current page's month & year as the title.
+     * @return {String}
+     */
+    pageTitleDay() {
+      return this.translation.ymd
+        ? `${this.currYearName} ${this.currMonthName}`
+        : `${this.currMonthName} ${this.currYearName}`
+    },
+    /**
+     * The first day of the next page's month.
+     * @return {Date}
+     */
     nextPageDate() {
       const d = new Date(this.pageTimestamp)
       return new Date(this.utils.setMonth(d, this.utils.getMonth(d) + 1))
