@@ -11,7 +11,7 @@
         :class="allowedToShowView('year') ? 'up' : ''"
         @click="showPickerCalendar('year')"
       >
-        {{ pageYearName }}
+        {{ pageTitleMonth }}
       </span>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
@@ -85,10 +85,10 @@ export default {
       return months
     },
     /**
-     * Get year name on current page.
+     * Display the current page's year as the title.
      * @return {String}
      */
-    pageYearName() {
+    pageTitleMonth() {
       const { yearSuffix } = this.translation
       return `${this.pageYear}${yearSuffix}`
     },

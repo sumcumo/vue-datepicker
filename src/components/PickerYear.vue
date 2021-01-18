@@ -7,7 +7,7 @@
       :previous="previousDecade"
     >
       <span>
-        {{ getPageDecade }}
+        {{ pageTitleYear }}
       </span>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
@@ -74,10 +74,10 @@ export default {
       return this.pageDecadeStart + this.yearRange - 1
     },
     /**
-     * Get decade name on current page.
+     * Display the current page's decade (or year range) as the title.
      * @return {String}
      */
-    getPageDecade() {
+    pageTitleYear() {
       const { yearSuffix } = this.translation
       return `${this.pageDecadeStart} - ${this.pageDecadeEnd}${yearSuffix}`
     },
@@ -134,7 +134,6 @@ export default {
         date,
       )
     },
-    // eslint-disable-next-line complexity,max-statements
     /**
      * Whether the selected date is in this year
      * @param {Date} date
