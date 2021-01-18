@@ -63,6 +63,7 @@
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
 import HighlightedDate from '~/utils/HighlightedDate'
+import FocusedCell from '~/utils/FocusedCell'
 
 export default {
   name: 'PickerDay',
@@ -166,6 +167,16 @@ export default {
      */
     firstDayOfWeekNumber() {
       return this.utils.getDayFromAbbr(this.firstDayOfWeek)
+    },
+    focusedCellStatus() {
+      const config = {
+        focusedCell: this.focusedCell,
+        showEdgeDates: this.showEdgeDates,
+        disabledConfig: this.disabledConfig
+        utils: this.utils
+      }
+
+      return new FocusedCell(config).statusDay
     },
     highlightedConfig() {
       return new HighlightedDate(

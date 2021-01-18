@@ -5,7 +5,7 @@
       <h3>Default datepicker...</h3>
       <Datepicker
         placeholder="Select Date"
-        :inline="false"
+        :inline="true"
         :language="languages['de']"
         :disabled-dates="{
           // to: new Date(2020, 10, 15),

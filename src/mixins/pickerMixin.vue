@@ -80,7 +80,6 @@ export default {
     currentView() {
       return this.$options.name.replace('Picker', '').toLowerCase()
     },
-    // eslint-disable-next-line complexity
     /**
      * A look-up object created from 'disabledDates' prop
      * @return {Object}

@@ -53,6 +53,7 @@
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
+import FocusedCell from '~/utils/FocusedCell'
 
 export default {
   name: 'PickerMonth',
@@ -97,6 +98,16 @@ export default {
      * Is the next year disabled?
      * @return {Boolean}
      */
+    focusedCellStatus() {
+      const config = {
+        focusedCell: this.focusedCell,
+        showEdgeDates: this.showEdgeDates,
+        disabledConfig: this.disabledConfig,
+        utils: this.utils
+      }
+
+      return new FocusedCell(config).statusMonth
+    },
     isNextDisabled() {
       if (!this.disabledConfig.has.from) {
         return false
