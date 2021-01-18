@@ -24,7 +24,7 @@
         @keydown.left.prevent="focusNav(isRtl ? 'next' : 'prev')"
         @keydown.right.prevent="focusNav(isRtl ? 'prev' : 'next')"
       >
-        {{ pageTitleMonth }}
+        {{ pageTitleDay }}
       </button>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
@@ -211,22 +211,6 @@ export default {
         this.disabledConfig.to.year >= this.pageYear
       )
     },
-    /**
-     * Returns the current page's month as an integer.
-     * @return {Number}
-     */
-    pageMonth() {
-      return this.utils.getMonth(this.pageDate)
-    },
-    /**
-     * Get the current page's month & year.
-     * @return {String}
-     */
-    pageTitleMonth() {
-      return this.translation.ymd
-        ? `${this.currYearName} ${this.currMonthName}`
-        : `${this.currMonthName} ${this.currYearName}`
-    },
     keyUpDelta() {
       if (this.showEdgeDates) {
         return this.keyUpChangeAmount
@@ -302,6 +286,22 @@ export default {
       }
       return this.isRtl ? -1 : 1
       // return 1
+    },
+    /**
+     * Returns the current page's month as an integer.
+     * @return {Number}
+     */
+    pageMonth() {
+      return this.utils.getMonth(this.pageDate)
+    },
+    /**
+     * Display the current page's month & year as the title.
+     * @return {String}
+     */
+    pageTitleDay() {
+      return this.translation.ymd
+        ? `${this.currYearName} ${this.currMonthName}`
+        : `${this.currMonthName} ${this.currYearName}`
     },
     /**
      * The first day of the next page's month.

@@ -13,7 +13,7 @@
       @check-focus="$emit('check-focus')"
       @focus-first-cell="focusFirstNonDisabledCell"
     >
-      <span class="decade">{{ pageTitleDecade }}</span>
+      <span class="decade">{{ pageTitleYear }}</span>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
@@ -206,7 +206,7 @@ export default {
      * Get decade name on current page.
      * @return {String}
      */
-    pageTitleDecade() {
+    pageTitleYear() {
       const { yearSuffix } = this.translation
       return `${this.pageDecadeStart} - ${this.pageDecadeEnd}${yearSuffix}`
     },

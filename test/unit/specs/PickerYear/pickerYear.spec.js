@@ -29,19 +29,6 @@ describe('PickerYear: shallowMount', () => {
     expect(wrapper.vm.isSelectedYear(new Date(2017, 1, 1))).toEqual(false)
   })
 
-  it('formats the decade range', async () => {
-    wrapper.setProps({
-      pageDate: new Date(2021, 1, 1),
-    })
-    await wrapper.vm.$nextTick()
-    expect(wrapper.vm.pageTitleDecade).toEqual('2020 - 2029')
-    wrapper.setProps({
-      pageDate: new Date(2001, 1, 1),
-    })
-    await wrapper.vm.$nextTick()
-    expect(wrapper.vm.pageTitleDecade).toEqual('2000 - 2009')
-  })
-
   it('emits an event when selected', () => {
     wrapper.vm.selectYear({ isDisabled: false })
     expect(wrapper.emitted()['select-year']).toBeTruthy()
@@ -53,7 +40,7 @@ describe('PickerYear: shallowMount', () => {
       yearRange: 12,
     })
     await wrapper.vm.$nextTick()
-    expect(wrapper.vm.pageTitleDecade).toEqual('2016 - 2027')
+    expect(wrapper.vm.pageTitleYear).toEqual('2016 - 2027')
     expect(wrapper.vm.$el.querySelectorAll('.cell.year').length).toEqual(12)
   })
 })
@@ -83,5 +70,18 @@ describe('PickerYear: mount', () => {
   it('can set the previous decade', () => {
     wrapper.vm.previousDecade()
     expect(wrapper.emitted()['changed-decade']).toBeTruthy()
+  })
+
+  it('formats the decade range', async () => {
+    wrapper.setProps({
+      pageDate: new Date(2021, 1, 1),
+    })
+    await wrapper.vm.$nextTick()
+    expect(wrapper.vm.pageTitleYear).toEqual('2020 - 2029')
+    wrapper.setProps({
+      pageDate: new Date(2001, 1, 1),
+    })
+    await wrapper.vm.$nextTick()
+    expect(wrapper.vm.pageTitleYear).toEqual('2000 - 2009')
   })
 })

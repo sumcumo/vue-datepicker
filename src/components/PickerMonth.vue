@@ -24,7 +24,7 @@
         @keydown.left.prevent="focusNav(isRtl ? 'next' : 'prev')"
         @keydown.right.prevent="focusNav(isRtl ? 'prev' : 'next')"
       >
-        {{ pageTitleYear }}
+        {{ pageTitleMonth }}
       </button>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
@@ -134,10 +134,10 @@ export default {
       return this.isRtl ? 1 : -1
     },
     /**
-     * Which year to display on the current page.
+     * Display the current page's year as the title.
      * @return {String}
      */
-    pageTitleYear() {
+    pageTitleMonth() {
       const { yearSuffix } = this.translation
       return `${this.pageYear}${yearSuffix}`
     },

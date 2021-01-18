@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.1](https://github.com/sumcumo/vue-datepicker/compare/v3.0.0...v3.0.1) (2021-01-18)
+
+
+### Bug Fixes
+
+* **dateutils:** issue with typeable date on dayless format ([3a69f2e](https://github.com/sumcumo/vue-datepicker/commit/3a69f2ea4ffddef1eaf3f617cf1b048ae84754dd))
+* **picker:** isseu with default date in disabled range ([01a947d](https://github.com/sumcumo/vue-datepicker/commit/01a947d7cb5c5490ee6e0ed008c6ca11d63eecdb))
+
 ## [3.0.0](https://github.com/sumcumo/vue-datepicker/compare/v2.1.2...v3.0.0) (2020-12-16)
 
 ### Breaking Changes

@@ -5,40 +5,29 @@ import DisabledDate from './DisabledDate'
 
 export default class HighlightedDate {
   constructor(utils, disabledDates, highlighted) {
-    this.utils = utils
-    this.disabledDates = disabledDates
-    this.highlighted = highlighted
-  }
-
-  set utils(utils) {
     this._utils = utils
-  }
-
-  set disabledDates(disabledDates) {
     this._disabledDates = disabledDates
-  }
-
-  set highlighted(highlighted) {
     this._highlighted = highlighted
   }
 
   get config() {
-    const hi = this._highlighted
-    const u = makeCellUtils(this._utils)
+    const highlightedDates = this._highlighted
+    const utils = makeCellUtils(this._utils)
 
     return {
-      exists: u.configExists(hi),
-      to: u.dayMonthYear(hi, 'to'),
-      from: u.dayMonthYear(hi, 'from'),
+      exists: utils.configExists(highlightedDates),
+      to: utils.dayMonthYear(highlightedDates, 'to'),
+      from: utils.dayMonthYear(highlightedDates, 'from'),
       has: {
-        customPredictor: u.isDefined(hi, 'customPredictor'),
-        daysOfMonth: u.hasArray(hi, 'daysOfMonth'),
-        daysOfWeek: u.hasArray(hi, 'days'),
-        from: u.hasDate(hi, 'from'),
-        specificDates: u.hasArray(hi, 'dates'),
-        to: u.hasDate(hi, 'to'),
+        customPredictor: utils.isDefined(highlightedDates, 'customPredictor'),
+        daysOfMonth: utils.hasArray(highlightedDates, 'daysOfMonth'),
+        daysOfWeek: utils.hasArray(highlightedDates, 'days'),
+        from: utils.hasDate(highlightedDates, 'from'),
+        specificDates: utils.hasArray(highlightedDates, 'dates'),
+        to: utils.hasDate(highlightedDates, 'to'),
         includeDisabled:
-          u.isDefined(hi, 'includeDisabled') && hi.includeDisabled,
+          utils.isDefined(highlightedDates, 'includeDisabled') &&
+          highlightedDates.includeDisabled,
       },
     }
   }
@@ -59,35 +48,37 @@ export default class HighlightedDate {
   }
 
   isDateHighlightedVia(date) {
-    const hi = this._highlighted
+    const highlightedDates = this._highlighted
     const { has } = this.config
 
     return {
       to: () => {
-        return has.to && date <= hi.to
+        return has.to && date <= highlightedDates.to
       },
       from: () => {
-        return has.from && date >= hi.from
+        return has.from && date >= highlightedDates.from
       },
       customPredictor: () => {
-        return has.customPredictor && hi.customPredictor(date)
+        return has.customPredictor && highlightedDates.customPredictor(date)
       },
       specificDate: () => {
         if (!has.specificDates) return false
 
-        return hi.dates.some((d) => {
+        return highlightedDates.dates.some((d) => {
           return this._utils.compareDates(date, d)
         })
       },
       daysOfWeek: () => {
         if (!has.daysOfWeek) return false
 
-        return hi.days.indexOf(this._utils.getDay(date)) !== -1
+        return highlightedDates.days.indexOf(this._utils.getDay(date)) !== -1
       },
       daysOfMonth: () => {
         if (!has.daysOfMonth) return false
 
-        return hi.daysOfMonth.indexOf(this._utils.getDate(date)) !== -1
+        return (
+          highlightedDates.daysOfMonth.indexOf(this._utils.getDate(date)) !== -1
+        )
       },
     }
   }
@@ -98,22 +89,12 @@ export default class HighlightedDate {
 
     const isHighlightedVia = this.isDateHighlightedVia(date)
 
-    if (isHighlightedVia.to() && isHighlightedVia.from()) {
-      return true
-    }
-
-    if (isHighlightedVia.specificDate()) {
-      return true
-    }
-
-    if (isHighlightedVia.daysOfWeek()) {
-      return true
-    }
-
-    if (isHighlightedVia.daysOfMonth()) {
-      return true
-    }
-
-    return isHighlightedVia.customPredictor()
+    return (
+      (isHighlightedVia.to() && isHighlightedVia.from()) ||
+      isHighlightedVia.specificDate() ||
+      isHighlightedVia.daysOfWeek() ||
+      isHighlightedVia.daysOfMonth() ||
+      isHighlightedVia.customPredictor()
+    )
   }
 }
