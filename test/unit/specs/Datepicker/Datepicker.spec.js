@@ -1,4 +1,5 @@
 import { mount, shallowMount } from '@vue/test-utils'
+import { addDays } from 'date-fns'
 import DateInput from '~/components/DateInput.vue'
 import Datepicker from '~/components/Datepicker.vue'
 
@@ -254,6 +255,26 @@ describe('Datepicker shallowMounted', () => {
       timestamp: dateTemp.valueOf(),
     })
     expect(wrapper.emitted()['changed-month']).toBeTruthy()
+  })
+
+  it('should clear date on default date disabled', async () => {
+    const someDate = new Date('2021-01-15')
+    const wrapperTemp = shallowMount(Datepicker, {
+      propsData: {
+        value: someDate,
+        disabledDates: {
+          customPredictor(customPredictorDate) {
+            if (customPredictorDate < addDays(someDate, 4)) {
+              return true
+            }
+            return false
+          },
+        },
+      },
+    })
+    await wrapperTemp.vm.$nextTick()
+    expect(wrapperTemp.vm.selectedDate).toEqual(null)
+    expect(wrapperTemp.emitted().input).toBeTruthy()
   })
 })
 
