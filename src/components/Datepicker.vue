@@ -38,6 +38,8 @@
     >
       <slot slot="beforeDateInput" name="beforeDateInput" />
       <slot slot="afterDateInput" name="afterDateInput" />
+      <slot slot="clearBtn" name="clearBtn" />
+      <slot slot="calendarBtn" name="calendarBtn" />
     </DateInput>
 
     <Popup
