@@ -19,6 +19,10 @@
   width: 300px;
   z-index: 10000;
 
+  .today {
+    background-color: #eee;
+  }
+
   * {
     box-sizing: border-box;
   }
