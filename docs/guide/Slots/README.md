@@ -87,7 +87,7 @@ To provide custom content for the calendar button, the `calendarBtn` slot may be
 </DatePicker>
 ```
 
-## calendarBtn
+## clearBtn
 
 To provide custom content for the clear button, the `clearBtn` slot may be used:
 
