@@ -11,9 +11,9 @@ to show some custom text:
 
 ```html
 <DatePicker :bootstrap-styling="true">
-  <div slot="beforeCalendarHeaderDay" class="calendar-header">
-    Choose a Date
-  </div>
+  <template #beforeCalendarHeaderDay>
+    <div class="calendar-header">Choose a Date</div>
+  </template>
 </DatePicker>
 ```
 
@@ -26,9 +26,11 @@ to show some custom text:
 
 ```html
 <DatePicker :bootstrap-styling="true">
-  <div slot="calendarFooterMonth">
-    <button>Select all Months</button>
-  </div>
+  <template #calendarFooterMonth>
+    <div>
+      <button>Select all Months</button>
+    </div>
+  </template>
 </DatePicker>
 ```
 
@@ -39,7 +41,9 @@ To implement some custom styling (for instance to add an animated placeholder) o
 
 ```html
 <DatePicker>
-  <span slot="afterDateInput" class="animated-placeholder">Choose a Date</span>
+  <template #afterDateInput>
+    <span class="animated-placeholder">Choose a Date</span>
+  </template>
 </DatePicker>
 ```
 
@@ -50,9 +54,9 @@ allows you to do that:
 
 ```html
 <DatePicker>
-  <span slot="beforeDateInput">
+  <template #beforeDateInput>
     <CustomIcon />
-  </span>
+  </template>
 </DatePicker>
 ```
 
@@ -62,11 +66,35 @@ To provide custom content for buttons that rotate intervals in calendar header `
 
 ```html
 <DatePicker>
-  <span slot="prevIntervalBtn">
+  <template #prevIntervalBtn>
     <CustomIcon />
-  </span>
-  <span slot="nextIntervalBtn">
+  </template>
+  <template #nextIntervalBtn>
     <CustomIcon />
-  </span>
+  </template>
+</DatePicker>
+```
+
+## calendarBtn
+
+To provide custom content for the calendar button, the `calendarBtn` slot may be used:
+
+```html
+<DatePicker :calendar-button="true">
+  <template #calendarBtn>
+    <CustomIcon />
+  </template>
+</DatePicker>
+```
+
+## calendarBtn
+
+To provide custom content for the clear button, the `clearBtn` slot may be used:
+
+```html
+<DatePicker :clear-button="true">
+  <template #clearBtn>
+    <CustomIcon />
+  </template>
 </DatePicker>
 ```
