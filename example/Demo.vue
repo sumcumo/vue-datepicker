@@ -496,7 +496,7 @@ export default {
 </script>
 
 <style>
-@import url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css');
+@import url('https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css');
 
 body {
   font-family: 'Helvetica Neue Light', Helvetica, sans-serif;
@@ -509,10 +509,6 @@ select {
   font-size: 100%;
   border: 1px solid #ccc;
   width: 100%;
-}
-
-select {
-  height: 2.5em;
 }
 
 .example {
@@ -541,6 +537,10 @@ pre {
 h5 {
   font-size: 100%;
   padding: 0;
+}
+
+h3 {
+  margin-top: 20px;
 }
 
 .form-group {

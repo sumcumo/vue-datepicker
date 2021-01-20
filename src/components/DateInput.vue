@@ -12,10 +12,12 @@
       @click="toggleCalendar"
     >
       <span :class="{ 'input-group-text': bootstrapStyling }">
-        <i :class="calendarButtonIcon">
-          {{ calendarButtonIconContent }}
-          <span v-if="!calendarButtonIcon">&hellip;</span>
-        </i>
+        <slot name="calendarBtn">
+          <i :class="calendarButtonIcon">
+            {{ calendarButtonIconContent }}
+            <span v-if="!calendarButtonIcon">&hellip;</span>
+          </i>
+        </slot>
       </span>
     </span>
     <!-- Input -->
@@ -49,9 +51,11 @@
       @click="clearDate()"
     >
       <span :class="{ 'input-group-text': bootstrapStyling }">
-        <i :class="clearButtonIcon">
-          <span v-if="!clearButtonIcon">&times;</span>
-        </i>
+        <slot name="clearBtn">
+          <i :class="clearButtonIcon">
+            <span v-if="!clearButtonIcon">&times;</span>
+          </i>
+        </slot>
       </span>
     </span>
     <slot name="afterDateInput" />
