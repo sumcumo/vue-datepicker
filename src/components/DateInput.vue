@@ -166,8 +166,8 @@ export default {
     parseTypedDate(event) {
       const code = event.keyCode ? event.keyCode : event.which
       // close calendar if escape or enter are pressed
-       if (
-         this.isOpen &&
+      if (
+        this.isOpen &&
         [
           27, // escape
           13, // enter
