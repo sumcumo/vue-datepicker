@@ -42,6 +42,8 @@
       @click="showCalendarByClick"
       @focus="showCalendarByFocus"
       @keyup="parseTypedDate"
+      @keyup.enter="toggleCalendar"
+      @keyup.escape="$emit('close-calendar')"
     />
     <!-- Clear Button -->
     <span
@@ -163,18 +165,7 @@ export default {
      * Attempt to parse a typed date
      * @param {Event} event
      */
-    parseTypedDate(event) {
-      const code = event.keyCode ? event.keyCode : event.which
-      // close calendar if escape or enter are pressed
-      if (
-        this.isOpen &&
-        [
-          27, // escape
-          13, // enter
-        ].indexOf(code) !== -1
-      ) {
-        this.input.blur()
-      }
+    parseTypedDate() {
       if (this.typeable) {
         const parsableDate = this.parseDate(this.input.value)
         const parsedDate = Date.parse(parsableDate)
