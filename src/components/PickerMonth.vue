@@ -2,40 +2,102 @@
   <div class="picker-view">
     <slot name="beforeCalendarHeaderMonth" />
     <PickerHeader
-      :config="headerConfig"
-      :next="nextYear"
-      :previous="previousYear"
+      ref="PickerHeader"
+      :is-next-disabled="isNextDisabled"
+      :is-previous-disabled="isPreviousDisabled"
+      :is-rtl="isRtl"
+      :is-up-disabled="isUpDisabled"
+      :show-header="showHeader"
+      @check-focus="$emit('check-focus')"
+      @focus-first-cell="focusFirstNonDisabledCell"
+      @focus-up-button="focusNavUp"
+      @next="nextYear"
+      @previous="previousYear"
     >
-      <span
-        class="month__year_btn"
-        :class="allowedToShowView('year') ? 'up' : ''"
-        @click="showPickerCalendar('year')"
+      <button
+        ref="up"
+        class="up month__year_btn"
+        :disabled="isUpDisabled"
+        @blur="$emit('check-focus')"
+        @click="showPickerCalendar(nextViewUp)"
+        @keydown.down.prevent="focusFirstNonDisabledCell"
+        @keydown.left.prevent="focusNav(isRtl ? 'next' : 'prev')"
+        @keydown.right.prevent="focusNav(isRtl ? 'prev' : 'next')"
+        @keyup.esc="$emit('close')"
       >
         {{ pageTitleMonth }}
-      </span>
+      </button>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
-    <span
-      v-for="month in months"
-      :key="month.timestamp"
-      :class="{ selected: month.isSelected, disabled: month.isDisabled }"
+    <button
+      v-for="cell in cells"
+      :ref="cell.id"
+      :key="cell.id"
+      :class="{ selected: cell.isSelected }"
       class="cell month"
-      @click.stop="selectMonth(month)"
+      :disabled="cell.isDisabled"
+      @blur="$emit('check-focus')"
+      @click.stop="selectMonth(cell)"
+      @focus="focusedCell = cell"
+      @keydown.up.prevent="setFocus(nextCell.up)"
+      @keydown.down.prevent="setFocus(nextCell.down)"
+      @keydown.left.prevent="setFocus(nextCell.left)"
+      @keydown.right.prevent="setFocus(nextCell.right)"
+      @keyup.esc="$emit('close')"
     >
-      {{ month.month }}
-    </span>
+      {{ cell.month }}
+    </button>
     <slot name="calendarFooterMonth" />
   </div>
 </template>
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
+import FocusedMonth from '~/utils/FocusedMonth'
 
 export default {
-  name: 'DatepickerMonthView',
+  name: 'PickerMonth',
   mixins: [pickerMixin],
   computed: {
+    /**
+     * Set an array with all months
+     * @return {Array}
+     */
+    cells() {
+      const months = []
+      const dObj = this.newPageMonth()
+
+      for (let i = 0; i < 12; i += 1) {
+        months.push({
+          id: i,
+          month: this.utils.getMonthName(i, this.translation.months),
+          timestamp: dObj.valueOf(),
+          isSelected: this.isSelectedMonth(dObj),
+          isDisabled: this.isDisabledMonth(dObj),
+        })
+        this.utils.setMonth(dObj, this.utils.getMonth(dObj) + 1)
+      }
+      return months
+    },
+    /**
+     * Determines properties of the next cell up/down/left/right
+     * @return {Object}
+     */
+    nextCell() {
+      const config = {
+        cells: this.cells,
+        columns: this.columns,
+        daysFromNextMonth: this.daysFromNextMonth,
+        daysFromPrevMonth: this.daysFromPrevMonth,
+        focusedCell: this.focusedCell,
+        isRtl: this.isRtl,
+        isDisabledMonth: this.isDisabledMonth,
+        showEdgeDates: this.showEdgeDates,
+      }
+
+      return new FocusedMonth(config).nextCell
+    },
     /**
      * Is the next year disabled?
      * @return {Boolean}
@@ -57,34 +119,6 @@ export default {
       return this.disabledConfig.to.year >= this.pageYear
     },
     /**
-     * Set an array with all months
-     * @return {Array}
-     */
-    months() {
-      const d = this.pageDate
-      const months = []
-      // set up a new date object to the beginning of the current 'page'
-      const dObj = this.useUtc
-        ? new Date(Date.UTC(d.getUTCFullYear(), 0, d.getUTCDate()))
-        : new Date(
-            d.getFullYear(),
-            0,
-            d.getDate(),
-            d.getHours(),
-            d.getMinutes(),
-          )
-      for (let i = 0; i < 12; i += 1) {
-        months.push({
-          month: this.utils.getMonthName(i, this.translation.months),
-          timestamp: dObj.valueOf(),
-          isSelected: this.isSelectedMonth(dObj),
-          isDisabled: this.isDisabledMonth(dObj),
-        })
-        this.utils.setMonth(dObj, this.utils.getMonth(dObj) + 1)
-      }
-      return months
-    },
-    /**
      * Display the current page's year as the title.
      * @return {String}
      */
@@ -94,6 +128,22 @@ export default {
     },
   },
   methods: {
+    /**
+     * Set up a new date object to the first month of the current 'page'
+     * @return Date
+     */
+    newPageMonth() {
+      const d = this.pageDate
+      return this.useUtc
+        ? new Date(Date.UTC(d.getUTCFullYear(), 0, d.getUTCDate()))
+        : new Date(
+            d.getFullYear(),
+            0,
+            d.getDate(),
+            d.getHours(),
+            d.getMinutes(),
+          )
+    },
     /**
      * Changes the year up or down
      * @param {Number} incrementBy
@@ -131,26 +181,36 @@ export default {
     /**
      * Increments the year
      */
-    nextYear() {
-      if (!this.isNextDisabled) {
-        this.changeYear(1)
+    nextYear(viaClick = false) {
+      if (this.isNextDisabled) {
+        return
+      }
+      this.changeYear(1)
+
+      if (viaClick) {
+        this.focusNav('next')
       }
     },
     /**
      * Decrements the year
      */
-    previousYear() {
-      if (!this.isPreviousDisabled) {
-        this.changeYear(-1)
+    previousYear(viaClick = false) {
+      if (this.isPreviousDisabled) {
+        return
+      }
+      this.changeYear(-1)
+
+      if (viaClick) {
+        this.focusNav('prev')
       }
     },
     /**
      * Emits a selectMonth event
      * @param {Object} month
      */
-    selectMonth(month) {
-      if (!month.isDisabled) {
-        this.$emit('select-month', month)
+    selectMonth(cell) {
+      if (!cell.isDisabled) {
+        this.$emit('select-month', cell)
       }
     },
   },

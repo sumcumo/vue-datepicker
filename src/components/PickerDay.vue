@@ -2,33 +2,56 @@
   <div class="picker-view">
     <slot name="beforeCalendarHeaderDay" />
     <PickerHeader
-      :config="headerConfig"
-      :next="nextMonth"
-      :previous="previousMonth"
+      ref="PickerHeader"
+      :is-next-disabled="isNextDisabled"
+      :is-previous-disabled="isPreviousDisabled"
+      :is-rtl="isRtl"
+      :is-up-disabled="isUpDisabled"
+      :show-header="showHeader"
+      @check-focus="$emit('check-focus')"
+      @focus-first-cell="focusFirstNonDisabledCell"
+      @focus-up-button="focusNavUp"
+      @next="nextMonth"
+      @previous="previousMonth"
     >
-      <span
-        :class="allowedToShowView('month') ? 'up' : ''"
-        class="day__month_btn"
-        @click="showPickerCalendar('month')"
+      <button
+        ref="up"
+        class="up day__month_btn"
+        :disabled="isUpDisabled"
+        @blur="$emit('check-focus')"
+        @click="showPickerCalendar(nextViewUp)"
+        @keydown.down.prevent="focusFirstNonDisabledCell"
+        @keydown.left.prevent="focusNav(isRtl ? 'next' : 'prev')"
+        @keydown.right.prevent="focusNav(isRtl ? 'prev' : 'next')"
+        @keyup.esc="$emit('close')"
       >
         {{ pageTitleDay }}
-      </span>
+      </button>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
-    <div :class="isRtl ? 'flex-rtl' : ''">
-      <span v-for="d in daysOfWeek" :key="d.timestamp" class="cell day-header">
+    <div :class="{ 'flex-rtl': isRtl }">
+      <span v-for="d in daysOfWeek" :key="d.timestamp" class="day-header">
         {{ d }}
       </span>
-      <span
-        v-for="day in days"
-        :key="day.timestamp"
+      <button
+        v-for="cell in cells"
+        :ref="cell.id"
+        :key="cell.id"
         class="cell day"
-        :class="dayClasses(day)"
-        @click="selectDate(day)"
+        :class="dayClasses(cell)"
+        :disabled="cell.isDisabled"
+        @blur="$emit('check-focus')"
+        @click="selectDate(cell)"
+        @focus="focusedCell = cell"
+        @keydown.up.prevent="setFocus(nextCell.up)"
+        @keydown.down.prevent="setFocus(nextCell.down)"
+        @keydown.left.prevent="setFocus(nextCell.left)"
+        @keydown.right.prevent="setFocus(nextCell.right)"
+        @keyup.esc="$emit('close')"
       >
-        {{ dayCellContent(day) }}
-      </span>
+        {{ dayCellContent(cell) }}
+      </button>
     </div>
     <slot name="calendarFooterDay" />
   </div>
@@ -36,10 +59,11 @@
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
+import FocusedDate from '~/utils/FocusedDate'
 import HighlightedDate from '~/utils/HighlightedDate'
 
 export default {
-  name: 'DatepickerDayView',
+  name: 'PickerDay',
   mixins: [pickerMixin],
   props: {
     dayCellContent: {
@@ -67,6 +91,24 @@ export default {
   },
   computed: {
     /**
+     * Sets an array with all days to show this month
+     * @return {Array}
+     */
+    cells() {
+      const days = []
+      const daysInCalendar =
+        this.daysFromPrevMonth + this.daysInMonth + this.daysFromNextMonth
+      const firstOfMonth = this.newPageDate()
+      const dObj = new Date(
+        firstOfMonth.setDate(firstOfMonth.getDate() - this.daysFromPrevMonth),
+      )
+      for (let i = 0; i < daysInCalendar; i += 1) {
+        days.push(this.makeDay(i, dObj))
+        this.utils.setDate(dObj, this.utils.getDate(dObj) + 1)
+      }
+      return days
+    },
+    /**
      * Gets the name of the month the current page is on
      * @return {String}
      */
@@ -84,24 +126,6 @@ export default {
     currYearName() {
       const { yearSuffix } = this.translation
       return `${this.pageYear}${yearSuffix}`
-    },
-    /**
-     * Sets an array with all days to show this month
-     * @return {Array}
-     */
-    days() {
-      const days = []
-      const daysInCalendar =
-        this.daysFromPrevMonth + this.daysInMonth + this.daysFromNextMonth
-      const firstOfMonth = this.newPageDate()
-      const dObj = new Date(
-        firstOfMonth.setDate(firstOfMonth.getDate() - this.daysFromPrevMonth),
-      )
-      for (let i = 0; i < daysInCalendar; i += 1) {
-        days.push(this.makeDay(i, dObj))
-        this.utils.setDate(dObj, this.utils.getDate(dObj) + 1)
-      }
-      return days
     },
     /**
      * Returns an array of day names
@@ -140,6 +164,31 @@ export default {
      */
     firstDayOfWeekNumber() {
       return this.utils.getDayFromAbbr(this.firstDayOfWeek)
+    },
+    /**
+     * Determines properties of the next cell up/down/left/right
+     * @return {Object}
+     */
+    nextCell() {
+      const config = {
+        cells: this.cells,
+        columns: this.columns,
+        daysFromNextMonth: this.daysFromNextMonth,
+        daysFromPrevMonth: this.daysFromPrevMonth,
+        focusedCell: this.focusedCell,
+        isRtl: this.isRtl,
+        isDisabledDate: this.isDisabledDate,
+        showEdgeDates: this.showEdgeDates,
+      }
+
+      return new FocusedDate(config).nextCell
+    },
+    highlightedConfig() {
+      return new HighlightedDate(
+        this.utils,
+        this.disabledDates,
+        this.highlighted,
+      ).config
     },
     /**
      * Is the next month disabled?
@@ -191,13 +240,6 @@ export default {
       const d = new Date(this.pageTimestamp)
       return new Date(this.utils.setMonth(d, this.utils.getMonth(d) + 1))
     },
-    highlightedConfig() {
-      return new HighlightedDate(
-        this.utils,
-        this.disabledDates,
-        this.highlighted,
-      ).config
-    },
   },
   methods: {
     /**
@@ -210,16 +252,17 @@ export default {
       this.$emit('changed-month', date)
     },
     /**
-     * set the class for a specific day
+     * Set the class for a specific day
      * @param {Object} day
      * @return {Object}
      */
     dayClasses(day) {
+      const isMuted = day.isPreviousMonth || day.isNextMonth
+
       return {
-        'selected': day.isSelected,
-        'disabled': day.isDisabled,
+        'selected': isMuted ? false : day.isSelected,
         'highlighted': day.isHighlighted,
-        'muted': day.isPreviousMonth || day.isNextMonth,
+        'muted': isMuted,
         'today': day.isToday,
         'weekend': day.isWeekend,
         'sat': day.isSaturday,
@@ -227,12 +270,6 @@ export default {
         'highlight-start': day.isHighlightStart,
         'highlight-end': day.isHighlightEnd,
       }
-    },
-    /**
-     * @return {Number}
-     */
-    getPageMonth() {
-      return this.utils.getMonth(this.pageDate)
     },
     /**
      * Whether a day is disabled
@@ -302,7 +339,7 @@ export default {
       )
     },
     /**
-     * Defines the objects within the days array
+     * Defines the objects within the cells array
      * @param  {id}  id
      * @param  {Date}  dObj
      * @return {Object}
@@ -316,6 +353,7 @@ export default {
       const showDate = this.showEdgeDates || !(isPreviousMonth || isNextMonth)
 
       return {
+        id,
         date: showDate ? this.utils.getDate(dObj) : '',
         timestamp: dObj.valueOf(),
         isSelected: this.isSelectedDate(dObj),
@@ -350,29 +388,64 @@ export default {
     /**
      * Increment the current page month
      */
-    nextMonth() {
-      if (!this.isNextDisabled) {
-        this.changeMonth(+1)
+    nextMonth(viaClick = false) {
+      if (this.isNextDisabled) {
+        return
+      }
+      this.changeMonth(+1)
+
+      if (viaClick) {
+        this.focusNav('next')
       }
     },
     /**
      * Decrement the page month
      */
-    previousMonth() {
-      if (!this.isPreviousDisabled) {
-        this.changeMonth(-1)
+    previousMonth(viaClick = false) {
+      if (this.isPreviousDisabled) {
+        return
+      }
+      this.changeMonth(-1)
+
+      if (viaClick) {
+        this.focusNav('prev')
       }
     },
     /**
      * Emits a selectDate event
-     * @param {Object} date
+     * @param {Object} cell
      */
-    selectDate(date) {
-      if (date.isDisabled) {
-        this.$emit('selected-disabled', date)
-      } else {
-        this.$emit('select-date', date)
+    // eslint-disable-next-line max-statements
+    selectDate(cell) {
+      if (cell.isDisabled) {
+        this.$emit('selected-disabled', cell)
+        return
       }
+      if (cell.isPreviousMonth) {
+        this.selectDateOnPreviousMonth(cell)
+        return
+      }
+      if (cell.isNextMonth) {
+        this.selectDateOnNextMonth(cell)
+        return
+      }
+      this.$emit('select-date', cell)
+    },
+    selectDateOnPreviousMonth(cell) {
+      const { timestamp } = cell
+      this.previousMonth()
+      this.$nextTick(() => {
+        const newCell = this.findCellByTimestamp(timestamp)
+        this.$emit('select-date', newCell)
+      })
+    },
+    selectDateOnNextMonth(cell) {
+      const { timestamp } = cell
+      this.nextMonth()
+      this.$nextTick(() => {
+        const newCell = this.findCellByTimestamp(timestamp)
+        this.$emit('select-date', newCell)
+      })
     },
   },
 }

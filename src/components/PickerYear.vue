@@ -2,35 +2,49 @@
   <div class="picker-view">
     <slot name="beforeCalendarHeaderYear" />
     <PickerHeader
-      :config="headerConfig"
-      :next="nextDecade"
-      :previous="previousDecade"
+      ref="PickerHeader"
+      :is-next-disabled="isNextDisabled"
+      :is-previous-disabled="isPreviousDisabled"
+      :is-rtl="isRtl"
+      :is-up-disabled="isUpDisabled"
+      :show-header="showHeader"
+      @check-focus="$emit('check-focus')"
+      @focus-first-cell="focusFirstNonDisabledCell"
+      @next="nextDecade"
+      @previous="previousDecade"
     >
-      <span>
-        {{ pageTitleYear }}
-      </span>
+      <span class="decade">{{ pageTitleYear }}</span>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
-
-    <span
-      v-for="year in years"
-      :key="year.timestamp"
-      :class="{ selected: year.isSelected, disabled: year.isDisabled }"
+    <button
+      v-for="cell in cells"
+      :ref="cell.id"
+      :key="cell.id"
+      :class="{ selected: cell.isSelected }"
       class="cell year"
-      @click.stop="selectYear(year)"
+      :disabled="cell.isDisabled"
+      @blur="$emit('check-focus')"
+      @click.stop="selectYear(cell)"
+      @focus="focusedCell = cell"
+      @keydown.up.prevent="setFocus(nextCell.up)"
+      @keydown.down.prevent="setFocus(nextCell.down)"
+      @keydown.left.prevent="setFocus(nextCell.left)"
+      @keydown.right.prevent="setFocus(nextCell.right)"
+      @keyup.esc="$emit('close')"
     >
-      {{ year.year }}
-    </span>
+      {{ cell.year }}
+    </button>
     <slot name="calendarFooterYear" />
   </div>
 </template>
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
+import FocusedYear from '~/utils/FocusedYear'
 
 export default {
-  name: 'DatepickerYearView',
+  name: 'PickerYear',
   mixins: [pickerMixin],
   props: {
     yearRange: {
@@ -39,6 +53,36 @@ export default {
     },
   },
   computed: {
+    /**
+     * Sets an array with years for a decade (or the no. of years in yearRange)
+     * @return {Array}
+     */
+    cells() {
+      const years = []
+      const dObj = this.newPageYear()
+      const cellsInGrid =
+        Math.ceil(this.yearRange / this.columns) * this.columns
+
+      for (let i = 0; i < this.yearRange; i += 1) {
+        years.push({
+          id: i,
+          year: this.utils.getFullYear(dObj),
+          timestamp: dObj.valueOf(),
+          isSelected: this.isSelectedYear(dObj),
+          isDisabled: this.isDisabledYear(dObj),
+        })
+        this.utils.setFullYear(dObj, this.utils.getFullYear(dObj) + 1)
+      }
+
+      // Fill any remaining cells with blanks to position trailing cells correctly when rtl
+      for (let i = years.length; i < cellsInGrid; i += 1) {
+        years.push({
+          id: i,
+          isDisabled: true,
+        })
+      }
+      return years
+    },
     /**
      * Is the next decade disabled?
      * @return {Boolean}
@@ -60,6 +104,25 @@ export default {
       return this.disabledConfig.to.year >= this.pageDecadeStart
     },
     /**
+     * Determines properties of the next cell up/down/left/right
+     * @return {Object}
+     */
+    nextCell() {
+      const config = {
+        cells: this.cells,
+        columns: this.columns,
+        daysFromNextMonth: this.daysFromNextMonth,
+        daysFromPrevMonth: this.daysFromPrevMonth,
+        focusedCell: this.focusedCell,
+        isRtl: this.isRtl,
+        isDisabledYear: this.isDisabledYear,
+        showEdgeDates: this.showEdgeDates,
+        yearRange: this.yearRange,
+      }
+
+      return new FocusedYear(config).nextCell
+    },
+    /**
      * The year at which the current yearRange starts
      * @return {Number}
      */
@@ -74,52 +137,20 @@ export default {
       return this.pageDecadeStart + this.yearRange - 1
     },
     /**
-     * Display the current page's decade (or year range) as the title.
+     * Get decade name on current page.
      * @return {String}
      */
     pageTitleYear() {
       const { yearSuffix } = this.translation
       return `${this.pageDecadeStart} - ${this.pageDecadeEnd}${yearSuffix}`
     },
-    /**
-     * Set an array with years for a decade
-     * @return {Array}
-     */
-    years() {
-      const d = this.pageDate
-      const years = []
-      const year = this.useUtc
-        ? Math.floor(d.getUTCFullYear() / this.yearRange) * this.yearRange
-        : Math.floor(d.getFullYear() / this.yearRange) * this.yearRange
-
-      // set up a new date object to the beginning of the current 'page'7
-      const dObj = this.useUtc
-        ? new Date(Date.UTC(year, d.getUTCMonth(), d.getUTCDate()))
-        : new Date(
-            year,
-            d.getMonth(),
-            d.getDate(),
-            d.getHours(),
-            d.getMinutes(),
-          )
-      for (let i = 0; i < this.yearRange; i += 1) {
-        years.push({
-          year: this.utils.getFullYear(dObj),
-          timestamp: dObj.valueOf(),
-          isSelected: this.isSelectedYear(dObj),
-          isDisabled: this.isDisabledYear(dObj),
-        })
-        this.utils.setFullYear(dObj, this.utils.getFullYear(dObj) + 1)
-      }
-      return years
-    },
   },
   methods: {
     /**
-     * Changes the year up or down
+     * Changes the decade (or yearRange) up or down
      * @param {Number} incrementBy
      */
-    changeYear(incrementBy) {
+    changeDecade(incrementBy) {
       const date = this.pageDate
       this.utils.setFullYear(date, this.utils.getFullYear(date) + incrementBy)
       this.$emit('changed-decade', date)
@@ -147,28 +178,57 @@ export default {
       )
     },
     /**
+     * Set up a new date object to the first year of the current 'page'
+     */
+    newPageYear() {
+      const d = this.pageDate
+      const year = this.useUtc
+        ? Math.floor(d.getUTCFullYear() / this.yearRange) * this.yearRange
+        : Math.floor(d.getFullYear() / this.yearRange) * this.yearRange
+
+      return this.useUtc
+        ? new Date(Date.UTC(year, d.getUTCMonth(), d.getUTCDate()))
+        : new Date(
+            year,
+            d.getMonth(),
+            d.getDate(),
+            d.getHours(),
+            d.getMinutes(),
+          )
+    },
+    /**
      * Increments the decade
      */
-    nextDecade() {
-      if (!this.isNextDisabled) {
-        this.changeYear(this.yearRange)
+    nextDecade(viaClick = false) {
+      if (this.isNextDisabled) {
+        return
+      }
+      this.changeDecade(this.yearRange)
+
+      if (viaClick) {
+        this.focusNav('next')
       }
     },
     /**
      * Decrements the decade
      */
-    previousDecade() {
-      if (!this.isPreviousDisabled) {
-        this.changeYear(-this.yearRange)
+    previousDecade(viaClick = false) {
+      if (this.isPreviousDisabled) {
+        return
+      }
+      this.changeDecade(-this.yearRange)
+
+      if (viaClick) {
+        this.focusNav('prev')
       }
     },
     /**
      * Emits a selectYear event
      * @param {Object} year
      */
-    selectYear(year) {
-      if (!year.isDisabled) {
-        this.$emit('select-year', year)
+    selectYear(cell) {
+      if (!cell.isDisabled) {
+        this.$emit('select-year', cell)
       }
     },
   },

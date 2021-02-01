@@ -10,13 +10,24 @@ describe('PickerYear', () => {
         allowedToShowView: () => true,
         translation: en,
         pageDate: new Date(2018, 1, 1),
-        selectedDate: new Date(2018, 2, 24),
       },
     })
   })
 
   afterEach(() => {
     wrapper.destroy()
+  })
+
+  it('knows the current year', () => {
+    const today = wrapper.vm.utils.getNewDateObject(new Date())
+    const firstOfYear = new Date(wrapper.vm.utils.setDate(today, 1))
+    const currentYear = wrapper.vm.utils.getFullYear(today)
+
+    wrapper.setProps({
+      useUtc: true,
+      pageDate: firstOfYear,
+    })
+    expect(wrapper.vm.todayCell.year).toEqual(currentYear)
   })
 
   it('knows the selected year', async () => {
@@ -30,11 +41,13 @@ describe('PickerYear', () => {
   })
 
   it('can set the next decade', () => {
+    wrapper.vm.focusNav = jest.fn
     wrapper.vm.nextDecade()
     expect(wrapper.emitted()['changed-decade']).toBeTruthy()
   })
 
   it('can set the previous decade', () => {
+    wrapper.vm.focusNav = jest.fn
     wrapper.vm.previousDecade()
     expect(wrapper.emitted()['changed-decade']).toBeTruthy()
   })

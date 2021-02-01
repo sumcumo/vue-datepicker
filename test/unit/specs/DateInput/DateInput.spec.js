@@ -60,7 +60,7 @@ describe('DateInput', () => {
     })
     expect(wrapper.vm.isOpen).toBeFalsy()
     wrapper.find('input').trigger('focus')
-    expect(wrapper.emitted('show-calendar')).toBeTruthy()
+    expect(wrapper.emitted('open')).toHaveLength(1)
   })
 
   it('does not open calendar on focus, if show-calendar-on-focus prop is false', async () => {
@@ -70,7 +70,7 @@ describe('DateInput', () => {
     expect(wrapper.vm.isOpen).toBeFalsy()
 
     wrapper.find('input').trigger('focus')
-    expect(wrapper.emitted('show-calendar')).toBeFalsy()
+    expect(wrapper.emitted('open')).toBeFalsy()
   })
 
   it('adds bootstrap classes', async () => {
@@ -115,31 +115,56 @@ describe('DateInput', () => {
     expect(wrapper.find('input').element.value).toEqual('!')
   })
 
-  it('triggers closeCalendar on blur', () => {
-    wrapper.find('input').trigger('blur')
-    expect(wrapper.emitted('close-calendar')).toBeTruthy()
-  })
-
-  it('should open the calendar on focus', async () => {
+  it('opens the calendar on focus', async () => {
     wrapper.find('input').trigger('focus')
-    expect(wrapper.emitted('show-calendar')).toBeFalsy()
+    expect(wrapper.emitted('open')).toBeUndefined()
     wrapper.setProps({
       showCalendarOnFocus: true,
     })
     await wrapper.vm.$nextTick()
     wrapper.find('input').trigger('focus')
-    expect(wrapper.emitted('show-calendar')).toBeTruthy()
+    expect(wrapper.emitted('open')).toHaveLength(1)
   })
 
-  it('should open the calendar only on calendar button click', async () => {
+  it('opens the calendar on enter, provided the calendar is NOT typeable', async () => {
+    wrapper.find('input').trigger('keydown.enter')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.emitted('open')).toHaveLength(1)
+  })
+
+  it('does not open the calendar on enter if the calendar is typeable', async () => {
+    wrapper.setProps({
+      typeable: true,
+    })
+    wrapper.find('input').trigger('keydown.enter')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.emitted('open')).toBeUndefined()
+  })
+
+  it('opens the calendar via the space bar, provided the calendar is NOT typeable', async () => {
+    wrapper.find('input').trigger('keydown.space')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.emitted('open')).toHaveLength(1)
+  })
+
+  it('does not open the calendar via the space bar if the calendar is typeable', async () => {
+    wrapper.setProps({
+      typeable: true,
+    })
+    wrapper.find('input').trigger('keydown.space')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.emitted('open')).toBeUndefined()
+  })
+
+  it('open the calendar only on button click when the relevant prop is set', async () => {
     wrapper.setProps({
       calendarButton: true,
       showCalendarOnButtonClick: true,
     })
     await wrapper.vm.$nextTick()
     wrapper.find('input').trigger('click')
-    expect(wrapper.emitted('show-calendar')).toBeFalsy()
+    expect(wrapper.emitted('open')).toBeUndefined()
     wrapper.find('.vdp-datepicker__calendar-button').trigger('click')
-    expect(wrapper.emitted('show-calendar')).toBeTruthy()
+    expect(wrapper.emitted('open')).toHaveLength(1)
   })
 })

@@ -30,6 +30,7 @@ const cellUtils = {
     const d = obj[prop]
 
     return {
+      date: d,
       day: utils.getDate(d),
       month: utils.getMonth(d),
       year: utils.getFullYear(d),
