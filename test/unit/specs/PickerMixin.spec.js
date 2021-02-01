@@ -1,14 +1,30 @@
 import { shallowMount } from '@vue/test-utils'
 import { en } from '~/locale'
 import pickerMixin from '~/mixins/pickerMixin.vue'
-import defaultComponent from '../defaultComponent.vue'
+
+const Component = {
+  render() {},
+  mixins: [pickerMixin],
+}
 
 const options = {
+  name: 'PickerDay',
   mixins: [pickerMixin],
   propsData: {
-    selectedDate: new Date(2018, 2, 24),
     format: 'dd MMM yyyy',
+    selectedDate: new Date(2018, 2, 24),
     translation: en,
+  },
+  computed: {
+    cells() {
+      return Array(35)
+        .fill({})
+        .map((v, i) => {
+          return {
+            id: i,
+          }
+        })
+    },
   },
 }
 
@@ -25,7 +41,8 @@ describe('pickerMixin', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = shallowMount(defaultComponent, options)
+    wrapper = shallowMount(Component, options)
+    wrapper.vm.focusNav = jest.fn
   })
 
   afterEach(() => {
@@ -40,6 +57,7 @@ describe('pickerMixin', () => {
     wrapper.vm.showPickerCalendar('month')
     expect(wrapper.emitted('show-month-calendar')).toBeTruthy()
   })
+
   it('should use `isNextDisabled` correctly', () => {
     expect(wrapper.vm.isNextDisabled).toBeFalsy()
   })

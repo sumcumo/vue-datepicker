@@ -80,7 +80,7 @@ export default {
     },
     refName: {
       type: String,
-      default: '',
+      default: 'input',
     },
     required: {
       type: Boolean,

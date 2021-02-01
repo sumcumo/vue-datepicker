@@ -2,14 +2,14 @@
   <div :class="{ 'input-group': bootstrapStyling }">
     <slot name="beforeDateInput" />
     <!-- Calendar Button -->
-    <span
+    <button
       v-if="calendarButton"
-      :class="{
-        'input-group-prepend': bootstrapStyling,
-        'calendar-btn-disabled': disabled,
-      }"
+      ref="calendarButton"
+      :class="{ 'input-group-prepend': bootstrapStyling }"
       class="vdp-datepicker__calendar-button"
-      @click="toggleCalendar"
+      :disabled="disabled"
+      @blur="$emit('check-focus')"
+      @click="toggleFromButton"
     >
       <span :class="{ 'input-group-text': bootstrapStyling }">
         <slot name="calendarBtn">
@@ -19,7 +19,7 @@
           </i>
         </slot>
       </span>
-    </span>
+    </button>
     <!-- Input -->
     <input
       :id="id"
@@ -36,18 +36,23 @@
       :readonly="!typeable"
       :required="required"
       :tabindex="tabindex"
-      :type="inline ? 'hidden' : 'text'"
+      :type="inline ? 'hidden' : null"
       :value="formattedValue"
       @blur="inputBlurred"
-      @click="showCalendarByClick"
-      @focus="showCalendarByFocus"
+      @click="toggleByClick"
+      @keydown.space="openBySpace"
+      @keydown.enter.prevent="openByEnter"
+      @keydown.esc.prevent="clearDate"
+      @focus="openByFocus"
       @keyup="parseTypedDate"
     />
     <!-- Clear Button -->
-    <span
+    <button
       v-if="clearButton && selectedDate"
       :class="{ 'input-group-append': bootstrapStyling }"
       class="vdp-datepicker__clear-button"
+      :disabled="disabled"
+      @blur="$emit('check-focus')"
       @click="clearDate()"
     >
       <span :class="{ 'input-group-text': bootstrapStyling }">
@@ -57,7 +62,7 @@
           </i>
         </slot>
       </span>
-    </span>
+    </button>
     <slot name="afterDateInput" />
   </div>
 </template>
@@ -138,6 +143,7 @@ export default {
      * emit a clearDate event
      */
     clearDate() {
+      this.input.value = ''
       this.$emit('clear-date')
     },
     /**
@@ -145,8 +151,7 @@ export default {
      */
     inputBlurred() {
       if (this.typeable) {
-        const parsableDate = this.parseDate(this.input.value)
-        const parsedDate = Date.parse(parsableDate)
+        const parsedDate = Date.parse(this.parseDate(this.input.value))
 
         if (Number.isNaN(parsedDate)) {
           this.clearDate()
@@ -155,25 +160,15 @@ export default {
           this.typedDate = ''
           this.$emit('typed-date', parsedDate)
         }
+        this.$emit('close')
       }
       this.$emit('blur')
-      this.$emit('close-calendar')
+      this.$emit('check-focus')
     },
     /**
      * Attempt to parse a typed date
-     * @param {Event} event
      */
-    parseTypedDate(event) {
-      const code = event.keyCode ? event.keyCode : event.which
-      // close calendar if escape or enter are pressed
-      if (
-        [
-          27, // escape
-          13, // enter
-        ].indexOf(code) !== -1
-      ) {
-        this.input.blur()
-      }
+    parseTypedDate() {
       if (this.typeable) {
         const parsableDate = this.parseDate(this.input.value)
         const parsedDate = Date.parse(parsableDate)
@@ -191,20 +186,43 @@ export default {
         this.parser,
       )
     },
-    toggleCalendar() {
-      this.$emit(this.isOpen ? 'close-calendar' : 'show-calendar')
+    toggle() {
+      this.$emit(this.isOpen ? 'close' : 'open')
     },
-    showCalendarByClick() {
+    toggleFromButton() {
+      this.$emit(this.isOpen ? 'close' : 'open', 'calendarButton')
+      this.$nextTick(() => {
+        if (!this.isOpen) {
+          this.$refs.calendarButton.focus()
+        }
+      })
+    },
+    toggleByClick() {
       if (!this.showCalendarOnButtonClick) {
-        this.toggleCalendar()
+        this.$emit(this.isOpen ? 'close' : 'open', this.refName)
       }
     },
-    showCalendarByFocus() {
+    openByEnter() {
+      if (this.typeable) {
+        this.inputBlurred()
+        return
+      }
+      if (!this.showCalendarOnButtonClick) {
+        this.toggle()
+      }
+    },
+    openByFocus() {
       if (this.showCalendarOnFocus) {
-        this.$emit('show-calendar')
+        this.$emit('open')
+        return
       }
 
       this.$emit('focus')
+    },
+    openBySpace() {
+      if (!this.typeable && !this.showCalendarOnButtonClick) {
+        this.toggle()
+      }
     },
   },
 }

@@ -1,7 +1,13 @@
 <template>
-  <div :class="[wrapperClass, isRtl ? 'rtl' : '']" class="vdp-datepicker">
+  <div
+    ref="vdp-datepicker"
+    class="vdp-datepicker"
+    :class="[wrapperClass, { rtl: isRtl }]"
+    @keyup.esc.prevent="closeAndClear"
+  >
     <DateInput
       :id="id"
+      ref="DateInput"
       :autofocus="autofocus"
       :bootstrap-styling="bootstrapStyling"
       :calendar-button="calendarButton"
@@ -30,10 +36,11 @@
       :typeable="typeable"
       :use-utc="useUtc"
       @blur="onBlur"
+      @check-focus="checkFocus"
       @clear-date="clearDate"
-      @close-calendar="close"
+      @close="close"
       @focus="onFocus"
-      @show-calendar="showCalendar"
+      @open="open"
       @typed-date="setTypedDate"
     >
       <slot slot="beforeDateInput" name="beforeDateInput" />
@@ -51,7 +58,7 @@
       :visible="isOpen"
     >
       <div
-        v-if="isOpen"
+        v-show="isOpen"
         ref="datepicker"
         :class="pickerClasses"
         @mousedown.prevent
@@ -60,12 +67,17 @@
           <slot name="beforeCalendarHeader" />
           <Component
             :is="currentPicker"
+            ref="PickerView"
             :allowed-to-show-view="allowedToShowView"
             :day-cell-content="dayCellContent"
             :disabled-dates="disabledDates"
             :first-day-of-week="firstDayOfWeek"
+            :has-been-focused="hasBeenFocused"
             :highlighted="highlighted"
             :is-rtl="isRtl"
+            :is-inline="isInline"
+            :is-open="isOpen"
+            :open-date="computedOpenDate"
             :page-date="pageDate"
             :page-timestamp="pageTimestamp"
             :selected-date="selectedDate"
@@ -73,16 +85,19 @@
             :show-full-month-name="fullMonthName"
             :show-header="showHeader"
             :translation="translation"
+            :typeable="typeable"
             :use-utc="useUtc"
             :year-range="yearPickerRange"
-            @select-date="selectDate"
-            @changed-month="handleChangedMonthFromDayPicker"
-            @selected-disabled="selectDisabledDate"
-            @select-month="selectMonth"
-            @changed-year="setPageDate"
-            @show-month-calendar="showSpecificCalendar('Month')"
-            @select-year="selectYear"
             @changed-decade="setPageDate"
+            @changed-month="handleChangedMonthFromDayPicker"
+            @changed-year="setPageDate"
+            @check-focus="checkFocus"
+            @close="close"
+            @select-date="selectDate"
+            @select-month="selectMonth"
+            @select-year="selectYear"
+            @selected-disabled="selectDisabledDate"
+            @show-month-calendar="showSpecificCalendar('Month')"
             @show-year-calendar="showSpecificCalendar('Year')"
           >
             <template v-for="slotKey of calendarSlots">
@@ -240,11 +255,15 @@ export default {
        */
       selectedDate: null,
       utils: constructedDateUtils,
+      hasBeenFocused: false,
     }
   },
   computed: {
     computedInitialView() {
       return this.initialView ? this.initialView : this.minimumView
+    },
+    computedOpenDate() {
+      return this.openDate ? this.utils.getNewDateObject(this.openDate) : null
     },
     isInline() {
       return !!this.inline
@@ -253,7 +272,7 @@ export default {
       return this.currentPicker !== ''
     },
     isRtl() {
-      return this.translation.rtl === true
+      return this.translation.rtl
     },
     pageDate() {
       return new Date(this.pageTimestamp)
@@ -303,6 +322,36 @@ export default {
       return viewIndex >= minimumViewIndex && viewIndex <= maximumViewIndex
     },
     /**
+     * Close the calendar if no element within it is focused
+     */
+    checkFocus() {
+      // eslint-disable-next-line no-console
+      console.log('check the focus')
+      return
+      // eslint-disable-next-line complexity,max-statements,no-unreachable
+      this.$nextTick(() => {
+        // Wrap in a try/catch block to avoid an error when running tests
+        try {
+          const input = this.$refs.InputDate
+          const picker = this.$refs.PickerView
+          const isInputFocused = input && input.$el.matches(':focus-within')
+          const isPickerFocused = picker && picker.$el.matches(':focus-within')
+          const isFocused = isInputFocused || isPickerFocused
+
+          if (isFocused) {
+            this.hasBeenFocused = true
+            return
+          }
+
+          if (this.isOpen) {
+            this.close()
+          }
+        } catch {
+          // :focus-within is not supported by this browser - https://caniuse.com/css-focus-within
+        }
+      })
+    },
+    /**
      * Clear the selected date
      */
     clearDate() {
@@ -315,10 +364,40 @@ export default {
     /**
      * Close the calendar views
      */
-    close() {
-      if (!this.isInline) {
-        this.currentPicker = ''
-        this.$emit('closed')
+    close(elementToFocus) {
+      if (this.isInline) {
+        return
+      }
+      this.currentPicker = ''
+
+      if (!this.showCalendarOnFocus && !this.typeable) {
+        if (elementToFocus) {
+          this.focusElement(elementToFocus)
+        }
+      }
+      this.$emit('closed')
+    },
+    /**
+     * Close the calendar and clear the input field
+     */
+    closeAndClear() {
+      this.close()
+      this.clearDate()
+    },
+    /**
+     * Focus the input field
+     */
+    focusElement(elementToFocus) {
+      this.$nextTick(() => {
+        this.$refs.DateInput.$refs[elementToFocus].focus()
+      })
+    },
+    /**
+     * Focus the selected cell if the calendar is inline
+     */
+    focusIfInline(cell) {
+      if (this.isInline) {
+        this.$refs.PickerView.focusCell(cell.id)
       }
     },
     /**
@@ -390,6 +469,7 @@ export default {
           `initialView '${this.initialView}' cannot be rendered based on minimum '${this.minimumView}' and maximum '${this.maximumView}'`,
         )
       }
+
       switch (initialView) {
         case 'year':
           this.showSpecificCalendar('Year')
@@ -399,7 +479,6 @@ export default {
           break
         default:
           this.showSpecificCalendar('Day')
-          break
       }
     },
     /**
@@ -449,12 +528,13 @@ export default {
       return dateTemp
     },
     /**
-     * @param {Object} date
+     * @param {Object} cell
      */
-    selectDate(date) {
+    selectDate(cell) {
       this.resetTypedDate = this.utils.getNewDateObject()
+      this.focusIfInline(cell)
       this.close()
-      this.setDate(date.timestamp)
+      this.setDate(cell.timestamp)
     },
     /**
      * @param {Object} date
@@ -463,35 +543,35 @@ export default {
       this.$emit('selected-disabled', date)
     },
     /**
-     * @param {Object} month
+     * @param {Object} cell
      */
-    selectMonth(month) {
-      const date = new Date(month.timestamp)
+    selectMonth(cell) {
+      const date = new Date(cell.timestamp)
       if (this.allowedToShowView('day')) {
         this.setPageDate(date)
-        this.$emit('changed-month', month)
+        this.$emit('changed-month', cell)
         this.showSpecificCalendar('Day')
       } else {
-        this.selectDate(month)
+        this.selectDate(cell)
       }
     },
     /**
-     * @param {Object} year
+     * @param {Object} cell
      */
-    selectYear(year) {
-      const date = new Date(year.timestamp)
+    selectYear(cell) {
+      const date = new Date(cell.timestamp)
       if (this.allowedToShowView('month')) {
         this.setPageDate(date)
-        this.$emit('changed-year', year)
+        this.$emit('changed-year', cell)
         this.showSpecificCalendar('Month')
       } else {
-        this.selectDate(year)
+        this.selectDate(cell)
       }
     },
     /**
-     * Shows the calendar at the relevant view: 'day', 'month', or 'year'
+     * Opens the calendar with the relevant view: 'day', 'month', or 'year'
      */
-    showCalendar() {
+    open() {
       if (this.disabled || this.isInline) {
         return
       }

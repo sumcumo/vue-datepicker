@@ -6,10 +6,6 @@
   position: relative;
   text-align: left;
   box-sizing: border-box;
-
-  .calendar-btn-disabled {
-    cursor: not-allowed;
-  }
 }
 
 .vdp-datepicker__calendar {
@@ -31,23 +27,38 @@
     position: static;
   }
 
-  header {
-    display: block;
-    line-height: 40px;
+  button {
+    background: inherit;
+    text-align: center;
 
-    span {
-      display: inline-block;
-      float: left;
-      text-align: center;
-      width: 71.42857142857143%;
+    &:disabled {
+      color: #ddd;
+    }
+  }
+
+  header {
+    display: flex;
+    height: 40px;
+    justify-content: space-between;
+
+    button {
+      border: none;
+      flex-grow: 1;
+
+      &:hover:not(:disabled) {
+        background: #eee;
+      }
+
+      &.up {
+        color: #000;
+        flex-grow: 5;
+      }
     }
 
     .prev,
     .next {
-      float: left;
       max-height: 40px;
       position: relative;
-      width: 14.285714285714286%;
 
       .default {
         text-indent: -10000px;
@@ -69,9 +80,13 @@
           border-right: 10px solid #000;
           margin-left: -5px;
         }
+      }
 
-        &.disabled:after {
-          border-right: 10px solid #ddd;
+      &:disabled {
+        .default {
+          &:after {
+            border-right: 10px solid #ddd;
+          }
         }
       }
     }
@@ -82,31 +97,23 @@
           border-left: 10px solid #000;
           margin-left: 5px;
         }
+      }
 
-        &.disabled:after {
-          border-left: 10px solid #ddd;
+      &:disabled {
+        .default {
+          &:after {
+            border-left: 10px solid #ddd;
+          }
         }
       }
     }
 
-    .prev:not(.disabled),
-    .next:not(.disabled),
-    .up:not(.disabled) {
-      cursor: pointer;
-
-      &:hover {
-        background: #eee;
-      }
+    .decade {
+      align-items: center;
+      display: flex;
+      flex-grow: 5;
+      justify-content: center;
     }
-  }
-
-  .disabled {
-    color: #ddd;
-    cursor: default;
-
-    //&.selected {
-    //  color: #104756;
-    //}
   }
 
   .flex-rtl {
@@ -117,19 +124,13 @@
 
   .cell {
     border: 1px solid transparent;
-    display: inline-block;
     height: 40px;
-    line-height: 40px;
     padding: 0 5px;
     text-align: center;
     vertical-align: middle;
     width: 14.285714285714286%;
 
-    &:not(.blank):not(.disabled).day,
-    &:not(.blank):not(.disabled).month,
-    &:not(.blank):not(.disabled).year {
-      cursor: pointer;
-
+    &:not(:disabled) {
       &:hover {
         border: 1px solid #4bd;
       }
@@ -152,7 +153,7 @@
       background: #cae5ed;
       color: #104756;
 
-      &.disabled {
+      &:disabled:not(.selected) {
         color: #accad2;
       }
     }
@@ -160,28 +161,27 @@
     &.muted {
       color: #757575;
 
-      &.selected {
-        color: #104756;
-      }
-
-      &.disabled:not(.selected) {
+      &:disabled {
         color: #ddd;
+      }
 
-        &.highlighted {
-          color: #accad2;
-        }
+      &.selected,
+      &.highlighted {
+        color: #114e5e;
       }
     }
+  }
 
-    &.day-header {
-      cursor: inherit;
-      font-size: 75%;
-      white-space: nowrap;
-
-      &:hover {
-        background: inherit;
-      }
-    }
+  .day-header {
+    display: inline-block;
+    font-size: 75%;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 5px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 14.285714285714286%;
   }
 
   .month,
@@ -191,16 +191,5 @@
 
   .picker-view {
     width: inherit;
-  }
-}
-
-.vdp-datepicker__clear-button,
-.vdp-datepicker__calendar-button {
-  cursor: pointer;
-  font-style: normal;
-
-  &.disabled {
-    color: #999;
-    cursor: default;
   }
 }

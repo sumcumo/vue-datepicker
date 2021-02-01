@@ -10,13 +10,24 @@ describe('PickerMonth', () => {
         allowedToShowView: () => true,
         translation: en,
         pageDate: new Date(2018, 1, 1),
-        selectedDate: new Date(2018, 2, 24),
       },
     })
   })
 
   afterEach(() => {
     wrapper.destroy()
+  })
+
+  it('knows the current month', () => {
+    const today = wrapper.vm.utils.getNewDateObject()
+    const firstOfMonth = new Date(wrapper.vm.utils.setDate(today, 1))
+    const currentMonth = wrapper.vm.utils.getMonth(today)
+
+    wrapper.setProps({
+      pageDate: firstOfMonth,
+    })
+
+    expect(wrapper.vm.todayCell.id).toEqual(currentMonth)
   })
 
   it('knows the selected month', () => {
@@ -29,13 +40,39 @@ describe('PickerMonth', () => {
   })
 
   it('can set the next year', () => {
+    wrapper.vm.focusNav = jest.fn
     wrapper.vm.nextYear()
+
+    expect(wrapper.emitted()['changed-year']).toHaveLength(1)
     expect(wrapper.emitted()['changed-year'][0][0].getFullYear()).toEqual(2019)
+
+    wrapper.setProps({
+      useUtc: true,
+      disabledDates: {
+        from: new Date(2018, 2, 1),
+      },
+    })
+
+    wrapper.vm.nextYear()
+    expect(wrapper.emitted()['changed-year']).toHaveLength(1)
   })
 
   it('can set the previous year', () => {
+    wrapper.vm.focusNav = jest.fn
     wrapper.vm.previousYear()
+
+    expect(wrapper.emitted()['changed-year']).toHaveLength(1)
     expect(wrapper.emitted()['changed-year'][0][0].getFullYear()).toEqual(2017)
+
+    wrapper.setProps({
+      useUtc: true,
+      disabledDates: {
+        to: new Date(2018, 1, 1),
+      },
+    })
+
+    wrapper.vm.previousYear()
+    expect(wrapper.emitted()['changed-year']).toHaveLength(1)
   })
 
   it('emits date on selection', () => {

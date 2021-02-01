@@ -24,15 +24,9 @@ describe('Datepicker unmounted', () => {
 
 describe('Datepicker mounted', () => {
   let wrapper
-  let date
+
   beforeEach(() => {
-    date = new Date(2016, 1, 15)
-    wrapper = mount(Datepicker, {
-      propsData: {
-        format: 'yyyy-MM-dd',
-        value: date,
-      },
-    })
+    wrapper = mount(Datepicker)
   })
 
   afterEach(() => {
@@ -49,6 +43,68 @@ describe('Datepicker mounted', () => {
     const input = wrapper.find('input')
     input.trigger('focus')
     expect(wrapper.emitted().focus).toBeTruthy()
+  })
+
+  it('should open/close when the input field is clicked', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    await input.trigger('click')
+    expect(wrapper.vm.isOpen).toBeFalsy()
+  })
+
+  it('should open/close when the calendar button is clicked', async () => {
+    wrapper.setProps({
+      calendarButton: true,
+    })
+
+    await wrapper.vm.$nextTick()
+
+    const calendarButton = wrapper.find('button')
+    await calendarButton.trigger('click')
+
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    await calendarButton.trigger('click')
+    expect(wrapper.vm.isOpen).toBeFalsy()
+  })
+})
+
+describe('Datepicker mounted to document body', () => {
+  let wrapper
+
+  beforeEach(() => {
+    wrapper = mount(Datepicker, {
+      attachTo: document.body,
+    })
+  })
+
+  afterEach(() => {
+    wrapper.destroy()
+  })
+
+  it("should focus today's date by default", async () => {
+    await wrapper.vm.open()
+
+    const todayCell = wrapper.find('button.today')
+    expect(todayCell.element).toBe(document.activeElement)
+  })
+
+  it('should close when the calendar loses focus', async () => {
+    await wrapper.vm.open()
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    // I'm not quite sure yet how to simulate a click on the body...
+    // await document.body.click()
+
+    // Or simply that today's cell is no longer focused?
+    // const todayCell = wrapper.find('button.today')
+    // await todayCell.trigger('blur')
+    // expect(todayCell.element).not.toBe(document.activeElement)
+
+    // expect(wrapper.vm.isOpen).toBeFalsy()
   })
 })
 
@@ -115,6 +171,7 @@ describe('Datepicker shallowMounted', () => {
   })
 
   it('should open and close the calendar', () => {
+    wrapper.vm.focusElement = jest.fn
     wrapper.vm.close()
     expect(wrapper.vm.isOpen).toEqual(false)
 
@@ -133,7 +190,10 @@ describe('Datepicker shallowMounted', () => {
     wrapper.vm.showSpecificCalendar('Day')
     expect(wrapper.vm.isOpen).toEqual(true)
 
-    wrapper.vm.close()
+    wrapper.trigger('keyup.esc')
+    expect(wrapper.vm.isOpen).toEqual(false)
+
+    wrapper.vm.showSpecificCalendar('Nonsense')
     expect(wrapper.vm.isOpen).toEqual(false)
   })
 
@@ -145,6 +205,7 @@ describe('Datepicker shallowMounted', () => {
 
   it('can select a day', () => {
     const dateTemp = new Date(2016, 9, 1)
+    wrapper.vm.focusElement = jest.fn
     wrapper.vm.selectDate({ timestamp: dateTemp.valueOf() })
     expect(wrapper.vm.pageTimestamp).toEqual(dateTemp.valueOf())
     expect(wrapper.vm.selectedDate.getMonth()).toEqual(9)
@@ -379,7 +440,7 @@ describe('Datepicker with initial-view', () => {
   let wrapper
   it('should open in Day view', () => {
     wrapper = shallowMount(Datepicker)
-    wrapper.vm.showCalendar()
+    wrapper.vm.open()
     expect(wrapper.vm.computedInitialView).toEqual('day')
     expect(wrapper.vm.currentPicker).toEqual('PickerDay')
   })
@@ -390,7 +451,7 @@ describe('Datepicker with initial-view', () => {
         initialView: 'month',
       },
     })
-    wrapper.vm.showCalendar()
+    wrapper.vm.open()
     expect(wrapper.vm.computedInitialView).toEqual('month')
     expect(wrapper.vm.currentPicker).toEqual('PickerMonth')
   })
@@ -401,7 +462,7 @@ describe('Datepicker with initial-view', () => {
         initialView: 'year',
       },
     })
-    wrapper.vm.showCalendar()
+    wrapper.vm.open()
     expect(wrapper.vm.computedInitialView).toEqual('year')
     expect(wrapper.vm.currentPicker).toEqual('PickerYear')
   })
@@ -412,7 +473,7 @@ describe('Datepicker with initial-view', () => {
         disabled: true,
       },
     })
-    wrapper.vm.showCalendar()
+    wrapper.vm.open()
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
 })
@@ -425,7 +486,7 @@ describe('Datepicker on body', () => {
         appendToBody: true,
       },
     })
-    wrapper.vm.showCalendar()
+    wrapper.vm.open()
     await wrapper.vm.$nextTick()
     expect(wrapper.vm.$el.querySelector('.vdp-datepicker__calendar')).toBeNull()
     expect(document.querySelector('.vdp-datepicker__calendar')).toBeDefined()
@@ -438,7 +499,7 @@ describe('Datepicker on body', () => {
         appendToBody: true,
       },
     })
-    wrapper.vm.showCalendar()
+    wrapper.vm.open()
     await wrapper.vm.$nextTick()
     wrapper.vm.$destroy()
     expect(document.querySelector('.vdp-datepicker__calendar')).toBeNull()
