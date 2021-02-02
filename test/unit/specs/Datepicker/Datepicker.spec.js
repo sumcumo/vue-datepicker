@@ -50,6 +50,20 @@ describe('Datepicker mounted', () => {
     input.trigger('focus')
     expect(wrapper.emitted().focus).toBeTruthy()
   })
+
+  it('should open the calendar with click on input with showCalendarOnFocus', async () => {
+    wrapper.setProps({
+      showCalendarOnFocus: true,
+    })
+    await wrapper.vm.$nextTick()
+    wrapper.find('input').trigger('focus')
+    await wrapper.vm.$nextTick()
+    wrapper.find('input').trigger('click')
+    await wrapper.vm.$nextTick()
+    wrapper.find('input').trigger('FUCK')
+    expect(wrapper.emitted('opened')).toBeTruthy()
+    expect(wrapper.emitted('closed')).toBeFalsy()
+  })
 })
 
 describe('Datepicker shallowMounted', () => {

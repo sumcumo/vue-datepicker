@@ -11,15 +11,17 @@ describe('DateInput unmounted', () => {
 
 describe('DateInput', () => {
   let wrapper
-
-  beforeEach(() => {
-    wrapper = shallowMount(DateInput, {
+  const createWrapper = () => {
+    return shallowMount(DateInput, {
       propsData: {
         selectedDate: new Date(2018, 2, 24),
         format: 'dd MMM yyyy',
         translation: en,
       },
     })
+  }
+  beforeEach(() => {
+    wrapper = createWrapper()
   })
 
   afterEach(() => {
@@ -118,6 +120,12 @@ describe('DateInput', () => {
   it('triggers closeCalendar on blur', () => {
     wrapper.find('input').trigger('blur')
     expect(wrapper.emitted('close-calendar')).toBeTruthy()
+  })
+
+  it('should open the calendar on click', async () => {
+    wrapper.find('input').trigger('click')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.emitted('show-calendar')).toBeTruthy()
   })
 
   it('should open the calendar on focus', async () => {

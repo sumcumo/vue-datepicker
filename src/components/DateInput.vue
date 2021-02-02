@@ -92,6 +92,7 @@ export default {
     const constructedDateUtils = makeDateUtils(this.useUtc)
     return {
       input: null,
+      isFocusedUsed: false,
       typedDate: '',
       utils: constructedDateUtils,
     }
@@ -141,23 +142,15 @@ export default {
       this.$emit('clear-date')
     },
     /**
-     * Submits a typed date if it's valid
+     * submit typedDate and emit a blur event
      */
     inputBlurred() {
       if (this.typeable) {
-        const parsableDate = this.parseDate(this.input.value)
-        const parsedDate = Date.parse(parsableDate)
-
-        if (Number.isNaN(parsedDate)) {
-          this.clearDate()
-        } else {
-          this.input.value = this.formattedDate
-          this.typedDate = ''
-          this.$emit('typed-date', parsedDate)
-        }
+        this.submitTypedDate()
       }
       this.$emit('blur')
       this.$emit('close-calendar')
+      this.isFocusedUsed = false
     },
     /**
      * Attempt to parse a typed date
@@ -195,8 +188,15 @@ export default {
       this.$emit(this.isOpen ? 'close-calendar' : 'show-calendar')
     },
     showCalendarByClick() {
-      if (!this.showCalendarOnButtonClick) {
+      const isFocusedUsed =
+        !this.showCalendarOnFocus ||
+        (this.showCalendarOnFocus && !this.isFocusedUsed)
+      if (!this.showCalendarOnButtonClick && !isFocusedUsed) {
         this.toggleCalendar()
+      }
+
+      if (this.showCalendarOnFocus) {
+        this.isFocusedUsed = true
       }
     },
     showCalendarByFocus() {
@@ -205,6 +205,21 @@ export default {
       }
 
       this.$emit('focus')
+    },
+    /**
+     * Submits a typed date if it's valid
+     */
+    submitTypedDate() {
+      const parsableDate = this.parseDate(this.input.value)
+      const parsedDate = Date.parse(parsableDate)
+
+      if (Number.isNaN(parsedDate)) {
+        this.clearDate()
+      } else {
+        this.input.value = this.formattedDate
+        this.typedDate = ''
+        this.$emit('typed-date', parsedDate)
+      }
     },
   },
 }
