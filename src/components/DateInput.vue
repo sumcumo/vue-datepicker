@@ -93,6 +93,7 @@ export default {
     return {
       input: null,
       isFocusedUsed: false,
+      isBlurred: false,
       typedDate: '',
       utils: constructedDateUtils,
     }
@@ -145,6 +146,7 @@ export default {
      * submit typedDate and emit a blur event
      */
     inputBlurred() {
+      this.isBlurred = this.isOpen
       if (this.typeable) {
         this.submitTypedDate()
       }
@@ -184,13 +186,9 @@ export default {
         this.parser,
       )
     },
-    toggleCalendar() {
-      this.$emit(this.isOpen ? 'close-calendar' : 'show-calendar')
-    },
     showCalendarByClick() {
-      const isFocusedUsed =
-        !this.showCalendarOnFocus ||
-        (this.showCalendarOnFocus && !this.isFocusedUsed)
+      const isFocusedUsed = this.showCalendarOnFocus && !this.isFocusedUsed
+
       if (!this.showCalendarOnButtonClick && !isFocusedUsed) {
         this.toggleCalendar()
       }
@@ -204,6 +202,7 @@ export default {
         this.$emit('show-calendar')
       }
 
+      this.isBlurred = false
       this.$emit('focus')
     },
     /**
@@ -220,6 +219,13 @@ export default {
         this.typedDate = ''
         this.$emit('typed-date', parsedDate)
       }
+    },
+    toggleCalendar() {
+      if (!this.isOpen && this.isBlurred) {
+        this.isBlurred = false
+        return
+      }
+      this.$emit(this.isOpen ? 'close-calendar' : 'show-calendar')
     },
   },
 }

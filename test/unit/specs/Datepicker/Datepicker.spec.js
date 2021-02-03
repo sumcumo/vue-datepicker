@@ -51,18 +51,62 @@ describe('Datepicker mounted', () => {
     expect(wrapper.emitted().focus).toBeTruthy()
   })
 
-  it('should open the calendar with click on input with showCalendarOnFocus', async () => {
-    wrapper.setProps({
+  it('should open the calendar with click on input when showCalendarOnFocus = true', async () => {
+    await wrapper.setProps({
       showCalendarOnFocus: true,
     })
+    const input = wrapper.find('input')
+
+    await input.trigger('focus')
+    await input.trigger('click')
     await wrapper.vm.$nextTick()
-    wrapper.find('input').trigger('focus')
-    await wrapper.vm.$nextTick()
-    wrapper.find('input').trigger('click')
-    await wrapper.vm.$nextTick()
-    wrapper.find('input').trigger('FUCK')
-    expect(wrapper.emitted('opened')).toBeTruthy()
-    expect(wrapper.emitted('closed')).toBeFalsy()
+    expect(wrapper.vm.isOpen).toBeTruthy()
+  })
+
+  it('should toggle the calendar via the calendar button', async () => {
+    await wrapper.setProps({
+      calendarButton: true,
+    })
+
+    const calendarButton = wrapper.find('span.vdp-datepicker__calendar-button')
+
+    await calendarButton.trigger('click')
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    await calendarButton.trigger('click')
+    expect(wrapper.vm.isOpen).toBeFalsy()
+  })
+
+  it('should toggle the calendar via the calendar button when showCalendarOnFocus = true', async () => {
+    await wrapper.setProps({
+      calendarButton: true,
+      showCalendarOnFocus: true,
+    })
+
+    const calendarButton = wrapper.find('span.vdp-datepicker__calendar-button')
+
+    await calendarButton.trigger('click')
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    await calendarButton.trigger('click')
+    expect(wrapper.vm.isOpen).toBeFalsy()
+  })
+
+  it('should close the calendar via the calendar button, despite input being focused', async () => {
+    await wrapper.setProps({
+      calendarButton: true,
+      showCalendarOnFocus: true,
+    })
+
+    const input = wrapper.find('input')
+    const calendarButton = wrapper.find('span.vdp-datepicker__calendar-button')
+
+    await input.trigger('focus')
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    await input.trigger('blur')
+    await calendarButton.trigger('click')
+    expect(wrapper.vm.isOpen).toBeFalsy()
   })
 })
 
