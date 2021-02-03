@@ -92,7 +92,8 @@ export default {
     const constructedDateUtils = makeDateUtils(this.useUtc)
     return {
       input: null,
-      isFocusedUsed: false,
+      inputFocusOpensCalendar: true,
+      isInputFocused: false,
       typedDate: '',
       utils: constructedDateUtils,
     }
@@ -130,6 +131,13 @@ export default {
     resetTypedDate() {
       this.typedDate = ''
     },
+    isInputFocused: {
+      immediate: true,
+      handler() {
+        this.setInputIsFocused()
+        this.setInputFocusOpensCalendar()
+      },
+    },
   },
   mounted() {
     this.input = this.$el.querySelector('input')
@@ -148,9 +156,10 @@ export default {
       if (this.typeable) {
         this.submitTypedDate()
       }
+
       this.$emit('blur')
+      this.setInputIsFocused()
       this.$emit('close-calendar')
-      this.isFocusedUsed = false
     },
     /**
      * Attempt to parse a typed date
@@ -184,23 +193,26 @@ export default {
         this.parser,
       )
     },
-    toggleCalendar() {
-      this.$emit(this.isOpen ? 'close-calendar' : 'show-calendar')
+    setInputIsFocused() {
+      const input = this.$refs[this.refName]
+
+      if (input) {
+        this.isInputFocused = input.matches(':focus')
+      }
+    },
+    setInputFocusOpensCalendar() {
+      this.inputFocusOpensCalendar =
+        !this.showCalendarOnButtonClick &&
+        (this.showCalendarOnFocus ||
+          (!this.showCalendarOnFocus && !this.isInputFocused))
     },
     showCalendarByClick() {
-      const isFocusedUsed =
-        !this.showCalendarOnFocus ||
-        (this.showCalendarOnFocus && !this.isFocusedUsed)
-      if (!this.showCalendarOnButtonClick && !isFocusedUsed) {
-        this.toggleCalendar()
-      }
-
-      if (this.showCalendarOnFocus) {
-        this.isFocusedUsed = true
+      if (this.inputFocusOpensCalendar && !this.isOpen) {
+        this.$emit('show-calendar')
       }
     },
     showCalendarByFocus() {
-      if (this.showCalendarOnFocus) {
+      if (this.showCalendarOnFocus && this.inputFocusOpensCalendar) {
         this.$emit('show-calendar')
       }
 
@@ -220,6 +232,9 @@ export default {
         this.typedDate = ''
         this.$emit('typed-date', parsedDate)
       }
+    },
+    toggleCalendar() {
+      this.$emit(this.isOpen ? 'close-calendar' : 'show-calendar')
     },
   },
 }

@@ -117,8 +117,8 @@ describe('DateInput', () => {
     expect(wrapper.find('input').element.value).toEqual('!')
   })
 
-  it('triggers closeCalendar on blur', () => {
-    wrapper.find('input').trigger('blur')
+  it('triggers closeCalendar on blur', async () => {
+    await wrapper.find('input').trigger('blur')
     expect(wrapper.emitted('close-calendar')).toBeTruthy()
   })
 
@@ -140,12 +140,15 @@ describe('DateInput', () => {
   })
 
   it('should open the calendar only on calendar button click', async () => {
-    wrapper.setProps({
+    await wrapper.setProps({
       calendarButton: true,
       showCalendarOnButtonClick: true,
     })
-    await wrapper.vm.$nextTick()
-    wrapper.find('input').trigger('click')
+    await wrapper.vm.setInputFocusOpensCalendar()
+
+    const input = wrapper.find('input')
+    await input.trigger('focus')
+    await input.trigger('click')
     expect(wrapper.emitted('show-calendar')).toBeFalsy()
     wrapper.find('.vdp-datepicker__calendar-button').trigger('click')
     expect(wrapper.emitted('show-calendar')).toBeTruthy()
