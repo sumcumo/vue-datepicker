@@ -1,5 +1,5 @@
 <template>
-  <div class="picker-view">
+  <div class="picker-view" @keydown.right.prevent="ree">
     <slot name="beforeCalendarHeaderDay" />
     <PickerHeader
       :config="headerConfig"
@@ -16,19 +16,20 @@
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
-    <div :class="isRtl ? 'flex-rtl' : ''">
+    <div ref="days" :class="isRtl ? 'flex-rtl' : ''">
       <span v-for="d in daysOfWeek" :key="d.timestamp" class="cell day-header">
         {{ d }}
       </span>
-      <span
+      <button
         v-for="day in days"
         :key="day.timestamp"
         class="cell day"
         :class="dayClasses(day)"
+        :disabled="day.isDisabled"
         @click="selectDate(day)"
       >
         {{ dayCellContent(day) }}
-      </span>
+      </button>
     </div>
     <slot name="calendarFooterDay" />
   </div>
@@ -37,6 +38,7 @@
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
 import HighlightedDate from '~/utils/HighlightedDate'
+import { arrowRight } from '~/utils/KeyFunctions'
 
 export default {
   name: 'DatepickerDayView',
@@ -199,7 +201,27 @@ export default {
       ).config
     },
   },
+  mounted() {
+    console.log('tTEST', this.$refs)
+    this.days.forEach((day, index) => {
+      if (day.isToday) {
+        console.log(this.$refs.days.querySelectorAll('button.cell.day'))
+        this.$refs.days.querySelectorAll('button.cell.day')[index].focus()
+      }
+    })
+    //   this.$refs.pickerView.addEventListener('keyup', (event) => {
+    //     console.log('heyho', event)
+    //     const code = event.keyCode ? event.keyCode : event.which
+    //     if (code === '30') {
+    //       arrowRight({ view: 'PickerDay', nextPage: this.nextMonth })
+    //     }
+    //   })
+  },
   methods: {
+    ree() {
+      console.log('rofl')
+      arrowRight({ view: 'PickerDay', nextPage: this.nextMonth })
+    },
     /**
      * Change the page month
      * @param {Number} incrementBy
