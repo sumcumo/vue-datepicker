@@ -1,3 +1,5 @@
+@import "mixins";
+
 .rtl {
   direction: rtl;
 }
@@ -196,6 +198,7 @@
 
 .vdp-datepicker__clear-button,
 .vdp-datepicker__calendar-button {
+  @include button-reset;
   cursor: pointer;
   font-style: normal;
 
