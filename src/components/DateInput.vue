@@ -4,6 +4,7 @@
     <!-- Calendar Button -->
     <button
       v-if="calendarButton"
+      :aria-label="`${isOpen ? 'Close' : 'Open'} Datepicker`"
       :class="{
         'input-group-prepend': bootstrapStyling,
         'calendar-btn-disabled': disabled,
