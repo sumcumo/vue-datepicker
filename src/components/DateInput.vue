@@ -2,7 +2,7 @@
   <div :class="{ 'input-group': bootstrapStyling }">
     <slot name="beforeDateInput" />
     <!-- Calendar Button -->
-    <span
+    <button
       v-if="calendarButton"
       :class="{
         'input-group-prepend': bootstrapStyling,
@@ -19,7 +19,7 @@
           </i>
         </slot>
       </span>
-    </span>
+    </button>
     <!-- Input -->
     <input
       :id="id"
