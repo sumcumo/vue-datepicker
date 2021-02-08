@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/sumcumo/vue-datepicker/compare/v3.0.1...v3.1.0) (2021-02-08)
+
+
+### Features
+
+* **input:** Add slot for calendar icons ([#75](https://github.com/sumcumo/vue-datepicker/issues/75)) ([6b9600a](https://github.com/sumcumo/vue-datepicker/commit/6b9600ad8e9c650a0980d34bbd21459072dc92b4))
+* **style:** highlight today ([e45b92d](https://github.com/sumcumo/vue-datepicker/commit/e45b92d2684ffd945556d38e0a42aa222b66ae96))
+
+
+### Bug Fixes
+
+* **disableddates:** resolve all years are disabled for `from` ([252602b](https://github.com/sumcumo/vue-datepicker/commit/252602b5182632fa1a1419f4625b4b8cd4704539))
+* **input:** resolve flicker on showCalendarByFocus ([#82](https://github.com/sumcumo/vue-datepicker/issues/82)) ([e10daab](https://github.com/sumcumo/vue-datepicker/commit/e10daab72cb6dcadcf72a721dcea8be9f2d89b22))
+
 ### [3.0.1](https://github.com/sumcumo/vue-datepicker/compare/v3.0.0...v3.0.1) (2021-01-18)
 
 
