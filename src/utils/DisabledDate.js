@@ -123,7 +123,7 @@ export default class DisabledDate {
         return has.to && year < to.year
       },
       from: () => {
-        return has.from && year < from.year
+        return has.from && year > from.year
       },
     }
   }

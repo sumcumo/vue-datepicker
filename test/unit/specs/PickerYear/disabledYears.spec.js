@@ -84,4 +84,18 @@ describe('PickerYear', () => {
     })
     expect(wrapper.vm.isDisabledYear(new Date(2016, 8, 29))).toEqual(false)
   })
+
+  it('should not disable everything for from', () => {
+    wrapper.setProps({
+      disabledDates: {
+        to: undefined,
+        from: new Date(2018, 4, 15),
+      },
+    })
+    expect(wrapper.vm.isDisabledYear(new Date(2020, 4, 29))).toEqual(true)
+    expect(wrapper.vm.isDisabledYear(new Date(2019, 4, 29))).toEqual(true)
+    expect(wrapper.vm.isDisabledYear(new Date(2018, 4, 29))).toEqual(false)
+    expect(wrapper.vm.isDisabledYear(new Date(2017, 4, 29))).toEqual(false)
+    expect(wrapper.vm.isDisabledYear(new Date(2016, 4, 29))).toEqual(false)
+  })
 })
