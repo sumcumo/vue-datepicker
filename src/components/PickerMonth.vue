@@ -16,15 +16,16 @@
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
-    <span
+    <button
       v-for="month in months"
+      :aria-label="`Select ${localDateString(month)}`"
       :key="month.timestamp"
       :class="{ selected: month.isSelected, disabled: month.isDisabled }"
       class="cell month"
       @click.stop="selectMonth(month)"
     >
       {{ month.month }}
-    </span>
+    </button>
     <slot name="calendarFooterMonth" />
   </div>
 </template>
@@ -127,6 +128,14 @@ export default {
         year === this.utils.getFullYear(this.selectedDate) &&
         month === this.utils.getMonth(this.selectedDate)
       )
+    },
+    localDateString(day) {
+      const options = {
+        year: 'numeric',
+        month: 'long',
+      }
+      
+      return new Date(day.timestamp).toLocaleDateString(undefined, options)
     },
     /**
      * Increments the year
