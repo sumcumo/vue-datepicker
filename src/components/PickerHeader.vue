@@ -1,6 +1,6 @@
 <template>
   <header v-if="config.showHeader">
-    <span
+    <button
       class="prev"
       :aria-label="`${config.isRtl ? 'next' : 'previous'} ${controlLabel}`"
       :class="{ disabled: isLeftNavDisabled }"
@@ -9,9 +9,9 @@
       <slot name="prevIntervalBtn">
         <span class="default">&lt;</span>
       </slot>
-    </span>
+    </button>
     <slot />
-    <span
+    <button
       class="next"
       :aria-label="`${config.isRtl ? 'previous' : 'next'} ${controlLabel}`"
       :class="{ disabled: isRightNavDisabled }"
@@ -20,7 +20,7 @@
       <slot name="nextIntervalBtn">
         <span class="default">&gt;</span>
       </slot>
-    </span>
+    </button>
   </header>
 </template>
 
