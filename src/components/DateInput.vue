@@ -91,7 +91,7 @@ export default {
       },
     },
     uid: {
-      type: String,
+      type: Number,
       default: null
     }
   },
