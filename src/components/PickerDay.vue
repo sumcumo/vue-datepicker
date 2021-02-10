@@ -20,7 +20,7 @@
       <span v-for="d in daysOfWeek" :key="d.timestamp" class="cell day-header">
         {{ d }}
       </span>
-      <span
+      <button
         v-for="day in days"
         :key="day.timestamp"
         class="cell day"
@@ -28,7 +28,7 @@
         @click="selectDate(day)"
       >
         {{ dayCellContent(day) }}
-      </span>
+      </button>
     </div>
     <slot name="calendarFooterDay" />
   </div>
