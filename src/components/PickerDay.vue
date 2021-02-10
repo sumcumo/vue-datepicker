@@ -22,6 +22,7 @@
       </span>
       <button
         v-for="day in days"
+        :aria-label="`Select ${localDateString(day)}`"
         :key="day.timestamp"
         class="cell day"
         :class="dayClasses(day)"
@@ -300,6 +301,16 @@ export default {
       return (
         this.selectedDate && this.utils.compareDates(this.selectedDate, dObj)
       )
+    },
+    localDateString(day) {
+      const options = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }
+      
+      return new Date(day.timestamp).toLocaleDateString(undefined, options)
     },
     /**
      * Defines the objects within the days array
