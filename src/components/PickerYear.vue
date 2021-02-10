@@ -13,15 +13,16 @@
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
 
-    <span
+    <button
       v-for="year in years"
+      :aria-label="`Select ${localDateString(year)}`"
       :key="year.timestamp"
       :class="{ selected: year.isSelected, disabled: year.isDisabled }"
       class="cell year"
       @click.stop="selectYear(year)"
     >
       {{ year.year }}
-    </span>
+    </button>
     <slot name="calendarFooterYear" />
   </div>
 </template>
@@ -145,6 +146,13 @@ export default {
       return (
         this.selectedDate && year === this.utils.getFullYear(this.selectedDate)
       )
+    },
+    localDateString(year) {
+      const options = {
+        year: 'numeric',
+      }
+      
+      return new Date(year.timestamp).toLocaleDateString(undefined, options)
     },
     /**
      * Increments the decade
