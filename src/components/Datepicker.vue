@@ -54,8 +54,8 @@
       <div
         v-if="isOpen"
         ref="datepicker"
-        :class="pickerClasses"
         :id="`vdp-datepicker-${_uid}`"
+        :class="pickerClasses"
         @mousedown.prevent
       >
         <template v-if="isOpen">

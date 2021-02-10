@@ -23,8 +23,8 @@
       </span>
       <button
         v-for="day in days"
-        :aria-label="`Select ${localDateString(day)}`"
         :key="day.timestamp"
+        :aria-label="`Select ${localDateString(day)}`"
         class="cell day"
         :class="dayClasses(day)"
         @click="selectDate(day)"

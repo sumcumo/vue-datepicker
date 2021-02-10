@@ -16,8 +16,8 @@
 
     <button
       v-for="year in years"
-      :aria-label="`Select ${localDateString(year)}`"
       :key="year.timestamp"
+      :aria-label="`Select ${localDateString(year)}`"
       :class="{ selected: year.isSelected, disabled: year.isDisabled }"
       class="cell year"
       @click.stop="selectYear(year)"

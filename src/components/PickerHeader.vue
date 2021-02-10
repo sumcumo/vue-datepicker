@@ -50,7 +50,7 @@ export default {
     previous: {
       type: Function,
       required: true,
-    }
+    },
   },
   computed: {
     /**

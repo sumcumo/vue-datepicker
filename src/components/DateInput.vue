@@ -92,8 +92,8 @@ export default {
     },
     uid: {
       type: Number,
-      default: null
-    }
+      default: null,
+    },
   },
   data() {
     const constructedDateUtils = makeDateUtils(this.useUtc)

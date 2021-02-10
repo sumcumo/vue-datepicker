@@ -19,8 +19,8 @@
     </PickerHeader>
     <button
       v-for="month in months"
-      :aria-label="`Select ${localDateString(month)}`"
       :key="month.timestamp"
+      :aria-label="`Select ${localDateString(month)}`"
       :class="{ selected: month.isSelected, disabled: month.isDisabled }"
       class="cell month"
       @click.stop="selectMonth(month)"
