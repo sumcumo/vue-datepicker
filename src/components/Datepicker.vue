@@ -53,8 +53,8 @@
     >
       <div
         v-if="isOpen"
-        ref="datepicker"
         :id="`vdp-datepicker-${_uid}`"
+        ref="datepicker"
         :class="pickerClasses"
         @mousedown.prevent
       >

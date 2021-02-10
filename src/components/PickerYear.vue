@@ -152,7 +152,6 @@ export default {
       const options = {
         year: 'numeric',
       }
-      
       return new Date(year.timestamp).toLocaleDateString(undefined, options)
     },
     /**

@@ -310,7 +310,6 @@ export default {
         month: 'long',
         day: 'numeric',
       }
-      
       return new Date(day.timestamp).toLocaleDateString(undefined, options)
     },
     /**

@@ -135,7 +135,6 @@ export default {
         year: 'numeric',
         month: 'long',
       }
-      
       return new Date(month.timestamp).toLocaleDateString(undefined, options)
     },
     /**
