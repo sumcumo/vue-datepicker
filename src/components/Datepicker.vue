@@ -28,6 +28,7 @@
       :tabindex="tabindex"
       :translation="translation"
       :typeable="typeable"
+      :uid="_uid"
       :use-utc="useUtc"
       @blur="onBlur"
       @clear-date="clearDate"
@@ -54,6 +55,7 @@
         v-if="isOpen"
         ref="datepicker"
         :class="pickerClasses"
+        :id="`vdp-datepicker-${_uid}`"
         @mousedown.prevent
       >
         <template v-if="isOpen">

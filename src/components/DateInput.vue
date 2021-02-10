@@ -4,6 +4,7 @@
     <!-- Calendar Button -->
     <button
       v-if="calendarButton"
+      :aria-controls="`vdp-datepicker-${uid}`"
       :aria-expanded="`${isOpen ? 'true' : 'false'}`"
       :aria-label="`${isOpen ? 'Close' : 'Open'} Datepicker`"
       :class="{
@@ -89,6 +90,10 @@ export default {
         return {}
       },
     },
+    uid: {
+      type: String,
+      default: null
+    }
   },
   data() {
     const constructedDateUtils = makeDateUtils(this.useUtc)
