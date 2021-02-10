@@ -129,13 +129,13 @@ export default {
         month === this.utils.getMonth(this.selectedDate)
       )
     },
-    localDateString(day) {
+    localDateString(month) {
       const options = {
         year: 'numeric',
         month: 'long',
       }
       
-      return new Date(day.timestamp).toLocaleDateString(undefined, options)
+      return new Date(month.timestamp).toLocaleDateString(undefined, options)
     },
     /**
      * Increments the year
