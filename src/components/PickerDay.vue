@@ -5,6 +5,7 @@
       :config="headerConfig"
       :next="nextMonth"
       :previous="previousMonth"
+      control-label="month"
     >
       <span
         :class="allowedToShowView('month') ? 'up' : ''"

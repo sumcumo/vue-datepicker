@@ -5,6 +5,7 @@
       :config="headerConfig"
       :next="nextDecade"
       :previous="previousDecade"
+       control-label="decade"
     >
       <span>
         {{ pageTitleYear }}

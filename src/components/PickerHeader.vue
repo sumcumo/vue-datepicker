@@ -2,6 +2,7 @@
   <header v-if="config.showHeader">
     <span
       class="prev"
+      :aria-label="`${config.isRtl ? 'next' : 'previous'} ${controlLabel}`"
       :class="{ disabled: isLeftNavDisabled }"
       @click="config.isRtl ? next() : previous()"
     >
@@ -12,6 +13,7 @@
     <slot />
     <span
       class="next"
+      :aria-label="`${config.isRtl ? 'previous' : 'next'} ${controlLabel}`"
       :class="{ disabled: isRightNavDisabled }"
       @click="config.isRtl ? previous() : next()"
     >
@@ -37,6 +39,10 @@ export default {
         }
       },
     },
+    controlLabel: {
+      type: String,
+      default: null,
+    },
     next: {
       type: Function,
       required: true,
@@ -44,7 +50,7 @@ export default {
     previous: {
       type: Function,
       required: true,
-    },
+    }
   },
   computed: {
     /**
