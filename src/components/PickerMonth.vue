@@ -5,7 +5,7 @@
       :config="headerConfig"
       :next="nextYear"
       :previous="previousYear"
-       control-label="year"
+      control-label="year"
     >
       <span
         class="month__year_btn"
