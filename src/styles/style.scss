@@ -46,7 +46,7 @@
 
     .prev,
     .next {
-      background: none;
+      background: transparent;
       border: none;
       float: left;
       max-height: 40px;
@@ -120,7 +120,7 @@
   }
 
   .cell {
-    background: none;
+    background: transparent;
     border: 1px solid transparent;
     display: inline-block;
     height: 40px;
