@@ -229,12 +229,6 @@ export default {
       }
     },
     /**
-     * @return {Number}
-     */
-    getPageMonth() {
-      return this.utils.getMonth(this.pageDate)
-    },
-    /**
      * Whether a day is disabled
      * @param {Date} date to check if disabled
      * @return {Boolean}

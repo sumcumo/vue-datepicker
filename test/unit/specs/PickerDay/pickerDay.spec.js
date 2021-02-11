@@ -33,10 +33,6 @@ describe('PickerDay: DOM', () => {
     expect(wrapper.emitted()['select-date']).toBeTruthy()
   })
 
-  it('knows the current page month', () => {
-    expect(wrapper.vm.getPageMonth()).toEqual(1)
-  })
-
   it('emits show year calendar event when clicked on the year', () => {
     const yearBtn = wrapper.find('.day__month_btn')
     yearBtn.trigger('click')
