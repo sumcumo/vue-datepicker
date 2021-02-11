@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: 'trapFocus',
+  name: 'TrapFocus',
   data() {
     return {
       fistFocusable: null,
