@@ -59,7 +59,7 @@
       >
         <slot name="beforeCalendarHeader" />
         <Component
-          :is="currentPicker"
+          :is="picker"
           :allowed-to-show-view="allowedToShowView"
           :day-cell-content="dayCellContent"
           :disabled-dates="disabledDates"
@@ -80,9 +80,8 @@
           @select-date="selectDate"
           @select-month="selectMonth"
           @select-year="selectYear"
+          @set-view="setView"
           @selected-disabled="selectDisabledDate"
-          @show-month-calendar="showSpecificCalendar('Month')"
-          @show-year-calendar="showSpecificCalendar('Year')"
         >
           <template v-for="slotKey of calendarSlots">
             <slot :slot="slotKey" :name="slotKey" />
@@ -215,7 +214,6 @@ export default {
     return {
       calendarHeight: 0,
       calendarSlots,
-      currentPicker: '',
       /*
        * Vue cannot observe changes to a Date Object so date must be stored as a timestamp
        * This represents the first day of the current viewing month
@@ -229,6 +227,7 @@ export default {
        */
       selectedDate: null,
       utils,
+      view: '',
     }
   },
   computed: {
@@ -239,13 +238,17 @@ export default {
       return !!this.inline
     },
     isOpen() {
-      return this.currentPicker !== ''
+      return this.view !== ''
     },
     isRtl() {
       return this.translation.rtl
     },
     pageDate() {
       return new Date(this.pageTimestamp)
+    },
+    picker() {
+      const view = this.view || this.computedInitialView
+      return `Picker${this.ucFirst(view)}`
     },
     pickerClasses() {
       return [
@@ -302,7 +305,7 @@ export default {
      */
     close() {
       if (!this.isInline) {
-        this.currentPicker = ''
+        this.view = ''
         this.$emit('closed')
       }
     },
@@ -408,17 +411,8 @@ export default {
           `initialView '${this.initialView}' cannot be rendered based on minimum '${this.minimumView}' and maximum '${this.maximumView}'`,
         )
       }
-      switch (initialView) {
-        case 'year':
-          this.showSpecificCalendar('Year')
-          break
-        case 'month':
-          this.showSpecificCalendar('Month')
-          break
-        default:
-          this.showSpecificCalendar('Day')
-          break
-      }
+
+      this.setView(initialView)
     },
     /**
      * Sets the date that the calendar should open on
@@ -476,7 +470,7 @@ export default {
       if (this.allowedToShowView('day')) {
         this.setPageDate(date)
         this.$emit('changed-month', month)
-        this.showSpecificCalendar('Day')
+        this.setView('day')
       } else {
         this.selectDate(month)
       }
@@ -489,18 +483,21 @@ export default {
       if (this.allowedToShowView('month')) {
         this.setPageDate(date)
         this.$emit('changed-year', year)
-        this.showSpecificCalendar('Month')
+        this.setView('month')
       } else {
         this.selectDate(year)
       }
     },
     /**
-     * Show a specific picker
+     * Set the picker view
      */
-    showSpecificCalendar(type) {
-      if (this.allowedToShowView(type.toLowerCase())) {
-        this.currentPicker = `Picker${type}`
+    setView(view) {
+      if (this.allowedToShowView(view)) {
+        this.view = view
       }
+    },
+    ucFirst(str) {
+      return str[0].toUpperCase() + str.substring(1)
     },
   },
 }

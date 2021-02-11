@@ -45,9 +45,9 @@ describe('PickerMonth', () => {
     expect(wrapper.emitted()['select-month'][0][0].timestamp).toEqual(time)
   })
 
-  it('emits show year calendar event when clicked on the year', () => {
-    const yearBtn = wrapper.find('.month__year_btn')
-    yearBtn.trigger('click')
-    expect(wrapper.emitted()['show-year-calendar']).toBeTruthy()
+  it('emits set-view event with `year` when the up button is clicked', () => {
+    const upButton = wrapper.find('.month__year_btn')
+    upButton.trigger('click')
+    expect(wrapper.emitted()['set-view'][0][0]).toBe('year')
   })
 })

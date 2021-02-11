@@ -33,9 +33,9 @@ describe('PickerDay: DOM', () => {
     expect(wrapper.emitted()['select-date']).toBeTruthy()
   })
 
-  it('emits show year calendar event when clicked on the year', () => {
-    const yearBtn = wrapper.find('.day__month_btn')
-    yearBtn.trigger('click')
-    expect(wrapper.emitted()['show-month-calendar']).toBeTruthy()
+  it('emits set-view event with `month` when the up button is clicked', () => {
+    const upButton = wrapper.find('.day__month_btn')
+    upButton.trigger('click')
+    expect(wrapper.emitted()['set-view'][0][0]).toBe('month')
   })
 })

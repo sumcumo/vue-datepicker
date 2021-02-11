@@ -9,7 +9,7 @@
       <span
         :class="allowedToShowView('month') ? 'up' : ''"
         class="day__month_btn"
-        @click="showPickerCalendar('month')"
+        @click="$emit('set-view', 'month')"
       >
         {{ pageTitleDay }}
       </span>

@@ -13,7 +13,7 @@ describe('Datepicker unmounted', () => {
     const defaultData = Datepicker.data()
     const defaultProps = Datepicker.props
     expect(defaultData.selectedDate).toEqual(null)
-    expect(defaultData.currentPicker).toEqual('')
+    expect(defaultData.view).toEqual('')
     expect(defaultData.calendarHeight).toEqual(0)
 
     expect(typeof defaultProps.fixedPosition.validator).toEqual('function')
@@ -194,22 +194,25 @@ describe('Datepicker shallowMounted', () => {
     wrapper.vm.close()
     expect(wrapper.vm.isOpen).toEqual(false)
 
-    wrapper.vm.showSpecificCalendar('Month')
+    wrapper.vm.setView('month')
     expect(wrapper.vm.isOpen).toEqual(true)
 
     wrapper.vm.close()
     expect(wrapper.vm.isOpen).toEqual(false)
 
-    wrapper.vm.showSpecificCalendar('Year')
+    wrapper.vm.setView('year')
     expect(wrapper.vm.isOpen).toEqual(true)
 
     wrapper.vm.close()
     expect(wrapper.vm.isOpen).toEqual(false)
 
-    wrapper.vm.showSpecificCalendar('Day')
+    wrapper.vm.setView('day')
     expect(wrapper.vm.isOpen).toEqual(true)
 
     wrapper.vm.close()
+    expect(wrapper.vm.isOpen).toEqual(false)
+
+    wrapper.vm.setView('nonsense')
     expect(wrapper.vm.isOpen).toEqual(false)
   })
 
@@ -224,7 +227,6 @@ describe('Datepicker shallowMounted', () => {
     wrapper.vm.selectDate({ timestamp: dateTemp.valueOf() })
     expect(wrapper.vm.pageTimestamp).toEqual(dateTemp.valueOf())
     expect(wrapper.vm.selectedDate.getMonth()).toEqual(9)
-    expect(wrapper.vm.currentPicker).toEqual('')
     expect(wrapper.emitted().selected).toBeTruthy()
   })
 
@@ -238,7 +240,7 @@ describe('Datepicker shallowMounted', () => {
     expect(new Date(wrapper.vm.pageTimestamp).getMonth()).toEqual(
       dateTemp.getMonth(),
     )
-    expect(wrapper.vm.currentPicker).toEqual('PickerDay')
+    expect(wrapper.vm.picker).toEqual('PickerDay')
   })
 
   it('can select a year', () => {
@@ -251,7 +253,7 @@ describe('Datepicker shallowMounted', () => {
     expect(new Date(wrapper.vm.pageTimestamp).getFullYear()).toEqual(
       dateTemp.getFullYear(),
     )
-    expect(wrapper.vm.currentPicker).toEqual('PickerMonth')
+    expect(wrapper.vm.picker).toEqual('PickerMonth')
   })
 
   it('resets the default page date', () => {
@@ -323,6 +325,17 @@ describe('Datepicker shallowMounted', () => {
     wrapperTemp.setProps({ initialView: 'month' })
     await wrapperTemp.vm.$nextTick()
     expect(spy).toHaveBeenCalled()
+  })
+
+  it('derives `picker` from the current `view`', async () => {
+    await wrapper.setProps({
+      initialView: 'day',
+    })
+
+    expect(wrapper.vm.picker).toBe('PickerDay')
+    await wrapper.setProps({ initialView: 'month' })
+
+    expect(wrapper.vm.picker).toBe('PickerMonth')
   })
 
   it('should emit changedMonth on a month change received from PickerDay', () => {
@@ -457,7 +470,7 @@ describe('Datepicker with initial-view', () => {
     wrapper = shallowMount(Datepicker)
     wrapper.vm.open()
     expect(wrapper.vm.computedInitialView).toEqual('day')
-    expect(wrapper.vm.currentPicker).toEqual('PickerDay')
+    expect(wrapper.vm.picker).toEqual('PickerDay')
   })
 
   it('should open in Month view', () => {
@@ -468,7 +481,7 @@ describe('Datepicker with initial-view', () => {
     })
     wrapper.vm.open()
     expect(wrapper.vm.computedInitialView).toEqual('month')
-    expect(wrapper.vm.currentPicker).toEqual('PickerMonth')
+    expect(wrapper.vm.picker).toEqual('PickerMonth')
   })
 
   it('should open in Year view', () => {
@@ -479,7 +492,7 @@ describe('Datepicker with initial-view', () => {
     })
     wrapper.vm.open()
     expect(wrapper.vm.computedInitialView).toEqual('year')
-    expect(wrapper.vm.currentPicker).toEqual('PickerYear')
+    expect(wrapper.vm.picker).toEqual('PickerYear')
   })
 
   it('should not open if the calendar is disabled', () => {

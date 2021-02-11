@@ -74,13 +74,5 @@ export default {
       return this.utils.getFullYear(this.pageDate)
     },
   },
-  methods: {
-    /**
-     * Emit an event to show the month picker
-     */
-    showPickerCalendar(type) {
-      this.$emit(`show-${type}-calendar`)
-    },
-  },
 }
 </script>

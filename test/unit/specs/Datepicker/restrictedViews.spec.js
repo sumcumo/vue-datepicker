@@ -55,10 +55,10 @@ describe('Datepicker with restricted views', () => {
     expect(wrapper.vm.allowedToShowView('year')).toEqual(false)
     expect(wrapper.vm.allowedToShowView('day')).toEqual(true)
     expect(wrapper.vm.allowedToShowView('month')).toEqual(true)
-    expect(wrapper.vm.currentPicker).toBe('PickerDay')
+    expect(wrapper.vm.picker).toBe('PickerDay')
     let upButton = wrapper.find('.day__month_btn')
     await upButton.trigger('click')
-    expect(wrapper.vm.currentPicker).toBe('PickerMonth')
+    expect(wrapper.vm.picker).toBe('PickerMonth')
     upButton = wrapper.find('.month__year_btn')
     expect(upButton.element.tabIndex).toBe(-1)
 
@@ -75,7 +75,7 @@ describe('Datepicker with restricted views', () => {
     expect(wrapper.vm.allowedToShowView('day')).toEqual(false)
     expect(wrapper.vm.allowedToShowView('year')).toEqual(false)
     expect(wrapper.vm.allowedToShowView('month')).toEqual(true)
-    expect(wrapper.vm.currentPicker).toBe('PickerMonth')
+    expect(wrapper.vm.picker).toBe('PickerMonth')
 
     wrapper = mount(Datepicker, {
       propsData: {
@@ -127,7 +127,7 @@ describe('Datepicker with restricted views', () => {
         .length,
     ).toEqual(0)
 
-    expect(wrapper.vm.currentPicker).toBe('PickerDay')
+    expect(wrapper.vm.picker).toBe('PickerDay')
 
     wrapper = mount(Datepicker, {
       propsData: {
