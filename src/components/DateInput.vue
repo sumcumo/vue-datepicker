@@ -9,7 +9,7 @@
         'calendar-btn-disabled': disabled,
       }"
       class="vdp-datepicker__calendar-button"
-      @click="toggleCalendar"
+      @click="toggleTrapCalendar"
     >
       <span :class="{ 'input-group-text': bootstrapStyling }">
         <slot name="calendarBtn">
@@ -64,10 +64,11 @@
 <script>
 import makeDateUtils from '~/utils/DateUtils'
 import inputProps from '~/mixins/inputProps.vue'
+import trapFocus from '~/mixins/trapFocus.vue'
 
 export default {
   name: 'DateInput',
-  mixins: [inputProps],
+  mixins: [inputProps, trapFocus],
   props: {
     isOpen: {
       type: Boolean,
@@ -226,6 +227,14 @@ export default {
         return
       }
       this.$emit(this.isOpen ? 'close-calendar' : 'show-calendar')
+    },
+    toggleTrapCalendar() {
+      this.toggleCalendar()
+      if (!this.isOpen) {
+        this.$nextTick().then(() => {
+          this.trapFocus(this.$parent.$refs.popup.$el)
+        })
+      }
     },
   },
 }
