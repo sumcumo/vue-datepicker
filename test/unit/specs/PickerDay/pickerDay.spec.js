@@ -10,7 +10,6 @@ describe('PickerDay: DOM', () => {
         allowedToShowView: () => true,
         translation: en,
         pageDate: new Date(2018, 1, 1),
-        selectedDate: new Date(2018, 2, 24),
       },
     })
   })

@@ -1,13 +1,17 @@
 import { shallowMount } from '@vue/test-utils'
 import { en } from '~/locale'
 import pickerMixin from '~/mixins/pickerMixin.vue'
-import defaultComponent from '../defaultComponent.vue'
+
+const Component = {
+  render() {},
+  mixins: [pickerMixin],
+}
 
 const options = {
   mixins: [pickerMixin],
   propsData: {
-    selectedDate: new Date(2018, 2, 24),
     format: 'dd MMM yyyy',
+    selectedDate: new Date(2018, 2, 24),
     translation: en,
   },
 }
@@ -25,7 +29,7 @@ describe('pickerMixin', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = shallowMount(defaultComponent, options)
+    wrapper = shallowMount(Component, options)
   })
 
   afterEach(() => {

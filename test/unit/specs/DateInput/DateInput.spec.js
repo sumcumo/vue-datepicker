@@ -129,13 +129,13 @@ describe('DateInput', () => {
     expect(wrapper.emitted('close')).toBeTruthy()
   })
 
-  it('should open the calendar on click', async () => {
+  it('opens the calendar on click', async () => {
     wrapper.find('input').trigger('click')
     await wrapper.vm.$nextTick()
     expect(wrapper.emitted('open')).toBeTruthy()
   })
 
-  it('should open the calendar on focus', async () => {
+  it('opens the calendar on focus', async () => {
     wrapper.find('input').trigger('focus')
     expect(wrapper.emitted('open')).toBeFalsy()
     wrapper.setProps({
@@ -146,7 +146,7 @@ describe('DateInput', () => {
     expect(wrapper.emitted('open')).toBeTruthy()
   })
 
-  it('should open the calendar only on calendar button click', async () => {
+  it('opens ONLY on button click when the relevant prop is set', async () => {
     wrapper.setProps({
       calendarButton: true,
       showCalendarOnButtonClick: true,

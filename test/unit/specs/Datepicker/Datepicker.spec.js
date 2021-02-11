@@ -24,15 +24,9 @@ describe('Datepicker unmounted', () => {
 
 describe('Datepicker mounted', () => {
   let wrapper
-  let date
+
   beforeEach(() => {
-    date = new Date(2016, 1, 15)
-    wrapper = mount(Datepicker, {
-      propsData: {
-        format: 'yyyy-MM-dd',
-        value: date,
-      },
-    })
+    wrapper = mount(Datepicker)
   })
 
   afterEach(() => {
@@ -51,25 +45,33 @@ describe('Datepicker mounted', () => {
     expect(wrapper.emitted().focus).toBeTruthy()
   })
 
-  it('should open the calendar with click on input when showCalendarOnFocus = true', async () => {
+  it('should toggle when the input field is clicked', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    await input.trigger('click')
+    expect(wrapper.vm.isOpen).toBeFalsy()
+  })
+
+  it('should open on focusing the input when showCalendarOnFocus = true', async () => {
     await wrapper.setProps({
       showCalendarOnFocus: true,
     })
     const input = wrapper.find('input')
 
     await input.trigger('focus')
-    await input.trigger('click')
-    await wrapper.vm.$nextTick()
+
     expect(wrapper.vm.isOpen).toBeTruthy()
   })
 
-  it('should toggle the calendar via the calendar button', async () => {
+  it('should toggle via the calendar button', async () => {
     await wrapper.setProps({
       calendarButton: true,
     })
 
-    const calendarButton = wrapper.find('span.vdp-datepicker__calendar-button')
-
+    const calendarButton = wrapper.find('.vdp-datepicker__calendar-button')
     await calendarButton.trigger('click')
     expect(wrapper.vm.isOpen).toBeTruthy()
 
@@ -77,13 +79,13 @@ describe('Datepicker mounted', () => {
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
 
-  it('should toggle the calendar via the calendar button when showCalendarOnFocus = true', async () => {
+  it('should toggle via the calendar button when showCalendarOnFocus = true', async () => {
     await wrapper.setProps({
       calendarButton: true,
       showCalendarOnFocus: true,
     })
 
-    const calendarButton = wrapper.find('span.vdp-datepicker__calendar-button')
+    const calendarButton = wrapper.find('.vdp-datepicker__calendar-button')
 
     await calendarButton.trigger('click')
     expect(wrapper.vm.isOpen).toBeTruthy()
@@ -92,7 +94,7 @@ describe('Datepicker mounted', () => {
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
 
-  it('should close the calendar via the calendar button, despite input being focused', async () => {
+  it('should close via the calendar button, despite input being focused', async () => {
     await wrapper.setProps({
       calendarButton: true,
       showCalendarOnFocus: true,
@@ -322,8 +324,9 @@ describe('Datepicker shallowMounted', () => {
       },
     })
     const spy = jest.spyOn(wrapperTemp.vm, 'setInitialView')
-    wrapperTemp.setProps({ initialView: 'month' })
-    await wrapperTemp.vm.$nextTick()
+
+    await wrapperTemp.setProps({ initialView: 'month' })
+
     expect(spy).toHaveBeenCalled()
   })
 
