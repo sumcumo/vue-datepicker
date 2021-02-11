@@ -31,7 +31,7 @@ import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
 
 export default {
-  name: 'DatepickerYearView',
+  name: 'PickerYear',
   mixins: [pickerMixin],
   props: {
     yearRange: {

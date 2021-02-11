@@ -34,7 +34,7 @@ import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
 
 export default {
-  name: 'DatepickerMonthView',
+  name: 'PickerMonth',
   mixins: [pickerMixin],
   computed: {
     /**

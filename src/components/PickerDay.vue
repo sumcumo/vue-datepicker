@@ -40,7 +40,7 @@ import DisabledDate from '~/utils/DisabledDate'
 import HighlightedDate from '~/utils/HighlightedDate'
 
 export default {
-  name: 'DatepickerDayView',
+  name: 'PickerDay',
   mixins: [pickerMixin],
   props: {
     dayCellContent: {
