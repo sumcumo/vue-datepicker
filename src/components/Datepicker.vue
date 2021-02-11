@@ -56,41 +56,39 @@
         :class="pickerClasses"
         @mousedown.prevent
       >
-        <template v-if="isOpen">
-          <slot name="beforeCalendarHeader" />
-          <Component
-            :is="currentPicker"
-            :allowed-to-show-view="allowedToShowView"
-            :day-cell-content="dayCellContent"
-            :disabled-dates="disabledDates"
-            :first-day-of-week="firstDayOfWeek"
-            :highlighted="highlighted"
-            :is-rtl="isRtl"
-            :page-date="pageDate"
-            :page-timestamp="pageTimestamp"
-            :selected-date="selectedDate"
-            :show-edge-dates="showEdgeDates"
-            :show-full-month-name="fullMonthName"
-            :show-header="showHeader"
-            :translation="translation"
-            :use-utc="useUtc"
-            :year-range="yearPickerRange"
-            @select-date="selectDate"
-            @changed-month="handleChangedMonthFromDayPicker"
-            @selected-disabled="selectDisabledDate"
-            @select-month="selectMonth"
-            @changed-year="setPageDate"
-            @show-month-calendar="showSpecificCalendar('Month')"
-            @select-year="selectYear"
-            @changed-decade="setPageDate"
-            @show-year-calendar="showSpecificCalendar('Year')"
-          >
-            <template v-for="slotKey of calendarSlots">
-              <slot :slot="slotKey" :name="slotKey" />
-            </template>
-          </Component>
-          <slot name="calendarFooter" />
-        </template>
+        <slot name="beforeCalendarHeader" />
+        <Component
+          :is="currentPicker"
+          :allowed-to-show-view="allowedToShowView"
+          :day-cell-content="dayCellContent"
+          :disabled-dates="disabledDates"
+          :first-day-of-week="firstDayOfWeek"
+          :highlighted="highlighted"
+          :is-rtl="isRtl"
+          :page-date="pageDate"
+          :page-timestamp="pageTimestamp"
+          :selected-date="selectedDate"
+          :show-edge-dates="showEdgeDates"
+          :show-full-month-name="fullMonthName"
+          :show-header="showHeader"
+          :translation="translation"
+          :use-utc="useUtc"
+          :year-range="yearPickerRange"
+          @select-date="selectDate"
+          @changed-month="handleChangedMonthFromDayPicker"
+          @selected-disabled="selectDisabledDate"
+          @select-month="selectMonth"
+          @changed-year="setPageDate"
+          @show-month-calendar="showSpecificCalendar('Month')"
+          @select-year="selectYear"
+          @changed-decade="setPageDate"
+          @show-year-calendar="showSpecificCalendar('Year')"
+        >
+          <template v-for="slotKey of calendarSlots">
+            <slot :slot="slotKey" :name="slotKey" />
+          </template>
+        </Component>
+        <slot name="calendarFooter" />
       </div>
     </Popup>
   </div>
