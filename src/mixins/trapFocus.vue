@@ -35,7 +35,7 @@ export default {
           this.focusableElements = this.findFocusable(target)
 
           if (this.focusableElements.length > 0) {
-            this.fistFocusable = this.focusableElements[0]
+            [this.fistFocusable] = this.focusableElements
             this.lastFocusable = this.focusableElements[
               this.focusableElements.length - 1
             ]
