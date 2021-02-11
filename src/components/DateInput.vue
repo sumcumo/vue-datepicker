@@ -222,7 +222,7 @@ export default {
         this.isBlurred = false
         return
       }
-      this.$emit(this.isOpen ? 'close' : 'show-calendar')
+      this.$emit(this.isOpen ? 'close' : 'open')
     },
   },
 }

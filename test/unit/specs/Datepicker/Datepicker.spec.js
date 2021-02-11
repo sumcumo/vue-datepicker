@@ -455,7 +455,7 @@ describe('Datepicker with initial-view', () => {
   let wrapper
   it('should open in Day view', () => {
     wrapper = shallowMount(Datepicker)
-    wrapper.vm.showCalendar()
+    wrapper.vm.open()
     expect(wrapper.vm.computedInitialView).toEqual('day')
     expect(wrapper.vm.currentPicker).toEqual('PickerDay')
   })
@@ -466,7 +466,7 @@ describe('Datepicker with initial-view', () => {
         initialView: 'month',
       },
     })
-    wrapper.vm.showCalendar()
+    wrapper.vm.open()
     expect(wrapper.vm.computedInitialView).toEqual('month')
     expect(wrapper.vm.currentPicker).toEqual('PickerMonth')
   })
@@ -477,7 +477,7 @@ describe('Datepicker with initial-view', () => {
         initialView: 'year',
       },
     })
-    wrapper.vm.showCalendar()
+    wrapper.vm.open()
     expect(wrapper.vm.computedInitialView).toEqual('year')
     expect(wrapper.vm.currentPicker).toEqual('PickerYear')
   })
@@ -488,7 +488,7 @@ describe('Datepicker with initial-view', () => {
         disabled: true,
       },
     })
-    wrapper.vm.showCalendar()
+    wrapper.vm.open()
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
 })
@@ -501,7 +501,7 @@ describe('Datepicker on body', () => {
         appendToBody: true,
       },
     })
-    wrapper.vm.showCalendar()
+    wrapper.vm.open()
     await wrapper.vm.$nextTick()
     expect(wrapper.vm.$el.querySelector('.vdp-datepicker__calendar')).toBeNull()
     expect(document.querySelector('.vdp-datepicker__calendar')).toBeDefined()
@@ -514,7 +514,7 @@ describe('Datepicker on body', () => {
         appendToBody: true,
       },
     })
-    wrapper.vm.showCalendar()
+    wrapper.vm.open()
     await wrapper.vm.$nextTick()
     wrapper.vm.$destroy()
     expect(document.querySelector('.vdp-datepicker__calendar')).toBeNull()

@@ -62,7 +62,7 @@ describe('DateInput', () => {
     })
     expect(wrapper.vm.isOpen).toBeFalsy()
     wrapper.find('input').trigger('focus')
-    expect(wrapper.emitted('show-calendar')).toBeTruthy()
+    expect(wrapper.emitted('open')).toBeTruthy()
   })
 
   it('does not open calendar on focus, if show-calendar-on-focus prop is false', async () => {
@@ -72,7 +72,7 @@ describe('DateInput', () => {
     expect(wrapper.vm.isOpen).toBeFalsy()
 
     wrapper.find('input').trigger('focus')
-    expect(wrapper.emitted('show-calendar')).toBeFalsy()
+    expect(wrapper.emitted('open')).toBeFalsy()
   })
 
   it('adds bootstrap classes', async () => {
@@ -132,18 +132,18 @@ describe('DateInput', () => {
   it('should open the calendar on click', async () => {
     wrapper.find('input').trigger('click')
     await wrapper.vm.$nextTick()
-    expect(wrapper.emitted('show-calendar')).toBeTruthy()
+    expect(wrapper.emitted('open')).toBeTruthy()
   })
 
   it('should open the calendar on focus', async () => {
     wrapper.find('input').trigger('focus')
-    expect(wrapper.emitted('show-calendar')).toBeFalsy()
+    expect(wrapper.emitted('open')).toBeFalsy()
     wrapper.setProps({
       showCalendarOnFocus: true,
     })
     await wrapper.vm.$nextTick()
     wrapper.find('input').trigger('focus')
-    expect(wrapper.emitted('show-calendar')).toBeTruthy()
+    expect(wrapper.emitted('open')).toBeTruthy()
   })
 
   it('should open the calendar only on calendar button click', async () => {
@@ -153,8 +153,8 @@ describe('DateInput', () => {
     })
     await wrapper.vm.$nextTick()
     wrapper.find('input').trigger('click')
-    expect(wrapper.emitted('show-calendar')).toBeFalsy()
+    expect(wrapper.emitted('open')).toBeFalsy()
     wrapper.find('.vdp-datepicker__calendar-button').trigger('click')
-    expect(wrapper.emitted('show-calendar')).toBeTruthy()
+    expect(wrapper.emitted('open')).toBeTruthy()
   })
 })
