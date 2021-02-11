@@ -20,20 +20,17 @@ export default {
         if (e.shiftKey && document.activeElement === this.fistFocusable) {
           e.preventDefault()
           this.lastFocusable.focus()
-        } else if (
-          !e.shiftKey &&
-          document.activeElement === this.lastFocusable
-        ) {
+        }
+        if (!e.shiftKey && document.activeElement === this.lastFocusable) {
           e.preventDefault()
           this.fistFocusable.focus()
         }
       }
     },
     trapFocus(target = null) {
-      this.$nextTick().then(() => {
+      this.$nextTick(function () {
         if (target) {
           this.focusableElements = this.findFocusable(target)
-
           if (this.focusableElements.length > 0) {
             [this.fistFocusable] = this.focusableElements
             this.lastFocusable = this.focusableElements[
@@ -48,13 +45,11 @@ export default {
             )
           }
         }
-        if (!target) {
-          if (this.trappedElement) {
-            this.trappedElement.removeEventListener(
-              'keydown',
-              this.keyboardHandler,
-            )
-          }
+        if (!target && this.trappedElement) {
+          this.trappedElement.removeEventListener(
+            'keydown',
+            this.keyboardHandler,
+          )
         }
       })
     },
