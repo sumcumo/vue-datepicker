@@ -66,7 +66,6 @@
           :highlighted="highlighted"
           :is-rtl="isRtl"
           :page-date="pageDate"
-          :page-timestamp="pageTimestamp"
           :selected-date="selectedDate"
           :show-edge-dates="showEdgeDates"
           :show-full-month-name="fullMonthName"

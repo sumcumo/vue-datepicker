@@ -25,10 +25,6 @@ export default {
       type: Date,
       default: null,
     },
-    pageTimestamp: {
-      type: Number,
-      default: 0,
-    },
     selectedDate: {
       type: Date,
       default: null,

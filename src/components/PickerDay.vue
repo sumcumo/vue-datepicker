@@ -115,16 +115,15 @@ export default {
      * @return {String[]}
      */
     daysInMonth() {
-      const dObj = this.newPageDate()
-      return this.utils.getDaysInMonth(dObj)
+      return this.utils.getDaysInMonth(this.pageDate)
     },
     /**
      * Calculates how many days to show from the previous month
      * @return {number}
      */
     daysFromPrevMonth() {
-      const dObj = this.newPageDate()
-      return (7 - this.firstDayOfWeekNumber + this.utils.getDay(dObj)) % 7
+      const firstOfMonthDayNumber = this.utils.getDay(this.pageDate)
+      return (7 - this.firstDayOfWeekNumber + firstOfMonthDayNumber) % 7
     },
     /**
      * Calculates how many days to show from the next month
@@ -188,7 +187,7 @@ export default {
      * @return {Date}
      */
     nextPageDate() {
-      const d = new Date(this.pageTimestamp)
+      const d = this.newPageDate()
       return new Date(this.utils.setMonth(d, this.utils.getMonth(d) + 1))
     },
     highlightedConfig() {
