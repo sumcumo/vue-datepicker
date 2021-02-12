@@ -51,7 +51,7 @@
       :visible="isOpen"
     >
       <div
-        v-if="isOpen"
+        v-show="isOpen"
         ref="datepicker"
         class="vdp-datepicker__calendar"
         :class="pickerClasses"

@@ -1,5 +1,6 @@
 import { mount, shallowMount } from '@vue/test-utils'
 import { addDays } from 'date-fns'
+import { he } from '~/locale'
 import DateInput from '~/components/DateInput.vue'
 import Datepicker from '~/components/Datepicker.vue'
 
@@ -339,6 +340,28 @@ describe('Datepicker shallowMounted', () => {
     await wrapper.setProps({ initialView: 'month' })
 
     expect(wrapper.vm.picker).toBe('PickerMonth')
+  })
+
+  it('sets picker classes correctly', async () => {
+    await wrapper.setProps({
+      calendarClass: 'my-calendar-class',
+      inline: true,
+    })
+
+    await wrapper.vm.$nextTick()
+    const datepicker = wrapper.find('.vdp-datepicker__calendar')
+
+    expect(datepicker.element.className).toContain('vdp-datepicker__calendar')
+    expect(datepicker.element.className).toContain('my-calendar-class')
+    expect(datepicker.element.className).toContain('inline')
+    expect(datepicker.element.className).not.toContain('rtl')
+
+    await wrapper.setProps({
+      appendToBody: true,
+      language: he,
+    })
+
+    expect(datepicker.element.className).toContain('rtl')
   })
 
   it('should emit changedMonth on a month change received from PickerDay', () => {
