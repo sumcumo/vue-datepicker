@@ -29,6 +29,18 @@ describe('PickerYear', () => {
     expect(wrapper.vm.isSelectedYear(new Date(2017, 1, 1))).toEqual(false)
   })
 
+  it('knows the selected year when useUTC = true', async () => {
+    const newDate = new Date(2016, 9, 15)
+
+    await wrapper.setProps({
+      selectedDate: newDate,
+      useUtc: true,
+    })
+
+    expect(wrapper.vm.isSelectedYear(newDate)).toEqual(true)
+    expect(wrapper.vm.isSelectedYear(new Date(2017, 1, 1))).toEqual(false)
+  })
+
   it('can set the next decade', () => {
     wrapper.vm.nextDecade()
     expect(wrapper.emitted()['changed-decade']).toBeTruthy()
