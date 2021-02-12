@@ -27,12 +27,40 @@ describe('PickerMonth', () => {
     expect(wrapper.vm.isSelectedMonth(new Date(2017, 1, 1))).toEqual(false)
   })
 
+  it('knows the selected month when useUtc = true', () => {
+    const newDate = new Date(2016, 9, 15)
+    wrapper.setProps({
+      selectedDate: newDate,
+      useUtc: true,
+    })
+    expect(wrapper.vm.isSelectedMonth(newDate)).toEqual(true)
+    expect(wrapper.vm.isSelectedMonth(new Date(2017, 1, 1))).toEqual(false)
+  })
+
   it('can set the next year', () => {
+    wrapper.vm.nextYear()
+    expect(wrapper.emitted()['changed-year'][0][0].getFullYear()).toEqual(2019)
+
+    wrapper.setProps({
+      disabledDates: {
+        from: new Date(2018, 1, 1),
+      },
+    })
+
     wrapper.vm.nextYear()
     expect(wrapper.emitted()['changed-year'][0][0].getFullYear()).toEqual(2019)
   })
 
   it('can set the previous year', () => {
+    wrapper.vm.previousYear()
+    expect(wrapper.emitted()['changed-year'][0][0].getFullYear()).toEqual(2017)
+
+    wrapper.setProps({
+      disabledDates: {
+        to: new Date(2018, 1, 1),
+      },
+    })
+
     wrapper.vm.previousYear()
     expect(wrapper.emitted()['changed-year'][0][0].getFullYear()).toEqual(2017)
   })
