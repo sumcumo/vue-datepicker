@@ -1,9 +1,9 @@
 <template>
-  <header v-if="config.showHeader">
+  <header>
     <span
       class="prev"
       :class="{ disabled: isLeftNavDisabled }"
-      @click="config.isRtl ? next() : previous()"
+      @click="$emit(isRtl ? 'next' : 'previous')"
     >
       <slot name="prevIntervalBtn">
         <span class="default">&lt;</span>
@@ -13,7 +13,7 @@
     <span
       class="next"
       :class="{ disabled: isRightNavDisabled }"
-      @click="config.isRtl ? previous() : next()"
+      @click="$emit(isRtl ? 'previous' : 'next')"
     >
       <slot name="nextIntervalBtn">
         <span class="default">&gt;</span>
@@ -26,24 +26,21 @@
 export default {
   name: 'PickerHeader',
   props: {
-    config: {
-      type: Object,
-      default() {
-        return {
-          showHeader: true,
-          isRtl: false,
-          isNextDisabled: false,
-          isPreviousDisabled: false,
-        }
-      },
-    },
-    next: {
-      type: Function,
+    isNextDisabled: {
+      type: Boolean,
       required: true,
     },
-    previous: {
-      type: Function,
+    isPreviousDisabled: {
+      type: Boolean,
       required: true,
+    },
+    isRtl: {
+      type: Boolean,
+      required: true,
+    },
+    isUpDisabled: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {
@@ -52,18 +49,14 @@ export default {
      * @return {Boolean}
      */
     isLeftNavDisabled() {
-      return this.config.isRtl
-        ? this.config.isNextDisabled
-        : this.config.isPreviousDisabled
+      return this.isRtl ? this.isNextDisabled : this.isPreviousDisabled
     },
     /**
      * Is the right hand navigation button disabled?
      * @return {Boolean}
      */
     isRightNavDisabled() {
-      return this.config.isRtl
-        ? this.config.isPreviousDisabled
-        : this.config.isNextDisabled
+      return this.isRtl ? this.isPreviousDisabled : this.isNextDisabled
     },
   },
 }

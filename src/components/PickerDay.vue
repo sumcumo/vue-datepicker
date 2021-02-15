@@ -2,9 +2,13 @@
   <div class="picker-view">
     <slot name="beforeCalendarHeaderDay" />
     <PickerHeader
-      :config="headerConfig"
-      :next="nextMonth"
-      :previous="previousMonth"
+      v-if="showHeader"
+      :is-next-disabled="isNextDisabled"
+      :is-previous-disabled="isPreviousDisabled"
+      :is-rtl="isRtl"
+      :is-up-disabled="isUpDisabled"
+      @next="nextMonth"
+      @previous="previousMonth"
     >
       <span
         :class="{ up: !isUpDisabled }"

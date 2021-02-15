@@ -46,15 +46,6 @@ export default {
   },
   data() {
     return {
-      headerConfig: {
-        showHeader: this.showHeader,
-        isRtl: this.isRtl,
-        /**
-         * Need to be set inside the different pickers for month, year, decade
-         */
-        isNextDisabled: this.isNextDisabled,
-        isPreviousDisabled: this.isPreviousDisabled,
-      },
       utils: makeDateUtils(this.useUtc),
     }
   },

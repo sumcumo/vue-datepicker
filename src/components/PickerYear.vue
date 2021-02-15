@@ -2,9 +2,12 @@
   <div class="picker-view">
     <slot name="beforeCalendarHeaderYear" />
     <PickerHeader
-      :config="headerConfig"
-      :next="nextDecade"
-      :previous="previousDecade"
+      v-if="showHeader"
+      :is-next-disabled="isNextDisabled"
+      :is-previous-disabled="isPreviousDisabled"
+      :is-rtl="isRtl"
+      @next="nextDecade"
+      @previous="previousDecade"
     >
       <span>
         {{ pageTitleYear }}
