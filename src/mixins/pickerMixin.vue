@@ -7,10 +7,6 @@ export default {
   components: { PickerHeader },
   inheritAttrs: false,
   props: {
-    allowedToShowView: {
-      type: Function,
-      default() {},
-    },
     disabledDates: {
       type: Object,
       default() {
@@ -18,6 +14,10 @@ export default {
       },
     },
     isRtl: {
+      type: Boolean,
+      default: false,
+    },
+    isUpDisabled: {
       type: Boolean,
       default: false,
     },

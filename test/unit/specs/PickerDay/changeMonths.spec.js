@@ -8,7 +8,6 @@ describe('PickerDay: changing months', () => {
     wrapper = shallowMount(PickerDay, {
       propsData: {
         translation: en,
-        allowedToShowView: () => true,
         selectedDate: new Date(2018, 2, 24),
         pageDate: new Date(2018, 1, 1),
       },

@@ -8,7 +8,7 @@
     >
       <span
         class="month__year_btn"
-        :class="allowedToShowView('year') ? 'up' : ''"
+        :class="{ up: !isUpDisabled }"
         @click="$emit('set-view', 'year')"
       >
         {{ pageTitleMonth }}

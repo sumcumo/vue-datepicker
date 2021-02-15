@@ -7,7 +7,6 @@ describe('PickerYear', () => {
   beforeEach(() => {
     wrapper = shallowMount(PickerYear, {
       propsData: {
-        allowedToShowView: () => true,
         translation: en,
         pageDate: new Date(2018, 1, 1),
       },

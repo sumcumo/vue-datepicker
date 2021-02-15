@@ -12,7 +12,6 @@ describe('PickerDay: Set first day of week', () => {
       propsData: {
         firstDayOfWeek: 'mon',
         translation: en,
-        allowedToShowView: () => true,
         pageDate: new Date(2018, 1, 1),
       },
     })
@@ -64,7 +63,6 @@ describe('PickerDay: Datepicker with Saturday as first day of week', () => {
       propsData: {
         firstDayOfWeek: 'sat',
         translation: en,
-        allowedToShowView: () => true,
         pageDate: new Date(2018, 1, 1),
       },
     })

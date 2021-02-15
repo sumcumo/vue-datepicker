@@ -7,7 +7,7 @@
       :previous="previousMonth"
     >
       <span
-        :class="allowedToShowView('month') ? 'up' : ''"
+        :class="{ up: !isUpDisabled }"
         class="day__month_btn"
         @click="$emit('set-view', 'month')"
       >

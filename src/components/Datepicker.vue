@@ -60,12 +60,12 @@
         <slot name="beforeCalendarHeader" />
         <Component
           :is="picker"
-          :allowed-to-show-view="allowedToShowView"
           :day-cell-content="dayCellContent"
           :disabled-dates="disabledDates"
           :first-day-of-week="firstDayOfWeek"
           :highlighted="highlighted"
           :is-rtl="isRtl"
+          :is-up-disabled="isUpDisabled"
           :page-date="pageDate"
           :selected-date="selectedDate"
           :show-edge-dates="showEdgeDates"
@@ -231,6 +231,11 @@ export default {
     }
   },
   computed: {
+    allowedViews() {
+      const views = ['day', 'month', 'year']
+
+      return views.filter((view) => this.allowedToShowView(view))
+    },
     computedInitialView() {
       return this.initialView || this.minimumView
     },
@@ -242,6 +247,32 @@ export default {
     },
     isRtl() {
       return this.translation.rtl
+    },
+    isUpDisabled() {
+      return !this.allowedToShowView(this.nextView.up)
+    },
+    nextView() {
+      const isCurrentView = (view) => view === this.view
+      const viewIndex = this.allowedViews.findIndex(isCurrentView)
+      const nextViewDown = (index) => {
+        return index <= 0 ? undefined : this.allowedViews[index - 1]
+      }
+      const nextViewUp = (index) => {
+        if (index < 0) {
+          return undefined
+        }
+
+        if (index === this.allowedViews.length - 1) {
+          return 'decade'
+        }
+
+        return this.allowedViews[index + 1]
+      }
+
+      return {
+        up: nextViewUp(viewIndex),
+        down: nextViewDown(viewIndex),
+      }
     },
     pageDate() {
       return new Date(this.pageTimestamp)
@@ -496,6 +527,9 @@ export default {
         this.view = view
       }
     },
+    /**
+     * Capitalizes the first letter
+     */
     ucFirst(str) {
       return str[0].toUpperCase() + str.substring(1)
     },
