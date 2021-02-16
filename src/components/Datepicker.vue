@@ -1,5 +1,9 @@
 <template>
-  <div :class="[wrapperClass, isRtl ? 'rtl' : '']" class="vdp-datepicker">
+  <div
+    :class="[wrapperClass, isRtl ? 'rtl' : '']"
+    class="vdp-datepicker"
+    @keyup.escape="close()"
+  >
     <DateInput
       :id="id"
       :autofocus="autofocus"
