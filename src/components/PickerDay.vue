@@ -1,5 +1,5 @@
 <template>
-  <div class="picker-view" @keydown.right.prevent="ree">
+  <div ref="pickerView" class="picker-view">
     <slot name="beforeCalendarHeaderDay" />
     <PickerHeader
       :config="headerConfig"
@@ -17,9 +17,9 @@
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
     <div ref="days" :class="isRtl ? 'flex-rtl' : ''">
-      <span v-for="d in daysOfWeek" :key="d.timestamp" class="cell day-header">
-        {{ d }}
-      </span>
+      <!--      <span v-for="d in daysOfWeek" :key="d.timestamp" class="cell day-header">-->
+      <!--        {{ d }}-->
+      <!--      </span>-->
       <button
         v-for="day in days"
         :key="day.timestamp"
@@ -38,7 +38,7 @@
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
 import HighlightedDate from '~/utils/HighlightedDate'
-import { arrowRight } from '~/utils/KeyFunctions'
+import { dateSelector } from '../../KeyFunctions'
 
 export default {
   name: 'DatepickerDayView',
@@ -66,6 +66,11 @@ export default {
       type: Boolean,
       default: true,
     },
+  },
+  data() {
+    return {
+      pickerType: 'day',
+    }
   },
   computed: {
     /**
@@ -201,32 +206,25 @@ export default {
       ).config
     },
   },
+  // TODO move into mixin
   mounted() {
-    console.log('tTEST', this.$refs)
+    let isFocused = false
     this.days.forEach((day, index) => {
-      if (day.isToday) {
-        console.log(this.$refs.days.querySelectorAll('button.cell.day'))
-        this.$refs.days.querySelectorAll('button.cell.day')[index].focus()
+      if ((day.isSelected || day.isToday) && !isFocused) {
+        isFocused = true
+        this.$refs.days.querySelectorAll(dateSelector)[index].focus()
       }
     })
-    //   this.$refs.pickerView.addEventListener('keyup', (event) => {
-    //     console.log('heyho', event)
-    //     const code = event.keyCode ? event.keyCode : event.which
-    //     if (code === '30') {
-    //       arrowRight({ view: 'PickerDay', nextPage: this.nextMonth })
-    //     }
-    //   })
+    if (!isFocused) {
+      this.$refs.days.querySelectorAll(dateSelector)[0].focus()
+    }
   },
   methods: {
-    ree() {
-      console.log('rofl')
-      arrowRight({ view: 'PickerDay', nextPage: this.nextMonth })
-    },
     /**
      * Change the page month
      * @param {Number} incrementBy
      */
-    changeMonth(incrementBy) {
+    changePage(incrementBy) {
       const date = this.pageDate
       this.utils.setMonth(date, this.utils.getMonth(date) + incrementBy)
       this.$emit('changed-month', date)
@@ -374,7 +372,7 @@ export default {
      */
     nextMonth() {
       if (!this.isNextDisabled) {
-        this.changeMonth(+1)
+        this.changePage(+1)
       }
     },
     /**
@@ -382,7 +380,7 @@ export default {
      */
     previousMonth() {
       if (!this.isPreviousDisabled) {
-        this.changeMonth(-1)
+        this.changePage(-1)
       }
     },
     /**

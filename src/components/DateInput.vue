@@ -157,7 +157,7 @@ export default {
         }
       }
       this.$emit('blur')
-      this.$emit('close-calendar')
+      // this.$emit('close-calendar')
     },
     /**
      * Attempt to parse a typed date

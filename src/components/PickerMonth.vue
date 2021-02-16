@@ -1,5 +1,5 @@
 <template>
-  <div class="picker-view">
+  <div ref="pickerView" class="picker-view">
     <slot name="beforeCalendarHeaderMonth" />
     <PickerHeader
       :config="headerConfig"
@@ -16,25 +16,33 @@
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
-    <span
-      v-for="month in months"
-      :key="month.timestamp"
-      :class="{ selected: month.isSelected, disabled: month.isDisabled }"
-      class="cell month"
-      @click.stop="selectMonth(month)"
-    >
-      {{ month.month }}
-    </span>
+    <div ref="months">
+      <button
+        v-for="month in months"
+        :key="month.timestamp"
+        :class="{ selected: month.isSelected, disabled: month.isDisabled }"
+        class="cell month"
+        @click="selectMonth(month)"
+      >
+        {{ month.month }}
+      </button>
+    </div>
     <slot name="calendarFooterMonth" />
   </div>
 </template>
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
+import { dateSelector } from '../../KeyFunctions'
 
 export default {
   name: 'DatepickerMonthView',
   mixins: [pickerMixin],
+  data() {
+    return {
+      pickerType: 'month',
+    }
+  },
   computed: {
     /**
      * Is the next year disabled?
@@ -93,12 +101,27 @@ export default {
       return `${this.pageYear}${yearSuffix}`
     },
   },
+
+  // TODO move into mixin
+  mounted() {
+    let isFocused = false
+    this.months.forEach((day, index) => {
+      if (day.isSelected && !isFocused) {
+        isFocused = true
+        this.$refs.months.querySelectorAll(dateSelector)[index].focus()
+      }
+    })
+
+    if (!isFocused) {
+      this.$refs.months.querySelectorAll(dateSelector)[0].focus()
+    }
+  },
   methods: {
     /**
      * Changes the year up or down
      * @param {Number} incrementBy
      */
-    changeYear(incrementBy) {
+    changePage(incrementBy) {
       const date = this.pageDate
       this.utils.setFullYear(date, this.utils.getFullYear(date) + incrementBy)
       this.$emit('changed-year', date)
@@ -133,7 +156,7 @@ export default {
      */
     nextYear() {
       if (!this.isNextDisabled) {
-        this.changeYear(1)
+        this.changePage(1)
       }
     },
     /**
@@ -141,7 +164,7 @@ export default {
      */
     previousYear() {
       if (!this.isPreviousDisabled) {
-        this.changeYear(-1)
+        this.changePage(-1)
       }
     },
     /**

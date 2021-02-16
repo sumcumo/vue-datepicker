@@ -2,6 +2,7 @@
 import PickerHeader from '~/components/PickerHeader.vue'
 import makeDateUtils from '~/utils/DateUtils'
 import DisabledDate from '~/utils/DisabledDate'
+import { setFocusToAvailableCell } from '../../KeyFunctions'
 
 export default {
   components: { PickerHeader },
@@ -77,6 +78,28 @@ export default {
     pageYear() {
       return this.utils.getFullYear(this.pageDate)
     },
+  },
+  mounted() {
+    this.$refs.pickerView.addEventListener('keyup', (event) => {
+      const code = event.keyCode ? event.keyCode : event.which
+      const minSteps = this.pickerType === 'day' ? 7 : 3
+      const arrowKeys = [37, 38, 39, 40]
+      const options = {
+        changePage: this.changePage,
+      }
+      if (code === 37 || code === 38) {
+        options.type = 'previous'
+      }
+      if (code === 39 || code === 40) {
+        options.type = 'next'
+      }
+      if (code === 38 || code === 40) {
+        options.minSteps = minSteps
+      }
+      if (arrowKeys.includes(code)) {
+        setFocusToAvailableCell(options)
+      }
+    })
   },
   methods: {
     /**
