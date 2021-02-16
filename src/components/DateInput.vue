@@ -41,6 +41,8 @@
       @blur="inputBlurred"
       @click="showCalendarByClick"
       @focus="showCalendarByFocus"
+      @keydown.enter.prevent="onKeydownEnter"
+      @keydown.escape.prevent="$emit('close-calendar')"
       @keyup="parseTypedDate"
     />
     <!-- Clear Button -->
@@ -61,6 +63,7 @@
     <slot name="afterDateInput" />
   </div>
 </template>
+
 <script>
 import makeDateUtils from '~/utils/DateUtils'
 import inputProps from '~/mixins/inputProps.vue'
@@ -154,21 +157,16 @@ export default {
       this.$emit('close-calendar')
       this.isFocusedUsed = false
     },
+    onKeydownEnter() {
+      if (this.typeable) {
+        this.submitTypedDate()
+      }
+      this.$emit('close-calendar')
+    },
     /**
      * Attempt to parse a typed date
-     * @param {Event} event
      */
-    parseTypedDate(event) {
-      const code = event.keyCode ? event.keyCode : event.which
-      // close calendar if escape or enter are pressed
-      if (
-        [
-          27, // escape
-          13, // enter
-        ].indexOf(code) !== -1
-      ) {
-        this.input.blur()
-      }
+    parseTypedDate() {
       if (this.typeable) {
         const parsableDate = this.parseDate(this.input.value)
         const parsedDate = Date.parse(parsableDate)

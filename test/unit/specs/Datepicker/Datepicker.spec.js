@@ -108,6 +108,24 @@ describe('Datepicker mounted', () => {
     await calendarButton.trigger('click')
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
+
+  it('resets the date correctly when typeable', async () => {
+    wrapper.setProps({
+      typeable: true,
+    })
+
+    const input = wrapper.find('input')
+    await input.trigger('click')
+    await input.setValue('1 Jan 2000')
+    await input.trigger('keydown.enter')
+    expect(wrapper.vm.selectedDate).toEqual(new Date(2000, 0, 1))
+
+    await wrapper.setProps({
+      value: new Date(2016, 1, 15),
+    })
+
+    expect(wrapper.vm.selectedDate).toEqual(new Date(2016, 1, 15))
+  })
 })
 
 describe('Datepicker shallowMounted', () => {

@@ -117,9 +117,16 @@ describe('DateInput', () => {
     expect(wrapper.find('input').element.value).toEqual('!')
   })
 
-  it('triggers closeCalendar on blur', () => {
-    wrapper.find('input').trigger('blur')
+  it('emits close-calendar on blur', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('blur')
     expect(wrapper.emitted('close-calendar')).toBeTruthy()
+  })
+
+  it('emits close-calendar when escape is pressed', () => {
+    const input = wrapper.find('input')
+    input.trigger('keydown.escape')
+    expect(wrapper.emitted()['close-calendar']).toBeTruthy()
   })
 
   it('should open the calendar on click', async () => {
