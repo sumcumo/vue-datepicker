@@ -120,15 +120,6 @@ export default {
   },
   methods: {
     /**
-     * Changes the decade (or yearRange) up or down
-     * @param {Number} incrementBy
-     */
-    changeDecade(incrementBy) {
-      const date = this.pageDate
-      this.utils.setFullYear(date, this.utils.getFullYear(date) + incrementBy)
-      this.$emit('changed-decade', date)
-    },
-    /**
      * Whether a year is disabled
      * @param {Date} date
      * @return {Boolean}
@@ -155,7 +146,7 @@ export default {
      */
     nextDecade() {
       if (!this.isNextDisabled) {
-        this.changeDecade(this.yearRange)
+        this.changePage(this.yearRange)
       }
     },
     /**
@@ -163,7 +154,7 @@ export default {
      */
     previousDecade() {
       if (!this.isPreviousDisabled) {
-        this.changeDecade(-this.yearRange)
+        this.changePage(-this.yearRange)
       }
     },
     /**

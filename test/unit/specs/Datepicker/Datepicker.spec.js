@@ -364,12 +364,20 @@ describe('Datepicker shallowMounted', () => {
     expect(datepicker.element.className).toContain('rtl')
   })
 
-  it('should emit changedMonth on a month change received from PickerDay', () => {
-    const dateTemp = new Date(2016, 9, 1)
-    wrapper.vm.handleChangedMonthFromDayPicker({
-      timestamp: dateTemp.valueOf(),
-    })
-    expect(wrapper.emitted()['changed-month']).toBeTruthy()
+  it('should emit changed-month/year/decade', async () => {
+    const pageDate = new Date(2016, 2, 1)
+    await wrapper.vm.setView('day')
+    await wrapper.vm.handlePageChange(pageDate)
+
+    expect(wrapper.emitted('changed-month')).toBeTruthy()
+
+    await wrapper.vm.setView('month')
+    await wrapper.vm.handlePageChange(pageDate)
+    expect(wrapper.emitted('changed-year')).toBeTruthy()
+
+    await wrapper.vm.setView('year')
+    await wrapper.vm.handlePageChange(pageDate)
+    expect(wrapper.emitted('changed-decade')).toBeTruthy()
   })
 
   it('should clear date on default date disabled', async () => {

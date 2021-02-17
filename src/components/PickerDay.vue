@@ -203,13 +203,14 @@ export default {
   },
   methods: {
     /**
-     * Change the page month
+     * Changes the page up or down (overrides changePage in pickerMixin)
      * @param {Number} incrementBy
      */
-    changeMonth(incrementBy) {
+    changePage(incrementBy) {
       const date = this.pageDate
       this.utils.setMonth(date, this.utils.getMonth(date) + incrementBy)
-      this.$emit('changed-month', date)
+
+      this.$emit('page-change', date)
     },
     /**
      * Set the class for a specific day
@@ -353,7 +354,7 @@ export default {
      */
     nextMonth() {
       if (!this.isNextDisabled) {
-        this.changeMonth(+1)
+        this.changePage(+1)
       }
     },
     /**
@@ -361,7 +362,7 @@ export default {
      */
     previousMonth() {
       if (!this.isPreviousDisabled) {
-        this.changeMonth(-1)
+        this.changePage(-1)
       }
     },
     /**

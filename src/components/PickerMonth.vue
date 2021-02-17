@@ -100,15 +100,6 @@ export default {
   },
   methods: {
     /**
-     * Changes the year up or down
-     * @param {Number} incrementBy
-     */
-    changeYear(incrementBy) {
-      const date = this.pageDate
-      this.utils.setFullYear(date, this.utils.getFullYear(date) + incrementBy)
-      this.$emit('changed-year', date)
-    },
-    /**
      * Whether a month is disabled
      * @param {Date} date
      * @return {Boolean}
@@ -138,7 +129,7 @@ export default {
      */
     nextYear() {
       if (!this.isNextDisabled) {
-        this.changeYear(1)
+        this.changePage(1)
       }
     },
     /**
@@ -146,7 +137,7 @@ export default {
      */
     previousYear() {
       if (!this.isPreviousDisabled) {
-        this.changeYear(-1)
+        this.changePage(-1)
       }
     },
     /**

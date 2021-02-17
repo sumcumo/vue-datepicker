@@ -26,6 +26,16 @@ describe('PickerDay: DOM', () => {
     expect(wrapper.vm.isSelectedDate(new Date(2017, 1, 1))).toEqual(false)
   })
 
+  it('can set the next month', () => {
+    wrapper.vm.nextMonth()
+    expect(wrapper.emitted('page-change')[0][0].getMonth()).toEqual(2)
+  })
+
+  it('can set the previous month', () => {
+    wrapper.vm.previousMonth()
+    expect(wrapper.emitted('page-change')[0][0].getMonth()).toEqual(0)
+  })
+
   it('emits an event when selected', () => {
     wrapper.vm.selectDate({ isDisabled: false })
     expect(wrapper.emitted()['select-date']).toBeTruthy()

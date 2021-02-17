@@ -74,9 +74,7 @@
           :translation="translation"
           :use-utc="useUtc"
           :year-range="yearPickerRange"
-          @changed-decade="setPageDate"
-          @changed-month="handleChangedMonthFromDayPicker"
-          @changed-year="setPageDate"
+          @page-change="handlePageChange"
           @select-date="selectDate"
           @select-month="selectMonth"
           @select-year="selectYear"
@@ -341,11 +339,11 @@ export default {
       }
     },
     /**
-     * Handles a month change from the day picker
+     * Set the new pageDate and emit `changed-<view>` event
      */
-    handleChangedMonthFromDayPicker(date) {
-      this.setPageDate(date)
-      this.$emit('changed-month', date)
+    handlePageChange(pageDate) {
+      this.setPageDate(pageDate)
+      this.$emit(`changed-${this.nextView.up}`)
     },
     /**
      * Initiate the component

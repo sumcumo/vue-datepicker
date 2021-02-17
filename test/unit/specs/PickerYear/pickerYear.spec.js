@@ -42,12 +42,12 @@ describe('PickerYear', () => {
 
   it('can set the next decade', () => {
     wrapper.vm.nextDecade()
-    expect(wrapper.emitted()['changed-decade']).toBeTruthy()
+    expect(wrapper.emitted('page-change')[0][0].getFullYear()).toEqual(2028)
   })
 
   it('can set the previous decade', () => {
     wrapper.vm.previousDecade()
-    expect(wrapper.emitted()['changed-decade']).toBeTruthy()
+    expect(wrapper.emitted('page-change')[0][0].getFullYear()).toEqual(2008)
   })
 
   it('formats the decade range', async () => {
