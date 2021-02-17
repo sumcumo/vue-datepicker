@@ -1,5 +1,5 @@
 <template>
-  <div :class="[wrapperClass, isRtl ? 'rtl' : '']" class="vdp-datepicker">
+  <div class="vdp-datepicker" :class="[wrapperClass, { rtl: isRtl }]">
     <DateInput
       :id="id"
       :autofocus="autofocus"
@@ -53,6 +53,7 @@
       <div
         v-if="isOpen"
         ref="datepicker"
+        class="vdp-datepicker__calendar"
         :class="pickerClasses"
         @mousedown.prevent
       >
@@ -92,17 +93,18 @@
     </Popup>
   </div>
 </template>
+
 <script>
 import en from '~/locale/translations/en'
-import makeDateUtils from '~/utils/DateUtils'
 import calendarSlots from '~/utils/calendarSlots'
 import DateInput from '~/components/DateInput.vue'
+import DisabledDate from '~/utils/DisabledDate'
 import inputProps from '~/mixins/inputProps.vue'
+import makeDateUtils from '~/utils/DateUtils'
 import PickerDay from '~/components/PickerDay.vue'
 import PickerMonth from '~/components/PickerMonth.vue'
 import PickerYear from '~/components/PickerYear.vue'
 import Popup from '~/components/Popup.vue'
-import DisabledDate from '~/utils/DisabledDate'
 
 const validDate = (val) =>
   val === null ||
@@ -258,7 +260,6 @@ export default {
     pickerClasses() {
       return [
         this.calendarClass,
-        'vdp-datepicker__calendar',
         this.isInline && 'inline',
         this.isRtl && this.appendToBody && 'rtl',
       ]

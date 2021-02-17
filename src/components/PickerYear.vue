@@ -18,13 +18,14 @@
       :key="year.timestamp"
       :class="{ selected: year.isSelected, disabled: year.isDisabled }"
       class="cell year"
-      @click.stop="selectYear(year)"
+      @click="selectYear(year)"
     >
       {{ year.year }}
     </span>
     <slot name="calendarFooterYear" />
   </div>
 </template>
+
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
@@ -116,10 +117,10 @@ export default {
   },
   methods: {
     /**
-     * Changes the year up or down
+     * Changes the decade (or yearRange) up or down
      * @param {Number} incrementBy
      */
-    changeYear(incrementBy) {
+    changeDecade(incrementBy) {
       const date = this.pageDate
       this.utils.setFullYear(date, this.utils.getFullYear(date) + incrementBy)
       this.$emit('changed-decade', date)
@@ -151,7 +152,7 @@ export default {
      */
     nextDecade() {
       if (!this.isNextDisabled) {
-        this.changeYear(this.yearRange)
+        this.changeDecade(this.yearRange)
       }
     },
     /**
@@ -159,7 +160,7 @@ export default {
      */
     previousDecade() {
       if (!this.isPreviousDisabled) {
-        this.changeYear(-this.yearRange)
+        this.changeDecade(-this.yearRange)
       }
     },
     /**

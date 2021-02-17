@@ -16,7 +16,7 @@
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
-    <div :class="isRtl ? 'flex-rtl' : ''">
+    <div :class="{ 'flex-rtl': isRtl }">
       <span v-for="d in daysOfWeek" :key="d.timestamp" class="cell day-header">
         {{ d }}
       </span>
@@ -33,6 +33,7 @@
     <slot name="calendarFooterDay" />
   </div>
 </template>
+
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
@@ -93,10 +94,8 @@ export default {
       const days = []
       const daysInCalendar =
         this.daysFromPrevMonth + this.daysInMonth + this.daysFromNextMonth
-      const firstOfMonth = this.newPageDate()
-      const dObj = new Date(
-        firstOfMonth.setDate(firstOfMonth.getDate() - this.daysFromPrevMonth),
-      )
+      const dObj = this.firstCellDate()
+
       for (let i = 0; i < daysInCalendar; i += 1) {
         days.push(this.makeDay(i, dObj))
         this.utils.setDate(dObj, this.utils.getDate(dObj) + 1)
@@ -139,6 +138,13 @@ export default {
      */
     firstDayOfWeekNumber() {
       return this.utils.getDayFromAbbr(this.firstDayOfWeek)
+    },
+    highlightedConfig() {
+      return new HighlightedDate(
+        this.utils,
+        this.disabledDates,
+        this.highlighted,
+      ).config
     },
     /**
      * Is the next month disabled?
@@ -186,16 +192,9 @@ export default {
      * The first day of the next page's month.
      * @return {Date}
      */
-    nextPageDate() {
-      const d = this.newPageDate()
+    firstOfNextMonth() {
+      const d = new Date(this.pageDate)
       return new Date(this.utils.setMonth(d, this.utils.getMonth(d) + 1))
-    },
-    highlightedConfig() {
-      return new HighlightedDate(
-        this.utils,
-        this.disabledDates,
-        this.highlighted,
-      ).config
     },
   },
   methods: {
@@ -209,7 +208,7 @@ export default {
       this.$emit('changed-month', date)
     },
     /**
-     * set the class for a specific day
+     * Set the class for a specific day
      * @param {Object} day
      * @return {Object}
      */
@@ -302,7 +301,7 @@ export default {
      */
     // eslint-disable-next-line complexity
     makeDay(id, dObj) {
-      const isNextMonth = dObj >= this.nextPageDate
+      const isNextMonth = dObj >= this.firstOfNextMonth
       const isPreviousMonth = dObj < this.pageDate
       const isSaturday = this.utils.getDay(dObj) === 6
       const isSunday = this.utils.getDay(dObj) === 0
@@ -328,9 +327,10 @@ export default {
      * Set up a new date object to the first day of the current 'page'
      * @return Date
      */
-    newPageDate() {
+    firstCellDate() {
       const d = this.pageDate
-      return this.useUtc
+
+      const firstOfMonth = this.useUtc
         ? new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1))
         : new Date(
             d.getFullYear(),
@@ -339,6 +339,10 @@ export default {
             d.getHours(),
             d.getMinutes(),
           )
+
+      return new Date(
+        firstOfMonth.setDate(firstOfMonth.getDate() - this.daysFromPrevMonth),
+      )
     },
     /**
      * Increment the current page month

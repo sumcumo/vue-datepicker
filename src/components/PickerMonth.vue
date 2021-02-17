@@ -28,6 +28,7 @@
     <slot name="calendarFooterMonth" />
   </div>
 </template>
+
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'

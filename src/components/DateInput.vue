@@ -36,7 +36,7 @@
       :readonly="!typeable"
       :required="required"
       :tabindex="tabindex"
-      :type="inline ? 'hidden' : 'text'"
+      :type="inline ? 'hidden' : null"
       :value="formattedValue"
       @blur="inputBlurred"
       @click="showCalendarByClick"
@@ -92,13 +92,12 @@ export default {
     },
   },
   data() {
-    const constructedDateUtils = makeDateUtils(this.useUtc)
     return {
       input: null,
       isFocusedUsed: false,
       isBlurred: false,
       typedDate: '',
-      utils: constructedDateUtils,
+      utils: makeDateUtils(this.useUtc),
     }
   },
   computed: {
@@ -111,15 +110,6 @@ export default {
       }
       return this.inputClass
     },
-    formattedValue() {
-      if (!this.selectedDate) {
-        return null
-      }
-      if (this.typedDate.length) {
-        return this.typedDate
-      }
-      return this.formattedDate
-    },
     formattedDate() {
       return typeof this.format === 'function'
         ? this.format(new Date(this.selectedDate))
@@ -128,6 +118,15 @@ export default {
             this.format,
             this.translation,
           )
+    },
+    formattedValue() {
+      if (!this.selectedDate) {
+        return null
+      }
+      if (this.typedDate.length) {
+        return this.typedDate
+      }
+      return this.formattedDate
     },
   },
   watch: {
@@ -163,6 +162,14 @@ export default {
       }
       this.$emit('close-calendar')
     },
+    parseDate(value) {
+      return this.utils.parseDate(
+        value,
+        this.format,
+        this.translation,
+        this.parser,
+      )
+    },
     /**
      * Attempt to parse a typed date
      */
@@ -175,14 +182,6 @@ export default {
           this.$emit('typed-date', new Date(parsedDate))
         }
       }
-    },
-    parseDate(value) {
-      return this.utils.parseDate(
-        value,
-        this.format,
-        this.translation,
-        this.parser,
-      )
     },
     showCalendarByClick() {
       const isFocusedUsed = this.showCalendarOnFocus && !this.isFocusedUsed
