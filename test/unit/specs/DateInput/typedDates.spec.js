@@ -107,7 +107,7 @@ describe('DateInput', () => {
   it('emits close-calendar when return is pressed', () => {
     const input = wrapper.find('input')
     input.trigger('keydown.enter')
-    expect(wrapper.emitted()['close-calendar']).toBeTruthy()
+    expect(wrapper.emitted('close')).toBeTruthy()
   })
 
   it('clears a typed date if it does not parse', () => {

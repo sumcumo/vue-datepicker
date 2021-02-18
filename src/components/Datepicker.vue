@@ -31,7 +31,7 @@
       :use-utc="useUtc"
       @blur="onBlur"
       @clear-date="clearDate"
-      @close-calendar="close"
+      @close="close"
       @focus="onFocus"
       @show-calendar="showCalendar"
       @typed-date="setTypedDate"

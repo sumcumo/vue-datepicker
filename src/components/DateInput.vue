@@ -42,7 +42,7 @@
       @click="showCalendarByClick"
       @focus="showCalendarByFocus"
       @keydown.enter.prevent="onKeydownEnter"
-      @keydown.escape.prevent="$emit('close-calendar')"
+      @keydown.escape.prevent="$emit('close')"
       @keyup="parseTypedDate"
     />
     <!-- Clear Button -->
@@ -153,14 +153,14 @@ export default {
         this.submitTypedDate()
       }
       this.$emit('blur')
-      this.$emit('close-calendar')
+      this.$emit('close')
       this.isFocusedUsed = false
     },
     onKeydownEnter() {
       if (this.typeable) {
         this.submitTypedDate()
       }
-      this.$emit('close-calendar')
+      this.$emit('close')
     },
     parseDate(value) {
       return this.utils.parseDate(
@@ -222,7 +222,7 @@ export default {
         this.isBlurred = false
         return
       }
-      this.$emit(this.isOpen ? 'close-calendar' : 'show-calendar')
+      this.$emit(this.isOpen ? 'close' : 'show-calendar')
     },
   },
 }
