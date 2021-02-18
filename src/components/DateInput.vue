@@ -9,7 +9,7 @@
         'calendar-btn-disabled': disabled,
       }"
       class="vdp-datepicker__calendar-button"
-      @click="toggleCalendar"
+      @click="toggle"
     >
       <span :class="{ 'input-group-text': bootstrapStyling }">
         <slot name="calendarBtn">
@@ -187,7 +187,7 @@ export default {
       const isFocusedUsed = this.showCalendarOnFocus && !this.isFocusedUsed
 
       if (!this.showCalendarOnButtonClick && !isFocusedUsed) {
-        this.toggleCalendar()
+        this.toggle()
       }
 
       if (this.showCalendarOnFocus) {
@@ -217,7 +217,7 @@ export default {
         this.$emit('typed-date', parsedDate)
       }
     },
-    toggleCalendar() {
+    toggle() {
       if (!this.isOpen && this.isBlurred) {
         this.isBlurred = false
         return
