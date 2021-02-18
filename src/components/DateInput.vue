@@ -38,10 +38,10 @@
       :tabindex="tabindex"
       :type="inline ? 'hidden' : null"
       :value="formattedValue"
-      @blur="inputBlurred"
-      @click="showCalendarByClick"
-      @focus="showCalendarByFocus"
-      @keydown.enter.prevent="onKeydownEnter"
+      @blur="handleInputBlur"
+      @click="handleInputClick"
+      @focus="handleInputFocus"
+      @keydown.enter.prevent="handleKeydownEnter"
       @keydown.escape.prevent="$emit('close')"
       @keyup="parseTypedDate"
     />
@@ -147,7 +147,7 @@ export default {
     /**
      * submit typedDate and emit a blur event
      */
-    inputBlurred() {
+    handleInputBlur() {
       this.isBlurred = this.isOpen
       if (this.typeable) {
         this.submitTypedDate()
@@ -156,7 +156,26 @@ export default {
       this.$emit('close')
       this.isFocusedUsed = false
     },
-    onKeydownEnter() {
+    handleInputClick() {
+      const isFocusedUsed = this.showCalendarOnFocus && !this.isFocusedUsed
+
+      if (!this.showCalendarOnButtonClick && !isFocusedUsed) {
+        this.toggle()
+      }
+
+      if (this.showCalendarOnFocus) {
+        this.isFocusedUsed = true
+      }
+    },
+    handleInputFocus() {
+      if (this.showCalendarOnFocus) {
+        this.$emit('open')
+      }
+
+      this.isBlurred = false
+      this.$emit('focus')
+    },
+    handleKeydownEnter() {
       if (this.typeable) {
         this.submitTypedDate()
       }
@@ -182,25 +201,6 @@ export default {
           this.$emit('typed-date', new Date(parsedDate))
         }
       }
-    },
-    showCalendarByClick() {
-      const isFocusedUsed = this.showCalendarOnFocus && !this.isFocusedUsed
-
-      if (!this.showCalendarOnButtonClick && !isFocusedUsed) {
-        this.toggle()
-      }
-
-      if (this.showCalendarOnFocus) {
-        this.isFocusedUsed = true
-      }
-    },
-    showCalendarByFocus() {
-      if (this.showCalendarOnFocus) {
-        this.$emit('show-calendar')
-      }
-
-      this.isBlurred = false
-      this.$emit('focus')
     },
     /**
      * Submits a typed date if it's valid
