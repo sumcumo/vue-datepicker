@@ -21,18 +21,20 @@
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
     <div :class="{ 'flex-rtl': isRtl }">
-      <span v-for="d in daysOfWeek" :key="d.timestamp" class="cell day-header">
-        {{ d }}
+      <span v-for="(day, i) in daysOfWeek" :key="i" class="day-header">
+        {{ day }}
       </span>
-      <span
-        v-for="day in days"
-        :key="day.timestamp"
-        class="cell day"
-        :class="dayClasses(day)"
-        @click="selectDate(day)"
-      >
-        {{ dayCellContent(day) }}
-      </span>
+      <div ref="cells">
+        <span
+          v-for="cell in cells"
+          :key="cell.timestamp"
+          class="cell day"
+          :class="dayClasses(cell)"
+          @click="selectDate(cell)"
+        >
+          {{ dayCellContent(cell) }}
+        </span>
+      </div>
     </div>
     <slot name="calendarFooterDay" />
   </div>
@@ -72,6 +74,23 @@ export default {
   },
   computed: {
     /**
+     * Sets an array with all days to show this month
+     * @return {Array}
+     */
+    cells() {
+      const days = []
+      const daysInCalendar =
+        this.daysFromPrevMonth + this.daysInMonth + this.daysFromNextMonth
+      const dObj = this.firstCellDate()
+
+      for (let i = 0; i < daysInCalendar; i += 1) {
+        days.push(this.makeDay(i, dObj))
+        this.utils.setDate(dObj, this.utils.getDate(dObj) + 1)
+      }
+
+      return days
+    },
+    /**
      * Gets the name of the month the current page is on
      * @return {String}
      */
@@ -89,22 +108,6 @@ export default {
     currYearName() {
       const { yearSuffix } = this.translation
       return `${this.pageYear}${yearSuffix}`
-    },
-    /**
-     * Sets an array with all days to show this month
-     * @return {Array}
-     */
-    days() {
-      const days = []
-      const daysInCalendar =
-        this.daysFromPrevMonth + this.daysInMonth + this.daysFromNextMonth
-      const dObj = this.firstCellDate()
-
-      for (let i = 0; i < daysInCalendar; i += 1) {
-        days.push(this.makeDay(i, dObj))
-        this.utils.setDate(dObj, this.utils.getDate(dObj) + 1)
-      }
-      return days
     },
     /**
      * Returns an array of day names

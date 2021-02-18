@@ -15,16 +15,17 @@
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
-
-    <span
-      v-for="year in years"
-      :key="year.timestamp"
-      :class="{ selected: year.isSelected, disabled: year.isDisabled }"
-      class="cell year"
-      @click="selectYear(year)"
-    >
-      {{ year.year }}
-    </span>
+    <div ref="cells">
+      <span
+        v-for="cell in cells"
+        :key="cell.timestamp"
+        :class="{ selected: cell.isSelected, disabled: cell.isDisabled }"
+        class="cell year"
+        @click="selectYear(cell)"
+      >
+        {{ cell.year }}
+      </span>
+    </div>
     <slot name="calendarFooterYear" />
   </div>
 </template>
@@ -43,6 +44,38 @@ export default {
     },
   },
   computed: {
+    /**
+     * Sets an array with all years to show this decade (or yearRange)
+     * @return {Array}
+     */
+    cells() {
+      const d = this.pageDate
+      const years = []
+      const year = this.useUtc
+        ? Math.floor(d.getUTCFullYear() / this.yearRange) * this.yearRange
+        : Math.floor(d.getFullYear() / this.yearRange) * this.yearRange
+      // set up a new date object to the beginning of the current 'page'7
+      const dObj = this.useUtc
+        ? new Date(Date.UTC(year, d.getUTCMonth(), d.getUTCDate()))
+        : new Date(
+            year,
+            d.getMonth(),
+            d.getDate(),
+            d.getHours(),
+            d.getMinutes(),
+          )
+      for (let i = 0; i < this.yearRange; i += 1) {
+        years.push({
+          year: this.utils.getFullYear(dObj),
+          timestamp: dObj.valueOf(),
+          isSelected: this.isSelectedYear(dObj),
+          isDisabled: this.isDisabledYear(dObj),
+        })
+        this.utils.setFullYear(dObj, this.utils.getFullYear(dObj) + 1)
+      }
+
+      return years
+    },
     /**
      * Is the next decade disabled?
      * @return {Boolean}
@@ -84,38 +117,6 @@ export default {
     pageTitleYear() {
       const { yearSuffix } = this.translation
       return `${this.pageDecadeStart} - ${this.pageDecadeEnd}${yearSuffix}`
-    },
-    /**
-     * Set an array with years for a decade
-     * @return {Array}
-     */
-    years() {
-      const d = this.pageDate
-      const years = []
-      const year = this.useUtc
-        ? Math.floor(d.getUTCFullYear() / this.yearRange) * this.yearRange
-        : Math.floor(d.getFullYear() / this.yearRange) * this.yearRange
-
-      // set up a new date object to the beginning of the current 'page'7
-      const dObj = this.useUtc
-        ? new Date(Date.UTC(year, d.getUTCMonth(), d.getUTCDate()))
-        : new Date(
-            year,
-            d.getMonth(),
-            d.getDate(),
-            d.getHours(),
-            d.getMinutes(),
-          )
-      for (let i = 0; i < this.yearRange; i += 1) {
-        years.push({
-          year: this.utils.getFullYear(dObj),
-          timestamp: dObj.valueOf(),
-          isSelected: this.isSelectedYear(dObj),
-          isDisabled: this.isDisabledYear(dObj),
-        })
-        this.utils.setFullYear(dObj, this.utils.getFullYear(dObj) + 1)
-      }
-      return years
     },
   },
   methods: {

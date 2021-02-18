@@ -172,16 +172,18 @@
         }
       }
     }
+  }
 
-    &.day-header {
-      cursor: inherit;
-      font-size: 75%;
-      white-space: nowrap;
-
-      &:hover {
-        background: inherit;
-      }
-    }
+  .day-header {
+    display: inline-block;
+    font-size: 75%;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 5px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 14.285714285714286%;
   }
 
   .month,

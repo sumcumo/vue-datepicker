@@ -92,7 +92,7 @@ describe('PickerDay: DOM', () => {
 
     await firstCell.trigger('click')
 
-    expect(wrapper.emitted()['select-date'][0][0].date).toBe(28)
+    expect(wrapper.emitted('select-date')[0][0].date).toBe(28)
   })
 
   it('should select an edge date from the next month', async () => {
@@ -100,6 +100,6 @@ describe('PickerDay: DOM', () => {
 
     await lastCell.trigger('click')
 
-    expect(wrapper.emitted()['select-date'][0][0].date).toBe(3)
+    expect(wrapper.emitted('select-date')[0][0].date).toBe(3)
   })
 })

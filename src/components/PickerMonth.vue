@@ -20,15 +20,17 @@
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
-    <span
-      v-for="month in months"
-      :key="month.timestamp"
-      :class="{ selected: month.isSelected, disabled: month.isDisabled }"
-      class="cell month"
-      @click.stop="selectMonth(month)"
-    >
-      {{ month.month }}
-    </span>
+    <div ref="cells">
+      <span
+        v-for="cell in cells"
+        :key="cell.timestamp"
+        :class="{ selected: cell.isSelected, disabled: cell.isDisabled }"
+        class="cell month"
+        @click.stop="selectMonth(cell)"
+      >
+        {{ cell.month }}
+      </span>
+    </div>
     <slot name="calendarFooterMonth" />
   </div>
 </template>
@@ -41,6 +43,36 @@ export default {
   name: 'PickerMonth',
   mixins: [pickerMixin],
   computed: {
+    /**
+     * Sets an array with all months to show this year
+     * @return {Array}
+     */
+    cells() {
+      const d = this.pageDate
+      const months = []
+      // set up a new date object to the beginning of the current 'page'
+      const dObj = this.useUtc
+        ? new Date(Date.UTC(d.getUTCFullYear(), 0, d.getUTCDate()))
+        : new Date(
+            d.getFullYear(),
+            0,
+            d.getDate(),
+            d.getHours(),
+            d.getMinutes(),
+          )
+
+      for (let i = 0; i < 12; i += 1) {
+        months.push({
+          month: this.utils.getMonthName(i, this.translation.months),
+          timestamp: dObj.valueOf(),
+          isSelected: this.isSelectedMonth(dObj),
+          isDisabled: this.isDisabledMonth(dObj),
+        })
+        this.utils.setMonth(dObj, this.utils.getMonth(dObj) + 1)
+      }
+
+      return months
+    },
     /**
      * Is the next year disabled?
      * @return {Boolean}
@@ -60,34 +92,6 @@ export default {
         return false
       }
       return this.disabledConfig.to.year >= this.pageYear
-    },
-    /**
-     * Set an array with all months
-     * @return {Array}
-     */
-    months() {
-      const d = this.pageDate
-      const months = []
-      // set up a new date object to the beginning of the current 'page'
-      const dObj = this.useUtc
-        ? new Date(Date.UTC(d.getUTCFullYear(), 0, d.getUTCDate()))
-        : new Date(
-            d.getFullYear(),
-            0,
-            d.getDate(),
-            d.getHours(),
-            d.getMinutes(),
-          )
-      for (let i = 0; i < 12; i += 1) {
-        months.push({
-          month: this.utils.getMonthName(i, this.translation.months),
-          timestamp: dObj.valueOf(),
-          isSelected: this.isSelectedMonth(dObj),
-          isDisabled: this.isDisabledMonth(dObj),
-        })
-        this.utils.setMonth(dObj, this.utils.getMonth(dObj) + 1)
-      }
-      return months
     },
     /**
      * Display the current page's year as the title.

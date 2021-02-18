@@ -478,11 +478,11 @@ export default {
       this.setPageDate(date)
     },
     /**
-     * @param {Object} date
+     * @param {Object} cell
      */
-    selectDate(date) {
+    selectDate(cell) {
       this.resetTypedDate = this.utils.getNewDateObject()
-      this.setDate(date.timestamp)
+      this.setDate(cell.timestamp)
       this.close()
     },
     /**
@@ -492,29 +492,29 @@ export default {
       this.$emit('selected-disabled', date)
     },
     /**
-     * @param {Object} month
+     * @param {Object} cell
      */
-    selectMonth(month) {
-      const date = new Date(month.timestamp)
+    selectMonth(cell) {
+      const date = new Date(cell.timestamp)
       if (this.allowedToShowView('day')) {
         this.setPageDate(date)
-        this.$emit('changed-month', month)
+        this.$emit('changed-month', cell)
         this.setView('day')
       } else {
-        this.selectDate(month)
+        this.selectDate(cell)
       }
     },
     /**
-     * @param {Object} year
+     * @param {Object} cell
      */
-    selectYear(year) {
-      const date = new Date(year.timestamp)
+    selectYear(cell) {
+      const date = new Date(cell.timestamp)
       if (this.allowedToShowView('month')) {
         this.setPageDate(date)
-        this.$emit('changed-year', year)
+        this.$emit('changed-year', cell)
         this.setView('month')
       } else {
-        this.selectDate(year)
+        this.selectDate(cell)
       }
     },
     /**
