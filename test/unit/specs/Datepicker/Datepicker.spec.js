@@ -292,7 +292,7 @@ describe('Datepicker shallowMounted', () => {
   it('sets the date on typedDate event', () => {
     const wrapperTemp = shallowMount(Datepicker)
     const today = new Date()
-    wrapperTemp.vm.setTypedDate(today)
+    wrapperTemp.vm.handleTypedDate(today)
     expect(wrapperTemp.vm.selectedDate).toEqual(today)
   })
 

@@ -29,12 +29,12 @@
       :translation="translation"
       :typeable="typeable"
       :use-utc="useUtc"
-      @blur="onBlur"
+      @blur="handleInputBlur"
       @clear-date="clearDate"
       @close="close"
-      @focus="onFocus"
+      @focus="handleInputFocus"
       @open="open"
-      @typed-date="setTypedDate"
+      @typed-date="handleTypedDate"
     >
       <slot slot="beforeDateInput" name="beforeDateInput" />
       <slot slot="afterDateInput" name="afterDateInput" />
@@ -344,6 +344,18 @@ export default {
       this.$emit(`changed-${this.nextView.up}`, pageDate)
     },
     /**
+     * Emits a 'blur' event
+     */
+    handleInputBlur() {
+      this.$emit('blur')
+    },
+    /**
+     * Emits a 'focus' event
+     */
+    handleInputFocus() {
+      this.$emit('focus')
+    },
+    /**
      * Set the date, or go to the next view down
      */
     handleSelect(cell) {
@@ -363,6 +375,12 @@ export default {
      */
     handleSelectDisabled(cell) {
       this.$emit('selected-disabled', cell)
+    },
+    /**
+     * Set the date from a 'typed-date' event
+     */
+    handleTypedDate(date) {
+      this.setDate(date.valueOf())
     },
     /**
      * Initiate the component
@@ -391,18 +409,6 @@ export default {
       return new DisabledDate(this.utils, this.disabledDates).isDateDisabled(
         date,
       )
-    },
-    /**
-     * Emits a 'blur' event
-     */
-    onBlur() {
-      this.$emit('blur')
-    },
-    /**
-     * Emits a 'focus' event
-     */
-    onFocus() {
-      this.$emit('focus')
     },
     /**
      * Opens the calendar with the relevant view: 'day', 'month', or 'year'
@@ -476,12 +482,6 @@ export default {
         dateTemp = this.utils.resetDateTime(dateTemp)
       }
       this.pageTimestamp = this.utils.setDate(new Date(dateTemp), 1)
-    },
-    /**
-     * Set the date from a typedDate event
-     */
-    setTypedDate(date) {
-      this.setDate(date.valueOf())
     },
     /**
      * Set the datepicker value
