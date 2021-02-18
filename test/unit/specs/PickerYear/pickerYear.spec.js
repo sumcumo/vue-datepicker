@@ -64,8 +64,8 @@ describe('PickerYear', () => {
   })
 
   it('emits an event when selected', () => {
-    wrapper.vm.selectYear({ isDisabled: false })
-    expect(wrapper.emitted()['select-year']).toBeTruthy()
+    wrapper.vm.select({ isDisabled: false })
+    expect(wrapper.emitted('select')).toBeTruthy()
   })
 
   it('should set custom decade range', async () => {

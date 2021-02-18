@@ -23,8 +23,8 @@ describe('PickerYear', () => {
   })
 
   it("can't select a disabled year", () => {
-    wrapper.vm.selectYear({ isDisabled: true })
-    expect(wrapper.emitted()['select-year']).toBeFalsy()
+    wrapper.vm.select({ isDisabled: true })
+    expect(wrapper.emitted('select')).toBeFalsy()
   })
 
   it("can't navigate to a disabled year", () => {

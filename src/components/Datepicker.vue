@@ -75,11 +75,9 @@
           :use-utc="useUtc"
           :year-range="yearPickerRange"
           @page-change="handlePageChange"
-          @select-date="selectDate"
-          @select-month="selectMonth"
-          @select-year="selectYear"
+          @select="handleSelect"
+          @select-disabled="handleSelectDisabled"
           @set-view="setView"
-          @selected-disabled="selectDisabledDate"
         >
           <template v-for="slotKey of calendarSlots">
             <slot :slot="slotKey" :name="slotKey" />
@@ -343,7 +341,28 @@ export default {
      */
     handlePageChange(pageDate) {
       this.setPageDate(pageDate)
-      this.$emit(`changed-${this.nextView.up}`)
+      this.$emit(`changed-${this.nextView.up}`, pageDate)
+    },
+    /**
+     * Set the date, or go to the next view down
+     */
+    handleSelect(cell) {
+      if (this.allowedToShowView(this.nextView.down)) {
+        this.setPageDate(new Date(cell.timestamp))
+        this.$emit(`changed-${this.view}`, cell)
+        this.setView(this.nextView.down)
+        return
+      }
+
+      this.resetTypedDate = this.utils.getNewDateObject()
+      this.setDate(cell.timestamp)
+      this.close()
+    },
+    /**
+     * Emit a 'selected-disabled' event
+     */
+    handleSelectDisabled(cell) {
+      this.$emit('selected-disabled', cell)
     },
     /**
      * Initiate the component
@@ -476,46 +495,6 @@ export default {
       }
       this.selectedDate = date
       this.setPageDate(date)
-    },
-    /**
-     * @param {Object} cell
-     */
-    selectDate(cell) {
-      this.resetTypedDate = this.utils.getNewDateObject()
-      this.setDate(cell.timestamp)
-      this.close()
-    },
-    /**
-     * @param {Object} date
-     */
-    selectDisabledDate(date) {
-      this.$emit('selected-disabled', date)
-    },
-    /**
-     * @param {Object} cell
-     */
-    selectMonth(cell) {
-      const date = new Date(cell.timestamp)
-      if (this.allowedToShowView('day')) {
-        this.setPageDate(date)
-        this.$emit('changed-month', cell)
-        this.setView('day')
-      } else {
-        this.selectDate(cell)
-      }
-    },
-    /**
-     * @param {Object} cell
-     */
-    selectYear(cell) {
-      const date = new Date(cell.timestamp)
-      if (this.allowedToShowView('month')) {
-        this.setPageDate(date)
-        this.$emit('changed-year', cell)
-        this.setView('month')
-      } else {
-        this.selectDate(cell)
-      }
     },
     /**
      * Set the picker view

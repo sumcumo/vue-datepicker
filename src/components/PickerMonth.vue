@@ -26,7 +26,7 @@
         :key="cell.timestamp"
         :class="{ selected: cell.isSelected, disabled: cell.isDisabled }"
         class="cell month"
-        @click.stop="selectMonth(cell)"
+        @click="select(cell)"
       >
         {{ cell.month }}
       </span>
@@ -142,15 +142,6 @@ export default {
     previousYear() {
       if (!this.isPreviousDisabled) {
         this.changePage(-1)
-      }
-    },
-    /**
-     * Emits a selectMonth event
-     * @param {Object} month
-     */
-    selectMonth(month) {
-      if (!month.isDisabled) {
-        this.$emit('select-month', month)
       }
     },
   },

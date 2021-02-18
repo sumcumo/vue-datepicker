@@ -17,13 +17,14 @@ describe('Datepicker with restricted views', () => {
     wrapper = mount(Datepicker, {
       propsData: {
         minimumView: 'month',
-        maximumView: 'year',
       },
     })
     const date = new Date(2016, 9, 12)
-    wrapper.vm.selectYear({ timestamp: date.valueOf() })
+
+    wrapper.vm.setView('month')
     expect(wrapper.vm.isOpen).toEqual(true)
-    wrapper.vm.selectMonth({ timestamp: date.valueOf() })
+
+    wrapper.vm.handleSelect({ timestamp: date.valueOf() })
     expect(date.getFullYear()).toEqual(wrapper.vm.selectedDate.getFullYear())
     expect(date.getMonth()).toEqual(wrapper.vm.selectedDate.getMonth())
     expect(wrapper.vm.isOpen).toEqual(false)
@@ -33,11 +34,14 @@ describe('Datepicker with restricted views', () => {
     wrapper = mount(Datepicker, {
       propsData: {
         minimumView: 'year',
-        maximumView: 'year',
       },
     })
     const date = new Date(2016, 9, 12)
-    wrapper.vm.selectYear({ timestamp: date.valueOf() })
+
+    wrapper.vm.setView('year')
+    expect(wrapper.vm.isOpen).toEqual(true)
+
+    wrapper.vm.handleSelect({ timestamp: date.valueOf() })
     expect(wrapper.vm.isOpen).toEqual(false)
     expect(date.getFullYear()).toEqual(wrapper.vm.selectedDate.getFullYear())
   })

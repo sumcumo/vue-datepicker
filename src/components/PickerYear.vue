@@ -21,7 +21,7 @@
         :key="cell.timestamp"
         :class="{ selected: cell.isSelected, disabled: cell.isDisabled }"
         class="cell year"
-        @click="selectYear(cell)"
+        @click="select(cell)"
       >
         {{ cell.year }}
       </span>
@@ -156,15 +156,6 @@ export default {
     previousDecade() {
       if (!this.isPreviousDisabled) {
         this.changePage(-this.yearRange)
-      }
-    },
-    /**
-     * Emits a selectYear event
-     * @param {Object} year
-     */
-    selectYear(year) {
-      if (!year.isDisabled) {
-        this.$emit('select-year', year)
       }
     },
   },

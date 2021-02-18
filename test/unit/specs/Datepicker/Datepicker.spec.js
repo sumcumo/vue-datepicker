@@ -219,15 +219,15 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapper.vm.isOpen).toEqual(false)
   })
 
-  it('should emit selectedDisabled on a disabled timestamp', () => {
-    const dateTemp = new Date(2016, 9, 1)
-    wrapper.vm.selectDisabledDate({ timestamp: dateTemp.valueOf() })
-    expect(wrapper.emitted()['selected-disabled']).toBeTruthy()
+  it('should emit `selected-disabled` on selecting a disabled cell', () => {
+    wrapper.vm.handleSelectDisabled({ isDisabled: true })
+    expect(wrapper.emitted('selected-disabled')).toBeTruthy()
   })
 
   it('can select a day', () => {
     const dateTemp = new Date(2016, 9, 1)
-    wrapper.vm.selectDate({ timestamp: dateTemp.valueOf() })
+    wrapper.vm.setView('day')
+    wrapper.vm.handleSelect({ timestamp: dateTemp.valueOf() })
     expect(wrapper.vm.pageTimestamp).toEqual(dateTemp.valueOf())
     expect(wrapper.vm.selectedDate.getMonth()).toEqual(9)
     expect(wrapper.emitted().selected).toBeTruthy()
@@ -235,9 +235,10 @@ describe('Datepicker shallowMounted', () => {
 
   it('can select a month', () => {
     const dateTemp = new Date(2016, 9, 9)
-    wrapper.vm.selectMonth({ timestamp: dateTemp.valueOf() })
-    expect(wrapper.emitted()['changed-month']).toBeTruthy()
-    expect(wrapper.emitted()['changed-month'][0][0].timestamp).toEqual(
+    wrapper.vm.setView('month')
+    wrapper.vm.handleSelect({ timestamp: dateTemp.valueOf() })
+    expect(wrapper.emitted('changed-month')).toBeTruthy()
+    expect(wrapper.emitted('changed-month')[0][0].timestamp).toEqual(
       dateTemp.valueOf(),
     )
     expect(new Date(wrapper.vm.pageTimestamp).getMonth()).toEqual(
@@ -248,9 +249,10 @@ describe('Datepicker shallowMounted', () => {
 
   it('can select a year', () => {
     const dateTemp = new Date(2018, 9, 9)
-    wrapper.vm.selectYear({ timestamp: dateTemp.valueOf() })
-    expect(wrapper.emitted()['changed-year']).toBeTruthy()
-    expect(wrapper.emitted()['changed-year'][0][0].timestamp).toEqual(
+    wrapper.vm.setView('year')
+    wrapper.vm.handleSelect({ timestamp: dateTemp.valueOf() })
+    expect(wrapper.emitted('changed-year')).toBeTruthy()
+    expect(wrapper.emitted('changed-year')[0][0].timestamp).toEqual(
       dateTemp.valueOf(),
     )
     expect(new Date(wrapper.vm.pageTimestamp).getFullYear()).toEqual(
@@ -491,7 +493,7 @@ describe('Datepicker.vue inline', () => {
 
   it('should not close the calendar when date is selected', () => {
     const date = new Date()
-    wrapper.vm.selectDate({ timestamp: date.valueOf() })
+    wrapper.vm.handleSelect({ timestamp: date.valueOf() })
     expect(wrapper.vm.isOpen).toEqual(true)
     document.body.click()
     expect(wrapper.vm.isOpen).toEqual(true)

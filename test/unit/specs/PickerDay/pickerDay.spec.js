@@ -37,8 +37,8 @@ describe('PickerDay: DOM', () => {
   })
 
   it('emits an event when selected', () => {
-    wrapper.vm.selectDate({ isDisabled: false })
-    expect(wrapper.emitted()['select-date']).toBeTruthy()
+    wrapper.vm.select({ isDisabled: false })
+    expect(wrapper.emitted('select')).toBeTruthy()
   })
 
   it('knows the current page month', () => {
@@ -92,7 +92,7 @@ describe('PickerDay: DOM', () => {
 
     await firstCell.trigger('click')
 
-    expect(wrapper.emitted('select-date')[0][0].date).toBe(28)
+    expect(wrapper.emitted('select')[0][0].date).toBe(28)
   })
 
   it('should select an edge date from the next month', async () => {
@@ -100,6 +100,6 @@ describe('PickerDay: DOM', () => {
 
     await lastCell.trigger('click')
 
-    expect(wrapper.emitted('select-date')[0][0].date).toBe(3)
+    expect(wrapper.emitted('select')[0][0].date).toBe(3)
   })
 })

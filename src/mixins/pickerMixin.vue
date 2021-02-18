@@ -76,6 +76,17 @@ export default {
 
       this.$emit('page-change', date)
     },
+    /**
+     * Emits a 'select' or 'select-disabled' event
+     * @param {Object} cell
+     */
+    select(cell) {
+      if (cell.isDisabled) {
+        this.$emit('select-disabled', cell)
+      } else {
+        this.$emit('select', cell)
+      }
+    },
   },
 }
 </script>

@@ -23,8 +23,8 @@ describe('PickerMonth', () => {
   })
 
   it("can't select a disabled month", () => {
-    wrapper.vm.selectMonth({ isDisabled: true })
-    expect(wrapper.emitted['select-month']).toBeFalsy()
+    wrapper.vm.select({ isDisabled: true })
+    expect(wrapper.emitted('select')).toBeFalsy()
   })
 
   it('should detect a disabled month when the `to` year is in the past', () => {

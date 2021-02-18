@@ -30,7 +30,7 @@
           :key="cell.timestamp"
           class="cell day"
           :class="dayClasses(cell)"
-          @click="selectDate(cell)"
+          @click="select(cell)"
         >
           {{ dayCellContent(cell) }}
         </span>
@@ -366,17 +366,6 @@ export default {
     previousMonth() {
       if (!this.isPreviousDisabled) {
         this.changePage(-1)
-      }
-    },
-    /**
-     * Emits a selectDate event
-     * @param {Object} date
-     */
-    selectDate(date) {
-      if (date.isDisabled) {
-        this.$emit('selected-disabled', date)
-      } else {
-        this.$emit('select-date', date)
       }
     },
   },
