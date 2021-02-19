@@ -33,9 +33,9 @@ describe('PickerDay: disabled', () => {
   })
 
   it('cant change to a disabled month', () => {
-    wrapper.vm.previousMonth()
+    wrapper.vm.previousPage()
     expect(wrapper.vm.pageDate.getMonth()).toEqual(9)
-    wrapper.vm.nextMonth()
+    wrapper.vm.nextPage()
     expect(wrapper.vm.pageDate.getMonth()).toEqual(9)
   })
 

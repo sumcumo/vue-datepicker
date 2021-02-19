@@ -27,12 +27,12 @@ describe('PickerDay: DOM', () => {
   })
 
   it('can set the next month', () => {
-    wrapper.vm.nextMonth()
+    wrapper.vm.nextPage()
     expect(wrapper.emitted('page-change')[0][0].getMonth()).toEqual(2)
   })
 
   it('can set the previous month', () => {
-    wrapper.vm.previousMonth()
+    wrapper.vm.previousPage()
     expect(wrapper.emitted('page-change')[0][0].getMonth()).toEqual(0)
   })
 

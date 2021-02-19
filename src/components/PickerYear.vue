@@ -6,8 +6,8 @@
       :is-next-disabled="isNextDisabled"
       :is-previous-disabled="isPreviousDisabled"
       :is-rtl="isRtl"
-      @next="nextDecade"
-      @previous="previousDecade"
+      @next="nextPage"
+      @previous="previousPage"
     >
       <span>
         {{ pageTitleYear }}
@@ -143,17 +143,17 @@ export default {
       )
     },
     /**
-     * Increments the decade
+     * Increments the page (overrides nextPage in pickerMixin)
      */
-    nextDecade() {
+    nextPage() {
       if (!this.isNextDisabled) {
         this.changePage(this.yearRange)
       }
     },
     /**
-     * Decrements the decade
+     * Decrements the page (overrides previousPage in pickerMixin)
      */
-    previousDecade() {
+    previousPage() {
       if (!this.isPreviousDisabled) {
         this.changePage(-this.yearRange)
       }

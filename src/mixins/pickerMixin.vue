@@ -87,6 +87,22 @@ export default {
         this.$emit('select', cell)
       }
     },
+    /**
+     * Increment the current page
+     */
+    nextPage() {
+      if (!this.isNextDisabled) {
+        this.changePage(+1)
+      }
+    },
+    /**
+     * Decrement the page
+     */
+    previousPage() {
+      if (!this.isPreviousDisabled) {
+        this.changePage(-1)
+      }
+    },
   },
 }
 </script>

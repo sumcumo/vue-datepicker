@@ -7,8 +7,8 @@
       :is-previous-disabled="isPreviousDisabled"
       :is-rtl="isRtl"
       :is-up-disabled="isUpDisabled"
-      @next="nextYear"
-      @previous="previousYear"
+      @next="nextPage"
+      @previous="previousPage"
     >
       <span
         class="month__year_btn"
@@ -127,22 +127,6 @@ export default {
         year === this.utils.getFullYear(this.selectedDate) &&
         month === this.utils.getMonth(this.selectedDate)
       )
-    },
-    /**
-     * Increments the year
-     */
-    nextYear() {
-      if (!this.isNextDisabled) {
-        this.changePage(1)
-      }
-    },
-    /**
-     * Decrements the year
-     */
-    previousYear() {
-      if (!this.isPreviousDisabled) {
-        this.changePage(-1)
-      }
     },
   },
 }

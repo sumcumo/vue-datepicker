@@ -7,8 +7,8 @@
       :is-previous-disabled="isPreviousDisabled"
       :is-rtl="isRtl"
       :is-up-disabled="isUpDisabled"
-      @next="nextMonth"
-      @previous="previousMonth"
+      @next="nextPage"
+      @previous="previousPage"
     >
       <span
         :class="{ up: !isUpDisabled }"
@@ -146,6 +146,10 @@ export default {
     firstDayOfWeekNumber() {
       return this.utils.getDayFromAbbr(this.firstDayOfWeek)
     },
+    /**
+     * A look-up object created from 'highlighted' prop
+     * @return {Object}
+     */
     highlightedConfig() {
       return new HighlightedDate(
         this.utils,
@@ -351,22 +355,6 @@ export default {
       return new Date(
         firstOfMonth.setDate(firstOfMonth.getDate() - this.daysFromPrevMonth),
       )
-    },
-    /**
-     * Increment the current page month
-     */
-    nextMonth() {
-      if (!this.isNextDisabled) {
-        this.changePage(+1)
-      }
-    },
-    /**
-     * Decrement the page month
-     */
-    previousMonth() {
-      if (!this.isPreviousDisabled) {
-        this.changePage(-1)
-      }
     },
   },
 }
