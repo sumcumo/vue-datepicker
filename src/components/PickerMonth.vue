@@ -20,7 +20,7 @@
     <button
       v-for="month in months"
       :key="month.timestamp"
-      :aria-label="`Select ${localDateString(month)}`"
+      :aria-label="`Select ${formatDate(month)}`"
       :class="{ selected: month.isSelected, disabled: month.isDisabled }"
       class="cell month"
       @click.stop="selectMonth(month)"
@@ -129,13 +129,6 @@ export default {
         year === this.utils.getFullYear(this.selectedDate) &&
         month === this.utils.getMonth(this.selectedDate)
       )
-    },
-    localDateString(month) {
-      const options = {
-        year: 'numeric',
-        month: 'long',
-      }
-      return new Date(month.timestamp).toLocaleDateString(undefined, options)
     },
     /**
      * Increments the year

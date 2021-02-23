@@ -17,7 +17,7 @@
     <button
       v-for="year in years"
       :key="year.timestamp"
-      :aria-label="`Select ${localDateString(year)}`"
+      :aria-label="`Select ${formatDate(year)}`"
       :class="{ selected: year.isSelected, disabled: year.isDisabled }"
       class="cell year"
       @click.stop="selectYear(year)"
@@ -147,12 +147,6 @@ export default {
       return (
         this.selectedDate && year === this.utils.getFullYear(this.selectedDate)
       )
-    },
-    localDateString(year) {
-      const options = {
-        year: 'numeric',
-      }
-      return new Date(year.timestamp).toLocaleDateString(undefined, options)
     },
     /**
      * Increments the decade
