@@ -66,6 +66,7 @@
             :day-cell-content="dayCellContent"
             :disabled-dates="disabledDates"
             :first-day-of-week="firstDayOfWeek"
+            :format="format"
             :highlighted="highlighted"
             :is-rtl="isRtl"
             :page-date="pageDate"
