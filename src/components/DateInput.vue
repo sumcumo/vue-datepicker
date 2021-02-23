@@ -2,8 +2,11 @@
   <div :class="{ 'input-group': bootstrapStyling }">
     <slot name="beforeDateInput" />
     <!-- Calendar Button -->
-    <span
+    <button
       v-if="calendarButton"
+      :aria-controls="`vdp-datepicker-${uid}`"
+      :aria-expanded="`${isOpen ? 'true' : 'false'}`"
+      :aria-label="`${isOpen ? 'Close' : 'Open'} Datepicker`"
       :class="{
         'input-group-prepend': bootstrapStyling,
         'calendar-btn-disabled': disabled,
@@ -19,7 +22,7 @@
           </i>
         </slot>
       </span>
-    </span>
+    </button>
     <!-- Input -->
     <input
       :id="id"
@@ -89,6 +92,10 @@ export default {
       default() {
         return {}
       },
+    },
+    uid: {
+      type: Number,
+      default: null,
     },
   },
   data() {

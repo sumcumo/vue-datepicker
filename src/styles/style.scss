@@ -1,3 +1,5 @@
+@import "mixins";
+
 .rtl {
   direction: rtl;
 }
@@ -44,6 +46,8 @@
 
     .prev,
     .next {
+      background: transparent;
+      border: none;
       float: left;
       max-height: 40px;
       position: relative;
@@ -116,6 +120,7 @@
   }
 
   .cell {
+    background: transparent;
     border: 1px solid transparent;
     display: inline-block;
     height: 40px;
@@ -196,6 +201,7 @@
 
 .vdp-datepicker__clear-button,
 .vdp-datepicker__calendar-button {
+  @include button-reset;
   cursor: pointer;
   font-style: normal;
 

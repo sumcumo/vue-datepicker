@@ -17,6 +17,10 @@ export default {
         return {}
       },
     },
+    format: {
+      type: [String, Function],
+      default: 'dd MMM yyyy',
+    },
     isRtl: {
       type: Boolean,
       default: false,
@@ -79,6 +83,15 @@ export default {
     },
   },
   methods: {
+    formatDate(date) {
+      return typeof this.format === 'function'
+        ? this.format(new Date(date.timestamp))
+        : this.utils.formatDate(
+            new Date(date.timestamp),
+            this.format,
+            this.translation,
+          )
+    },
     /**
      * Emit an event to show the month picker
      */

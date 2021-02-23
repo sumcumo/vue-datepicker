@@ -5,6 +5,7 @@
       :config="headerConfig"
       :next="nextDecade"
       :previous="previousDecade"
+      control-label="decade"
     >
       <span>
         {{ pageTitleYear }}
@@ -13,15 +14,16 @@
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
 
-    <span
+    <button
       v-for="year in years"
       :key="year.timestamp"
+      :aria-label="`Select ${formatDate(year)}`"
       :class="{ selected: year.isSelected, disabled: year.isDisabled }"
       class="cell year"
       @click.stop="selectYear(year)"
     >
       {{ year.year }}
-    </span>
+    </button>
     <slot name="calendarFooterYear" />
   </div>
 </template>

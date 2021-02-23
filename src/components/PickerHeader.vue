@@ -1,24 +1,26 @@
 <template>
   <header v-if="config.showHeader">
-    <span
+    <button
       class="prev"
+      :aria-label="`${config.isRtl ? 'next' : 'previous'} ${controlLabel}`"
       :class="{ disabled: isLeftNavDisabled }"
       @click="config.isRtl ? next() : previous()"
     >
       <slot name="prevIntervalBtn">
         <span class="default">&lt;</span>
       </slot>
-    </span>
+    </button>
     <slot />
-    <span
+    <button
       class="next"
+      :aria-label="`${config.isRtl ? 'previous' : 'next'} ${controlLabel}`"
       :class="{ disabled: isRightNavDisabled }"
       @click="config.isRtl ? previous() : next()"
     >
       <slot name="nextIntervalBtn">
         <span class="default">&gt;</span>
       </slot>
-    </span>
+    </button>
   </header>
 </template>
 
@@ -36,6 +38,10 @@ export default {
           isPreviousDisabled: false,
         }
       },
+    },
+    controlLabel: {
+      type: String,
+      default: null,
     },
     next: {
       type: Function,

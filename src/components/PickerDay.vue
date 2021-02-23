@@ -5,6 +5,7 @@
       :config="headerConfig"
       :next="nextMonth"
       :previous="previousMonth"
+      control-label="month"
     >
       <span
         :class="allowedToShowView('month') ? 'up' : ''"
@@ -20,15 +21,16 @@
       <span v-for="d in daysOfWeek" :key="d.timestamp" class="cell day-header">
         {{ d }}
       </span>
-      <span
+      <button
         v-for="day in days"
         :key="day.timestamp"
+        :aria-label="`Select ${formatDate(day)}`"
         class="cell day"
         :class="dayClasses(day)"
         @click="selectDate(day)"
       >
         {{ dayCellContent(day) }}
-      </span>
+      </button>
     </div>
     <slot name="calendarFooterDay" />
   </div>

@@ -5,6 +5,7 @@
       :config="headerConfig"
       :next="nextYear"
       :previous="previousYear"
+      control-label="year"
     >
       <span
         class="month__year_btn"
@@ -16,15 +17,16 @@
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
-    <span
+    <button
       v-for="month in months"
       :key="month.timestamp"
+      :aria-label="`Select ${formatDate(month)}`"
       :class="{ selected: month.isSelected, disabled: month.isDisabled }"
       class="cell month"
       @click.stop="selectMonth(month)"
     >
       {{ month.month }}
-    </span>
+    </button>
     <slot name="calendarFooterMonth" />
   </div>
 </template>

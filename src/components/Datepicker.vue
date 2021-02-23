@@ -28,6 +28,7 @@
       :tabindex="tabindex"
       :translation="translation"
       :typeable="typeable"
+      :uid="_uid"
       :use-utc="useUtc"
       @blur="onBlur"
       @clear-date="clearDate"
@@ -52,6 +53,7 @@
     >
       <div
         v-if="isOpen"
+        :id="`vdp-datepicker-${_uid}`"
         ref="datepicker"
         :class="pickerClasses"
         @mousedown.prevent
@@ -64,6 +66,7 @@
             :day-cell-content="dayCellContent"
             :disabled-dates="disabledDates"
             :first-day-of-week="firstDayOfWeek"
+            :format="format"
             :highlighted="highlighted"
             :is-rtl="isRtl"
             :page-date="pageDate"
