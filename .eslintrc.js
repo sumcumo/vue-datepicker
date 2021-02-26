@@ -10,6 +10,7 @@ module.exports = {
     'plugin:compat/recommended',
     'prettier',
     'prettier/babel',
+    'plugin:cypress/recommended',
     'plugin:jest/recommended',
     'plugin:vue/recommended',
     'prettier/vue',
