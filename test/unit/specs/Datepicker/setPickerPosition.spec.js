@@ -27,7 +27,7 @@ describe('Datepicker mounted', () => {
     wrapper.vm.$refs.popup.$el.getBoundingClientRect = getBoundingClientRect
     wrapper.vm.$el.getBoundingClientRect = getBoundingClientRect
 
-    wrapper.vm.showCalendar()
+    wrapper.vm.open()
     await wrapper.vm.$nextTick()
 
     const calendar = wrapper.vm.$refs.popup
@@ -52,7 +52,7 @@ describe('Datepicker mounted', () => {
     wrapper.vm.$refs.popup.$el.getBoundingClientRect = getBoundingClientRect
     wrapper.vm.$el.getBoundingClientRect = getBoundingClientRect
 
-    wrapper.vm.showCalendar()
+    wrapper.vm.open()
     await wrapper.vm.$nextTick()
 
     const calendar = wrapper.vm.$refs.popup
@@ -79,7 +79,7 @@ describe('Datepicker mounted', () => {
       fixedPosition: 'top-right',
     })
 
-    wrapper.vm.showCalendar()
+    wrapper.vm.open()
     await wrapper.vm.$nextTick()
 
     const calendar = wrapper.vm.$refs.popup
@@ -92,7 +92,7 @@ describe('Datepicker mounted', () => {
       fixedPosition: 'bottom-left',
     })
 
-    wrapper.vm.showCalendar()
+    wrapper.vm.open()
     await wrapper.vm.$nextTick()
 
     const calendar = wrapper.vm.$refs.popup
@@ -118,7 +118,7 @@ describe('Datepicker mounted', () => {
     wrapper.vm.$refs.popup.$el.getBoundingClientRect = getBoundingClientRect
     wrapper.vm.$el.getBoundingClientRect = getBoundingClientRect
 
-    wrapper.vm.showCalendar()
+    wrapper.vm.open()
     await wrapper.vm.$nextTick()
 
     const calendar = wrapper.vm.$refs.popup

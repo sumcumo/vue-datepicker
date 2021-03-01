@@ -1,26 +1,15 @@
 import { shallowMount } from '@vue/test-utils'
 import PickerHeader from '~/components/PickerHeader.vue'
 
-describe('PickerHeader unmounted', () => {
-  it('sets the correct default data', () => {
-    const { props } = PickerHeader
-    expect(typeof props.config.default).toEqual('function')
-    const configDefault = props.config.default()
-    expect(configDefault.showHeader).toBeTruthy()
-    expect(configDefault.isRtl).toBeFalsy()
-    expect(configDefault.isNextDisabled).toBeFalsy()
-    expect(configDefault.isPreviousDisabled).toBeFalsy()
-  })
-})
-
-describe('PickerHeader mounted', () => {
+describe('PickerHeader', () => {
   let wrapper
 
   beforeEach(() => {
     wrapper = shallowMount(PickerHeader, {
       propsData: {
-        previous: () => {},
-        next: () => {},
+        isRtl: false,
+        isNextDisabled: false,
+        isPreviousDisabled: false,
       },
     })
   })

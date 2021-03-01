@@ -17,13 +17,14 @@ describe('Datepicker with restricted views', () => {
     wrapper = mount(Datepicker, {
       propsData: {
         minimumView: 'month',
-        maximumView: 'year',
       },
     })
     const date = new Date(2016, 9, 12)
-    wrapper.vm.selectYear({ timestamp: date.valueOf() })
+
+    wrapper.vm.setView('month')
     expect(wrapper.vm.isOpen).toEqual(true)
-    wrapper.vm.selectMonth({ timestamp: date.valueOf() })
+
+    wrapper.vm.handleSelect({ timestamp: date.valueOf() })
     expect(date.getFullYear()).toEqual(wrapper.vm.selectedDate.getFullYear())
     expect(date.getMonth()).toEqual(wrapper.vm.selectedDate.getMonth())
     expect(wrapper.vm.isOpen).toEqual(false)
@@ -33,11 +34,14 @@ describe('Datepicker with restricted views', () => {
     wrapper = mount(Datepicker, {
       propsData: {
         minimumView: 'year',
-        maximumView: 'year',
       },
     })
     const date = new Date(2016, 9, 12)
-    wrapper.vm.selectYear({ timestamp: date.valueOf() })
+
+    wrapper.vm.setView('year')
+    expect(wrapper.vm.isOpen).toEqual(true)
+
+    wrapper.vm.handleSelect({ timestamp: date.valueOf() })
     expect(wrapper.vm.isOpen).toEqual(false)
     expect(date.getFullYear()).toEqual(wrapper.vm.selectedDate.getFullYear())
   })
@@ -49,16 +53,16 @@ describe('Datepicker with restricted views', () => {
         maximumView: 'month',
       },
     })
-    wrapper.vm.showCalendar()
+    wrapper.vm.open()
     await wrapper.vm.$nextTick()
 
     expect(wrapper.vm.allowedToShowView('year')).toEqual(false)
     expect(wrapper.vm.allowedToShowView('day')).toEqual(true)
     expect(wrapper.vm.allowedToShowView('month')).toEqual(true)
-    expect(wrapper.vm.currentPicker).toBe('PickerDay')
+    expect(wrapper.vm.picker).toBe('PickerDay')
     let upButton = wrapper.find('.day__month_btn')
     await upButton.trigger('click')
-    expect(wrapper.vm.currentPicker).toBe('PickerMonth')
+    expect(wrapper.vm.picker).toBe('PickerMonth')
     upButton = wrapper.find('.month__year_btn')
     expect(upButton.element.tabIndex).toBe(-1)
 
@@ -70,12 +74,12 @@ describe('Datepicker with restricted views', () => {
         maximumView: 'month',
       },
     })
-    wrapper.vm.showCalendar()
+    wrapper.vm.open()
 
     expect(wrapper.vm.allowedToShowView('day')).toEqual(false)
     expect(wrapper.vm.allowedToShowView('year')).toEqual(false)
     expect(wrapper.vm.allowedToShowView('month')).toEqual(true)
-    expect(wrapper.vm.currentPicker).toBe('PickerMonth')
+    expect(wrapper.vm.picker).toBe('PickerMonth')
 
     wrapper = mount(Datepicker, {
       propsData: {
@@ -109,7 +113,7 @@ describe('Datepicker with restricted views', () => {
         maximumView: 'day',
       },
     })
-    wrapper.vm.showCalendar()
+    wrapper.vm.open()
     await wrapper.vm.$nextTick()
     expect(
       wrapper.vm.$el.querySelectorAll('.vdp-datepicker__calendar').length,
@@ -127,7 +131,7 @@ describe('Datepicker with restricted views', () => {
         .length,
     ).toEqual(0)
 
-    expect(wrapper.vm.currentPicker).toBe('PickerDay')
+    expect(wrapper.vm.picker).toBe('PickerDay')
 
     wrapper = mount(Datepicker, {
       propsData: {
@@ -135,7 +139,7 @@ describe('Datepicker with restricted views', () => {
         maximumView: 'year',
       },
     })
-    wrapper.vm.showCalendar()
+    wrapper.vm.open()
     await wrapper.vm.$nextTick()
     expect(
       wrapper.vm.$el.querySelectorAll('.vdp-datepicker__calendar').length,

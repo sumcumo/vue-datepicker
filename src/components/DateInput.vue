@@ -9,7 +9,7 @@
         'calendar-btn-disabled': disabled,
       }"
       class="vdp-datepicker__calendar-button"
-      @click="toggleCalendar"
+      @click="toggle"
     >
       <span :class="{ 'input-group-text': bootstrapStyling }">
         <slot name="calendarBtn">
@@ -36,13 +36,13 @@
       :readonly="!typeable"
       :required="required"
       :tabindex="tabindex"
-      :type="inline ? 'hidden' : 'text'"
+      :type="inline ? 'hidden' : null"
       :value="formattedValue"
-      @blur="inputBlurred"
-      @click="showCalendarByClick"
-      @focus="showCalendarByFocus"
-      @keydown.enter.prevent="onKeydownEnter"
-      @keydown.escape.prevent="$emit('close-calendar')"
+      @blur="handleInputBlur"
+      @click="handleInputClick"
+      @focus="handleInputFocus"
+      @keydown.enter.prevent="handleKeydownEnter"
+      @keydown.escape.prevent="$emit('close')"
       @keyup="parseTypedDate"
     />
     <!-- Clear Button -->
@@ -92,13 +92,12 @@ export default {
     },
   },
   data() {
-    const constructedDateUtils = makeDateUtils(this.useUtc)
     return {
       input: null,
       isFocusedUsed: false,
       isBlurred: false,
       typedDate: '',
-      utils: constructedDateUtils,
+      utils: makeDateUtils(this.useUtc),
     }
   },
   computed: {
@@ -111,15 +110,6 @@ export default {
       }
       return this.inputClass
     },
-    formattedValue() {
-      if (!this.selectedDate) {
-        return null
-      }
-      if (this.typedDate.length) {
-        return this.typedDate
-      }
-      return this.formattedDate
-    },
     formattedDate() {
       return typeof this.format === 'function'
         ? this.format(new Date(this.selectedDate))
@@ -128,6 +118,15 @@ export default {
             this.format,
             this.translation,
           )
+    },
+    formattedValue() {
+      if (!this.selectedDate) {
+        return null
+      }
+      if (this.typedDate.length) {
+        return this.typedDate
+      }
+      return this.formattedDate
     },
   },
   watch: {
@@ -148,20 +147,47 @@ export default {
     /**
      * submit typedDate and emit a blur event
      */
-    inputBlurred() {
+    handleInputBlur() {
       this.isBlurred = this.isOpen
       if (this.typeable) {
         this.submitTypedDate()
       }
       this.$emit('blur')
-      this.$emit('close-calendar')
+      this.$emit('close')
       this.isFocusedUsed = false
     },
-    onKeydownEnter() {
+    handleInputClick() {
+      const isFocusedUsed = this.showCalendarOnFocus && !this.isFocusedUsed
+
+      if (!this.showCalendarOnButtonClick && !isFocusedUsed) {
+        this.toggle()
+      }
+
+      if (this.showCalendarOnFocus) {
+        this.isFocusedUsed = true
+      }
+    },
+    handleInputFocus() {
+      if (this.showCalendarOnFocus) {
+        this.$emit('open')
+      }
+
+      this.isBlurred = false
+      this.$emit('focus')
+    },
+    handleKeydownEnter() {
       if (this.typeable) {
         this.submitTypedDate()
       }
-      this.$emit('close-calendar')
+      this.$emit('close')
+    },
+    parseDate(value) {
+      return this.utils.parseDate(
+        value,
+        this.format,
+        this.translation,
+        this.parser,
+      )
     },
     /**
      * Attempt to parse a typed date
@@ -175,33 +201,6 @@ export default {
           this.$emit('typed-date', new Date(parsedDate))
         }
       }
-    },
-    parseDate(value) {
-      return this.utils.parseDate(
-        value,
-        this.format,
-        this.translation,
-        this.parser,
-      )
-    },
-    showCalendarByClick() {
-      const isFocusedUsed = this.showCalendarOnFocus && !this.isFocusedUsed
-
-      if (!this.showCalendarOnButtonClick && !isFocusedUsed) {
-        this.toggleCalendar()
-      }
-
-      if (this.showCalendarOnFocus) {
-        this.isFocusedUsed = true
-      }
-    },
-    showCalendarByFocus() {
-      if (this.showCalendarOnFocus) {
-        this.$emit('show-calendar')
-      }
-
-      this.isBlurred = false
-      this.$emit('focus')
     },
     /**
      * Submits a typed date if it's valid
@@ -218,12 +217,12 @@ export default {
         this.$emit('typed-date', parsedDate)
       }
     },
-    toggleCalendar() {
+    toggle() {
       if (!this.isOpen && this.isBlurred) {
         this.isBlurred = false
         return
       }
-      this.$emit(this.isOpen ? 'close-calendar' : 'show-calendar')
+      this.$emit(this.isOpen ? 'close' : 'open')
     },
   },
 }

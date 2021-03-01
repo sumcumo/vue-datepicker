@@ -7,10 +7,8 @@ describe('PickerYear', () => {
   beforeEach(() => {
     wrapper = shallowMount(PickerYear, {
       propsData: {
-        allowedToShowView: () => true,
         translation: en,
         pageDate: new Date(2018, 1, 1),
-        selectedDate: new Date(2018, 2, 24),
       },
     })
   })
@@ -21,22 +19,35 @@ describe('PickerYear', () => {
 
   it('knows the selected year', async () => {
     const newDate = new Date(2016, 9, 15)
-    wrapper.setProps({
+
+    await wrapper.setProps({
       selectedDate: newDate,
     })
-    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.isSelectedYear(newDate)).toEqual(true)
+    expect(wrapper.vm.isSelectedYear(new Date(2017, 1, 1))).toEqual(false)
+  })
+
+  it('knows the selected year when useUtc = true', async () => {
+    const newDate = new Date(2016, 9, 15)
+
+    await wrapper.setProps({
+      selectedDate: newDate,
+      useUtc: true,
+    })
+
     expect(wrapper.vm.isSelectedYear(newDate)).toEqual(true)
     expect(wrapper.vm.isSelectedYear(new Date(2017, 1, 1))).toEqual(false)
   })
 
   it('can set the next decade', () => {
-    wrapper.vm.nextDecade()
-    expect(wrapper.emitted()['changed-decade']).toBeTruthy()
+    wrapper.vm.nextPage()
+    expect(wrapper.emitted('page-change')[0][0].getFullYear()).toEqual(2028)
   })
 
   it('can set the previous decade', () => {
-    wrapper.vm.previousDecade()
-    expect(wrapper.emitted()['changed-decade']).toBeTruthy()
+    wrapper.vm.previousPage()
+    expect(wrapper.emitted('page-change')[0][0].getFullYear()).toEqual(2008)
   })
 
   it('formats the decade range', async () => {
@@ -53,8 +64,8 @@ describe('PickerYear', () => {
   })
 
   it('emits an event when selected', () => {
-    wrapper.vm.selectYear({ isDisabled: false })
-    expect(wrapper.emitted()['select-year']).toBeTruthy()
+    wrapper.vm.select({ isDisabled: false })
+    expect(wrapper.emitted('select')).toBeTruthy()
   })
 
   it('should set custom decade range', async () => {

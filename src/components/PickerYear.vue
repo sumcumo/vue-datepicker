@@ -2,9 +2,12 @@
   <div class="picker-view">
     <slot name="beforeCalendarHeaderYear" />
     <PickerHeader
-      :config="headerConfig"
-      :next="nextDecade"
-      :previous="previousDecade"
+      v-if="showHeader"
+      :is-next-disabled="isNextDisabled"
+      :is-previous-disabled="isPreviousDisabled"
+      :is-rtl="isRtl"
+      @next="nextPage"
+      @previous="previousPage"
     >
       <span>
         {{ pageTitleYear }}
@@ -12,25 +15,27 @@
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
-
-    <span
-      v-for="year in years"
-      :key="year.timestamp"
-      :class="{ selected: year.isSelected, disabled: year.isDisabled }"
-      class="cell year"
-      @click.stop="selectYear(year)"
-    >
-      {{ year.year }}
-    </span>
+    <div ref="cells">
+      <span
+        v-for="cell in cells"
+        :key="cell.timestamp"
+        :class="{ selected: cell.isSelected, disabled: cell.isDisabled }"
+        class="cell year"
+        @click="select(cell)"
+      >
+        {{ cell.year }}
+      </span>
+    </div>
     <slot name="calendarFooterYear" />
   </div>
 </template>
+
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
 
 export default {
-  name: 'DatepickerYearView',
+  name: 'PickerYear',
   mixins: [pickerMixin],
   props: {
     yearRange: {
@@ -39,6 +44,38 @@ export default {
     },
   },
   computed: {
+    /**
+     * Sets an array with all years to show this decade (or yearRange)
+     * @return {Array}
+     */
+    cells() {
+      const d = this.pageDate
+      const years = []
+      const year = this.useUtc
+        ? Math.floor(d.getUTCFullYear() / this.yearRange) * this.yearRange
+        : Math.floor(d.getFullYear() / this.yearRange) * this.yearRange
+      // set up a new date object to the beginning of the current 'page'7
+      const dObj = this.useUtc
+        ? new Date(Date.UTC(year, d.getUTCMonth(), d.getUTCDate()))
+        : new Date(
+            year,
+            d.getMonth(),
+            d.getDate(),
+            d.getHours(),
+            d.getMinutes(),
+          )
+      for (let i = 0; i < this.yearRange; i += 1) {
+        years.push({
+          year: this.utils.getFullYear(dObj),
+          timestamp: dObj.valueOf(),
+          isSelected: this.isSelectedYear(dObj),
+          isDisabled: this.isDisabledYear(dObj),
+        })
+        this.utils.setFullYear(dObj, this.utils.getFullYear(dObj) + 1)
+      }
+
+      return years
+    },
     /**
      * Is the next decade disabled?
      * @return {Boolean}
@@ -81,49 +118,8 @@ export default {
       const { yearSuffix } = this.translation
       return `${this.pageDecadeStart} - ${this.pageDecadeEnd}${yearSuffix}`
     },
-    /**
-     * Set an array with years for a decade
-     * @return {Array}
-     */
-    years() {
-      const d = this.pageDate
-      const years = []
-      const year = this.useUtc
-        ? Math.floor(d.getUTCFullYear() / this.yearRange) * this.yearRange
-        : Math.floor(d.getFullYear() / this.yearRange) * this.yearRange
-
-      // set up a new date object to the beginning of the current 'page'7
-      const dObj = this.useUtc
-        ? new Date(Date.UTC(year, d.getUTCMonth(), d.getUTCDate()))
-        : new Date(
-            year,
-            d.getMonth(),
-            d.getDate(),
-            d.getHours(),
-            d.getMinutes(),
-          )
-      for (let i = 0; i < this.yearRange; i += 1) {
-        years.push({
-          year: this.utils.getFullYear(dObj),
-          timestamp: dObj.valueOf(),
-          isSelected: this.isSelectedYear(dObj),
-          isDisabled: this.isDisabledYear(dObj),
-        })
-        this.utils.setFullYear(dObj, this.utils.getFullYear(dObj) + 1)
-      }
-      return years
-    },
   },
   methods: {
-    /**
-     * Changes the year up or down
-     * @param {Number} incrementBy
-     */
-    changeYear(incrementBy) {
-      const date = this.pageDate
-      this.utils.setFullYear(date, this.utils.getFullYear(date) + incrementBy)
-      this.$emit('changed-decade', date)
-    },
     /**
      * Whether a year is disabled
      * @param {Date} date
@@ -147,28 +143,19 @@ export default {
       )
     },
     /**
-     * Increments the decade
+     * Increments the page (overrides nextPage in pickerMixin)
      */
-    nextDecade() {
+    nextPage() {
       if (!this.isNextDisabled) {
-        this.changeYear(this.yearRange)
+        this.changePage(this.yearRange)
       }
     },
     /**
-     * Decrements the decade
+     * Decrements the page (overrides previousPage in pickerMixin)
      */
-    previousDecade() {
+    previousPage() {
       if (!this.isPreviousDisabled) {
-        this.changeYear(-this.yearRange)
-      }
-    },
-    /**
-     * Emits a selectYear event
-     * @param {Object} year
-     */
-    selectYear(year) {
-      if (!year.isDisabled) {
-        this.$emit('select-year', year)
+        this.changePage(-this.yearRange)
       }
     },
   },

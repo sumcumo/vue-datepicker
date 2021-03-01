@@ -2,44 +2,50 @@
   <div class="picker-view">
     <slot name="beforeCalendarHeaderDay" />
     <PickerHeader
-      :config="headerConfig"
-      :next="nextMonth"
-      :previous="previousMonth"
+      v-if="showHeader"
+      :is-next-disabled="isNextDisabled"
+      :is-previous-disabled="isPreviousDisabled"
+      :is-rtl="isRtl"
+      @next="nextPage"
+      @previous="previousPage"
     >
       <span
-        :class="allowedToShowView('month') ? 'up' : ''"
+        :class="{ up: !isUpDisabled }"
         class="day__month_btn"
-        @click="showPickerCalendar('month')"
+        @click="$emit('set-view', 'month')"
       >
         {{ pageTitleDay }}
       </span>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
-    <div :class="isRtl ? 'flex-rtl' : ''">
-      <span v-for="d in daysOfWeek" :key="d.timestamp" class="cell day-header">
-        {{ d }}
+    <div :class="{ 'flex-rtl': isRtl }">
+      <span v-for="day in daysOfWeek" :key="day" class="day-header">
+        {{ day }}
       </span>
-      <span
-        v-for="day in days"
-        :key="day.timestamp"
-        class="cell day"
-        :class="dayClasses(day)"
-        @click="selectDate(day)"
-      >
-        {{ dayCellContent(day) }}
-      </span>
+      <div ref="cells">
+        <span
+          v-for="cell in cells"
+          :key="cell.timestamp"
+          class="cell day"
+          :class="dayClasses(cell)"
+          @click="select(cell)"
+        >
+          {{ dayCellContent(cell) }}
+        </span>
+      </div>
     </div>
     <slot name="calendarFooterDay" />
   </div>
 </template>
+
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
 import HighlightedDate from '~/utils/HighlightedDate'
 
 export default {
-  name: 'DatepickerDayView',
+  name: 'PickerDay',
   mixins: [pickerMixin],
   props: {
     dayCellContent: {
@@ -67,6 +73,23 @@ export default {
   },
   computed: {
     /**
+     * Sets an array with all days to show this month
+     * @return {Array}
+     */
+    cells() {
+      const days = []
+      const daysInCalendar =
+        this.daysFromPrevMonth + this.daysInMonth + this.daysFromNextMonth
+      const dObj = this.firstCellDate()
+
+      for (let i = 0; i < daysInCalendar; i += 1) {
+        days.push(this.makeDay(i, dObj))
+        this.utils.setDate(dObj, this.utils.getDate(dObj) + 1)
+      }
+
+      return days
+    },
+    /**
      * Gets the name of the month the current page is on
      * @return {String}
      */
@@ -86,24 +109,6 @@ export default {
       return `${this.pageYear}${yearSuffix}`
     },
     /**
-     * Sets an array with all days to show this month
-     * @return {Array}
-     */
-    days() {
-      const days = []
-      const daysInCalendar =
-        this.daysFromPrevMonth + this.daysInMonth + this.daysFromNextMonth
-      const firstOfMonth = this.newPageDate()
-      const dObj = new Date(
-        firstOfMonth.setDate(firstOfMonth.getDate() - this.daysFromPrevMonth),
-      )
-      for (let i = 0; i < daysInCalendar; i += 1) {
-        days.push(this.makeDay(i, dObj))
-        this.utils.setDate(dObj, this.utils.getDate(dObj) + 1)
-      }
-      return days
-    },
-    /**
      * Returns an array of day names
      * @return {String[]}
      */
@@ -115,16 +120,15 @@ export default {
      * @return {String[]}
      */
     daysInMonth() {
-      const dObj = this.newPageDate()
-      return this.utils.getDaysInMonth(dObj)
+      return this.utils.getDaysInMonth(this.pageDate)
     },
     /**
      * Calculates how many days to show from the previous month
      * @return {number}
      */
     daysFromPrevMonth() {
-      const dObj = this.newPageDate()
-      return (7 - this.firstDayOfWeekNumber + this.utils.getDay(dObj)) % 7
+      const firstOfMonthDayNumber = this.utils.getDay(this.pageDate)
+      return (7 - this.firstDayOfWeekNumber + firstOfMonthDayNumber) % 7
     },
     /**
      * Calculates how many days to show from the next month
@@ -140,6 +144,17 @@ export default {
      */
     firstDayOfWeekNumber() {
       return this.utils.getDayFromAbbr(this.firstDayOfWeek)
+    },
+    /**
+     * A look-up object created from 'highlighted' prop
+     * @return {Object}
+     */
+    highlightedConfig() {
+      return new HighlightedDate(
+        this.utils,
+        this.disabledDates,
+        this.highlighted,
+      ).config
     },
     /**
      * Is the next month disabled?
@@ -187,30 +202,24 @@ export default {
      * The first day of the next page's month.
      * @return {Date}
      */
-    nextPageDate() {
-      const d = new Date(this.pageTimestamp)
+    firstOfNextMonth() {
+      const d = new Date(this.pageDate)
       return new Date(this.utils.setMonth(d, this.utils.getMonth(d) + 1))
-    },
-    highlightedConfig() {
-      return new HighlightedDate(
-        this.utils,
-        this.disabledDates,
-        this.highlighted,
-      ).config
     },
   },
   methods: {
     /**
-     * Change the page month
+     * Changes the page up or down (overrides changePage in pickerMixin)
      * @param {Number} incrementBy
      */
-    changeMonth(incrementBy) {
+    changePage(incrementBy) {
       const date = this.pageDate
       this.utils.setMonth(date, this.utils.getMonth(date) + incrementBy)
-      this.$emit('changed-month', date)
+
+      this.$emit('page-change', date)
     },
     /**
-     * set the class for a specific day
+     * Set the class for a specific day
      * @param {Object} day
      * @return {Object}
      */
@@ -227,12 +236,6 @@ export default {
         'highlight-start': day.isHighlightStart,
         'highlight-end': day.isHighlightEnd,
       }
-    },
-    /**
-     * @return {Number}
-     */
-    getPageMonth() {
-      return this.utils.getMonth(this.pageDate)
     },
     /**
      * Whether a day is disabled
@@ -309,7 +312,7 @@ export default {
      */
     // eslint-disable-next-line complexity
     makeDay(id, dObj) {
-      const isNextMonth = dObj >= this.nextPageDate
+      const isNextMonth = dObj >= this.firstOfNextMonth
       const isPreviousMonth = dObj < this.pageDate
       const isSaturday = this.utils.getDay(dObj) === 6
       const isSunday = this.utils.getDay(dObj) === 0
@@ -335,9 +338,10 @@ export default {
      * Set up a new date object to the first day of the current 'page'
      * @return Date
      */
-    newPageDate() {
+    firstCellDate() {
       const d = this.pageDate
-      return this.useUtc
+
+      const firstOfMonth = this.useUtc
         ? new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1))
         : new Date(
             d.getFullYear(),
@@ -346,33 +350,10 @@ export default {
             d.getHours(),
             d.getMinutes(),
           )
-    },
-    /**
-     * Increment the current page month
-     */
-    nextMonth() {
-      if (!this.isNextDisabled) {
-        this.changeMonth(+1)
-      }
-    },
-    /**
-     * Decrement the page month
-     */
-    previousMonth() {
-      if (!this.isPreviousDisabled) {
-        this.changeMonth(-1)
-      }
-    },
-    /**
-     * Emits a selectDate event
-     * @param {Object} date
-     */
-    selectDate(date) {
-      if (date.isDisabled) {
-        this.$emit('selected-disabled', date)
-      } else {
-        this.$emit('select-date', date)
-      }
+
+      return new Date(
+        firstOfMonth.setDate(firstOfMonth.getDate() - this.daysFromPrevMonth),
+      )
     },
   },
 }

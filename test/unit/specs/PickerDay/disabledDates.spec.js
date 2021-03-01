@@ -7,7 +7,6 @@ describe('PickerDay: disabled', () => {
   beforeEach(() => {
     wrapper = shallowMount(PickerDay, {
       propsData: {
-        allowedToShowView: () => true,
         showMonthCalendar: () => {},
         translation: en,
         disabledDates: {
@@ -29,14 +28,14 @@ describe('PickerDay: disabled', () => {
   })
 
   it('should not select a disabled date', () => {
-    wrapper.vm.selectDate({ isDisabled: true })
-    expect(wrapper.emitted()['select-date']).toBeFalsy()
+    wrapper.vm.select({ isDisabled: true })
+    expect(wrapper.emitted('select')).toBeFalsy()
   })
 
   it('cant change to a disabled month', () => {
-    wrapper.vm.previousMonth()
+    wrapper.vm.previousPage()
     expect(wrapper.vm.pageDate.getMonth()).toEqual(9)
-    wrapper.vm.nextMonth()
+    wrapper.vm.nextPage()
     expect(wrapper.vm.pageDate.getMonth()).toEqual(9)
   })
 
@@ -116,9 +115,9 @@ describe('PickerDay: disabled', () => {
     expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 11))).toEqual(false)
   })
 
-  it('should emit a selected-disabled event for a disabled date', () => {
-    wrapper.vm.selectDate({ isDisabled: true })
-    expect(wrapper.emitted()['selected-disabled']).toBeTruthy()
+  it('should emit a select-disabled event for a disabled date', () => {
+    wrapper.vm.select({ isDisabled: true })
+    expect(wrapper.emitted('select-disabled')).toBeTruthy()
   })
 
   it('should close without warning when its undefined', () => {

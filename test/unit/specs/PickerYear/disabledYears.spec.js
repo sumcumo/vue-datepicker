@@ -7,7 +7,6 @@ describe('PickerYear', () => {
   beforeEach(() => {
     wrapper = shallowMount(PickerYear, {
       propsData: {
-        allowedToShowView: () => true,
         translation: en,
         pageDate: new Date(2018, 3, 1),
         selectedDate: new Date(2018, 3, 19),
@@ -24,15 +23,15 @@ describe('PickerYear', () => {
   })
 
   it("can't select a disabled year", () => {
-    wrapper.vm.selectYear({ isDisabled: true })
-    expect(wrapper.emitted()['select-year']).toBeFalsy()
+    wrapper.vm.select({ isDisabled: true })
+    expect(wrapper.emitted('select')).toBeFalsy()
   })
 
   it("can't navigate to a disabled year", () => {
-    wrapper.vm.previousDecade()
+    wrapper.vm.previousPage()
     expect(wrapper.emitted()['changed-decade']).toBeFalsy()
 
-    wrapper.vm.nextDecade()
+    wrapper.vm.nextPage()
     expect(wrapper.emitted()['changed-decade']).toBeFalsy()
   })
 

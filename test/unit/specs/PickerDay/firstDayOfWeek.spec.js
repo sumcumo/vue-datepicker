@@ -12,7 +12,6 @@ describe('PickerDay: Set first day of week', () => {
       propsData: {
         firstDayOfWeek: 'mon',
         translation: en,
-        allowedToShowView: () => true,
         pageDate: new Date(2018, 1, 1),
       },
     })
@@ -39,8 +38,8 @@ describe('PickerDay: Set first day of week', () => {
       pageTimestamp: dateUtils.setDate(startDate, 1),
     })
     for (let i = 0; i < 6; i += 1) {
-      expect(wrapper.vm.days[i].isPreviousMonth).toBeTruthy()
-      expect(wrapper.vm.days[i].isNextMonth).toBeFalsy()
+      expect(wrapper.vm.cells[i].isPreviousMonth).toBeTruthy()
+      expect(wrapper.vm.cells[i].isNextMonth).toBeFalsy()
     }
   })
 
@@ -52,8 +51,8 @@ describe('PickerDay: Set first day of week', () => {
       pageDate: testDate,
       pageTimestamp: dateUtils.setDate(startDate, 1),
     })
-    expect(wrapper.vm.days[0].isPreviousMonth).toBeFalsy()
-    expect(wrapper.vm.days[0].isNextMonth).toBeFalsy()
+    expect(wrapper.vm.cells[0].isPreviousMonth).toBeFalsy()
+    expect(wrapper.vm.cells[0].isNextMonth).toBeFalsy()
   })
 })
 
@@ -64,7 +63,6 @@ describe('PickerDay: Datepicker with Saturday as first day of week', () => {
       propsData: {
         firstDayOfWeek: 'sat',
         translation: en,
-        allowedToShowView: () => true,
         pageDate: new Date(2018, 1, 1),
       },
     })
@@ -83,8 +81,8 @@ describe('PickerDay: Datepicker with Saturday as first day of week', () => {
       pageTimestamp: dateUtils.setDate(startDate, 1),
     })
     for (let i = 0; i < 6; i += 1) {
-      expect(wrapper.vm.days[i].isPreviousMonth).toBeTruthy()
-      expect(wrapper.vm.days[i].isNextMonth).toBeFalsy()
+      expect(wrapper.vm.cells[i].isPreviousMonth).toBeTruthy()
+      expect(wrapper.vm.cells[i].isNextMonth).toBeFalsy()
     }
   })
 
@@ -96,7 +94,7 @@ describe('PickerDay: Datepicker with Saturday as first day of week', () => {
       pageDate: testDate,
       pageTimestamp: dateUtils.setDate(startDate, 1),
     })
-    expect(wrapper.vm.days[0].isPreviousMonth).toBeFalsy()
-    expect(wrapper.vm.days[0].isNextMonth).toBeFalsy()
+    expect(wrapper.vm.cells[0].isPreviousMonth).toBeFalsy()
+    expect(wrapper.vm.cells[0].isNextMonth).toBeFalsy()
   })
 })

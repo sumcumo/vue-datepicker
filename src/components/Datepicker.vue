@@ -1,5 +1,5 @@
 <template>
-  <div :class="[wrapperClass, isRtl ? 'rtl' : '']" class="vdp-datepicker">
+  <div class="vdp-datepicker" :class="[wrapperClass, { rtl: isRtl }]">
     <DateInput
       :id="id"
       :autofocus="autofocus"
@@ -29,12 +29,12 @@
       :translation="translation"
       :typeable="typeable"
       :use-utc="useUtc"
-      @blur="onBlur"
+      @blur="handleInputBlur"
       @clear-date="clearDate"
-      @close-calendar="close"
-      @focus="onFocus"
-      @show-calendar="showCalendar"
-      @typed-date="setTypedDate"
+      @close="close"
+      @focus="handleInputFocus"
+      @open="open"
+      @typed-date="handleTypedDate"
     >
       <slot slot="beforeDateInput" name="beforeDateInput" />
       <slot slot="afterDateInput" name="afterDateInput" />
@@ -51,67 +51,55 @@
       :visible="isOpen"
     >
       <div
-        v-if="isOpen"
+        v-show="isOpen"
         ref="datepicker"
+        class="vdp-datepicker__calendar"
         :class="pickerClasses"
         @mousedown.prevent
       >
-        <template v-if="isOpen">
-          <slot name="beforeCalendarHeader" />
-          <Component
-            :is="currentPicker"
-            :allowed-to-show-view="allowedToShowView"
-            :day-cell-content="dayCellContent"
-            :disabled-dates="disabledDates"
-            :first-day-of-week="firstDayOfWeek"
-            :highlighted="highlighted"
-            :is-rtl="isRtl"
-            :page-date="pageDate"
-            :page-timestamp="pageTimestamp"
-            :selected-date="selectedDate"
-            :show-edge-dates="showEdgeDates"
-            :show-full-month-name="fullMonthName"
-            :show-header="showHeader"
-            :translation="translation"
-            :use-utc="useUtc"
-            :year-range="yearPickerRange"
-            @select-date="selectDate"
-            @changed-month="handleChangedMonthFromDayPicker"
-            @selected-disabled="selectDisabledDate"
-            @select-month="selectMonth"
-            @changed-year="setPageDate"
-            @show-month-calendar="showSpecificCalendar('Month')"
-            @select-year="selectYear"
-            @changed-decade="setPageDate"
-            @show-year-calendar="showSpecificCalendar('Year')"
-          >
-            <template v-for="slotKey of calendarSlots">
-              <slot :slot="slotKey" :name="slotKey" />
-            </template>
-          </Component>
-          <slot name="calendarFooter" />
-        </template>
+        <slot name="beforeCalendarHeader" />
+        <Component
+          :is="picker"
+          :day-cell-content="dayCellContent"
+          :disabled-dates="disabledDates"
+          :first-day-of-week="firstDayOfWeek"
+          :highlighted="highlighted"
+          :is-rtl="isRtl"
+          :is-up-disabled="isUpDisabled"
+          :page-date="pageDate"
+          :selected-date="selectedDate"
+          :show-edge-dates="showEdgeDates"
+          :show-full-month-name="fullMonthName"
+          :show-header="showHeader"
+          :translation="translation"
+          :use-utc="useUtc"
+          :year-range="yearPickerRange"
+          @page-change="handlePageChange"
+          @select="handleSelect"
+          @select-disabled="handleSelectDisabled"
+          @set-view="setView"
+        >
+          <template v-for="slotKey of calendarSlots">
+            <slot :slot="slotKey" :name="slotKey" />
+          </template>
+        </Component>
+        <slot name="calendarFooter" />
       </div>
     </Popup>
   </div>
 </template>
+
 <script>
 import en from '~/locale/translations/en'
-import makeDateUtils from '~/utils/DateUtils'
 import calendarSlots from '~/utils/calendarSlots'
 import DateInput from '~/components/DateInput.vue'
+import DisabledDate from '~/utils/DisabledDate'
 import inputProps from '~/mixins/inputProps.vue'
+import makeDateUtils from '~/utils/DateUtils'
 import PickerDay from '~/components/PickerDay.vue'
 import PickerMonth from '~/components/PickerMonth.vue'
 import PickerYear from '~/components/PickerYear.vue'
 import Popup from '~/components/Popup.vue'
-import DisabledDate from '~/utils/DisabledDate'
-
-const validDate = (val) =>
-  val === null ||
-  val instanceof Date ||
-  typeof val === 'string' ||
-  typeof val === 'number'
 
 export default {
   name: 'Datepicker',
@@ -199,7 +187,11 @@ export default {
     value: {
       type: [String, Date, Number],
       default: '',
-      validator: validDate,
+      validator: (val) =>
+        val === null ||
+        val instanceof Date ||
+        typeof val === 'string' ||
+        typeof val === 'number',
     },
     wrapperClass: {
       type: [String, Object, Array],
@@ -211,66 +203,89 @@ export default {
     },
   },
   data() {
-    // const startDate = this.openDate ? new Date(this.openDate) : new Date()
-    const constructedDateUtils = makeDateUtils(this.useUtc)
-    let startDate
-    if (this.openDate) {
-      startDate = constructedDateUtils.getNewDateObject(this.openDate)
-    } else {
-      startDate = constructedDateUtils.getNewDateObject()
-    }
-    const pageTimestamp = constructedDateUtils.setDate(startDate, 1)
+    const utils = makeDateUtils(this.useUtc)
+    const startDate = utils.getNewDateObject(this.openDate || null)
+    const pageTimestamp = utils.setDate(startDate, 1)
+
     return {
-      /*
-       * Positioning
-       */
       calendarHeight: 0,
       calendarSlots,
-      currentPicker: '',
       /*
        * Vue cannot observe changes to a Date Object so date must be stored as a timestamp
        * This represents the first day of the current viewing month
        * {Number}
        */
       pageTimestamp,
-      resetTypedDate: constructedDateUtils.getNewDateObject(),
+      resetTypedDate: utils.getNewDateObject(),
       /*
        * Selected Date
        * {Date}
        */
       selectedDate: null,
-      utils: constructedDateUtils,
+      utils,
+      view: '',
     }
   },
   computed: {
+    allowedViews() {
+      const views = ['day', 'month', 'year']
+
+      return views.filter((view) => this.allowedToShowView(view))
+    },
     computedInitialView() {
-      return this.initialView ? this.initialView : this.minimumView
+      return this.initialView || this.minimumView
     },
     isInline() {
       return !!this.inline
     },
     isOpen() {
-      return this.currentPicker !== ''
+      return this.view !== ''
     },
     isRtl() {
-      return this.translation.rtl === true
+      return this.translation.rtl
+    },
+    isUpDisabled() {
+      return !this.allowedToShowView(this.nextView.up)
+    },
+    nextView() {
+      const isCurrentView = (view) => view === this.view
+      const viewIndex = this.allowedViews.findIndex(isCurrentView)
+      const nextViewDown = (index) => {
+        return index <= 0 ? undefined : this.allowedViews[index - 1]
+      }
+      const nextViewUp = (index) => {
+        if (index < 0) {
+          return undefined
+        }
+
+        if (index === this.allowedViews.length - 1) {
+          return 'decade'
+        }
+
+        return this.allowedViews[index + 1]
+      }
+
+      return {
+        up: nextViewUp(viewIndex),
+        down: nextViewDown(viewIndex),
+      }
     },
     pageDate() {
       return new Date(this.pageTimestamp)
     },
+    picker() {
+      const view = this.view || this.computedInitialView
+      return `Picker${this.ucFirst(view)}`
+    },
     pickerClasses() {
       return [
         this.calendarClass,
-        'vdp-datepicker__calendar',
         this.isInline && 'inline',
         this.isRtl && this.appendToBody && 'rtl',
       ]
     },
     translation() {
       return this.language
-    },
-    disabledDatesClass() {
-      return new DisabledDate(this.utils, this.disabledDates)
     },
   },
   watch: {
@@ -317,16 +332,55 @@ export default {
      */
     close() {
       if (!this.isInline) {
-        this.currentPicker = ''
+        this.view = ''
         this.$emit('closed')
       }
     },
     /**
-     * Handles a month change from the day picker
+     * Set the new pageDate and emit `changed-<view>` event
      */
-    handleChangedMonthFromDayPicker(date) {
-      this.setPageDate(date)
-      this.$emit('changed-month', date)
+    handlePageChange(pageDate) {
+      this.setPageDate(pageDate)
+      this.$emit(`changed-${this.nextView.up}`, pageDate)
+    },
+    /**
+     * Emits a 'blur' event
+     */
+    handleInputBlur() {
+      this.$emit('blur')
+    },
+    /**
+     * Emits a 'focus' event
+     */
+    handleInputFocus() {
+      this.$emit('focus')
+    },
+    /**
+     * Set the date, or go to the next view down
+     */
+    handleSelect(cell) {
+      if (this.allowedToShowView(this.nextView.down)) {
+        this.setPageDate(new Date(cell.timestamp))
+        this.$emit(`changed-${this.view}`, cell)
+        this.setView(this.nextView.down)
+        return
+      }
+
+      this.resetTypedDate = this.utils.getNewDateObject()
+      this.setDate(cell.timestamp)
+      this.close()
+    },
+    /**
+     * Emit a 'selected-disabled' event
+     */
+    handleSelectDisabled(cell) {
+      this.$emit('selected-disabled', cell)
+    },
+    /**
+     * Set the date from a 'typed-date' event
+     */
+    handleTypedDate(date) {
+      this.setDate(date.valueOf())
     },
     /**
      * Initiate the component
@@ -334,29 +388,49 @@ export default {
     init() {
       if (this.value) {
         let parsedValue = this.parseValue(this.value)
-        const isDateDisabled =
-          parsedValue && this.disabledDatesClass.isDateDisabled(parsedValue)
+        const isDateDisabled = parsedValue && this.isDateDisabled(parsedValue)
+
         if (isDateDisabled) {
           parsedValue = null
           this.$emit('input', parsedValue)
         }
         this.setValue(parsedValue)
       }
+
       if (this.isInline) {
         this.setInitialView()
       }
     },
     /**
-     * Emits a 'blur' event
+     * Returns true if a date is disabled
+     * @param {Date} date
      */
-    onBlur() {
-      this.$emit('blur')
+    isDateDisabled(date) {
+      return new DisabledDate(this.utils, this.disabledDates).isDateDisabled(
+        date,
+      )
     },
     /**
-     * Emits a 'focus' event
+     * Opens the calendar with the relevant view: 'day', 'month', or 'year'
      */
-    onFocus() {
-      this.$emit('focus')
+    open() {
+      if (this.disabled || this.isInline) {
+        return
+      }
+      this.setInitialView()
+      this.$emit('opened')
+    },
+    /**
+     * Parse a datepicker value from string/number to date
+     * @param {Date|String|Number|null} date
+     */
+    parseValue(date) {
+      let dateTemp = date
+      if (typeof dateTemp === 'string' || typeof dateTemp === 'number') {
+        const parsed = new Date(dateTemp)
+        dateTemp = Number.isNaN(parsed.valueOf()) ? null : parsed
+      }
+      return dateTemp
     },
     /**
      * Called in the event that the user navigates to date pages and
@@ -385,22 +459,14 @@ export default {
      */
     setInitialView() {
       const initialView = this.computedInitialView
+
       if (!this.allowedToShowView(initialView)) {
         throw new Error(
           `initialView '${this.initialView}' cannot be rendered based on minimum '${this.minimumView}' and maximum '${this.maximumView}'`,
         )
       }
-      switch (initialView) {
-        case 'year':
-          this.showSpecificCalendar('Year')
-          break
-        case 'month':
-          this.showSpecificCalendar('Month')
-          break
-        default:
-          this.showSpecificCalendar('Day')
-          break
-      }
+
+      this.setView(initialView)
     },
     /**
      * Sets the date that the calendar should open on
@@ -418,12 +484,6 @@ export default {
       this.pageTimestamp = this.utils.setDate(new Date(dateTemp), 1)
     },
     /**
-     * Set the date from a typedDate event
-     */
-    setTypedDate(date) {
-      this.setDate(date.valueOf())
-    },
-    /**
      * Set the datepicker value
      * @param {Date|String|Number|null} date
      */
@@ -437,74 +497,18 @@ export default {
       this.setPageDate(date)
     },
     /**
-     * parse a datepicker value from string/number to date
-     * @param {Date|String|Number|null} date
+     * Set the picker view
      */
-    parseValue(date) {
-      let dateTemp = date
-      if (typeof dateTemp === 'string' || typeof dateTemp === 'number') {
-        const parsed = new Date(dateTemp)
-        dateTemp = Number.isNaN(parsed.valueOf()) ? null : parsed
-      }
-      return dateTemp
-    },
-    /**
-     * @param {Object} date
-     */
-    selectDate(date) {
-      this.resetTypedDate = this.utils.getNewDateObject()
-      this.close()
-      this.setDate(date.timestamp)
-    },
-    /**
-     * @param {Object} date
-     */
-    selectDisabledDate(date) {
-      this.$emit('selected-disabled', date)
-    },
-    /**
-     * @param {Object} month
-     */
-    selectMonth(month) {
-      const date = new Date(month.timestamp)
-      if (this.allowedToShowView('day')) {
-        this.setPageDate(date)
-        this.$emit('changed-month', month)
-        this.showSpecificCalendar('Day')
-      } else {
-        this.selectDate(month)
+    setView(view) {
+      if (this.allowedToShowView(view)) {
+        this.view = view
       }
     },
     /**
-     * @param {Object} year
+     * Capitalizes the first letter
      */
-    selectYear(year) {
-      const date = new Date(year.timestamp)
-      if (this.allowedToShowView('month')) {
-        this.setPageDate(date)
-        this.$emit('changed-year', year)
-        this.showSpecificCalendar('Month')
-      } else {
-        this.selectDate(year)
-      }
-    },
-    /**
-     * Shows the calendar at the relevant view: 'day', 'month', or 'year'
-     */
-    showCalendar() {
-      if (this.disabled || this.isInline) {
-        return
-      }
-      this.setInitialView()
-      this.$emit('opened')
-    },
-    /**
-     * Show a specific picker
-     */
-    showSpecificCalendar(type) {
-      if (this.allowedToShowView(type.toLowerCase())) {
-        this.currentPicker = `Picker${type}`
-      }
+    ucFirst(str) {
+      return str[0].toUpperCase() + str.substring(1)
     },
   },
 }

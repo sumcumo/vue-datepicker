@@ -62,7 +62,7 @@ describe('DateInput', () => {
     })
     expect(wrapper.vm.isOpen).toBeFalsy()
     wrapper.find('input').trigger('focus')
-    expect(wrapper.emitted('show-calendar')).toBeTruthy()
+    expect(wrapper.emitted('open')).toBeTruthy()
   })
 
   it('does not open calendar on focus, if show-calendar-on-focus prop is false', async () => {
@@ -72,7 +72,7 @@ describe('DateInput', () => {
     expect(wrapper.vm.isOpen).toBeFalsy()
 
     wrapper.find('input').trigger('focus')
-    expect(wrapper.emitted('show-calendar')).toBeFalsy()
+    expect(wrapper.emitted('open')).toBeFalsy()
   })
 
   it('adds bootstrap classes', async () => {
@@ -117,44 +117,44 @@ describe('DateInput', () => {
     expect(wrapper.find('input').element.value).toEqual('!')
   })
 
-  it('emits close-calendar on blur', async () => {
+  it('emits close on blur', async () => {
     const input = wrapper.find('input')
     await input.trigger('blur')
-    expect(wrapper.emitted('close-calendar')).toBeTruthy()
+    expect(wrapper.emitted('close')).toBeTruthy()
   })
 
-  it('emits close-calendar when escape is pressed', () => {
+  it('emits close when escape is pressed', () => {
     const input = wrapper.find('input')
     input.trigger('keydown.escape')
-    expect(wrapper.emitted()['close-calendar']).toBeTruthy()
+    expect(wrapper.emitted('close')).toBeTruthy()
   })
 
-  it('should open the calendar on click', async () => {
+  it('opens the calendar on click', async () => {
     wrapper.find('input').trigger('click')
     await wrapper.vm.$nextTick()
-    expect(wrapper.emitted('show-calendar')).toBeTruthy()
+    expect(wrapper.emitted('open')).toBeTruthy()
   })
 
-  it('should open the calendar on focus', async () => {
+  it('opens the calendar on focus', async () => {
     wrapper.find('input').trigger('focus')
-    expect(wrapper.emitted('show-calendar')).toBeFalsy()
+    expect(wrapper.emitted('open')).toBeFalsy()
     wrapper.setProps({
       showCalendarOnFocus: true,
     })
     await wrapper.vm.$nextTick()
     wrapper.find('input').trigger('focus')
-    expect(wrapper.emitted('show-calendar')).toBeTruthy()
+    expect(wrapper.emitted('open')).toBeTruthy()
   })
 
-  it('should open the calendar only on calendar button click', async () => {
+  it('opens ONLY on button click when the relevant prop is set', async () => {
     wrapper.setProps({
       calendarButton: true,
       showCalendarOnButtonClick: true,
     })
     await wrapper.vm.$nextTick()
     wrapper.find('input').trigger('click')
-    expect(wrapper.emitted('show-calendar')).toBeFalsy()
+    expect(wrapper.emitted('open')).toBeFalsy()
     wrapper.find('.vdp-datepicker__calendar-button').trigger('click')
-    expect(wrapper.emitted('show-calendar')).toBeTruthy()
+    expect(wrapper.emitted('open')).toBeTruthy()
   })
 })

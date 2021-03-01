@@ -7,10 +7,6 @@ export default {
   components: { PickerHeader },
   inheritAttrs: false,
   props: {
-    allowedToShowView: {
-      type: Function,
-      default() {},
-    },
     disabledDates: {
       type: Object,
       default() {
@@ -21,13 +17,13 @@ export default {
       type: Boolean,
       default: false,
     },
+    isUpDisabled: {
+      type: Boolean,
+      default: false,
+    },
     pageDate: {
       type: Date,
       default: null,
-    },
-    pageTimestamp: {
-      type: Number,
-      default: 0,
     },
     selectedDate: {
       type: Date,
@@ -50,15 +46,6 @@ export default {
   },
   data() {
     return {
-      headerConfig: {
-        showHeader: this.showHeader,
-        isRtl: this.isRtl,
-        /**
-         * Need to be set inside the different pickers for month, year, decade
-         */
-        isNextDisabled: this.isNextDisabled,
-        isPreviousDisabled: this.isPreviousDisabled,
-      },
       utils: makeDateUtils(this.useUtc),
     }
   },
@@ -80,10 +67,41 @@ export default {
   },
   methods: {
     /**
-     * Emit an event to show the month picker
+     * Changes the page up or down
+     * @param {Number} incrementBy
      */
-    showPickerCalendar(type) {
-      this.$emit(`show-${type}-calendar`)
+    changePage(incrementBy) {
+      const date = this.pageDate
+      this.utils.setFullYear(date, this.utils.getFullYear(date) + incrementBy)
+
+      this.$emit('page-change', date)
+    },
+    /**
+     * Emits a 'select' or 'select-disabled' event
+     * @param {Object} cell
+     */
+    select(cell) {
+      if (cell.isDisabled) {
+        this.$emit('select-disabled', cell)
+      } else {
+        this.$emit('select', cell)
+      }
+    },
+    /**
+     * Increment the current page
+     */
+    nextPage() {
+      if (!this.isNextDisabled) {
+        this.changePage(+1)
+      }
+    },
+    /**
+     * Decrement the page
+     */
+    previousPage() {
+      if (!this.isPreviousDisabled) {
+        this.changePage(-1)
+      }
     },
   },
 }
