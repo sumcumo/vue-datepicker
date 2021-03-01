@@ -6,7 +6,6 @@
       :is-next-disabled="isNextDisabled"
       :is-previous-disabled="isPreviousDisabled"
       :is-rtl="isRtl"
-      :is-up-disabled="isUpDisabled"
       @next="nextPage"
       @previous="previousPage"
     >

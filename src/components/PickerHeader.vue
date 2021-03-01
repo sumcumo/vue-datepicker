@@ -38,10 +38,6 @@ export default {
       type: Boolean,
       required: true,
     },
-    isUpDisabled: {
-      type: Boolean,
-      default: false,
-    },
   },
   computed: {
     /**
