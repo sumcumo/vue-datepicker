@@ -145,6 +145,7 @@ export default {
      * emit a clearDate event
      */
     clearDate() {
+      this.input.value = ''
       this.$emit('clear-date')
     },
     /**
