@@ -173,14 +173,14 @@ describe('Datepicker shallowMounted', () => {
         format: 'yyyy-MM-dd',
       },
     })
-    wrapperTemp.vm.setDate(dateTemp.valueOf())
+    wrapperTemp.vm.selectDate(dateTemp.valueOf())
     expect(wrapperTemp.vm.selectedDate.valueOf()).toEqual(dateTemp.valueOf())
   })
 
   it('clears the date', () => {
     const dateTemp = new Date(2016, 9, 9)
     const wrapperTemp = shallowMount(Datepicker)
-    wrapperTemp.vm.setDate(dateTemp.valueOf())
+    wrapperTemp.vm.selectDate(dateTemp.valueOf())
     wrapperTemp.vm.clearDate()
     expect(wrapperTemp.vm.selectedDate).toEqual(null)
   })
@@ -280,7 +280,7 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapperTemp.vm.pageDate.getFullYear()).toEqual(today.getFullYear())
     expect(wrapperTemp.vm.pageDate.getMonth()).toEqual(today.getMonth())
     expect(wrapperTemp.vm.pageDate.getDate()).toEqual(1)
-    wrapperTemp.vm.setDate(pastDate.valueOf())
+    wrapperTemp.vm.selectDate(pastDate.valueOf())
     wrapperTemp.vm.resetDefaultPageDate()
     expect(wrapperTemp.vm.pageDate.getFullYear()).toEqual(
       pastDate.getFullYear(),

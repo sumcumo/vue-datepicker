@@ -367,7 +367,7 @@ export default {
       }
 
       this.resetTypedDate = this.utils.getNewDateObject()
-      this.setDate(cell.timestamp)
+      this.selectDate(cell.timestamp)
       this.close()
     },
     /**
@@ -380,7 +380,7 @@ export default {
      * Set the date from a 'typed-date' event
      */
     handleTypedDate(date) {
-      this.setDate(date.valueOf())
+      this.selectDate(date.valueOf())
     },
     /**
      * Initiate the component
@@ -444,10 +444,10 @@ export default {
       this.setPageDate(this.selectedDate)
     },
     /**
-     * Set the selected date
+     * Select the date
      * @param {Number} timestamp
      */
-    setDate(timestamp) {
+    selectDate(timestamp) {
       const date = new Date(timestamp)
       this.selectedDate = date
       this.setPageDate(date)

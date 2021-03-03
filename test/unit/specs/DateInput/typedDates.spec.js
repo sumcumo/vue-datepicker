@@ -152,14 +152,14 @@ describe('Datepicker mount', () => {
   })
 
   it('shows the correct month as you type', async () => {
-    const spySetDate = jest.spyOn(wrapper.vm, 'setDate')
+    const spySelectDate = jest.spyOn(wrapper.vm, 'selectDate')
     const input = wrapper.find('input')
 
     await input.trigger('click')
     input.element.value = 'Jan'
     await input.trigger('keyup')
 
-    expect(spySetDate).toHaveBeenCalled()
+    expect(spySelectDate).toHaveBeenCalled()
     expect(wrapper.vm.isOpen).toBeTruthy()
     expect(new Date(wrapper.vm.pageDate).getMonth()).toBe(0)
 
