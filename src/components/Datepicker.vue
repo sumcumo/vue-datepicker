@@ -55,6 +55,7 @@
         ref="datepicker"
         class="vdp-datepicker__calendar"
         :class="pickerClasses"
+        data-test-calendar
         @mousedown.prevent
       >
         <slot name="beforeCalendarHeader" />

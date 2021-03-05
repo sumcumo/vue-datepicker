@@ -1,0 +1,6 @@
+{
+  "pluginsFile": "test/e2e/plugins/index.js",
+  "baseUrl": "http://localhost:8080",
+  "chromeWebSecurity": true,
+  "testFiles": "**/*.{feature,features}"
+}
