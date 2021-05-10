@@ -9,10 +9,8 @@ module.exports = {
     'airbnb-base',
     'plugin:compat/recommended',
     'prettier',
-    'prettier/babel',
     'plugin:jest/recommended',
     'plugin:vue/recommended',
-    'prettier/vue',
   ],
   plugins: ['import', 'prettier', 'html', 'vue', 'jest'],
   settings: {
@@ -90,6 +88,7 @@ module.exports = {
       { registeredComponentsOnly: false },
     ],
     'vue/no-deprecated-scope-attribute': 'error',
+    'arrow-body-style': 'off',
   },
   overrides: [
     {
