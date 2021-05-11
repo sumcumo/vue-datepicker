@@ -82,6 +82,9 @@
           <template v-for="slotKey of calendarSlots">
             <slot :slot="slotKey" :name="slotKey" />
           </template>
+          <template #dayCellContent="{ cell }">
+            <slot name="dayCellContent" :cell="cell" v-if="cell" />
+          </template>
         </Component>
         <slot name="calendarFooter" />
       </div>

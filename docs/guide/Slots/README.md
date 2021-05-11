@@ -98,3 +98,16 @@ To provide custom content for the clear button, the `clearBtn` slot may be used:
   </template>
 </DatePicker>
 ```
+
+
+## dayCellContent
+
+To provide custom content for the dayCellContent, the `dayCellContent` slot may be used:
+
+```html
+<DatePicker :clear-button="true">
+  <template #dayCellContent="{ cell }">
+    <span>{{ cell.date }}</span>
+  </template>
+</DatePicker>
+```

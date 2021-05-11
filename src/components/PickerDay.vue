@@ -31,7 +31,9 @@
           :class="dayClasses(cell)"
           @click="select(cell)"
         >
-          {{ dayCellContent(cell) }}
+          <slot name="dayCellContent" :cell="cell">
+            {{ dayCellContent(cell) }}
+          </slot>
         </span>
       </div>
     </div>
