@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.2.0](https://github.com/sumcumo/vue-datepicker/compare/v3.1.0...v3.2.0) (2021-05-11)
+
+
+### Features
+
+* **picker-day:** add dayCelltContent slot ([#95](https://github.com/sumcumo/vue-datepicker/issues/95)) ([6e7c86f](https://github.com/sumcumo/vue-datepicker/commit/6e7c86ff1a9762c51a30d5a5547adf1eb0a2bd7e))
+
+
+### Bug Fixes
+
+* **datepicker:** reset typeable date ([#79](https://github.com/sumcumo/vue-datepicker/issues/79)) ([b828dfd](https://github.com/sumcumo/vue-datepicker/commit/b828dfd03da6348464e1d8f909909a5d81eda2e5))
+
 ## [3.1.0](https://github.com/sumcumo/vue-datepicker/compare/v3.0.1...v3.1.0) (2021-02-08)
 
 
