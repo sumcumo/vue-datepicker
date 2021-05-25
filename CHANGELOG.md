@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.2.1](https://github.com/sumcumo/vue-datepicker/compare/v3.2.0...v3.2.1) (2021-05-25)
+
+
+### Bug Fixes
+
+* **project:** make the commonjs bundle build correct again ([#99](https://github.com/sumcumo/vue-datepicker/issues/99)) ([677228d](https://github.com/sumcumo/vue-datepicker/commit/677228dac944c58c22fc682f33f3251cba2cfaeb))
+
 ## [3.2.0](https://github.com/sumcumo/vue-datepicker/compare/v3.1.0...v3.2.0) (2021-05-11)
 
 
