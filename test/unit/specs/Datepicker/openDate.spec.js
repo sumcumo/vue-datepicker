@@ -16,9 +16,36 @@ describe('Datepicker with open date', () => {
     wrapper.destroy()
   })
 
-  it('should be set to October', () => {
+  it('should accept an instance of a date object', () => {
     expect(wrapper.vm.pageDate.getMonth()).toEqual(9)
     expect(wrapper.vm.pageDate.getFullYear()).toEqual(2016)
+  })
+
+  it('should accept a parsable string', async () => {
+    await wrapper.setProps({
+      openDate: '12 October 2016',
+    })
+
+    expect(wrapper.vm.pageDate.getMonth()).toEqual(9)
+    expect(wrapper.vm.pageDate.getFullYear()).toEqual(2016)
+  })
+
+  it('should accept a parsable number', async () => {
+    await wrapper.setProps({
+      openDate: new Date(2016, 9, 12).valueOf(),
+    })
+
+    expect(wrapper.vm.pageDate.getMonth()).toEqual(9)
+    expect(wrapper.vm.pageDate.getFullYear()).toEqual(2016)
+  })
+
+  it('should accept null', async () => {
+    await wrapper.setProps({
+      openDate: null,
+    })
+
+    expect(wrapper.vm.pageDate.getMonth()).not.toEqual(9)
+    expect(wrapper.vm.pageDate.getFullYear()).not.toEqual(2016)
   })
 
   it("should set pageTimestamp to be first day of open date's month", () => {

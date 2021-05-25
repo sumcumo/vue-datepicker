@@ -1,43 +1,89 @@
 <template>
-  <div class="picker-view">
-    <slot name="beforeCalendarHeaderDay" />
+  <div
+    class="picker-view"
+    @keydown.tab="$emit('tab', $event)"
+    @focusin="$emit('focusin', $event)"
+  >
+    <div v-if="hasSlot.header" ref="beforeCalendarHeaderDay">
+      <slot name="beforeCalendarHeaderDay" />
+    </div>
+
     <PickerHeader
       v-if="showHeader"
+      ref="pickerHeader"
+      :height="headerHeight"
       :is-next-disabled="isNextDisabled"
       :is-previous-disabled="isPreviousDisabled"
       :is-rtl="isRtl"
-      @next="nextPage"
-      @previous="previousPage"
+      :is-typeable="isTypeable"
+      :is-up-disabled="isUpDisabled"
+      :width="width"
+      @clear-date="$emit('clear-date')"
+      @page-change="changePage($event)"
+      @reset-tabbable-cell="$emit('reset-tabbable-cell')"
+      @set-focus="$emit('set-focus', $event)"
     >
-      <span
-        :class="{ up: !isUpDisabled }"
+      <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
+      <UpButton
+        ref="up"
         class="day__month_btn"
-        @click="$emit('set-view', 'month')"
+        :is-disabled="isUpDisabled"
+        :is-rtl="isRtl"
+        :is-typeable="isTypeable"
+        @clear-date="$emit('clear-date')"
+        @select="$emit('set-view', 'month')"
+        @set-focus="$emit('set-focus', $event)"
       >
         {{ pageTitleDay }}
-      </span>
+      </UpButton>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
-      <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
-    <div :class="{ 'flex-rtl': isRtl }">
-      <span v-for="day in daysOfWeek" :key="day" class="day-header">
-        {{ day }}
-      </span>
-      <div ref="cells">
-        <span
-          v-for="cell in cells"
-          :key="cell.timestamp"
-          class="cell day"
-          :class="dayClasses(cell)"
-          @click="select(cell)"
-        >
-          <slot name="dayCellContent" :cell="cell">
-            {{ dayCellContent(cell) }}
-          </slot>
+
+    <div>
+      <div
+        ref="dayHeader"
+        class="day-header"
+        :style="{
+          'height': `${rowHeight}px`,
+          'line-height': `${rowHeight}px`,
+        }"
+      >
+        <span v-for="day in daysOfWeek" :key="day">
+          {{ day }}
         </span>
       </div>
+
+      <div
+        data-test-cells-wrapper
+        class="cells-wrapper"
+        :style="`transition-duration: ${slideDuration}ms; height: ${cellsHeight}px`"
+      >
+        <Transition :name="transitionName">
+          <PickerCells
+            ref="cells"
+            :key="pageTitleDay"
+            v-slot="{ cell }"
+            :cells="cells"
+            :day-cell-content="dayCellContent"
+            :is-rtl="isRtl"
+            :row-height="rowHeight"
+            :show-edge-dates="showEdgeDates"
+            :style="`transition-duration: ${slideDuration}ms`"
+            :tabbable-cell-id="tabbableCellId"
+            view="day"
+            @arrow="handleArrow($event)"
+            @clear-date="$emit('clear-date')"
+            @select="select($event)"
+          >
+            {{ dayCellContent(cell) }}
+          </PickerCells>
+        </Transition>
+      </div>
     </div>
-    <slot name="calendarFooterDay" />
+
+    <div v-if="hasSlot.footer" ref="calendarFooterDay">
+      <slot name="calendarFooterDay" />
+    </div>
   </div>
 </template>
 
@@ -45,24 +91,27 @@
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
 import HighlightedDate from '~/utils/HighlightedDate'
+import PickerCells from './PickerCells.vue'
+import UpButton from './UpButton.vue'
 
 export default {
   name: 'PickerDay',
+  components: { PickerCells, UpButton },
   mixins: [pickerMixin],
   props: {
     dayCellContent: {
       type: Function,
       default: (day) => day.date,
     },
+    firstDayOfWeek: {
+      type: String,
+      default: 'sun',
+    },
     highlighted: {
       type: Object,
       default() {
         return {}
       },
-    },
-    firstDayOfWeek: {
-      type: String,
-      default: 'sun',
     },
     showFullMonthName: {
       type: Boolean,
@@ -148,6 +197,14 @@ export default {
       return this.utils.getDayFromAbbr(this.firstDayOfWeek)
     },
     /**
+     * The first day of the next page's month.
+     * @return {Date}
+     */
+    firstOfNextMonth() {
+      const d = new Date(this.pageDate)
+      return new Date(this.utils.setMonth(d, this.utils.getMonth(d) + 1))
+    },
+    /**
      * A look-up object created from 'highlighted' prop
      * @return {Object}
      */
@@ -200,44 +257,28 @@ export default {
         ? `${this.currYearName} ${this.currMonthName}`
         : `${this.currMonthName} ${this.currYearName}`
     },
-    /**
-     * The first day of the next page's month.
-     * @return {Date}
-     */
-    firstOfNextMonth() {
-      const d = new Date(this.pageDate)
-      return new Date(this.utils.setMonth(d, this.utils.getMonth(d) + 1))
-    },
   },
   methods: {
     /**
-     * Changes the page up or down (overrides changePage in pickerMixin)
-     * @param {Number} incrementBy
+     * Set up a new date object to the first day of the current 'page'
+     * @return Date
      */
-    changePage(incrementBy) {
-      const date = this.pageDate
-      this.utils.setMonth(date, this.utils.getMonth(date) + incrementBy)
+    firstCellDate() {
+      const d = this.pageDate
 
-      this.$emit('page-change', date)
-    },
-    /**
-     * Set the class for a specific day
-     * @param {Object} day
-     * @return {Object}
-     */
-    dayClasses(day) {
-      return {
-        'selected': day.isSelected,
-        'disabled': day.isDisabled,
-        'highlighted': day.isHighlighted,
-        'muted': day.isPreviousMonth || day.isNextMonth,
-        'today': day.isToday,
-        'weekend': day.isWeekend,
-        'sat': day.isSaturday,
-        'sun': day.isSunday,
-        'highlight-start': day.isHighlightStart,
-        'highlight-end': day.isHighlightEnd,
-      }
+      const firstOfMonth = this.useUtc
+        ? new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1))
+        : new Date(
+            d.getFullYear(),
+            d.getMonth(),
+            1,
+            d.getHours(),
+            d.getMinutes(),
+          )
+
+      return new Date(
+        firstOfMonth.setDate(firstOfMonth.getDate() - this.daysFromPrevMonth),
+      )
     },
     /**
      * Whether a day is disabled
@@ -328,6 +369,8 @@ export default {
         isHighlighted: this.isHighlightedDate(dObj),
         isHighlightStart: this.isHighlightStart(dObj),
         isHighlightEnd: this.isHighlightEnd(dObj),
+        isOpenDate:
+          this.openDate && this.utils.compareDates(dObj, this.openDate),
         isToday: this.utils.compareDates(dObj, new Date()),
         isWeekend: isSaturday || isSunday,
         isSaturday,
@@ -335,27 +378,6 @@ export default {
         isPreviousMonth,
         isNextMonth,
       }
-    },
-    /**
-     * Set up a new date object to the first day of the current 'page'
-     * @return Date
-     */
-    firstCellDate() {
-      const d = this.pageDate
-
-      const firstOfMonth = this.useUtc
-        ? new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1))
-        : new Date(
-            d.getFullYear(),
-            d.getMonth(),
-            1,
-            d.getHours(),
-            d.getMinutes(),
-          )
-
-      return new Date(
-        firstOfMonth.setDate(firstOfMonth.getDate() - this.daysFromPrevMonth),
-      )
     },
   },
 }

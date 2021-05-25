@@ -3,7 +3,7 @@
     <h1>Datepicker Examples</h1>
     <div class="example">
       <h3>Default datepicker...</h3>
-      <Datepicker placeholder="Select Date" :append-to-body="true" />
+      <Datepicker placeholder="Select Date" />
       <code>
         &lt;datepicker placeholder="Select Date"&gt;&lt;/datepicker&gt;
       </code>
@@ -230,6 +230,7 @@
       <Datepicker :inline="true" />
       <code>&lt;datepicker :inline="true"&gt;&lt;/datepicker&gt;</code>
     </div>
+
     <div class="example">
       <h3>RTL datepicker</h3>
       <Datepicker :language="languages.he" />

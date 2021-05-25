@@ -1,32 +1,5 @@
 /* eslint no-param-reassign: 0 */
 /**
- * get the hidden element width, height
- * @param {HTMLElement} element dom
- */
-export function getPopupElementSize(element) {
-  const originalDisplay = element.style.display
-  const originalVisibility = element.style.visibility
-  element.style.display = 'block'
-  element.style.visibility = 'hidden'
-  const styles = window.getComputedStyle(element)
-  const width =
-    element.offsetWidth +
-    parseInt(styles.marginLeft, 10) +
-    parseInt(styles.marginRight, 10)
-  const height =
-    element.offsetHeight +
-    parseInt(styles.marginTop, 10) +
-    parseInt(styles.marginBottom, 10)
-  element.style.display = originalDisplay
-  element.style.visibility = originalVisibility
-
-  return {
-    width,
-    height,
-  }
-}
-
-/**
  * get the popup position
  * @param {Element} el element
  * @param {Element} elRelative relative element
@@ -76,7 +49,7 @@ export function getRelativePosition({
     top = offsetY + relativeRect.height
   }
   const setTop = () => {
-    top = offsetY - targetHeight
+    top = offsetY - targetHeight - 2
   }
 
   if (fixedPosition === '') {
@@ -92,19 +65,19 @@ export function getRelativePosition({
       setBottom()
     }
 
-    const hasRelativWidth =
+    const hasRelativeWidth =
       documentWidth - relativeRect.left < targetWidth &&
       relativeRect.right < targetWidth
 
-    const hasRelativHeight =
+    const hasRelativeHeight =
       relativeRect.top <= targetHeight &&
       documentHeight - relativeRect.bottom <= targetHeight
 
-    if (hasRelativWidth) {
+    if (hasRelativeWidth) {
       left = offsetX - relativeRect.left + 1
     }
 
-    if (hasRelativHeight) {
+    if (hasRelativeHeight) {
       top = offsetY + documentHeight - relativeRect.top - targetHeight
     }
   } else {

@@ -1,45 +1,88 @@
 <template>
-  <div class="picker-view">
-    <slot name="beforeCalendarHeaderMonth" />
+  <div
+    class="picker-view"
+    @keydown.tab="$emit('tab', $event)"
+    @focusin="$emit('focusin', $event)"
+  >
+    <div v-if="hasSlot.header" ref="beforeCalendarHeaderMonth">
+      <slot name="beforeCalendarHeaderMonth" />
+    </div>
+
     <PickerHeader
       v-if="showHeader"
+      ref="pickerHeader"
+      :height="headerHeight"
       :is-next-disabled="isNextDisabled"
       :is-previous-disabled="isPreviousDisabled"
       :is-rtl="isRtl"
-      @next="nextPage"
-      @previous="previousPage"
+      :is-typeable="isTypeable"
+      :is-up-disabled="isUpDisabled"
+      @clear-date="$emit('clear-date')"
+      @page-change="changePage($event)"
+      @reset-tabbable-cell="$emit('reset-tabbable-cell')"
+      @set-focus="$emit('set-focus', $event)"
     >
-      <span
+      <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
+      <UpButton
+        ref="up"
         class="month__year_btn"
-        :class="{ up: !isUpDisabled }"
-        @click="$emit('set-view', 'year')"
+        :is-disabled="isUpDisabled"
+        :is-rtl="isRtl"
+        :is-typeable="isTypeable"
+        @clear-date="$emit('clear-date')"
+        @select="$emit('set-view', 'year')"
+        @set-focus="$emit('set-focus', $event)"
       >
         {{ pageTitleMonth }}
-      </span>
+      </UpButton>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
-      <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
-    <div ref="cells">
-      <span
-        v-for="cell in cells"
-        :key="cell.timestamp"
-        :class="{ selected: cell.isSelected, disabled: cell.isDisabled }"
-        class="cell month"
-        @click="select(cell)"
-      >
-        {{ cell.month }}
-      </span>
+
+    <div
+      class="cells-wrapper"
+      :style="`transition-duration: ${slideDuration}ms; height: ${cellsHeight}px`"
+    >
+      <Transition :name="transitionName">
+        <PickerCells
+          ref="cells"
+          :key="pageTitleMonth"
+          v-slot="{ cell }"
+          :cells="cells"
+          :is-rtl="isRtl"
+          :row-height="rowHeight"
+          :style="`transition-duration: ${slideDuration}ms`"
+          :tabbable-cell-id="tabbableCellId"
+          view="month"
+          @arrow="handleArrow($event)"
+          @clear-date="$emit('clear-date')"
+          @select="select($event)"
+        >
+          {{ monthCellContent(cell) }}
+        </PickerCells>
+      </Transition>
     </div>
-    <slot name="calendarFooterMonth" />
+
+    <div v-if="hasSlot.footer" ref="calendarFooterMonth">
+      <slot name="calendarFooterMonth" />
+    </div>
   </div>
 </template>
 
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
+import PickerCells from './PickerCells.vue'
+import UpButton from './UpButton.vue'
 
 export default {
   name: 'PickerMonth',
+  components: { PickerCells, UpButton },
+  props: {
+    monthCellContent: {
+      type: Function,
+      default: (month) => month.month,
+    },
+  },
   mixins: [pickerMixin],
   computed: {
     /**
@@ -59,13 +102,23 @@ export default {
             d.getHours(),
             d.getMinutes(),
           )
+      const { translation } = this
+      const todayMonth = new Date(
+        this.utils.setDate(this.utils.getNewDateObject(), 1),
+      )
 
       for (let i = 0; i < 12; i += 1) {
         months.push({
-          month: this.utils.getMonthName(i, this.translation.months),
+          month: this.utils.getMonthName(i, translation.months),
+          monthAbbr: this.utils.getMonthNameAbbr(i, translation.monthsAbbr),
           timestamp: dObj.valueOf(),
-          isSelected: this.isSelectedMonth(dObj),
           isDisabled: this.isDisabledMonth(dObj),
+          isOpenDate:
+            this.isMinimumView &&
+            this.openDate &&
+            this.utils.compareDates(dObj, this.openDate),
+          isSelected: this.isSelectedMonth(dObj),
+          isToday: this.utils.compareDates(dObj, todayMonth),
         })
         this.utils.setMonth(dObj, this.utils.getMonth(dObj) + 1)
       }

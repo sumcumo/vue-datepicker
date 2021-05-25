@@ -21,23 +21,58 @@ describe('DateInput', () => {
     wrapper.destroy()
   })
 
-  it('does not format the date when typed', () => {
+  it('emits `typed-date` on blur when date is valid', async () => {
+    const input = wrapper.find('input')
+    input.setValue('1 Jan 2000')
+    await input.trigger('keyup')
+    await input.trigger('blur')
+    expect(wrapper.emitted('typed-date')).toBeTruthy()
+  })
+
+  it('does not emit `typed-date` on blur when date is invalid', async () => {
+    const input = wrapper.find('input')
+    input.setValue('invalid date')
+    await input.trigger('keyup')
+    await input.trigger('blur')
+    expect(wrapper.emitted('typed-date')).toBeFalsy()
+  })
+
+  it('emits close on enter when calendar is open and date is valid', async () => {
+    await wrapper.setProps({
+      isOpen: true,
+    })
+    const input = wrapper.find('input')
+    input.setValue('1 Jan 2000')
+    await input.trigger('keyup')
+    await input.trigger('keydown.enter')
+    expect(wrapper.emitted('close')).toBeTruthy()
+  })
+
+  it('does not emit close on enter when date is invalid', async () => {
+    const input = wrapper.find('input')
+    input.setValue('invalid date')
+    await input.trigger('keydown.enter')
+
+    expect(wrapper.emitted('close')).toBeFalsy()
+  })
+
+  it('does not format the date when typed', async () => {
     const dateString = '2018-04-24'
     wrapper.vm.input.value = dateString
     expect(wrapper.vm.input.value).toEqual(dateString)
-    wrapper.setData({
+    await wrapper.setData({
       typedDate: dateString,
     })
-    wrapper.setProps({
+    await wrapper.setProps({
       selectedDate: new Date(dateString),
     })
     expect(wrapper.vm.typedDate).toEqual(dateString)
     expect(wrapper.vm.formattedValue).toEqual(dateString)
   })
 
-  it('allows international custom date format d.M.yyyy', () => {
+  it('allows international custom date format d.M.yyyy', async () => {
     const dateString = '24.06.2018'
-    wrapper.setProps({
+    await wrapper.setProps({
       selectedDate: new Date(dateString),
       typeable: true,
       format: 'd.M.yyyy',
@@ -49,9 +84,9 @@ describe('DateInput', () => {
     expect(wrapper.vm.formattedValue).toEqual(dateString)
   })
 
-  it('allows international custom date format dd/MM/yyyy', () => {
+  it('allows international custom date format dd/MM/yyyy', async () => {
     const dateString = '24/06/2018'
-    wrapper.setProps({
+    await wrapper.setProps({
       selectedDate: new Date(dateString),
       typeable: true,
       format: 'dd/MM/yyyy',
@@ -63,9 +98,9 @@ describe('DateInput', () => {
     expect(wrapper.vm.formattedValue).toEqual(dateString)
   })
 
-  it('allows international custom date format dd MM yyyy', () => {
+  it('allows international custom date format dd MM yyyy', async () => {
     const dateString = '24 06 2018'
-    wrapper.setProps({
+    await wrapper.setProps({
       selectedDate: new Date(dateString),
       typeable: true,
       format: 'dd MM yyyy',
@@ -77,9 +112,9 @@ describe('DateInput', () => {
     expect(wrapper.vm.formattedValue).toEqual(dateString)
   })
 
-  it('allows function format', () => {
+  it('allows function format', async () => {
     const dateString = '2018-08-12'
-    wrapper.setProps({
+    await wrapper.setProps({
       selectedDate: new Date(dateString),
       typeable: true,
       format(date) {
@@ -90,31 +125,19 @@ describe('DateInput', () => {
       },
     })
     const input = wrapper.find('input')
-    input.element.value = dateString
+    input.setValue(dateString)
     expect(input.element.value).toEqual(dateString)
     input.trigger('keyup')
+    input.trigger('keydown.enter')
     expect(wrapper.vm.formattedValue).toEqual('12.08.2018')
   })
 
-  it('emits the date when typed', () => {
+  it('emits the date when typed', async () => {
     const input = wrapper.find('input')
-    wrapper.vm.input.value = '2018-04-24'
-    input.trigger('keyup')
-    expect(wrapper.emitted()['typed-date']).toBeDefined()
-    expect(wrapper.emitted()['typed-date'][0][0]).toBeInstanceOf(Date)
-  })
-
-  it('emits close-calendar when return is pressed', () => {
-    const input = wrapper.find('input')
-    input.trigger('keydown.enter')
-    expect(wrapper.emitted('close')).toBeTruthy()
-  })
-
-  it('clears a typed date if it does not parse', () => {
-    const input = wrapper.find('input')
-    wrapper.setData({ typedDate: 'not a date' })
-    input.trigger('blur')
-    expect(wrapper.emitted()['clear-date']).toBeDefined()
+    input.setValue('2018-04-24')
+    await input.trigger('keyup')
+    expect(wrapper.emitted('typed-date')).toBeDefined()
+    expect(wrapper.emitted('typed-date')[0][0]).toBeInstanceOf(Date)
   })
 
   it("doesn't emit the date if typeable=false", () => {
@@ -142,7 +165,6 @@ describe('Datepicker mount', () => {
         format: 'dd MMM yyyy',
         translation: en,
         typeable: true,
-        useUtc: true,
       },
     })
   })
@@ -156,14 +178,14 @@ describe('Datepicker mount', () => {
     const input = wrapper.find('input')
 
     await input.trigger('click')
-    input.element.value = 'Jan'
+    input.setValue('Jan')
     await input.trigger('keyup')
 
     expect(spySelectDate).toHaveBeenCalled()
     expect(wrapper.vm.isOpen).toBeTruthy()
     expect(new Date(wrapper.vm.pageDate).getMonth()).toBe(0)
 
-    input.element.value = 'Feb'
+    input.setValue('Feb')
     await input.trigger('keyup')
 
     expect(new Date(wrapper.vm.pageDate).getMonth()).toBe(1)
@@ -171,9 +193,221 @@ describe('Datepicker mount', () => {
 
   it('formats the date on blur', async () => {
     const input = wrapper.find('input')
-    input.element.value = '2018-04-24'
-    input.trigger('blur')
-    await wrapper.vm.$nextTick()
+    input.setValue('2018-04-24')
+    await input.trigger('keyup')
+    await input.trigger('blur')
     expect(input.element.value).toEqual('24 Apr 2018')
+  })
+
+  it('closes the calendar when no date is selected and escape is pressed', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    await input.trigger('keydown.esc')
+    expect(wrapper.vm.isOpen).toBeFalsy()
+  })
+
+  it('clears an invalid date when the input field is blurred', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    input.setValue('invalid date')
+    await input.trigger('keyup')
+    await input.trigger('blur')
+
+    expect(input.element.value).toBe('')
+    expect(wrapper.vm.selectedDate).toBeNull()
+  })
+
+  it('formats a valid date when the input field is blurred and the calendar is closed', async () => {
+    const input = wrapper.find('input')
+
+    input.setValue('12jan12')
+    await input.trigger('keyup')
+    await input.trigger('blur')
+
+    expect(input.element.value).toBe('12 Jan 2012')
+    expect(wrapper.vm.selectedDate).toStrictEqual(new Date(2012, 0, 12))
+  })
+
+  it('formats a valid date when the input field is blurred and the calendar is open', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    input.setValue('12jan12')
+    await input.trigger('keyup')
+    await input.trigger('blur')
+
+    expect(input.element.value).toBe('12 Jan 2012')
+    expect(wrapper.vm.selectedDate).toStrictEqual(new Date(2012, 0, 12))
+  })
+
+  it('submits a valid date on pressing the enter key', async () => {
+    const input = wrapper.find('input')
+
+    input.setValue('12jan12')
+    await input.trigger('keyup')
+    await input.trigger('keydown.enter')
+
+    expect(input.element.value).toBe('12 Jan 2012')
+    expect(wrapper.vm.isOpen).toBeFalsy()
+    expect(wrapper.vm.selectedDate).toStrictEqual(new Date(2012, 0, 12))
+
+    await input.trigger('click')
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    input.setValue('13feb13')
+    await input.trigger('keyup')
+    await input.trigger('keydown.enter')
+
+    expect(input.element.value).toBe('13 Feb 2013')
+    expect(wrapper.vm.isOpen).toBeFalsy()
+    expect(wrapper.vm.selectedDate).toStrictEqual(new Date(2013, 1, 13))
+  })
+
+  it('only submits a date on pressing the enter key when typeable', async () => {
+    const input = wrapper.find('input')
+
+    await wrapper.setProps({
+      typeable: false,
+    })
+
+    input.setValue('12jan12')
+    await input.trigger('keyup')
+    await input.trigger('keydown.enter')
+
+    expect(input.element.value).toBe('12jan12')
+    expect(wrapper.vm.isOpen).toBeFalsy()
+    expect(wrapper.vm.selectedDate).toBeNull()
+  })
+})
+
+describe('Datepicker mounted to document body', () => {
+  let wrapper
+
+  beforeEach(() => {
+    wrapper = mount(Datepicker, {
+      attachTo: document.body,
+      propsData: {
+        format: 'dd MMM yyyy',
+        translation: en,
+        typeable: true,
+      },
+    })
+  })
+
+  afterEach(() => {
+    wrapper.destroy()
+  })
+
+  it('opens the calendar when the space bar is pressed on the input field', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('keydown.space')
+    await input.trigger('keyup.space')
+
+    expect(wrapper.vm.isOpen).toBeTruthy()
+  })
+
+  it('focuses the previous button on arrowing down from the input field when open', async () => {
+    const input = wrapper.find('input')
+    const prevButton = wrapper.find('.prev')
+
+    await input.trigger('focus')
+    await wrapper.find('input').trigger('keydown.down')
+
+    expect(document.activeElement).toBe(prevButton.element)
+  })
+
+  it('closes the calendar on pressing escape if a date is selected', async () => {
+    await wrapper.setProps({
+      value: new Date(2020, 0, 1),
+    })
+
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    await input.trigger('keydown.esc')
+    expect(wrapper.vm.isOpen).toBeFalsy()
+  })
+
+  it('clears the date on pressing escape if a date is selected and the calendar is closed', async () => {
+    await wrapper.setProps({
+      value: new Date(2020, 0, 1),
+    })
+
+    const input = wrapper.find('input')
+    expect(wrapper.vm.selectedDate).toStrictEqual(new Date(2020, 0, 1))
+
+    await input.trigger('keydown.esc')
+    expect(wrapper.vm.selectedDate).toBeNull()
+  })
+
+  it('clears invalid input on arrowing down from the input field', async () => {
+    const input = wrapper.find('input')
+
+    input.setValue('invalid date')
+    await input.trigger('keyup')
+    expect(input.element.value).toBe('invalid date')
+
+    await input.trigger('keydown.down')
+    expect(input.element.value).toBe('')
+  })
+
+  it('formats valid input arrowing down from the input field', async () => {
+    const input = wrapper.find('input')
+
+    input.setValue('12jan12')
+    await input.trigger('keyup')
+    expect(input.element.value).toBe('12jan12')
+
+    await input.trigger('keydown.down')
+    expect(input.element.value).toBe('12 Jan 2012')
+  })
+
+  it('submits a valid input when the input field is blurred', async () => {
+    await wrapper.setProps({
+      value: new Date(2019, 2, 25),
+    })
+    const input = wrapper.find('input')
+
+    input.setValue('13jan2020')
+    await input.trigger('keyup')
+    expect(input.element.value).toBe('13jan2020')
+
+    await input.trigger('blur')
+    expect(input.element.value).toBe('13 Jan 2020')
+  })
+
+  it('submits a blank input when the input field is blurred', async () => {
+    const input = wrapper.find('input')
+
+    input.setValue('')
+    await input.trigger('keyup')
+    expect(input.element.value).toBe('')
+
+    await input.trigger('keydown.enter')
+    expect(input.element.value).toBe('')
+  })
+
+  it('removes leading space from input when the calendar is open and the input field is blurred', async () => {
+    const input = wrapper.find('input')
+
+    input.setValue(' ')
+    await input.trigger('keyup')
+    await input.trigger('blur')
+    expect(input.element.value).toBe('')
+
+    input.setValue('12 jan 12')
+    await input.trigger('keyup.space')
+    await input.trigger('blur')
+    expect(input.element.value).toBe('12 Jan 2012')
   })
 })

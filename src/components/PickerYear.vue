@@ -1,41 +1,77 @@
 <template>
-  <div class="picker-view">
-    <slot name="beforeCalendarHeaderYear" />
+  <div
+    class="picker-view"
+    @keydown.tab="$emit('tab', $event)"
+    @focusin="$emit('focusin', $event)"
+  >
+    <div v-if="hasSlot.header" ref="beforeCalendarHeaderYear">
+      <slot name="beforeCalendarHeaderYear" />
+    </div>
+
     <PickerHeader
       v-if="showHeader"
+      ref="pickerHeader"
+      :height="headerHeight"
       :is-next-disabled="isNextDisabled"
       :is-previous-disabled="isPreviousDisabled"
       :is-rtl="isRtl"
-      @next="nextPage"
-      @previous="previousPage"
+      :is-typeable="isTypeable"
+      @clear-date="$emit('clear-date')"
+      @page-change="changePage($event)"
+      @reset-tabbable-cell="$emit('reset-tabbable-cell')"
+      @set-focus="$emit('set-focus', $event)"
     >
-      <span>
-        {{ pageTitleYear }}
-      </span>
-      <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
-    </PickerHeader>
-    <div ref="cells">
-      <span
-        v-for="cell in cells"
-        :key="cell.timestamp"
-        :class="{ selected: cell.isSelected, disabled: cell.isDisabled }"
-        class="cell year"
-        @click="select(cell)"
+      <UpButton
+        ref="up"
+        :is-disabled="true"
+        :is-rtl="isRtl"
+        :is-typeable="isTypeable"
       >
-        {{ cell.year }}
-      </span>
+        {{ pageTitleYear }}
+      </UpButton>
+      <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
+    </PickerHeader>
+
+    <div
+      class="cells-wrapper"
+      :style="`transition-duration: ${slideDuration}ms; height: ${cellsHeight}px`"
+    >
+      <Transition :name="transitionName">
+        <PickerCells
+          ref="cells"
+          :key="pageTitleYear"
+          v-slot="{ cell }"
+          :cells="cells"
+          :is-rtl="isRtl"
+          :row-height="rowHeight"
+          :style="`transition-duration: ${slideDuration}ms`"
+          :tabbable-cell-id="tabbableCellId"
+          view="year"
+          @arrow="handleArrow($event)"
+          @clear-date="$emit('clear-date')"
+          @select="select($event)"
+        >
+          {{ cell.year }}
+        </PickerCells>
+      </Transition>
     </div>
-    <slot name="calendarFooterYear" />
+
+    <div v-if="hasSlot.footer" ref="calendarFooterYear">
+      <slot name="calendarFooterYear" />
+    </div>
   </div>
 </template>
 
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
+import PickerCells from './PickerCells.vue'
+import UpButton from './UpButton.vue'
 
 export default {
   name: 'PickerYear',
+  components: { PickerCells, UpButton },
   mixins: [pickerMixin],
   props: {
     yearRange: {
@@ -48,13 +84,14 @@ export default {
      * Sets an array with all years to show this decade (or yearRange)
      * @return {Array}
      */
+    // eslint-disable-next-line complexity,max-statements
     cells() {
       const d = this.pageDate
       const years = []
       const year = this.useUtc
         ? Math.floor(d.getUTCFullYear() / this.yearRange) * this.yearRange
         : Math.floor(d.getFullYear() / this.yearRange) * this.yearRange
-      // set up a new date object to the beginning of the current 'page'7
+      // set up a new date object to the beginning of the current 'page'
       const dObj = this.useUtc
         ? new Date(Date.UTC(year, d.getUTCMonth(), d.getUTCDate()))
         : new Date(
@@ -64,14 +101,32 @@ export default {
             d.getHours(),
             d.getMinutes(),
           )
+      const todayYear = new Date(
+        this.utils.setDate(this.utils.getNewDateObject(), 1),
+      )
+
       for (let i = 0; i < this.yearRange; i += 1) {
         years.push({
           year: this.utils.getFullYear(dObj),
           timestamp: dObj.valueOf(),
-          isSelected: this.isSelectedYear(dObj),
           isDisabled: this.isDisabledYear(dObj),
+          isOpenDate:
+            this.isMinimumView &&
+            this.openDate &&
+            this.utils.compareDates(dObj, this.openDate),
+          isSelected: this.isSelectedYear(dObj),
+          isToday: this.utils.compareDates(dObj, todayYear),
         })
         this.utils.setFullYear(dObj, this.utils.getFullYear(dObj) + 1)
+      }
+
+      // Fill any remaining cells with blanks to position trailing cells correctly when rtl
+      const cellsInGrid = Math.ceil(this.yearRange / 3) * 3
+      for (let i = years.length; i < cellsInGrid; i += 1) {
+        years.push({
+          id: i,
+          isDisabled: true,
+        })
       }
 
       return years
@@ -141,22 +196,6 @@ export default {
       return (
         this.selectedDate && year === this.utils.getFullYear(this.selectedDate)
       )
-    },
-    /**
-     * Increments the page (overrides nextPage in pickerMixin)
-     */
-    nextPage() {
-      if (!this.isNextDisabled) {
-        this.changePage(this.yearRange)
-      }
-    },
-    /**
-     * Decrements the page (overrides previousPage in pickerMixin)
-     */
-    previousPage() {
-      if (!this.isPreviousDisabled) {
-        this.changePage(-this.yearRange)
-      }
     },
   },
 }

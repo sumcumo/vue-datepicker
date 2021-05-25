@@ -32,6 +32,7 @@ export default {
     }),
     replace({
       'process.env.NODE_ENV': JSON.stringify('development'),
+      'preventAssignment': true,
     }),
     resolve({
       module: true,
@@ -45,7 +46,7 @@ export default {
     serve({
       contentBase: path.join(__dirname, '..', 'example'),
       host: 'localhost',
-      port: 10001,
+      port: 10002,
     }),
     livereload({
       verbose: true,

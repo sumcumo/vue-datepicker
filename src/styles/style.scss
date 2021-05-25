@@ -6,17 +6,13 @@
   position: relative;
   text-align: left;
   box-sizing: border-box;
-
-  .calendar-btn-disabled {
-    cursor: not-allowed;
-  }
 }
 
 .vdp-datepicker__calendar {
   background: #fff;
-  border: 1px solid #ccc;
+  //border: 1px solid #ccc;
+  border: 0;
   position: absolute;
-  width: 300px;
   z-index: 10000;
 
   .today {
@@ -31,23 +27,35 @@
     position: static;
   }
 
-  header {
-    display: block;
-    line-height: 40px;
+  button {
+    background: inherit;
+    text-align: center;
 
-    span {
-      display: inline-block;
-      float: left;
-      text-align: center;
-      width: 71.42857142857143%;
+    &:disabled {
+      color: #ddd;
+    }
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+
+    button {
+      border: none;
+
+      &:hover:not(:disabled) {
+        background: #eee;
+      }
+
+      &.up {
+        color: #000;
+        flex-grow: 5;
+      }
     }
 
     .prev,
     .next {
-      float: left;
-      max-height: 40px;
       position: relative;
-      width: 14.285714285714286%;
 
       .default {
         text-indent: -10000px;
@@ -61,6 +69,10 @@
           transform: translateX(-50%) translateY(-50%);
         }
       }
+
+      &.rtl {
+        transform: rotate(180deg);
+      }
     }
 
     .prev {
@@ -69,9 +81,13 @@
           border-right: 10px solid #000;
           margin-left: -5px;
         }
+      }
 
-        &.disabled:after {
-          border-right: 10px solid #ddd;
+      &:disabled {
+        .default {
+          &:after {
+            border-right: 10px solid #ddd;
+          }
         }
       }
     }
@@ -82,44 +98,21 @@
           border-left: 10px solid #000;
           margin-left: 5px;
         }
+      }
 
-        &.disabled:after {
-          border-left: 10px solid #ddd;
+      &:disabled {
+        .default {
+          &:after {
+            border-left: 10px solid #ddd;
+          }
         }
       }
     }
-
-    .prev:not(.disabled),
-    .next:not(.disabled),
-    .up:not(.disabled) {
-      cursor: pointer;
-
-      &:hover {
-        background: #eee;
-      }
-    }
-  }
-
-  .disabled {
-    color: #ddd;
-    cursor: default;
-
-    //&.selected {
-    //  color: #104756;
-    //}
-  }
-
-  .flex-rtl {
-    display: flex;
-    flex-wrap: wrap;
-    width: inherit;
   }
 
   .cell {
     border: 1px solid transparent;
     display: inline-block;
-    height: 40px;
-    line-height: 40px;
     padding: 0 5px;
     text-align: center;
     vertical-align: middle;
@@ -174,11 +167,9 @@
     }
   }
 
-  .day-header {
+  .day-header span {
     display: inline-block;
     font-size: 75%;
-    height: 40px;
-    line-height: 40px;
     padding: 0 5px;
     text-align: center;
     vertical-align: middle;
@@ -192,17 +183,50 @@
   }
 
   .picker-view {
+    background: white;
+    border: 1px solid #ccc;
+    position: absolute;
     width: inherit;
+
+    .cells-wrapper {
+      overflow: hidden;
+      position: relative;
+    }
+
+    .slide-right-leave-active,
+    .slide-right-enter-active {
+      position: absolute;
+      top: 0;
+    }
+    .slide-right-enter {
+      transform: translate(100%, 0);
+    }
+    .slide-right-leave-to {
+      transform: translate(-100%, 0);
+    }
+
+    .slide-left-leave-active,
+    .slide-left-enter-active {
+      position: absolute;
+      top: 0;
+    }
+    .slide-left-enter {
+      transform: translate(-100%, 0);
+    }
+    .slide-left-leave-to {
+      transform: translate(100%, 0);
+    }
   }
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 
 .vdp-datepicker__clear-button,
 .vdp-datepicker__calendar-button {
-  cursor: pointer;
+  border: none;
   font-style: normal;
-
-  &.disabled {
-    color: #999;
-    cursor: default;
-  }
+  padding: 0;
 }

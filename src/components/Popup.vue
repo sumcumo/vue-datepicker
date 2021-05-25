@@ -1,5 +1,5 @@
 <script>
-import { getPopupElementSize, getRelativePosition } from '~/utils/dom'
+import { getRelativePosition } from '~/utils/dom'
 
 export default {
   name: 'Popup',
@@ -16,6 +16,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    height: {
+      type: Number,
+      default: 0,
+    },
     rtl: {
       type: Boolean,
       default: false,
@@ -24,21 +28,26 @@ export default {
       type: Boolean,
       default: false,
     },
+    width: {
+      type: Number,
+      default: 300,
+    },
   },
   data() {
     return {
-      popupRect: null,
+      popupRect: {
+        width: 0,
+        height: 0,
+      },
     }
   },
   watch: {
     visible: {
       immediate: true,
       handler(val) {
-        this.$nextTick(() => {
-          if (val) {
-            this.displayPopup()
-          }
-        })
+        if (val) {
+          this.displayPopup()
+        }
       },
     },
   },
@@ -70,15 +79,11 @@ export default {
       this.setTopStyle()
       const popup = this.$el
       const relativeElement = this.$parent.$el
-      if (!this.popupRect) {
-        this.popupRect = getPopupElementSize(popup)
-      }
-      const { width, height } = this.popupRect
       const { left, top } = getRelativePosition({
         el: popup,
         elRelative: relativeElement,
-        targetWidth: width,
-        targetHeight: height,
+        targetWidth: this.width,
+        targetHeight: this.height,
         appendToBody: this.appendToBody,
         fixedPosition: this.fixedPosition,
         rtl: this.rtl,

@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import PickerDay from '~/components/PickerDay.vue'
 import { en } from '~/locale'
 import makeDateUtils from '~/utils/DateUtils'
@@ -8,7 +8,7 @@ const dateUtils = makeDateUtils(false)
 describe('PickerDay: Set first day of week', () => {
   let wrapper
   beforeEach(() => {
-    wrapper = shallowMount(PickerDay, {
+    wrapper = mount(PickerDay, {
       propsData: {
         firstDayOfWeek: 'mon',
         translation: en,
@@ -29,11 +29,11 @@ describe('PickerDay: Set first day of week', () => {
     expect(wrapper.vm.daysOfWeek[6]).toEqual('Sun')
   })
 
-  it('should have 6 days from previous month when month starts on a Sunday', () => {
+  it('should have 6 days from previous month when month starts on a Sunday', async () => {
     const testDate = new Date(2020, 10, 1)
     const startDate = dateUtils.getNewDateObject(testDate)
 
-    wrapper.setProps({
+    await wrapper.setProps({
       pageDate: testDate,
       pageTimestamp: dateUtils.setDate(startDate, 1),
     })
@@ -43,11 +43,11 @@ describe('PickerDay: Set first day of week', () => {
     }
   })
 
-  it('should have no days from previous month when month starts on a Monday', () => {
+  it('should have no days from previous month when month starts on a Monday', async () => {
     const testDate = new Date(2020, 5, 1)
     const startDate = dateUtils.getNewDateObject(testDate)
 
-    wrapper.setProps({
+    await wrapper.setProps({
       pageDate: testDate,
       pageTimestamp: dateUtils.setDate(startDate, 1),
     })
@@ -59,7 +59,7 @@ describe('PickerDay: Set first day of week', () => {
 describe('PickerDay: Datepicker with Saturday as first day of week', () => {
   let wrapper
   beforeEach(() => {
-    wrapper = shallowMount(PickerDay, {
+    wrapper = mount(PickerDay, {
       propsData: {
         firstDayOfWeek: 'sat',
         translation: en,
@@ -72,11 +72,11 @@ describe('PickerDay: Datepicker with Saturday as first day of week', () => {
     wrapper.destroy()
   })
 
-  it('should have 6 days from previous month when month starts on a Friday', () => {
+  it('should have 6 days from previous month when month starts on a Friday', async () => {
     const testDate = new Date(2021, 0, 1)
     const startDate = dateUtils.getNewDateObject(testDate)
 
-    wrapper.setProps({
+    await wrapper.setProps({
       pageDate: testDate,
       pageTimestamp: dateUtils.setDate(startDate, 1),
     })
@@ -86,11 +86,11 @@ describe('PickerDay: Datepicker with Saturday as first day of week', () => {
     }
   })
 
-  it('should have no days from previous month when month starts on a Saturday', () => {
+  it('should have no days from previous month when month starts on a Saturday', async () => {
     const testDate = new Date(2020, 7, 1)
     const startDate = dateUtils.getNewDateObject(testDate)
 
-    wrapper.setProps({
+    await wrapper.setProps({
       pageDate: testDate,
       pageTimestamp: dateUtils.setDate(startDate, 1),
     })

@@ -13,6 +13,7 @@ const options = {
     format: 'dd MMM yyyy',
     selectedDate: new Date(2018, 2, 24),
     translation: en,
+    view: 'day',
   },
 }
 
@@ -38,13 +39,5 @@ describe('pickerMixin', () => {
 
   it('should mount', () => {
     expect(wrapper.vm).toBeTruthy()
-  })
-
-  it('should use `isNextDisabled` correctly', () => {
-    expect(wrapper.vm.isNextDisabled).toBeFalsy()
-  })
-
-  it('should use `isPreviousDisabled` correctly', () => {
-    expect(wrapper.vm.isPreviousDisabled).toBeFalsy()
   })
 })

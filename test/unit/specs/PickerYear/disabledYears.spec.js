@@ -1,11 +1,11 @@
-import { shallowMount } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import PickerYear from '~/components/PickerYear.vue'
 import { en } from '~/locale'
 
 describe('PickerYear', () => {
   let wrapper
   beforeEach(() => {
-    wrapper = shallowMount(PickerYear, {
+    wrapper = mount(PickerYear, {
       propsData: {
         translation: en,
         pageDate: new Date(2018, 3, 1),
@@ -22,21 +22,16 @@ describe('PickerYear', () => {
     wrapper.destroy()
   })
 
-  it("can't select a disabled year", () => {
-    wrapper.vm.select({ isDisabled: true })
-    expect(wrapper.emitted('select')).toBeFalsy()
-  })
-
   it("can't navigate to a disabled year", () => {
-    wrapper.vm.previousPage()
+    wrapper.vm.changePage({ incrementBy: -1, focusRefs: ['prev'] })
     expect(wrapper.emitted()['changed-decade']).toBeFalsy()
 
-    wrapper.vm.nextPage()
+    wrapper.vm.changePage({ incrementBy: 1, focusRefs: ['next'] })
     expect(wrapper.emitted()['changed-decade']).toBeFalsy()
   })
 
-  it("can't change decade when previous or next decades are disabled", () => {
-    wrapper.setProps({
+  it("can't change decade when previous or next decades are disabled", async () => {
+    await wrapper.setProps({
       pageDate: new Date(2010, 9, 1),
       disabledDates: {
         to: new Date(2010, 8, 6),
@@ -47,8 +42,8 @@ describe('PickerYear', () => {
     expect(wrapper.vm.isNextDisabled).toEqual(true)
   })
 
-  it('can change decade despite having a disabled decade', () => {
-    wrapper.setProps({
+  it('can change decade despite having a disabled decade', async () => {
+    await wrapper.setProps({
       pageDate: new Date(2010, 9, 1),
       disabledDates: {
         to: new Date(2000, 11, 19),
@@ -59,8 +54,8 @@ describe('PickerYear', () => {
     expect(wrapper.vm.isNextDisabled).toEqual(false)
   })
 
-  it('can accept a customPredictor to check if the year is disabled', () => {
-    wrapper.setProps({
+  it('can accept a customPredictor to check if the year is disabled', async () => {
+    await wrapper.setProps({
       disabledDates: {
         customPredictor(date) {
           if (date.getFullYear() % 3 === 0) {
@@ -77,15 +72,15 @@ describe('PickerYear', () => {
     expect(wrapper.vm.isDisabledYear(new Date(2022, 2, 11))).toEqual(true)
   })
 
-  it('should close without warning when its undefined', () => {
-    wrapper.setProps({
+  it('should close without warning when its undefined', async () => {
+    await wrapper.setProps({
       disabledDates: undefined,
     })
     expect(wrapper.vm.isDisabledYear(new Date(2016, 8, 29))).toEqual(false)
   })
 
-  it('should not disable everything for from', () => {
-    wrapper.setProps({
+  it('should not disable everything for from', async () => {
+    await wrapper.setProps({
       disabledDates: {
         to: undefined,
         from: new Date(2018, 4, 15),

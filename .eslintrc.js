@@ -9,6 +9,7 @@ module.exports = {
     'airbnb-base',
     'plugin:compat/recommended',
     'prettier',
+    'plugin:cypress/recommended',
     'plugin:jest/recommended',
     'plugin:vue/recommended',
   ],

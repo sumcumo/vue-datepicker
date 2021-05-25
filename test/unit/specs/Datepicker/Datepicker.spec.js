@@ -27,26 +27,77 @@ describe('Datepicker mounted', () => {
   let wrapper
 
   beforeEach(() => {
+    jest.useFakeTimers()
     wrapper = mount(Datepicker)
   })
 
   afterEach(() => {
+    jest.clearAllTimers()
     wrapper.destroy()
   })
 
-  it('should emit blur', () => {
+  it('selects an edge date from the next month', async () => {
+    await wrapper.setProps({
+      value: new Date(2020, 0, 1),
+    })
+
+    const cells = wrapper.findAll('button.cell')
+    const lastCell = cells.at(cells.length - 1)
+
+    await lastCell.trigger('click')
+
+    expect(wrapper.vm.selectedDate).toStrictEqual(new Date(2020, 1, 1))
+  })
+
+  it('watches initialView when open', async () => {
+    const spy = jest.spyOn(wrapper.vm, 'setInitialView')
+    await wrapper.vm.open()
+
+    await wrapper.setProps({ initialView: 'month' })
+
+    expect(spy).toHaveBeenCalled()
+  })
+
+  it('derives `picker` from the current `view`', async () => {
+    await wrapper.setProps({
+      initialView: 'day',
+    })
+
+    expect(wrapper.vm.picker).toBe('PickerDay')
+    await wrapper.setProps({ initialView: 'month' })
+
+    expect(wrapper.vm.picker).toBe('PickerMonth')
+  })
+
+  it('emits changed-month/year/decade', async () => {
+    const pageDate = new Date(2016, 2, 1)
+    await wrapper.vm.setView('day')
+    await wrapper.vm.handlePageChange(pageDate)
+
+    expect(wrapper.emitted('changed-month')).toBeTruthy()
+
+    await wrapper.vm.setView('month')
+    await wrapper.vm.handlePageChange(pageDate)
+    expect(wrapper.emitted('changed-year')).toBeTruthy()
+
+    await wrapper.vm.setView('year')
+    await wrapper.vm.handlePageChange(pageDate)
+    expect(wrapper.emitted('changed-decade')).toBeTruthy()
+  })
+
+  it('emits blur', async () => {
     const input = wrapper.find('input')
-    input.trigger('blur')
+    await input.trigger('blur')
     expect(wrapper.emitted().blur).toBeTruthy()
   })
 
-  it('should emit focus', () => {
+  it('emits focus', async () => {
     const input = wrapper.find('input')
-    input.trigger('focus')
+    await input.trigger('focus')
     expect(wrapper.emitted().focus).toBeTruthy()
   })
 
-  it('should toggle when the input field is clicked', async () => {
+  it('toggles when the input field is clicked', async () => {
     const input = wrapper.find('input')
     await input.trigger('click')
 
@@ -56,7 +107,7 @@ describe('Datepicker mounted', () => {
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
 
-  it('should open on focusing the input when showCalendarOnFocus = true', async () => {
+  it('opens on focusing the input when showCalendarOnFocus = true', async () => {
     await wrapper.setProps({
       showCalendarOnFocus: true,
     })
@@ -67,12 +118,45 @@ describe('Datepicker mounted', () => {
     expect(wrapper.vm.isOpen).toBeTruthy()
   })
 
-  it('should toggle via the calendar button', async () => {
+  it('toggles on clicking the input when showCalendarOnFocus = true', async () => {
+    await wrapper.setProps({
+      showCalendarOnFocus: true,
+    })
+    const input = wrapper.find('input')
+
+    await input.trigger('focus')
+    await input.trigger('click')
+    expect(wrapper.vm.isOpen).toBeTruthy()
+    jest.advanceTimersByTime(wrapper.vm.fadeDuration)
+
+    await input.trigger('focus')
+    await input.trigger('click')
+    expect(wrapper.vm.isOpen).toBeFalsy()
+  })
+
+  it('toggles on clicking the input when typeable and showCalendarOnFocus = true', async () => {
+    await wrapper.setProps({
+      showCalendarOnFocus: true,
+      typeable: true,
+    })
+    const input = wrapper.find('input')
+
+    await input.trigger('focus')
+    await input.trigger('click')
+    expect(wrapper.vm.isOpen).toBeTruthy()
+    jest.advanceTimersByTime(wrapper.vm.fadeDuration)
+
+    await input.trigger('focus')
+    await input.trigger('click')
+    expect(wrapper.vm.isOpen).toBeFalsy()
+  })
+
+  it('toggles via the calendar button', async () => {
     await wrapper.setProps({
       calendarButton: true,
     })
 
-    const calendarButton = wrapper.find('.vdp-datepicker__calendar-button')
+    const calendarButton = wrapper.find('button[data-test-calendar-button]')
     await calendarButton.trigger('click')
     expect(wrapper.vm.isOpen).toBeTruthy()
 
@@ -80,13 +164,13 @@ describe('Datepicker mounted', () => {
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
 
-  it('should toggle via the calendar button when showCalendarOnFocus = true', async () => {
+  it('toggles via the calendar button when showCalendarOnFocus = true', async () => {
     await wrapper.setProps({
       calendarButton: true,
       showCalendarOnFocus: true,
     })
 
-    const calendarButton = wrapper.find('.vdp-datepicker__calendar-button')
+    const calendarButton = wrapper.find('button[data-test-calendar-button]')
 
     await calendarButton.trigger('click')
     expect(wrapper.vm.isOpen).toBeTruthy()
@@ -95,32 +179,33 @@ describe('Datepicker mounted', () => {
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
 
-  it('should close via the calendar button, despite input being focused', async () => {
+  it('closes via the calendar button when typeable and showCalendarOnFocus = true, despite input being focused', async () => {
     await wrapper.setProps({
       calendarButton: true,
       showCalendarOnFocus: true,
+      typeable: true,
     })
 
     const input = wrapper.find('input')
-    const calendarButton = wrapper.find('span.vdp-datepicker__calendar-button')
+    const calendarButton = wrapper.find('button[data-test-calendar-button]')
 
     await input.trigger('focus')
     expect(wrapper.vm.isOpen).toBeTruthy()
 
-    await input.trigger('blur')
     await calendarButton.trigger('click')
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
 
   it('resets the date correctly when typeable', async () => {
-    wrapper.setProps({
+    await wrapper.setProps({
       typeable: true,
     })
 
     const input = wrapper.find('input')
     await input.trigger('click')
-    await input.setValue('1 Jan 2000')
-    await input.trigger('keydown.enter')
+
+    input.setValue('1 Jan 2000')
+    await input.trigger('keyup')
     expect(wrapper.vm.selectedDate).toEqual(new Date(2000, 0, 1))
 
     await wrapper.setProps({
@@ -131,25 +216,758 @@ describe('Datepicker mounted', () => {
   })
 })
 
+describe('Datepicker mounted to body', () => {
+  let wrapper
+
+  beforeEach(() => {
+    jest.useFakeTimers()
+
+    wrapper = mount(Datepicker, {
+      attachTo: document.body,
+    })
+  })
+
+  afterEach(() => {
+    jest.clearAllTimers()
+
+    wrapper.destroy()
+  })
+
+  it("focuses today's date by default", async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    jest.advanceTimersByTime(wrapper.vm.fadeDuration)
+    const todayCell = wrapper.find('button.today')
+
+    expect(todayCell.text()).toBe(new Date().getDate().toString())
+    expect(document.activeElement).toStrictEqual(todayCell.element)
+  })
+
+  it('focuses the up button on increasing the view', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    jest.advanceTimersByTime(wrapper.vm.fadeDuration)
+    let upButton = wrapper.find('button.up')
+
+    await upButton.trigger('click')
+    jest.advanceTimersByTime(wrapper.vm.fadeDuration)
+    upButton = wrapper.find('button.up')
+
+    expect(document.activeElement).toBe(upButton.element)
+  })
+
+  it('focuses the tabbable-cell on decreasing the view', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    jest.advanceTimersByTime(wrapper.vm.fadeDuration)
+
+    const upButton = wrapper.find('button.up')
+
+    await upButton.trigger('click')
+    jest.advanceTimersByTime(wrapper.vm.fadeDuration)
+    const firstCell = wrapper.find('button.cell')
+
+    await firstCell.trigger('click')
+    jest.advanceTimersByTime(wrapper.vm.fadeDuration)
+
+    const tabbableCell = wrapper.find('button.cell[data-test-tabbable-cell]')
+    expect(document.activeElement).toBe(tabbableCell.element)
+  })
+
+  it('closes when the calendar loses focus', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    jest.advanceTimersByTime(wrapper.vm.fadeDuration)
+
+    const todayCell = wrapper.find('button.today')
+    expect(wrapper.vm.isOpen).toBeTruthy()
+    expect(document.activeElement).toStrictEqual(todayCell.element)
+
+    await document.activeElement.blur()
+    await document.body.click()
+
+    jest.advanceTimersByTime(wrapper.vm.fadeDuration)
+
+    expect(wrapper.vm.isOpen).toBeFalsy()
+  })
+})
+
+describe('Datepicker mounted to body with openDate', () => {
+  let wrapper
+
+  beforeEach(() => {
+    jest.useFakeTimers()
+
+    wrapper = mount(Datepicker, {
+      attachTo: document.body,
+      propsData: {
+        openDate: new Date(2020, 0, 1),
+      },
+    })
+  })
+
+  afterEach(() => {
+    jest.clearAllTimers()
+    wrapper.destroy()
+  })
+
+  it('arrows right on cell', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+    const secondOfMonth = wrapper.findAll('button.cell').at(4)
+
+    firstOfMonth.element.focus()
+    await firstOfMonth.trigger('keydown.right')
+
+    expect(document.activeElement).toBe(secondOfMonth.element)
+  })
+
+  it('arrows left on cell', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    const secondOfMonth = wrapper.findAll('button.cell').at(4)
+    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+
+    secondOfMonth.element.focus()
+    await firstOfMonth.trigger('keydown.left')
+
+    expect(document.activeElement).toBe(firstOfMonth.element)
+  })
+
+  it('arrows up on cell', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    const lastOfMonth = wrapper.findAll('button.cell').at(33)
+    lastOfMonth.element.focus()
+    await lastOfMonth.trigger('keydown.up')
+
+    const cellUp = wrapper.findAll('button.cell').at(26)
+    expect(document.activeElement).toBe(cellUp.element)
+  })
+
+  it('arrows down on cell', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+    firstOfMonth.element.focus()
+    await firstOfMonth.trigger('keydown.down')
+
+    const cellDown = wrapper.findAll('button.cell').at(10)
+    expect(document.activeElement).toBe(cellDown.element)
+  })
+
+  it('cannot arrow to a disabled page', async () => {
+    await wrapper.setProps({
+      disabledDates: {
+        to: new Date(2020, 0, 1),
+        from: new Date(2020, 0, 31),
+      },
+    })
+
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+    firstOfMonth.element.focus()
+    await firstOfMonth.trigger('keydown.up')
+    expect(document.activeElement).toBe(firstOfMonth.element)
+
+    const lastOfMonth = wrapper.findAll('button.cell').at(33)
+    lastOfMonth.element.focus()
+    await lastOfMonth.trigger('keydown.down')
+    expect(document.activeElement).toBe(lastOfMonth.element)
+  })
+
+  it('arrows left on cell to previous page', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+
+    firstOfMonth.element.focus()
+    await firstOfMonth.trigger('keydown.left')
+
+    const lastOfPreviousMonth = wrapper.findAll('button.cell').at(30)
+    setTimeout(
+      () => expect(document.activeElement).toBe(lastOfPreviousMonth.element),
+      wrapper.vm.slideDuration,
+    )
+  })
+
+  it('arrows right on cell to next page', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    const lastOfMonth = wrapper.findAll('button.cell').at(33)
+
+    lastOfMonth.element.focus()
+    await lastOfMonth.trigger('keydown.right')
+
+    const firstOfNextMonth = wrapper.findAll('button.cell').at(3)
+    setTimeout(
+      () => expect(document.activeElement).toBe(firstOfNextMonth.element),
+      wrapper.vm.slideDuration,
+    )
+  })
+
+  it('arrows up on cell to previous page', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+
+    firstOfMonth.element.focus()
+    await firstOfMonth.trigger('keydown.up')
+
+    const cellUp = wrapper.findAll('button.cell').at(24)
+
+    jest.advanceTimersByTime(wrapper.vm.slideDuration)
+
+    expect(document.activeElement).toBe(cellUp.element)
+  })
+
+  it('arrows down on cell to next page', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    const lastOfMonth = wrapper.findAll('button.cell').at(33)
+
+    lastOfMonth.element.focus()
+    await lastOfMonth.trigger('keydown.down')
+
+    const cellDown = wrapper.findAll('button.cell').at(12)
+    jest.advanceTimersByTime(wrapper.vm.slideDuration)
+    expect(document.activeElement).toBe(cellDown.element)
+  })
+
+  it('arrows up on cell to muted cell on previous page', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    const cellBelowMuted = wrapper.findAll('button.cell').at(9)
+
+    cellBelowMuted.element.focus()
+    await cellBelowMuted.trigger('keydown.up')
+
+    jest.advanceTimersByTime(wrapper.vm.slideDuration)
+    const cellUp = wrapper.findAll('button.cell').at(30)
+    expect(document.activeElement).toBe(cellUp.element)
+  })
+
+  it('arrows down on cell to muted cell on next page', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    const cellAboveMuted = wrapper.findAll('button.cell').at(27)
+
+    cellAboveMuted.element.focus()
+    await cellAboveMuted.trigger('keydown.down')
+
+    jest.advanceTimersByTime(wrapper.vm.slideDuration)
+    const cellDown = wrapper.findAll('button.cell').at(6)
+    expect(document.activeElement).toBe(cellDown.element)
+  })
+
+  it('arrows up on cell, bypassing a muted cell on the previous page', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+
+    firstOfMonth.element.focus()
+    await firstOfMonth.trigger('keydown.up')
+
+    const cellUp = wrapper.findAll('button.cell').at(24)
+    jest.advanceTimersByTime(wrapper.vm.slideDuration)
+    expect(document.activeElement).toBe(cellUp.element)
+  })
+
+  it('arrows down on cell, bypassing a muted cell on the next page', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    const lastOfMonth = wrapper.findAll('button.cell').at(33)
+
+    lastOfMonth.element.focus()
+    await lastOfMonth.trigger('keydown.down')
+
+    const cellDown = wrapper.findAll('button.cell').at(12)
+    jest.advanceTimersByTime(wrapper.vm.slideDuration)
+    expect(document.activeElement).toBe(cellDown.element)
+  })
+
+  it('arrows up on cell, bypassing a disabled cell on the previous page', async () => {
+    await wrapper.setProps({
+      disabledDates: {
+        dates: [new Date(2019, 11, 25)],
+      },
+    })
+
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+
+    firstOfMonth.element.focus()
+    await firstOfMonth.trigger('keydown.up')
+
+    const cellUp = wrapper.findAll('button.cell').at(17)
+    jest.advanceTimersByTime(wrapper.vm.slideDuration)
+    expect(document.activeElement).toBe(cellUp.element)
+  })
+
+  it('arrows down on cell, bypassing a disabled cell on the next page', async () => {
+    await wrapper.setProps({
+      disabledDates: {
+        dates: [new Date(2020, 1, 5)],
+      },
+    })
+
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    const lastOfMonth = wrapper.findAll('button.cell').at(33)
+
+    lastOfMonth.element.focus()
+    await lastOfMonth.trigger('keydown.down')
+
+    const cellDown = wrapper.findAll('button.cell').at(12)
+    jest.advanceTimersByTime(wrapper.vm.slideDuration)
+    expect(document.activeElement).toBe(cellDown.element)
+  })
+
+  it('arrows left on cell, bypassing a disabled cell on the previous page', async () => {
+    await wrapper.setProps({
+      disabledDates: {
+        dates: [new Date(2019, 11, 31)],
+      },
+    })
+
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+
+    firstOfMonth.element.focus()
+    await firstOfMonth.trigger('keydown.left')
+
+    const cellLeft = wrapper.findAll('button.cell').at(29)
+    jest.advanceTimersByTime(wrapper.vm.slideDuration)
+    expect(document.activeElement).toBe(cellLeft.element)
+  })
+
+  it('arrows right on cell, bypassing a disabled cell on the next page', async () => {
+    await wrapper.setProps({
+      disabledDates: {
+        dates: [new Date(2020, 1, 1)],
+      },
+    })
+
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    const lastOfMonth = wrapper.findAll('button.cell').at(33)
+
+    lastOfMonth.element.focus()
+    await lastOfMonth.trigger('keydown.right')
+
+    const cellRight = wrapper.findAll('button.cell').at(7)
+    jest.advanceTimersByTime(wrapper.vm.slideDuration)
+    expect(document.activeElement).toBe(cellRight.element)
+  })
+
+  it('arrows left on first cell (with no dates from previous month) to the previous page', async () => {
+    await wrapper.setProps({
+      value: new Date(2020, 2, 1),
+    })
+
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    const firstOfMonth = wrapper.findAll('button.cell').at(0)
+
+    firstOfMonth.element.focus()
+    await firstOfMonth.trigger('keydown.left')
+
+    const cellLeft = wrapper.findAll('button.cell').at(34)
+    jest.advanceTimersByTime(wrapper.vm.slideDuration)
+    expect(document.activeElement).toBe(cellLeft.element)
+  })
+
+  it('arrows right on last cell (with no dates from next month) to the next page', async () => {
+    await wrapper.setProps({
+      value: new Date(2020, 1, 29),
+    })
+
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    const lastOfMonth = wrapper.findAll('button.cell').at(34)
+
+    lastOfMonth.element.focus()
+    await lastOfMonth.trigger('keydown.right')
+
+    const cellRight = wrapper.findAll('button.cell').at(0)
+    jest.advanceTimersByTime(wrapper.vm.slideDuration)
+    expect(document.activeElement).toBe(cellRight.element)
+  })
+
+  it('arrows up on first cell (with no dates from previous month) to the previous page', async () => {
+    await wrapper.setProps({
+      value: new Date(2020, 2, 1),
+    })
+
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    const firstOfMonth = wrapper.findAll('button.cell').at(0)
+
+    firstOfMonth.element.focus()
+    await firstOfMonth.trigger('keydown.up')
+
+    const cellUp = wrapper.findAll('button.cell').at(28)
+    jest.advanceTimersByTime(wrapper.vm.slideDuration)
+    expect(document.activeElement).toBe(cellUp.element)
+  })
+
+  it('arrows down on last cell (with no dates from next month) to the next page', async () => {
+    await wrapper.setProps({
+      value: new Date(2020, 1, 29),
+    })
+
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    const lastOfMonth = wrapper.findAll('button.cell').at(34)
+
+    lastOfMonth.element.focus()
+    await lastOfMonth.trigger('keydown.down')
+
+    const cellDown = wrapper.findAll('button.cell').at(6)
+    jest.advanceTimersByTime(wrapper.vm.slideDuration)
+    expect(document.activeElement).toBe(cellDown.element)
+  })
+
+  it('arrows up on cell, bypassing a disabled cell, to reach the previous page', async () => {
+    await wrapper.setProps({
+      value: new Date(2020, 1, 8),
+      disabledDates: {
+        dates: [new Date(2020, 1, 1)],
+      },
+    })
+
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    const startCell = wrapper.findAll('button.cell').at(13)
+
+    startCell.element.focus()
+    await startCell.trigger('keydown.up')
+
+    const cellUp = wrapper.findAll('button.cell').at(27)
+    jest.advanceTimersByTime(wrapper.vm.slideDuration)
+    expect(document.activeElement).toBe(cellUp.element)
+  })
+
+  it('arrows down on cell, bypassing a disabled cell, to reach the next page', async () => {
+    await wrapper.setProps({
+      value: new Date(2020, 1, 22),
+      disabledDates: {
+        dates: [new Date(2020, 1, 29)],
+      },
+    })
+
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    const startCell = wrapper.findAll('button.cell').at(27)
+
+    startCell.element.focus()
+    await startCell.trigger('keydown.down')
+
+    const cellDown = wrapper.findAll('button.cell').at(6)
+    jest.advanceTimersByTime(wrapper.vm.slideDuration)
+    expect(document.activeElement).toBe(cellDown.element)
+  })
+
+  it('arrows down from the input field to the previous button when typeable', async () => {
+    await wrapper.setProps({
+      typeable: true,
+    })
+
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    expect(document.activeElement).toBe(input.element)
+
+    await input.trigger('keydown.down')
+    const prevButton = wrapper.find('button.prev')
+
+    expect(document.activeElement).toBe(prevButton.element)
+  })
+
+  it('arrows down from the input field to the `tabbable-cell` when typeable is true and `show-header` is false', async () => {
+    await wrapper.setProps({
+      typeable: true,
+      showHeader: false,
+    })
+
+    const input = wrapper.find('input')
+    await input.element.focus()
+    await input.trigger('keydown.down')
+
+    const tabbableCell = wrapper.find('button.cell[data-test-tabbable-cell]')
+
+    expect(document.activeElement).toStrictEqual(tabbableCell.element)
+  })
+
+  it('opens the calendar on pressing the `down` arrow when the input is focused', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('keydown.down')
+
+    const openDateCell = wrapper.find('button.open')
+    expect(document.activeElement).toStrictEqual(openDateCell.element)
+  })
+
+  it('reverts focus to the `open-date` when another date on the same page has focus and the `escape` key is pressed', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+    jest.advanceTimersByTime(wrapper.vm.fadeDuration)
+
+    const openDateCell = wrapper.find('button.open')
+    expect(document.activeElement).toStrictEqual(openDateCell.element)
+
+    await openDateCell.trigger('keydown.down')
+
+    const downCell = wrapper.findAll('button.cell').at(10)
+    await downCell.trigger('keydown.esc')
+
+    jest.advanceTimersByTime(wrapper.vm.fadeDuration)
+
+    expect(document.activeElement).toBe(openDateCell.element)
+  })
+
+  it('reverts focus to the `open-date` when a date on a different page has focus and the `escape` key is pressed', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+    jest.advanceTimersByTime(wrapper.vm.fadeDuration)
+
+    let openDateCell = wrapper.find('button.open')
+    expect(document.activeElement).toStrictEqual(openDateCell.element)
+
+    await openDateCell.trigger('keydown.up')
+    jest.advanceTimersByTime(wrapper.vm.slideDuration)
+
+    const upCell = wrapper.findAll('button.cell').at(24)
+    expect(document.activeElement).toBe(upCell.element)
+
+    await upCell.trigger('keydown.esc')
+
+    jest.advanceTimersByTime(wrapper.vm.slideDuration)
+    openDateCell = wrapper.find('button.open')
+    expect(document.activeElement).toBe(openDateCell.element)
+  })
+
+  it('reverts focus to the `open-date` when a month has focus and the `escape` key is pressed', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+    jest.advanceTimersByTime(wrapper.vm.fadeDuration)
+    expect(wrapper.vm.view).toBe('day')
+
+    let upButton = wrapper.find('button.up')
+    await upButton.trigger('click')
+    jest.advanceTimersByTime(wrapper.vm.fadeDuration)
+    expect(wrapper.vm.view).toBe('month')
+
+    upButton = wrapper.find('button.up')
+    await upButton.trigger('keydown.down')
+
+    const firstCell = wrapper.find('button.cell:not(.muted)')
+    await firstCell.trigger('keydown.esc')
+    jest.advanceTimersByTime(wrapper.vm.fadeDuration)
+    expect(wrapper.vm.view).toBe('day')
+
+    const openDateCell = wrapper.find('button.open')
+    expect(document.activeElement).toBe(openDateCell.element)
+  })
+
+  it('reverts focus to the `open-date` when a year has focus and the `escape` key is pressed', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+    jest.advanceTimersByTime(wrapper.vm.fadeDuration)
+    expect(wrapper.vm.view).toBe('day')
+
+    let upButton = wrapper.find('button.up')
+    await upButton.trigger('click')
+    jest.advanceTimersByTime(wrapper.vm.fadeDuration)
+    expect(wrapper.vm.view).toBe('month')
+
+    upButton = wrapper.find('button.up')
+    await upButton.trigger('click')
+    jest.advanceTimersByTime(wrapper.vm.fadeDuration)
+    expect(wrapper.vm.view).toBe('year')
+
+    const firstCell = wrapper.find('button.cell:not(.muted)')
+    upButton = wrapper.find('button.up')
+    await upButton.trigger('keydown.down')
+
+    await firstCell.element.focus()
+    await firstCell.trigger('keydown.esc')
+    jest.advanceTimersByTime(wrapper.vm.fadeDuration)
+    expect(wrapper.vm.view).toBe('day')
+
+    const openDateCell = wrapper.find('button.open')
+    expect(document.activeElement).toBe(openDateCell.element)
+  })
+
+  it('clears the date and closes the calendar on pressing the `escape` key, if the `open-date` is focused', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    expect(wrapper.vm.isOpen).toBeTruthy()
+    const openDateCell = wrapper.find('button.open')
+    await openDateCell.trigger('focus')
+    expect(document.activeElement).toStrictEqual(openDateCell.element)
+
+    await openDateCell.trigger('keydown.esc')
+    expect(wrapper.vm.isOpen).toBeFalsy()
+    expect(wrapper.vm.selectedDate).toEqual(null)
+  })
+
+  it('clears the date and reverts the calendar to `minimumView` on pressing the `escape` key', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    const upButton = wrapper.find('button.up')
+    await upButton.trigger('click')
+    expect(wrapper.vm.view).toBe('month')
+
+    const firstCell = wrapper.find('button.cell')
+    await firstCell.element.focus()
+    expect(document.activeElement).toBe(firstCell.element)
+
+    await firstCell.trigger('keydown.esc')
+    jest.advanceTimersByTime(wrapper.vm.fadeDuration)
+
+    const openDate = wrapper.find('button.open')
+    expect(wrapper.vm.view).toBe('day')
+    expect(wrapper.vm.selectedDate).toEqual(null)
+    expect(document.activeElement).toBe(openDate.element)
+  })
+
+  it('focuses the calendar button when closed via the calendar button', async () => {
+    await wrapper.setProps({
+      calendarButton: true,
+    })
+
+    const calendarButton = wrapper.find('button[data-test-calendar-button]')
+    await calendarButton.trigger('click')
+    jest.advanceTimersByTime(wrapper.vm.fadeDuration)
+
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    const openDateCell = wrapper.find('button.open')
+    expect(document.activeElement).toStrictEqual(openDateCell.element)
+
+    await calendarButton.trigger('click')
+    jest.advanceTimersByTime(wrapper.vm.fadeDuration)
+
+    expect(wrapper.vm.isOpen).toBeFalsy()
+    expect(document.activeElement).toBe(calendarButton.element)
+  })
+
+  it('has no element focused on selecting a date when show-calendar-on-focus = true', async () => {
+    await wrapper.setProps({
+      showCalendarOnFocus: true,
+    })
+
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+
+    const open = wrapper.find('button.open')
+    await open.trigger('click')
+
+    expect(wrapper.vm.selectedDate).toStrictEqual(new Date(2020, 0, 1))
+    expect(document.activeElement).toBe(document.body)
+  })
+})
+
+describe('Datepicker mounted to body with slots', () => {
+  let wrapper
+
+  beforeEach(() => {
+    jest.useFakeTimers()
+
+    const beforeCalendarHeaderDay =
+      '<div key="0">Example <a href="#">beforeCalendarHeaderDay</a> slot</div>'
+    const calendarFooterDay =
+      '<div key="1">Example <a href="#">calendarFooterDay</a> slot</div>'
+    const beforeCalendarHeaderMonth =
+      '<div key="2">Example <a href="#">beforeCalendarHeaderMonth</a> slot</div>'
+    const calendarFooterMonth =
+      '<div key="3">Example <a href="#">calendarFooterMonth</a> slot</div>'
+    const beforeCalendarHeaderYear =
+      '<div key="4">Example <a href="#">beforeCalendarHeaderYear</a> slot</div>'
+    const calendarFooterYear =
+      '<div key="5">Example <a href="#">calendarFooterYear</a> slot</div>'
+
+    wrapper = mount(Datepicker, {
+      attachTo: document.body,
+      slots: {
+        beforeCalendarHeaderDay,
+        calendarFooterDay,
+        beforeCalendarHeaderMonth,
+        calendarFooterMonth,
+        beforeCalendarHeaderYear,
+        calendarFooterYear,
+      },
+    })
+  })
+
+  afterEach(() => {
+    jest.clearAllTimers()
+    wrapper.destroy()
+  })
+
+  it('knows how many navElements there are', async () => {
+    expect(wrapper.vm.navElements.length).toEqual(0)
+
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    jest.advanceTimersByTime(wrapper.vm.fadeDuration)
+
+    expect(wrapper.vm.navElements.length).toEqual(6)
+  })
+})
+
 describe('Datepicker shallowMounted', () => {
   let wrapper
-  let date
   beforeEach(() => {
-    date = new Date(2016, 1, 15)
     wrapper = shallowMount(Datepicker, {
       propsData: {
         format: 'yyyy-MM-dd',
-        value: date,
+        value: new Date(2016, 1, 15),
       },
     })
   })
 
   afterEach(() => {
     wrapper.destroy()
-  })
-
-  it('correctly sets the value when created', () => {
-    expect(wrapper.vm.value).toEqual(date)
   })
 
   it('correctly sets the value from method', () => {
@@ -185,7 +1003,7 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapperTemp.vm.selectedDate).toEqual(null)
   })
 
-  it('should set pageTimestamp to be now', () => {
+  it('sets pageTimestamp to be now', () => {
     const data = Datepicker.data()
     const d = new Date(data.pageTimestamp)
     expect(d.getFullYear()).toEqual(new Date().getFullYear())
@@ -193,35 +1011,31 @@ describe('Datepicker shallowMounted', () => {
     expect(d.getDate()).toEqual(1)
   })
 
-  it('should open and close the calendar', () => {
-    wrapper.vm.close()
+  it('toggles the calendar', async () => {
+    wrapper.vm.setAllElements = jest.fn
+
     expect(wrapper.vm.isOpen).toEqual(false)
 
-    wrapper.vm.setView('month')
+    await wrapper.vm.setView('month')
     expect(wrapper.vm.isOpen).toEqual(true)
 
-    wrapper.vm.close()
+    await wrapper.vm.close()
     expect(wrapper.vm.isOpen).toEqual(false)
 
-    wrapper.vm.setView('year')
+    await wrapper.vm.setView('year')
     expect(wrapper.vm.isOpen).toEqual(true)
 
-    wrapper.vm.close()
+    await wrapper.vm.close()
     expect(wrapper.vm.isOpen).toEqual(false)
 
-    wrapper.vm.setView('day')
+    await wrapper.vm.setView('day')
     expect(wrapper.vm.isOpen).toEqual(true)
 
-    wrapper.vm.close()
+    await wrapper.vm.close()
     expect(wrapper.vm.isOpen).toEqual(false)
 
-    wrapper.vm.setView('nonsense')
+    await wrapper.vm.setView('invalid date')
     expect(wrapper.vm.isOpen).toEqual(false)
-  })
-
-  it('should emit `selected-disabled` on selecting a disabled cell', () => {
-    wrapper.vm.handleSelectDisabled({ isDisabled: true })
-    expect(wrapper.emitted('selected-disabled')).toBeTruthy()
   })
 
   it('can select a day', () => {
@@ -262,86 +1076,55 @@ describe('Datepicker shallowMounted', () => {
   })
 
   it('resets the default page date', () => {
-    const wrapperTemp = shallowMount(Datepicker)
     const today = new Date()
-    expect(wrapperTemp.vm.pageDate.getFullYear()).toEqual(today.getFullYear())
-    expect(wrapperTemp.vm.pageDate.getMonth()).toEqual(today.getMonth())
-    expect(wrapperTemp.vm.pageDate.getDate()).toEqual(1)
-    wrapperTemp.vm.resetDefaultPageDate()
-    expect(wrapperTemp.vm.pageDate.getFullYear()).toEqual(today.getFullYear())
-    expect(wrapperTemp.vm.pageDate.getMonth()).toEqual(today.getMonth())
-    expect(wrapperTemp.vm.pageDate.getDate()).toEqual(1)
+    wrapper.vm.selectDate(today.valueOf())
+    expect(wrapper.vm.pageDate.getFullYear()).toEqual(today.getFullYear())
+    expect(wrapper.vm.pageDate.getMonth()).toEqual(today.getMonth())
+    expect(wrapper.vm.pageDate.getDate()).toEqual(1)
+    wrapper.vm.resetDefaultPageDate()
+    expect(wrapper.vm.pageDate.getFullYear()).toEqual(today.getFullYear())
+    expect(wrapper.vm.pageDate.getMonth()).toEqual(today.getMonth())
+    expect(wrapper.vm.pageDate.getDate()).toEqual(1)
   })
 
   it('does not set the default page date if a date is selected', () => {
-    const wrapperTemp = shallowMount(Datepicker)
     const today = new Date()
     const pastDate = new Date(2018, 3, 20)
-    expect(wrapperTemp.vm.pageDate.getFullYear()).toEqual(today.getFullYear())
-    expect(wrapperTemp.vm.pageDate.getMonth()).toEqual(today.getMonth())
-    expect(wrapperTemp.vm.pageDate.getDate()).toEqual(1)
-    wrapperTemp.vm.selectDate(pastDate.valueOf())
-    wrapperTemp.vm.resetDefaultPageDate()
-    expect(wrapperTemp.vm.pageDate.getFullYear()).toEqual(
-      pastDate.getFullYear(),
-    )
-    expect(wrapperTemp.vm.pageDate.getMonth()).toEqual(pastDate.getMonth())
-    expect(wrapperTemp.vm.pageDate.getDate()).toEqual(1)
+    wrapper.vm.selectDate(today.valueOf())
+    expect(wrapper.vm.pageDate.getFullYear()).toEqual(today.getFullYear())
+    expect(wrapper.vm.pageDate.getMonth()).toEqual(today.getMonth())
+    expect(wrapper.vm.pageDate.getDate()).toEqual(1)
+    wrapper.vm.selectDate(pastDate.valueOf())
+    wrapper.vm.resetDefaultPageDate()
+    expect(wrapper.vm.pageDate.getFullYear()).toEqual(pastDate.getFullYear())
+    expect(wrapper.vm.pageDate.getMonth()).toEqual(pastDate.getMonth())
+    expect(wrapper.vm.pageDate.getDate()).toEqual(1)
   })
 
-  it('sets the date on typedDate event', () => {
-    const wrapperTemp = shallowMount(Datepicker)
+  it('sets the date on typedDate event', async () => {
+    await wrapper.setProps({
+      typeable: true,
+    })
     const today = new Date()
-    wrapperTemp.vm.handleTypedDate(today)
-    expect(wrapperTemp.vm.selectedDate).toEqual(today)
+    wrapper.vm.handleTypedDate(today)
+    expect(wrapper.vm.selectedDate).toEqual(today)
   })
 
   it('watches value', async () => {
-    const wrapperTemp = shallowMount(Datepicker, {
-      propsData: {
-        value: '2018-01-01',
-      },
-    })
-    const spy = jest.spyOn(wrapperTemp.vm, 'setValue')
-    wrapperTemp.setProps({ value: '2018-04-26' })
-    await wrapperTemp.vm.$nextTick()
+    const spy = jest.spyOn(wrapper.vm, 'setValue')
+    await wrapper.setProps({ value: '2018-04-26' })
+
     expect(spy).toHaveBeenCalled()
   })
 
   it('watches openDate', async () => {
-    const wrapperTemp = shallowMount(Datepicker, {
-      propsData: {
-        openDate: new Date(2018, 0, 1),
-      },
-    })
-    const spy = jest.spyOn(wrapperTemp.vm, 'setPageDate')
-    wrapperTemp.setProps({ openDate: new Date(2018, 3, 26) })
-    await wrapperTemp.vm.$nextTick()
-    expect(spy).toHaveBeenCalled()
-  })
-
-  it('watches initialView', async () => {
-    const wrapperTemp = shallowMount(Datepicker, {
-      propsData: {
-        initialView: 'day',
-      },
-    })
-    const spy = jest.spyOn(wrapperTemp.vm, 'setInitialView')
-
-    await wrapperTemp.setProps({ initialView: 'month' })
-
-    expect(spy).toHaveBeenCalled()
-  })
-
-  it('derives `picker` from the current `view`', async () => {
     await wrapper.setProps({
-      initialView: 'day',
+      openDate: new Date(2018, 0, 1),
     })
+    const spy = jest.spyOn(wrapper.vm, 'setPageDate')
+    await wrapper.setProps({ openDate: new Date(2018, 3, 26) })
 
-    expect(wrapper.vm.picker).toBe('PickerDay')
-    await wrapper.setProps({ initialView: 'month' })
-
-    expect(wrapper.vm.picker).toBe('PickerMonth')
+    expect(spy).toHaveBeenCalled()
   })
 
   it('sets picker classes correctly', async () => {
@@ -350,7 +1133,6 @@ describe('Datepicker shallowMounted', () => {
       inline: true,
     })
 
-    await wrapper.vm.$nextTick()
     const datepicker = wrapper.find('.vdp-datepicker__calendar')
 
     expect(datepicker.element.className).toContain('vdp-datepicker__calendar')
@@ -366,23 +1148,7 @@ describe('Datepicker shallowMounted', () => {
     expect(datepicker.element.className).toContain('rtl')
   })
 
-  it('should emit changed-month/year/decade', async () => {
-    const pageDate = new Date(2016, 2, 1)
-    await wrapper.vm.setView('day')
-    await wrapper.vm.handlePageChange(pageDate)
-
-    expect(wrapper.emitted('changed-month')).toBeTruthy()
-
-    await wrapper.vm.setView('month')
-    await wrapper.vm.handlePageChange(pageDate)
-    expect(wrapper.emitted('changed-year')).toBeTruthy()
-
-    await wrapper.vm.setView('year')
-    await wrapper.vm.handlePageChange(pageDate)
-    expect(wrapper.emitted('changed-decade')).toBeTruthy()
-  })
-
-  it('should clear date on default date disabled', async () => {
+  it('clears date on default date disabled', async () => {
     const someDate = new Date('2021-01-15')
     const wrapperTemp = shallowMount(Datepicker, {
       propsData: {
@@ -397,9 +1163,27 @@ describe('Datepicker shallowMounted', () => {
         },
       },
     })
-    await wrapperTemp.vm.$nextTick()
+
     expect(wrapperTemp.vm.selectedDate).toEqual(null)
     expect(wrapperTemp.emitted().input).toBeTruthy()
+  })
+
+  it('sets the transition correctly', async () => {
+    wrapper.vm.setTransitionName(1)
+    expect(wrapper.vm.transitionName).toBe('slide-right')
+
+    wrapper.vm.setTransitionName(-1)
+    expect(wrapper.vm.transitionName).toBe('slide-left')
+
+    await wrapper.setData({
+      translation: { rtl: true },
+    })
+
+    wrapper.vm.setTransitionName(1)
+    expect(wrapper.vm.transitionName).toBe('slide-left')
+
+    wrapper.vm.setTransitionName(-1)
+    expect(wrapper.vm.transitionName).toBe('slide-right')
   })
 })
 
@@ -418,7 +1202,7 @@ describe('Datepicker.vue set by string', () => {
     expect(wrapper.vm.selectedDate.getDate()).toEqual(date.getDate())
   })
 
-  it('should nullify malformed value', () => {
+  it('nullifies malformed value', () => {
     wrapper = shallowMount(Datepicker, {
       propsData: {
         value: 'today',
@@ -448,7 +1232,7 @@ describe('Datepicker.vue using UTC', () => {
   it('correctly sets the value using UTC', async () => {
     const timezoneOffset = new Date().getTimezoneOffset() / 60
 
-    // this is ambiguous because localzone differs by one day than UTC
+    // This is ambiguous because localzone differs from UTC by one day
     const ambiguousHour = 25 - timezoneOffset
     const ambiguousDate = new Date(2018, 3, 15, ambiguousHour)
     const ambiguousYear = ambiguousDate.getUTCFullYear()
@@ -464,6 +1248,7 @@ describe('Datepicker.vue using UTC', () => {
         useUtc: true, // This should fail if `useUtc=false`
       },
     })
+
     // It's important to assert the input rendered output
     await wrapper.vm.$nextTick()
     expect(wrapper.findComponent(DateInput).vm.formattedValue).toEqual(
@@ -483,15 +1268,15 @@ describe('Datepicker.vue inline', () => {
   })
 
   afterEach(() => {
-    wrapper.vm.$destroy()
+    wrapper.destroy()
   })
 
-  it('should show calendar as already open', () => {
+  it('shows calendar as already open', () => {
     expect(wrapper.vm.isOpen).toEqual(true)
     expect(wrapper.vm.isInline).toEqual(true)
   })
 
-  it('should not close the calendar when date is selected', () => {
+  it('does not close the calendar when date is selected', () => {
     const date = new Date()
     wrapper.vm.handleSelect({ timestamp: date.valueOf() })
     expect(wrapper.vm.isOpen).toEqual(true)
@@ -500,42 +1285,91 @@ describe('Datepicker.vue inline', () => {
   })
 })
 
+describe('Datepicker.vue inline mounted to body', () => {
+  let wrapper
+  beforeEach(() => {
+    jest.useFakeTimers()
+
+    wrapper = mount(Datepicker, {
+      attachTo: document.body,
+      propsData: {
+        inline: true,
+      },
+    })
+  })
+
+  afterEach(() => {
+    jest.clearAllTimers()
+
+    wrapper.destroy()
+  })
+
+  it('has no focused element unless it has been interacted with', async () => {
+    expect(document.activeElement).toEqual(document.body)
+    expect(wrapper.vm.isDirty).toBeFalsy()
+
+    const todayCell = wrapper.find('button.today')
+    await todayCell.trigger('focusin')
+    await todayCell.trigger('click')
+    // TODO: Not sure why we need this?
+    jest.advanceTimersByTime(0)
+
+    expect(document.activeElement).toEqual(todayCell.element)
+    expect(wrapper.vm.isDirty).toBeTruthy()
+  })
+
+  it('focuses the date when selected', async () => {
+    const openDate = wrapper.find('button.open')
+    await openDate.element.focus()
+    await openDate.trigger('click')
+
+    expect(document.activeElement).toBe(openDate.element)
+
+    const anotherDate = wrapper.findAll('button.cell').at(10)
+    await anotherDate.element.focus()
+    await anotherDate.trigger('click')
+
+    expect(document.activeElement).toBe(anotherDate.element)
+  })
+})
+
 describe('Datepicker with initial-view', () => {
   let wrapper
-  it('should open in Day view', () => {
-    wrapper = shallowMount(Datepicker)
+  beforeEach(() => {
+    wrapper = mount(Datepicker)
+  })
+
+  afterEach(() => {
+    wrapper.destroy()
+  })
+
+  it('opens in Day view', () => {
     wrapper.vm.open()
     expect(wrapper.vm.computedInitialView).toEqual('day')
     expect(wrapper.vm.picker).toEqual('PickerDay')
   })
 
-  it('should open in Month view', () => {
-    wrapper = shallowMount(Datepicker, {
-      propsData: {
-        initialView: 'month',
-      },
+  it('opens in Month view', async () => {
+    await wrapper.setProps({
+      initialView: 'month',
     })
     wrapper.vm.open()
     expect(wrapper.vm.computedInitialView).toEqual('month')
     expect(wrapper.vm.picker).toEqual('PickerMonth')
   })
 
-  it('should open in Year view', () => {
-    wrapper = shallowMount(Datepicker, {
-      propsData: {
-        initialView: 'year',
-      },
+  it('opens in Year view', async () => {
+    await wrapper.setProps({
+      initialView: 'year',
     })
     wrapper.vm.open()
     expect(wrapper.vm.computedInitialView).toEqual('year')
     expect(wrapper.vm.picker).toEqual('PickerYear')
   })
 
-  it('should not open if the calendar is disabled', () => {
-    wrapper = shallowMount(Datepicker, {
-      propsData: {
-        disabled: true,
-      },
+  it('does not open if the calendar is disabled', async () => {
+    await wrapper.setProps({
+      disabled: true,
     })
     wrapper.vm.open()
     expect(wrapper.vm.isOpen).toBeFalsy()
@@ -544,28 +1378,33 @@ describe('Datepicker with initial-view', () => {
 
 describe('Datepicker on body', () => {
   let wrapper
-  it('should append popup to body', async () => {
+  it('appends popup to body', async () => {
     wrapper = mount(Datepicker, {
       propsData: {
         appendToBody: true,
       },
     })
-    wrapper.vm.open()
-    await wrapper.vm.$nextTick()
+
+    await wrapper.vm.open()
+
     expect(wrapper.vm.$el.querySelector('.vdp-datepicker__calendar')).toBeNull()
     expect(document.querySelector('.vdp-datepicker__calendar')).toBeDefined()
-    wrapper.vm.$destroy()
+
+    await wrapper.vm.close()
+    wrapper.destroy()
   })
 
-  it('should remove popup on body on component removal', async () => {
+  it('removes popup on body on component removal', async () => {
     wrapper = mount(Datepicker, {
       propsData: {
         appendToBody: true,
       },
     })
-    wrapper.vm.open()
-    await wrapper.vm.$nextTick()
-    wrapper.vm.$destroy()
+
+    await wrapper.vm.open()
+    await wrapper.vm.close()
+
+    wrapper.destroy()
     expect(document.querySelector('.vdp-datepicker__calendar')).toBeNull()
   })
 })

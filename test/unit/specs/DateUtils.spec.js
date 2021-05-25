@@ -107,12 +107,19 @@ describe('dateUtils', () => {
     )
   })
 
-  it('should parse english dates', () => {
+  it('should return the original date if no format is specified', () => {
+    expect(dateUtils.parseDate('April 2020', '')).toEqual('April 2020')
+  })
+
+  it('should parse English dates', () => {
     expect(dateUtils.parseDate('16 April 2020', 'd MMMM yyyy')).toEqual(
       '2020-04-16T00:00:00',
     )
-    expect(dateUtils.parseDate('16th Apr 2020', 'do MMM yyyy')).toEqual(
-      '2020-04-16T00:00:00',
+    expect(dateUtils.parseDate('16th Nov 2020', 'do MMM yyyy')).toEqual(
+      '2020-11-16T00:00:00',
+    )
+    expect(dateUtils.parseDate('16th November 2020', 'do MMMM yyyy')).toEqual(
+      '2020-11-16T00:00:00',
     )
     expect(dateUtils.parseDate('Thu 16th Apr 2020', 'E do MMM yyyy')).toEqual(
       '2020-04-16T00:00:00',
@@ -129,7 +136,7 @@ describe('dateUtils', () => {
     expect(() => {
       dateUtils.parseDate('16 April 2020', () => {})
     }).toThrowError(
-      'Parser need to be a function if you are using a custom formatter',
+      'Parser needs to be a function if you are using a custom formatter',
     )
   })
 
@@ -301,7 +308,7 @@ describe('UTC functions', () => {
   it('returns the correct day number from an abbreviated day name', () => {
     expect(dateUtils.getDayFromAbbr('sun')).toEqual(0)
     expect(dateUtils.getDayFromAbbr('sat')).toEqual(6)
-    expect(() => dateUtils.getDayFromAbbr('nonsense')).toThrow(
+    expect(() => dateUtils.getDayFromAbbr('invalid date')).toThrow(
       'Invalid week day',
     )
   })
