@@ -231,7 +231,9 @@ export default {
         'disabled': day.isDisabled,
         'highlighted': day.isHighlighted,
         'muted': day.isPreviousMonth || day.isNextMonth,
-        'today': day.isToday,
+        'today': this.showEdgeDates
+          ? day.isToday
+          : day.isToday && !day.isPreviousMonth && !day.isNextMonth,
         'weekend': day.isWeekend,
         'sat': day.isSaturday,
         'sun': day.isSunday,
