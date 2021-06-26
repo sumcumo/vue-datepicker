@@ -4,7 +4,7 @@ import { en } from '~/locale'
 const dateUtils = makeDateUtils(false)
 
 describe('dateUtils', () => {
-  it('should detect invalid date object', () => {
+  it('detects an invalid date object', () => {
     expect(dateUtils.isValidDate(null)).toEqual(false)
     expect(dateUtils.isValidDate(123)).toEqual(false)
     expect(dateUtils.isValidDate('abc')).toEqual(false)
@@ -12,7 +12,7 @@ describe('dateUtils', () => {
     expect(dateUtils.isValidDate(new Date())).toEqual(true)
   })
 
-  it('should give correct days in a month', () => {
+  it('knows the correct number of days in a month', () => {
     expect(dateUtils.daysInMonth(2016, 0)).toEqual(31)
     expect(dateUtils.daysInMonth(2016, 1)).toEqual(29)
     expect(dateUtils.daysInMonth(2015, 1)).toEqual(28)
@@ -28,7 +28,7 @@ describe('dateUtils', () => {
     expect(dateUtils.daysInMonth(2016, 11)).toEqual(31)
   })
 
-  it('should format date strings correctly in English', () => {
+  it('formats date strings correctly in English', () => {
     expect(dateUtils.formatDate(new Date(2016, 0, 1), 'd MMMM yyyy')).toEqual(
       '1 January 2016',
     )
@@ -68,7 +68,7 @@ describe('dateUtils', () => {
   })
 
   // issue: https://github.com/sumcumo/vue-datepicker/issues/29
-  it('should format date strings without formatting issues like 03 Nrdv 2016 instead of 03 Nov 2016', () => {
+  it('formats date strings without formatting issues like 03 Nrdv 2016', () => {
     expect(dateUtils.formatDate(new Date(2016, 0, 12), 'd MMM yyyy')).toEqual(
       '12 Jan 2016',
     )
@@ -107,7 +107,7 @@ describe('dateUtils', () => {
     )
   })
 
-  it('should parse English dates', () => {
+  it('parses English dates', () => {
     expect(dateUtils.parseDate('16 April 2020', 'd MMMM yyyy')).toEqual(
       '2020-04-16T00:00:00',
     )
@@ -125,7 +125,7 @@ describe('dateUtils', () => {
     )
   })
 
-  it('should fail to parse because of missing parser', () => {
+  it('fails to parse because of missing parser', () => {
     expect(() => {
       dateUtils.parseDate('16 April 2020', () => {})
     }).toThrowError(
@@ -133,26 +133,26 @@ describe('dateUtils', () => {
     )
   })
 
-  it('should parse formats without day', () => {
+  it('parses formats without day', () => {
     expect(dateUtils.parseDate('April 2020', 'MMMM yyyy')).toEqual(
       '2020-04-01T00:00:00',
     )
   })
 
-  it('should parse formats without month', () => {
+  it('parses formats without month', () => {
     expect(dateUtils.parseDate('15 2020', 'dd yyyy')).toEqual(
       '2020-01-15T00:00:00',
     )
   })
 
-  it('should parse formats without year', () => {
+  it('parses formats without year', () => {
     const currentYear = new Date().getFullYear()
     expect(dateUtils.parseDate('15 April', 'dd MMMM')).toEqual(
       `${currentYear}-04-15T00:00:00`,
     )
   })
 
-  it('should give the correct day', () => {
+  it('returns the correct day', () => {
     expect(dateUtils.formatDate(new Date(2016, 8, 12), 'E')).toEqual('Mon')
   })
 
@@ -218,7 +218,7 @@ describe('dateUtils', () => {
 })
 
 describe('daysInMonth', () => {
-  it('should give the correct days in a month', () => {
+  it('gives the correct days in a month', () => {
     expect(dateUtils.daysInMonth(2017, 0)).toEqual(31) // Jan
     expect(dateUtils.daysInMonth(2017, 1)).toEqual(28) // Feb
     expect(dateUtils.daysInMonth(2017, 2)).toEqual(31) // Mar

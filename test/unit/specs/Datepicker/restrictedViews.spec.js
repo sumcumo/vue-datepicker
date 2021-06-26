@@ -3,7 +3,7 @@ import Datepicker from '~/components/Datepicker.vue'
 
 describe('Datepicker with restricted views', () => {
   let wrapper
-  it('should default initialView to minimumView', () => {
+  it('sets initialView to minimumView by default', () => {
     wrapper = mount(Datepicker, {
       propsData: {
         minimumView: 'month',
@@ -13,7 +13,7 @@ describe('Datepicker with restricted views', () => {
     expect(wrapper.vm.computedInitialView).toEqual('month')
   })
 
-  it('should save and close when selecting on minimum-view "month"', () => {
+  it('saves and closes when selecting on minimum-view "month"', () => {
     wrapper = mount(Datepicker, {
       propsData: {
         minimumView: 'month',
@@ -30,7 +30,7 @@ describe('Datepicker with restricted views', () => {
     expect(wrapper.vm.isOpen).toEqual(false)
   })
 
-  it('should save and close when selecting on minimum-view "year"', () => {
+  it('saves and closes when selecting on minimum-view "year"', () => {
     wrapper = mount(Datepicker, {
       propsData: {
         minimumView: 'year',
@@ -46,7 +46,7 @@ describe('Datepicker with restricted views', () => {
     expect(date.getFullYear()).toEqual(wrapper.vm.selectedDate.getFullYear())
   })
 
-  it('should only allow views in min-max range', async () => {
+  it('only allows views within the min-max range', async () => {
     wrapper = mount(Datepicker, {
       propsData: {
         minimumView: 'day',
@@ -92,7 +92,7 @@ describe('Datepicker with restricted views', () => {
     expect(wrapper.vm.allowedToShowView('month')).toEqual(true)
   })
 
-  it('should throw an error on disallowed initial views', () => {
+  it('throws an error on disallowed initial views', () => {
     wrapper = mount(Datepicker, {
       propsData: {
         minimumView: 'day',
@@ -106,7 +106,7 @@ describe('Datepicker with restricted views', () => {
     }).toThrow()
   })
 
-  it('should not render unused views', async () => {
+  it('does not render unused views', async () => {
     wrapper = mount(Datepicker, {
       propsData: {
         minimumView: 'day',

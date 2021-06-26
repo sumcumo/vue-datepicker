@@ -34,19 +34,19 @@ describe('Datepicker mounted', () => {
     wrapper.destroy()
   })
 
-  it('should emit blur', () => {
+  it('emits blur', () => {
     const input = wrapper.find('input')
     input.trigger('blur')
     expect(wrapper.emitted().blur).toBeTruthy()
   })
 
-  it('should emit focus', () => {
+  it('emits focus', () => {
     const input = wrapper.find('input')
     input.trigger('focus')
     expect(wrapper.emitted().focus).toBeTruthy()
   })
 
-  it('should toggle when the input field is clicked', async () => {
+  it('toggles when the input field is clicked', async () => {
     const input = wrapper.find('input')
     await input.trigger('click')
 
@@ -56,7 +56,7 @@ describe('Datepicker mounted', () => {
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
 
-  it('should open on focusing the input when showCalendarOnFocus = true', async () => {
+  it('opens on focusing the input when showCalendarOnFocus = true', async () => {
     await wrapper.setProps({
       showCalendarOnFocus: true,
     })
@@ -67,7 +67,7 @@ describe('Datepicker mounted', () => {
     expect(wrapper.vm.isOpen).toBeTruthy()
   })
 
-  it('should toggle via the calendar button', async () => {
+  it('toggles via the calendar button', async () => {
     await wrapper.setProps({
       calendarButton: true,
     })
@@ -80,7 +80,7 @@ describe('Datepicker mounted', () => {
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
 
-  it('should toggle via the calendar button when showCalendarOnFocus = true', async () => {
+  it('toggles via the calendar button when showCalendarOnFocus = true', async () => {
     await wrapper.setProps({
       calendarButton: true,
       showCalendarOnFocus: true,
@@ -95,7 +95,7 @@ describe('Datepicker mounted', () => {
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
 
-  it('should close via the calendar button, despite input being focused', async () => {
+  it('closes via the calendar button, despite input being focused', async () => {
     await wrapper.setProps({
       calendarButton: true,
       showCalendarOnFocus: true,
@@ -185,7 +185,7 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapperTemp.vm.selectedDate).toEqual(null)
   })
 
-  it('should set pageTimestamp to be now', () => {
+  it('sets pageTimestamp to be now', () => {
     const data = Datepicker.data()
     const d = new Date(data.pageTimestamp)
     expect(d.getFullYear()).toEqual(new Date().getFullYear())
@@ -193,8 +193,7 @@ describe('Datepicker shallowMounted', () => {
     expect(d.getDate()).toEqual(1)
   })
 
-  it('should open and close the calendar', () => {
-    wrapper.vm.close()
+  it('toggles the calendar', async () => {
     expect(wrapper.vm.isOpen).toEqual(false)
 
     wrapper.vm.setView('month')
@@ -219,7 +218,7 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapper.vm.isOpen).toEqual(false)
   })
 
-  it('should emit `selected-disabled` on selecting a disabled cell', () => {
+  it('emits `selected-disabled` on selecting a disabled cell', () => {
     wrapper.vm.handleSelectDisabled({ isDisabled: true })
     expect(wrapper.emitted('selected-disabled')).toBeTruthy()
   })
@@ -354,7 +353,7 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapper.emitted('changed-decade')).toBeTruthy()
   })
 
-  it('should clear date on default date disabled', async () => {
+  it('clears date on default date disabled', async () => {
     const someDate = new Date('2021-01-15')
     const wrapperTemp = shallowMount(Datepicker, {
       propsData: {
@@ -390,7 +389,7 @@ describe('Datepicker.vue set by string', () => {
     expect(wrapper.vm.selectedDate.getDate()).toEqual(date.getDate())
   })
 
-  it('should nullify malformed value', () => {
+  it('nullifies malformed value', () => {
     wrapper = shallowMount(Datepicker, {
       propsData: {
         value: 'today',
@@ -458,12 +457,12 @@ describe('Datepicker.vue inline', () => {
     wrapper.vm.$destroy()
   })
 
-  it('should show calendar as already open', () => {
+  it('shows calendar as already open', () => {
     expect(wrapper.vm.isOpen).toEqual(true)
     expect(wrapper.vm.isInline).toEqual(true)
   })
 
-  it('should not close the calendar when date is selected', () => {
+  it('does not close the calendar when date is selected', () => {
     const date = new Date()
     wrapper.vm.handleSelect({ timestamp: date.valueOf() })
     expect(wrapper.vm.isOpen).toEqual(true)
@@ -474,14 +473,14 @@ describe('Datepicker.vue inline', () => {
 
 describe('Datepicker with initial-view', () => {
   let wrapper
-  it('should open in Day view', () => {
+  it('opens in `day` view', () => {
     wrapper = shallowMount(Datepicker)
     wrapper.vm.open()
     expect(wrapper.vm.computedInitialView).toEqual('day')
     expect(wrapper.vm.picker).toEqual('PickerDay')
   })
 
-  it('should open in Month view', () => {
+  it('opens in `month` view', () => {
     wrapper = shallowMount(Datepicker, {
       propsData: {
         initialView: 'month',
@@ -492,7 +491,7 @@ describe('Datepicker with initial-view', () => {
     expect(wrapper.vm.picker).toEqual('PickerMonth')
   })
 
-  it('should open in Year view', () => {
+  it('opens in `year` view', () => {
     wrapper = shallowMount(Datepicker, {
       propsData: {
         initialView: 'year',
@@ -503,7 +502,7 @@ describe('Datepicker with initial-view', () => {
     expect(wrapper.vm.picker).toEqual('PickerYear')
   })
 
-  it('should not open if the calendar is disabled', () => {
+  it('does not open if the calendar is disabled', () => {
     wrapper = shallowMount(Datepicker, {
       propsData: {
         disabled: true,
@@ -516,7 +515,7 @@ describe('Datepicker with initial-view', () => {
 
 describe('Datepicker on body', () => {
   let wrapper
-  it('should append popup to body', async () => {
+  it('appends popup to body', async () => {
     wrapper = mount(Datepicker, {
       propsData: {
         appendToBody: true,
@@ -529,7 +528,7 @@ describe('Datepicker on body', () => {
     wrapper.vm.$destroy()
   })
 
-  it('should remove popup on body on component removal', async () => {
+  it('removes popup on body on component removal', async () => {
     wrapper = mount(Datepicker, {
       propsData: {
         appendToBody: true,

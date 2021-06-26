@@ -87,7 +87,7 @@ describe('PickerDay: DOM', () => {
     expect(lastCell.text()).toBe('')
   })
 
-  it('should select an edge date from the previous month', async () => {
+  it('selects an edge date from the previous month', async () => {
     const firstCell = wrapper.findAll('.day').at(0)
 
     await firstCell.trigger('click')
@@ -95,7 +95,7 @@ describe('PickerDay: DOM', () => {
     expect(wrapper.emitted('select')[0][0].date).toBe(28)
   })
 
-  it('should select an edge date from the next month', async () => {
+  it('selects an edge date from the next month', async () => {
     const lastCell = wrapper.findAll('.day').at(34)
 
     await lastCell.trigger('click')

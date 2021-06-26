@@ -18,7 +18,7 @@ describe('PickerHeader', () => {
     wrapper.destroy()
   })
 
-  it('should set `isLeftNavDisabled` correctly', () => {
+  it('sets `isLeftNavDisabled` correctly', () => {
     expect(wrapper.vm.isLeftNavDisabled).toBeFalsy()
     wrapper.setProps({
       config: {
@@ -30,7 +30,7 @@ describe('PickerHeader', () => {
     expect(wrapper.vm.isLeftNavDisabled).toBeFalsy()
   })
 
-  it('should set `isRightNavDisabled` correctly', () => {
+  it('sets `isRightNavDisabled` correctly', () => {
     expect(wrapper.vm.isRightNavDisabled).toBeFalsy()
     wrapper.setProps({
       config: {

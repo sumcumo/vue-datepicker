@@ -68,7 +68,7 @@ describe('PickerYear', () => {
     expect(wrapper.emitted('select')).toBeTruthy()
   })
 
-  it('should set custom decade range', async () => {
+  it('sets custom decade range', async () => {
     wrapper.setProps({
       pageDate: new Date(2021, 1, 1),
       yearRange: 12,
