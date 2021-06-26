@@ -92,19 +92,19 @@ export function getRelativePosition({
       setBottom()
     }
 
-    const hasRelativWidth =
+    const hasRelativeWidth =
       documentWidth - relativeRect.left < targetWidth &&
       relativeRect.right < targetWidth
 
-    const hasRelativHeight =
+    const hasRelativeHeight =
       relativeRect.top <= targetHeight &&
       documentHeight - relativeRect.bottom <= targetHeight
 
-    if (hasRelativWidth) {
+    if (hasRelativeWidth) {
       left = offsetX - relativeRect.left + 1
     }
 
-    if (hasRelativHeight) {
+    if (hasRelativeHeight) {
       top = offsetY + documentHeight - relativeRect.top - targetHeight
     }
   } else {
