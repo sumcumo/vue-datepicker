@@ -3,7 +3,7 @@ import DateInput from '~/components/DateInput.vue'
 import { en } from '~/locale'
 
 describe('DateInput unmounted', () => {
-  it('check props default', () => {
+  it('checks props default', () => {
     expect(typeof DateInput.props.translation.default).toEqual('function')
     expect(DateInput.props.translation.default()).toEqual({})
   })
@@ -28,7 +28,7 @@ describe('DateInput', () => {
     wrapper.destroy()
   })
 
-  it('should render correct contents', () => {
+  it('renders correct contents', () => {
     expect(wrapper.findAll('input')).toHaveLength(1)
   })
 
@@ -56,7 +56,7 @@ describe('DateInput', () => {
     expect(wrapper.find('input').element.value).toEqual('2016/1/15')
   })
 
-  it('opens calendar on focus, if show-calendar-on-focus prop is true', async () => {
+  it('opens calendar on focus when `show-calendar-on-focus` is true', async () => {
     wrapper.setProps({
       showCalendarOnFocus: true,
     })

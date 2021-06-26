@@ -17,7 +17,7 @@ const options = {
 }
 
 describe('pickerMixin unmounted', () => {
-  it('check props default', () => {
+  it('checks props default', () => {
     expect(typeof pickerMixin.props.disabledDates.default).toEqual('function')
     expect(pickerMixin.props.disabledDates.default()).toEqual({})
     expect(typeof pickerMixin.props.translation.default).toEqual('function')
@@ -36,15 +36,15 @@ describe('pickerMixin', () => {
     wrapper.destroy()
   })
 
-  it('should mount', () => {
+  it('mounts', () => {
     expect(wrapper.vm).toBeTruthy()
   })
 
-  it('should use `isNextDisabled` correctly', () => {
+  it('uses `isNextDisabled` correctly', () => {
     expect(wrapper.vm.isNextDisabled).toBeFalsy()
   })
 
-  it('should use `isPreviousDisabled` correctly', () => {
+  it('uses `isPreviousDisabled` correctly', () => {
     expect(wrapper.vm.isPreviousDisabled).toBeFalsy()
   })
 })

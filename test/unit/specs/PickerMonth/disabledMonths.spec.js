@@ -27,7 +27,7 @@ describe('PickerMonth', () => {
     expect(wrapper.emitted('select')).toBeFalsy()
   })
 
-  it('should detect a disabled month when the `to` year is in the past', () => {
+  it('detects a disabled month when the `to` year is in the past', () => {
     wrapper.setProps({
       disabledDates: {
         to: new Date(2017, 0, 1),
@@ -37,7 +37,7 @@ describe('PickerMonth', () => {
     expect(wrapper.vm.isDisabledMonth(new Date(2016, 0, 1))).toEqual(true)
   })
 
-  it('should detect a disabled month when the `from` year is in the future', () => {
+  it('detects a disabled month when the `from` year is in the future', () => {
     wrapper.setProps({
       disabledDates: {
         from: new Date(2019, 0, 1),
@@ -47,29 +47,29 @@ describe('PickerMonth', () => {
     expect(wrapper.vm.isDisabledMonth(new Date(2020, 0, 1))).toEqual(true)
   })
 
-  it('should close without warning when its undefined', () => {
+  it('closes without warning when it is undefined', () => {
     wrapper.setProps({
       disabledDates: undefined,
     })
     expect(wrapper.vm.isDisabledMonth(new Date(2016, 8, 29))).toEqual(false)
   })
 
-  it('should disable previous', () => {
+  it('disables the `previous` button', () => {
     expect(wrapper.vm.isPreviousDisabled).toEqual(true)
   })
 
-  it('should not disable previous', () => {
+  it('does not disable the `previous` button', () => {
     wrapper.setProps({
       disabledDates: {},
     })
     expect(wrapper.vm.isPreviousDisabled).toEqual(false)
   })
 
-  it('should disable next', () => {
+  it('disables the `next` button', () => {
     expect(wrapper.vm.isNextDisabled).toEqual(true)
   })
 
-  it('should not disable next', () => {
+  it('does not disable the `next` button', () => {
     wrapper.setProps({
       disabledDates: {},
     })

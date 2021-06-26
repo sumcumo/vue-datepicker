@@ -59,7 +59,7 @@ describe('PickerYear', () => {
     expect(wrapper.vm.isNextDisabled).toEqual(false)
   })
 
-  it('can accept a customPredictor to check if the year is disabled', () => {
+  it('accepts a customPredictor to check if the year is disabled', () => {
     wrapper.setProps({
       disabledDates: {
         customPredictor(date) {
@@ -77,14 +77,14 @@ describe('PickerYear', () => {
     expect(wrapper.vm.isDisabledYear(new Date(2022, 2, 11))).toEqual(true)
   })
 
-  it('should close without warning when its undefined', () => {
+  it('closes without warning when it is undefined', () => {
     wrapper.setProps({
       disabledDates: undefined,
     })
     expect(wrapper.vm.isDisabledYear(new Date(2016, 8, 29))).toEqual(false)
   })
 
-  it('should not disable everything for from', () => {
+  it('does not disable everything for from', () => {
     wrapper.setProps({
       disabledDates: {
         to: undefined,

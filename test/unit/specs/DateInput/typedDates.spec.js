@@ -104,7 +104,7 @@ describe('DateInput', () => {
     expect(wrapper.emitted()['typed-date'][0][0]).toBeInstanceOf(Date)
   })
 
-  it('emits close-calendar when return is pressed', () => {
+  it('emits `close` when return is pressed', () => {
     const input = wrapper.find('input')
     input.trigger('keydown.enter')
     expect(wrapper.emitted('close')).toBeTruthy()
