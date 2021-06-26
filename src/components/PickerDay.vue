@@ -1,6 +1,7 @@
 <template>
   <div class="picker-view">
     <slot name="beforeCalendarHeaderDay" />
+
     <PickerHeader
       v-if="showHeader"
       :is-next-disabled="isNextDisabled"
@@ -19,6 +20,7 @@
       </span>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
     </PickerHeader>
+
     <div :class="{ 'flex-rtl': isRtl }">
       <span v-for="day in daysOfWeek" :key="day" class="day-header">
         {{ day }}
@@ -37,6 +39,7 @@
         </span>
       </div>
     </div>
+
     <slot name="calendarFooterDay" />
   </div>
 </template>

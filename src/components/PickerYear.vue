@@ -1,6 +1,7 @@
 <template>
   <div class="picker-view">
     <slot name="beforeCalendarHeaderYear" />
+
     <PickerHeader
       v-if="showHeader"
       :is-next-disabled="isNextDisabled"
@@ -15,6 +16,7 @@
       </span>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
     </PickerHeader>
+
     <div ref="cells">
       <span
         v-for="cell in cells"
@@ -26,6 +28,7 @@
         {{ cell.year }}
       </span>
     </div>
+
     <slot name="calendarFooterYear" />
   </div>
 </template>

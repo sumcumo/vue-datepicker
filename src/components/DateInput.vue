@@ -181,12 +181,19 @@ export default {
       this.isBlurred = false
       this.$emit('focus')
     },
+    /**
+     * Submits a typed date
+     */
     handleKeydownEnter() {
       if (this.typeable) {
         this.submitTypedDate()
       }
       this.$emit('close')
     },
+    /**
+     * Parses a date from a string
+     * @param {String} value
+     */
     parseDate(value) {
       return this.utils.parseDate(
         value,

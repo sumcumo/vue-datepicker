@@ -1,6 +1,7 @@
 <template>
   <div class="picker-view">
     <slot name="beforeCalendarHeaderMonth" />
+
     <PickerHeader
       v-if="showHeader"
       :is-next-disabled="isNextDisabled"
@@ -19,6 +20,7 @@
       </span>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
     </PickerHeader>
+
     <div ref="cells">
       <span
         v-for="cell in cells"
@@ -30,6 +32,7 @@
         {{ cell.month }}
       </span>
     </div>
+
     <slot name="calendarFooterMonth" />
   </div>
 </template>
