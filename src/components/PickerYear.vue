@@ -54,7 +54,7 @@ export default {
       const year = this.useUtc
         ? Math.floor(d.getUTCFullYear() / this.yearRange) * this.yearRange
         : Math.floor(d.getFullYear() / this.yearRange) * this.yearRange
-      // set up a new date object to the beginning of the current 'page'7
+      // set up a new date object to the beginning of the current 'page'
       const dObj = this.useUtc
         ? new Date(Date.UTC(year, d.getUTCMonth(), d.getUTCDate()))
         : new Date(

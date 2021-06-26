@@ -331,7 +331,7 @@ export default {
       this.$emit('cleared')
     },
     /**
-     * Close the calendar views
+     * Close the calendar
      */
     close() {
       if (!this.isInline) {
@@ -381,6 +381,7 @@ export default {
     },
     /**
      * Set the date from a 'typed-date' event
+     * @param {Date} date
      */
     handleTypedDate(date) {
       this.selectDate(date.valueOf())
@@ -425,7 +426,8 @@ export default {
     },
     /**
      * Parse a datepicker value from string/number to date
-     * @param {Date|String|Number|null} date
+     * @param   {Date|String|Number|null} date
+     * @returns {Date}
      */
     parseValue(date) {
       let dateTemp = date
@@ -490,6 +492,7 @@ export default {
     },
     /**
      * Set the picker view
+     * @param {String} view
      */
     setView(view) {
       if (this.allowedToShowView(view)) {
@@ -498,6 +501,8 @@ export default {
     },
     /**
      * Capitalizes the first letter
+     * @param {String} str The string to capitalize
+     * @returns {String}
      */
     ucFirst(str) {
       return str[0].toUpperCase() + str.substring(1)
