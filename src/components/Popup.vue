@@ -57,12 +57,18 @@ export default {
     }
   },
   methods: {
+    /**
+     * Adjusts the popup's `top` style attribute when `append-to-body` is true
+     */
     setTopStyle() {
       if (this.appendToBody) {
         const relativeRect = this.$parent.$el.getBoundingClientRect()
         this.$el.style.top = `${relativeRect.bottom + window.scrollY}px`
       }
     },
+    /**
+     * Sets the `left` and `top` style attributes of the popup
+     */
     displayPopup() {
       if (this.inline || !this.visible) return
       this.setTopStyle()

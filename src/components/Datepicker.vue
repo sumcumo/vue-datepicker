@@ -421,6 +421,7 @@ export default {
       if (this.disabled || this.isInline) {
         return
       }
+
       this.setInitialView()
       this.$emit('opened')
     },
