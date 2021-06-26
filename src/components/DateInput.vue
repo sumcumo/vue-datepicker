@@ -4,11 +4,11 @@
     <!-- Calendar Button -->
     <span
       v-if="calendarButton"
+      class="vdp-datepicker__calendar-button"
       :class="{
         'input-group-prepend': bootstrapStyling,
         'calendar-btn-disabled': disabled,
       }"
-      class="vdp-datepicker__calendar-button"
       @click="toggle"
     >
       <span :class="{ 'input-group-text': bootstrapStyling }">
@@ -48,8 +48,8 @@
     <!-- Clear Button -->
     <span
       v-if="clearButton && selectedDate"
-      :class="{ 'input-group-append': bootstrapStyling }"
       class="vdp-datepicker__clear-button"
+      :class="{ 'input-group-append': bootstrapStyling }"
       @click="clearDate()"
     >
       <span :class="{ 'input-group-text': bootstrapStyling }">
