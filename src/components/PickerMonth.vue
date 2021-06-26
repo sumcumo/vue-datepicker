@@ -9,6 +9,7 @@
       @next="nextPage"
       @previous="previousPage"
     >
+      <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
       <span
         class="month__year_btn"
         :class="{ up: !isUpDisabled }"
@@ -17,14 +18,13 @@
         {{ pageTitleMonth }}
       </span>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
-      <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
     <div ref="cells">
       <span
         v-for="cell in cells"
         :key="cell.timestamp"
-        :class="{ selected: cell.isSelected, disabled: cell.isDisabled }"
         class="cell month"
+        :class="{ selected: cell.isSelected, disabled: cell.isDisabled }"
         @click="select(cell)"
       >
         {{ cell.month }}
@@ -64,8 +64,8 @@ export default {
         months.push({
           month: this.utils.getMonthName(i, this.translation.months),
           timestamp: dObj.valueOf(),
-          isSelected: this.isSelectedMonth(dObj),
           isDisabled: this.isDisabledMonth(dObj),
+          isSelected: this.isSelectedMonth(dObj),
         })
         this.utils.setMonth(dObj, this.utils.getMonth(dObj) + 1)
       }

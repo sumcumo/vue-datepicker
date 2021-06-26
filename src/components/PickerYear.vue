@@ -9,18 +9,18 @@
       @next="nextPage"
       @previous="previousPage"
     >
+      <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
       <span>
         {{ pageTitleYear }}
       </span>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
-      <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
     <div ref="cells">
       <span
         v-for="cell in cells"
         :key="cell.timestamp"
-        :class="{ selected: cell.isSelected, disabled: cell.isDisabled }"
         class="cell year"
+        :class="{ selected: cell.isSelected, disabled: cell.isDisabled }"
         @click="select(cell)"
       >
         {{ cell.year }}

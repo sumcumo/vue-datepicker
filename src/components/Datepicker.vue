@@ -12,8 +12,8 @@
       :disabled="disabled"
       :format="format"
       :inline="inline"
-      :is-open="isOpen"
       :input-class="inputClass"
+      :is-open="isOpen"
       :maxlength="maxlength"
       :name="name"
       :parser="parser"
@@ -83,7 +83,7 @@
             <slot :slot="slotKey" :name="slotKey" />
           </template>
           <template #dayCellContent="{ cell }">
-            <slot name="dayCellContent" :cell="cell" v-if="cell" />
+            <slot v-if="cell" name="dayCellContent" :cell="cell" />
           </template>
         </Component>
         <slot name="calendarFooter" />
@@ -340,13 +340,6 @@ export default {
       }
     },
     /**
-     * Set the new pageDate and emit `changed-<view>` event
-     */
-    handlePageChange(pageDate) {
-      this.setPageDate(pageDate)
-      this.$emit(`changed-${this.nextView.up}`, pageDate)
-    },
-    /**
      * Emits a 'blur' event
      */
     handleInputBlur() {
@@ -357,6 +350,13 @@ export default {
      */
     handleInputFocus() {
       this.$emit('focus')
+    },
+    /**
+     * Set the new pageDate and emit `changed-<view>` event
+     */
+    handlePageChange(pageDate) {
+      this.setPageDate(pageDate)
+      this.$emit(`changed-${this.nextView.up}`, pageDate)
     },
     /**
      * Set the date, or go to the next view down
