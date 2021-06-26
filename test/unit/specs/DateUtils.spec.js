@@ -107,7 +107,7 @@ describe('dateUtils', () => {
     )
   })
 
-  it('should parse english dates', () => {
+  it('should parse English dates', () => {
     expect(dateUtils.parseDate('16 April 2020', 'd MMMM yyyy')).toEqual(
       '2020-04-16T00:00:00',
     )
@@ -129,7 +129,7 @@ describe('dateUtils', () => {
     expect(() => {
       dateUtils.parseDate('16 April 2020', () => {})
     }).toThrowError(
-      'Parser need to be a function if you are using a custom formatter',
+      'Parser needs to be a function if you are using a custom formatter',
     )
   })
 
