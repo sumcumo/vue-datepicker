@@ -139,13 +139,13 @@ export default {
   },
   methods: {
     /**
-     * emit a clearDate event
+     * Emits a `clear-date` event
      */
     clearDate() {
       this.$emit('clear-date')
     },
     /**
-     * submit typedDate and emit a blur event
+     * Submit typedDate and emit a `blur` event
      */
     handleInputBlur() {
       this.isBlurred = this.isOpen
@@ -156,6 +156,9 @@ export default {
       this.$emit('close')
       this.isFocusedUsed = false
     },
+    /**
+     * Toggles the calendar (unless `show-calendar-on-button-click` is true)
+     */
     handleInputClick() {
       const isFocusedUsed = this.showCalendarOnFocus && !this.isFocusedUsed
 
@@ -167,6 +170,9 @@ export default {
         this.isFocusedUsed = true
       }
     },
+    /**
+     * Opens the calendar when `show-calendar-on-focus` is true
+     */
     handleInputFocus() {
       if (this.showCalendarOnFocus) {
         this.$emit('open')
@@ -217,6 +223,9 @@ export default {
         this.$emit('typed-date', parsedDate)
       }
     },
+    /**
+     * Opens or closes the calendar
+     */
     toggle() {
       if (!this.isOpen && this.isBlurred) {
         this.isBlurred = false
