@@ -74,6 +74,6 @@ describe('PickerMonth', () => {
   it('emits set-view event with `year` when the up button is clicked', async () => {
     const upButton = wrapper.find('.month__year_btn')
     await upButton.trigger('click')
-    expect(wrapper.emitted()['set-view'][0][0]).toBe('year')
+    expect(wrapper.emitted('set-view')[0][0]).toBe('year')
   })
 })

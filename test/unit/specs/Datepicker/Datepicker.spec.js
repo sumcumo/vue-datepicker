@@ -37,13 +37,13 @@ describe('Datepicker mounted', () => {
   it('emits blur', async () => {
     const input = wrapper.find('input')
     await input.trigger('blur')
-    expect(wrapper.emitted().blur).toBeTruthy()
+    expect(wrapper.emitted('blur')).toBeTruthy()
   })
 
   it('emits focus', async () => {
     const input = wrapper.find('input')
     await input.trigger('focus')
-    expect(wrapper.emitted().focus).toBeTruthy()
+    expect(wrapper.emitted('focus')).toBeTruthy()
   })
 
   it('toggles when the input field is clicked', async () => {
@@ -219,7 +219,7 @@ describe('Datepicker shallowMounted', () => {
     wrapper.vm.handleSelect({ timestamp: dateTemp.valueOf() })
     expect(wrapper.vm.pageTimestamp).toEqual(dateTemp.valueOf())
     expect(wrapper.vm.selectedDate.getMonth()).toEqual(9)
-    expect(wrapper.emitted().selected).toBeTruthy()
+    expect(wrapper.emitted('selected')).toBeTruthy()
   })
 
   it('can select a month', () => {
@@ -350,7 +350,7 @@ describe('Datepicker shallowMounted', () => {
     })
 
     expect(wrapperTemp.vm.selectedDate).toEqual(null)
-    expect(wrapperTemp.emitted().input).toBeTruthy()
+    expect(wrapperTemp.emitted('input')).toBeTruthy()
   })
 })
 

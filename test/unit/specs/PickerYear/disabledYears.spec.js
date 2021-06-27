@@ -29,10 +29,10 @@ describe('PickerYear', () => {
 
   it("can't navigate to a disabled year", () => {
     wrapper.vm.previousPage()
-    expect(wrapper.emitted()['changed-decade']).toBeFalsy()
+    expect(wrapper.emitted('changed-decade')).toBeFalsy()
 
     wrapper.vm.nextPage()
-    expect(wrapper.emitted()['changed-decade']).toBeFalsy()
+    expect(wrapper.emitted('changed-decade')).toBeFalsy()
   })
 
   it("can't change decade when previous or next decades are disabled", async () => {
