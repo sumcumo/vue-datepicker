@@ -167,22 +167,12 @@ describe('Datepicker shallowMounted', () => {
   })
 
   it('sets the date', () => {
-    const dateTemp = new Date(2016, 9, 9)
-    const wrapperTemp = shallowMount(Datepicker, {
-      propsData: {
-        format: 'yyyy-MM-dd',
-      },
-    })
-    wrapperTemp.vm.selectDate(dateTemp.valueOf())
-    expect(wrapperTemp.vm.selectedDate.valueOf()).toEqual(dateTemp.valueOf())
+    expect(wrapper.vm.selectedDate.valueOf()).toEqual(date.valueOf())
   })
 
   it('clears the date', () => {
-    const dateTemp = new Date(2016, 9, 9)
-    const wrapperTemp = shallowMount(Datepicker)
-    wrapperTemp.vm.selectDate(dateTemp.valueOf())
-    wrapperTemp.vm.clearDate()
-    expect(wrapperTemp.vm.selectedDate).toEqual(null)
+    wrapper.vm.clearDate()
+    expect(wrapper.vm.selectedDate).toEqual(null)
   })
 
   it('sets pageTimestamp to be now', () => {
@@ -261,45 +251,36 @@ describe('Datepicker shallowMounted', () => {
   })
 
   it('sets the date on typedDate event', () => {
-    const wrapperTemp = shallowMount(Datepicker)
     const today = new Date()
-    wrapperTemp.vm.handleTypedDate(today)
-    expect(wrapperTemp.vm.selectedDate).toEqual(today)
+    wrapper.vm.handleTypedDate(today)
+    expect(wrapper.vm.selectedDate).toEqual(today)
   })
 
   it('watches value', async () => {
-    const wrapperTemp = shallowMount(Datepicker, {
-      propsData: {
-        value: '2018-01-01',
-      },
-    })
-    const spy = jest.spyOn(wrapperTemp.vm, 'setValue')
-    await wrapperTemp.setProps({ value: '2018-04-26' })
+    const spy = jest.spyOn(wrapper.vm, 'setValue')
+    await wrapper.setProps({ value: '2018-04-26' })
 
     expect(spy).toHaveBeenCalled()
   })
 
   it('watches openDate', async () => {
-    const wrapperTemp = shallowMount(Datepicker, {
-      propsData: {
-        openDate: new Date(2018, 0, 1),
-      },
+    await wrapper.setProps({
+      openDate: new Date(2018, 0, 1),
     })
-    const spy = jest.spyOn(wrapperTemp.vm, 'setPageDate')
-    await wrapperTemp.setProps({ openDate: new Date(2018, 3, 26) })
+    const spy = jest.spyOn(wrapper.vm, 'setPageDate')
+    await wrapper.setProps({ openDate: new Date(2018, 3, 26) })
 
     expect(spy).toHaveBeenCalled()
   })
 
   it('watches initialView', async () => {
-    const wrapperTemp = shallowMount(Datepicker, {
-      propsData: {
-        initialView: 'day',
-      },
+    await wrapper.setProps({
+      initialView: 'day',
     })
-    const spy = jest.spyOn(wrapperTemp.vm, 'setInitialView')
 
-    await wrapperTemp.setProps({ initialView: 'month' })
+    const spy = jest.spyOn(wrapper.vm, 'setInitialView')
+
+    await wrapper.setProps({ initialView: 'month' })
 
     expect(spy).toHaveBeenCalled()
   })
