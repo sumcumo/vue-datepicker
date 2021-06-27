@@ -29,11 +29,11 @@ describe('PickerDay: Set first day of week', () => {
     expect(wrapper.vm.daysOfWeek[6]).toEqual('Sun')
   })
 
-  it('has 6 days from previous month when month starts on a Sunday', () => {
+  it('has 6 days from previous month when month starts on a Sunday', async () => {
     const testDate = new Date(2020, 10, 1)
     const startDate = dateUtils.getNewDateObject(testDate)
 
-    wrapper.setProps({
+    await wrapper.setProps({
       pageDate: testDate,
       pageTimestamp: dateUtils.setDate(startDate, 1),
     })
@@ -43,11 +43,11 @@ describe('PickerDay: Set first day of week', () => {
     }
   })
 
-  it('has no days from previous month when month starts on a Monday', () => {
+  it('has no days from previous month when month starts on a Monday', async () => {
     const testDate = new Date(2020, 5, 1)
     const startDate = dateUtils.getNewDateObject(testDate)
 
-    wrapper.setProps({
+    await wrapper.setProps({
       pageDate: testDate,
       pageTimestamp: dateUtils.setDate(startDate, 1),
     })
@@ -72,11 +72,11 @@ describe('PickerDay: Datepicker with Saturday as first day of week', () => {
     wrapper.destroy()
   })
 
-  it('has 6 days from previous month when month starts on a Friday', () => {
+  it('has 6 days from previous month when month starts on a Friday', async () => {
     const testDate = new Date(2021, 0, 1)
     const startDate = dateUtils.getNewDateObject(testDate)
 
-    wrapper.setProps({
+    await wrapper.setProps({
       pageDate: testDate,
       pageTimestamp: dateUtils.setDate(startDate, 1),
     })
@@ -86,11 +86,11 @@ describe('PickerDay: Datepicker with Saturday as first day of week', () => {
     }
   })
 
-  it('has no days from previous month when month starts on a Saturday', () => {
+  it('has no days from previous month when month starts on a Saturday', async () => {
     const testDate = new Date(2020, 7, 1)
     const startDate = dateUtils.getNewDateObject(testDate)
 
-    wrapper.setProps({
+    await wrapper.setProps({
       pageDate: testDate,
       pageTimestamp: dateUtils.setDate(startDate, 1),
     })

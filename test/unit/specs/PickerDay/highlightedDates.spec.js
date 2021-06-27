@@ -33,8 +33,8 @@ describe('PickerDay highlight date', () => {
     expect(wrapper.vm.isHighlightedDate(new Date(2016, 11, 5))).toEqual(false)
   })
 
-  it('highlights a disabled date when explicitly configured to do so', () => {
-    wrapper.setProps({
+  it('highlights a disabled date when explicitly configured to do so', async () => {
+    await wrapper.setProps({
       highlighted: {
         to: new Date(2016, 11, 8),
         from: new Date(2016, 11, 4),
@@ -60,8 +60,8 @@ describe('PickerDay highlight date', () => {
     expect(wrapper.vm.isHighlightedDate(new Date(2016, 11, 3))).toEqual(false)
   })
 
-  it('accepts an array of highlighted dates', () => {
-    wrapper.setProps({
+  it('accepts an array of highlighted dates', async () => {
+    await wrapper.setProps({
       highlighted: {
         dates: [
           new Date(2016, 9, 2),
@@ -74,8 +74,8 @@ describe('PickerDay highlight date', () => {
     expect(wrapper.vm.isHighlightedDate(new Date(2016, 9, 3))).toEqual(false)
   })
 
-  it('accepts an array of highlighted days of the week', () => {
-    wrapper.setProps({
+  it('accepts an array of highlighted days of the week', async () => {
+    await wrapper.setProps({
       highlighted: {
         days: [6, 0],
       },
@@ -84,8 +84,8 @@ describe('PickerDay highlight date', () => {
     expect(wrapper.vm.isHighlightedDate(new Date(2016, 9, 3))).toEqual(false)
   })
 
-  it('accepts an array of highlighted days of the month', () => {
-    wrapper.setProps({
+  it('accepts an array of highlighted days of the month', async () => {
+    await wrapper.setProps({
       highlighted: {
         daysOfMonth: [1, 10, 31],
       },
@@ -98,8 +98,8 @@ describe('PickerDay highlight date', () => {
     expect(wrapper.vm.isHighlightedDate(new Date(2016, 7, 20))).toEqual(false)
   })
 
-  it('accepts a customPredictor to check if the date is highlighted', () => {
-    wrapper.setProps({
+  it('accepts a customPredictor to check if the date is highlighted', async () => {
+    await wrapper.setProps({
       highlighted: {
         customPredictor(date) {
           if (date.getDate() % 5 === 0) {
@@ -127,8 +127,8 @@ describe('PickerDay highlight date', () => {
     expect(wrapper.vm.isHighlightEnd(new Date(2016, 11, 7))).toEqual(false)
   })
 
-  it('closes without warning when it is undefined', () => {
-    wrapper.setProps({
+  it('closes without warning when it is undefined', async () => {
+    await wrapper.setProps({
       highlighted: undefined,
     })
     expect(wrapper.vm.isHighlightedDate(new Date(2016, 8, 29))).toEqual(false)

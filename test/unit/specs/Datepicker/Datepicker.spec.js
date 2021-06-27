@@ -34,15 +34,15 @@ describe('Datepicker mounted', () => {
     wrapper.destroy()
   })
 
-  it('emits blur', () => {
+  it('emits blur', async () => {
     const input = wrapper.find('input')
-    input.trigger('blur')
+    await input.trigger('blur')
     expect(wrapper.emitted().blur).toBeTruthy()
   })
 
-  it('emits focus', () => {
+  it('emits focus', async () => {
     const input = wrapper.find('input')
-    input.trigger('focus')
+    await input.trigger('focus')
     expect(wrapper.emitted().focus).toBeTruthy()
   })
 
@@ -113,7 +113,7 @@ describe('Datepicker mounted', () => {
   })
 
   it('resets the date correctly when typeable', async () => {
-    wrapper.setProps({
+    await wrapper.setProps({
       typeable: true,
     })
 
@@ -199,19 +199,19 @@ describe('Datepicker shallowMounted', () => {
     wrapper.vm.setView('month')
     expect(wrapper.vm.isOpen).toEqual(true)
 
-    wrapper.vm.close()
+    await wrapper.vm.close()
     expect(wrapper.vm.isOpen).toEqual(false)
 
     wrapper.vm.setView('year')
     expect(wrapper.vm.isOpen).toEqual(true)
 
-    wrapper.vm.close()
+    await wrapper.vm.close()
     expect(wrapper.vm.isOpen).toEqual(false)
 
     wrapper.vm.setView('day')
     expect(wrapper.vm.isOpen).toEqual(true)
 
-    wrapper.vm.close()
+    await wrapper.vm.close()
     expect(wrapper.vm.isOpen).toEqual(false)
 
     wrapper.vm.setView('nonsense')
@@ -274,8 +274,8 @@ describe('Datepicker shallowMounted', () => {
       },
     })
     const spy = jest.spyOn(wrapperTemp.vm, 'setValue')
-    wrapperTemp.setProps({ value: '2018-04-26' })
-    await wrapperTemp.vm.$nextTick()
+    await wrapperTemp.setProps({ value: '2018-04-26' })
+
     expect(spy).toHaveBeenCalled()
   })
 
@@ -286,8 +286,8 @@ describe('Datepicker shallowMounted', () => {
       },
     })
     const spy = jest.spyOn(wrapperTemp.vm, 'setPageDate')
-    wrapperTemp.setProps({ openDate: new Date(2018, 3, 26) })
-    await wrapperTemp.vm.$nextTick()
+    await wrapperTemp.setProps({ openDate: new Date(2018, 3, 26) })
+
     expect(spy).toHaveBeenCalled()
   })
 
@@ -321,7 +321,6 @@ describe('Datepicker shallowMounted', () => {
       inline: true,
     })
 
-    await wrapper.vm.$nextTick()
     const datepicker = wrapper.find('.vdp-datepicker__calendar')
 
     expect(datepicker.element.className).toContain('vdp-datepicker__calendar')
@@ -368,7 +367,7 @@ describe('Datepicker shallowMounted', () => {
         },
       },
     })
-    await wrapperTemp.vm.$nextTick()
+
     expect(wrapperTemp.vm.selectedDate).toEqual(null)
     expect(wrapperTemp.emitted().input).toBeTruthy()
   })
@@ -521,8 +520,9 @@ describe('Datepicker on body', () => {
         appendToBody: true,
       },
     })
-    wrapper.vm.open()
-    await wrapper.vm.$nextTick()
+
+    await wrapper.vm.open()
+
     expect(wrapper.vm.$el.querySelector('.vdp-datepicker__calendar')).toBeNull()
     expect(document.querySelector('.vdp-datepicker__calendar')).toBeDefined()
     wrapper.vm.$destroy()
@@ -534,8 +534,9 @@ describe('Datepicker on body', () => {
         appendToBody: true,
       },
     })
-    wrapper.vm.open()
-    await wrapper.vm.$nextTick()
+
+    await wrapper.vm.open()
+
     wrapper.vm.$destroy()
     expect(document.querySelector('.vdp-datepicker__calendar')).toBeNull()
   })
