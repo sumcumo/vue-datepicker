@@ -301,7 +301,7 @@ describe('UTC functions', () => {
   it('returns the correct day number from an abbreviated day name', () => {
     expect(dateUtils.getDayFromAbbr('sun')).toEqual(0)
     expect(dateUtils.getDayFromAbbr('sat')).toEqual(6)
-    expect(() => dateUtils.getDayFromAbbr('nonsense')).toThrow(
+    expect(() => dateUtils.getDayFromAbbr('invalid date')).toThrow(
       'Invalid week day',
     )
   })
