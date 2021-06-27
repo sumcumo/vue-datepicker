@@ -33,6 +33,12 @@ describe('Datepicker mounted', () => {
     const calendar = wrapper.vm.$refs.popup
     expect(calendar.$el.style.left).toBe('0px')
     expect(calendar.$el.style.top).toBe('10px')
+
+    await wrapper.vm.close()
+    await wrapper.vm.open()
+
+    expect(calendar.$el.style.left).toBe('0px')
+    expect(calendar.$el.style.top).toBe('10px')
   })
 
   it('has everything out of bounds', async () => {
