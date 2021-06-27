@@ -99,9 +99,9 @@ describe('DateInput', () => {
   it('emits the date when typed', async () => {
     const input = wrapper.find('input')
     input.setValue('2018-04-24')
-    input.trigger('keyup')
-    expect(wrapper.emitted()['typed-date']).toBeDefined()
-    expect(wrapper.emitted()['typed-date'][0][0]).toBeInstanceOf(Date)
+    await input.trigger('keyup')
+    expect(wrapper.emitted('typed-date')).toBeDefined()
+    expect(wrapper.emitted('typed-date')[0][0]).toBeInstanceOf(Date)
   })
 
   it('emits `close` when return is pressed', async () => {
@@ -114,7 +114,7 @@ describe('DateInput', () => {
     const input = wrapper.find('input')
     wrapper.setData({ typedDate: 'not a date' })
     await input.trigger('blur')
-    expect(wrapper.emitted()['clear-date']).toBeDefined()
+    expect(wrapper.emitted('clear-date')).toBeDefined()
   })
 
   it("doesn't emit the date if typeable=false", async () => {
@@ -129,7 +129,7 @@ describe('DateInput', () => {
     input.setValue('2018-04-24')
     await input.trigger('keydown')
     await input.trigger('keyup')
-    expect(wrapperNotTypeAble.emitted().typedDate).not.toBeDefined()
+    expect(wrapperNotTypeAble.emitted('typedDate')).not.toBeDefined()
   })
 })
 

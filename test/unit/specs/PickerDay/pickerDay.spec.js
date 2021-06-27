@@ -64,7 +64,7 @@ describe('PickerDay: DOM', () => {
   it('emits set-view event with `month` when the up button is clicked', async () => {
     const upButton = wrapper.find('.day__month_btn')
     await upButton.trigger('click')
-    expect(wrapper.emitted()['set-view'][0][0]).toBe('month')
+    expect(wrapper.emitted('set-view')[0][0]).toBe('month')
   })
 
   it('displays edge dates by default', () => {
