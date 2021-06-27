@@ -453,42 +453,44 @@ describe('Datepicker.vue inline', () => {
 
 describe('Datepicker with initial-view', () => {
   let wrapper
-  it('opens in `day` view', () => {
-    wrapper = shallowMount(Datepicker)
-    wrapper.vm.open()
+  beforeEach(() => {
+    wrapper = mount(Datepicker)
+  })
+
+  afterEach(() => {
+    wrapper.destroy()
+  })
+
+  it('opens in `day` view', async () => {
+    await wrapper.vm.open()
+
     expect(wrapper.vm.computedInitialView).toEqual('day')
     expect(wrapper.vm.picker).toEqual('PickerDay')
   })
 
-  it('opens in `month` view', () => {
-    wrapper = shallowMount(Datepicker, {
-      propsData: {
-        initialView: 'month',
-      },
+  it('opens in `month` view', async () => {
+    await wrapper.setProps({
+      initialView: 'month',
     })
-    wrapper.vm.open()
+    await wrapper.vm.open()
     expect(wrapper.vm.computedInitialView).toEqual('month')
     expect(wrapper.vm.picker).toEqual('PickerMonth')
   })
 
-  it('opens in `year` view', () => {
-    wrapper = shallowMount(Datepicker, {
-      propsData: {
-        initialView: 'year',
-      },
+  it('opens in `year` view', async () => {
+    await wrapper.setProps({
+      initialView: 'year',
     })
-    wrapper.vm.open()
+    await wrapper.vm.open()
     expect(wrapper.vm.computedInitialView).toEqual('year')
     expect(wrapper.vm.picker).toEqual('PickerYear')
   })
 
-  it('does not open if the calendar is disabled', () => {
-    wrapper = shallowMount(Datepicker, {
-      propsData: {
-        disabled: true,
-      },
+  it('does not open if the calendar is disabled', async () => {
+    await wrapper.setProps({
+      disabled: true,
     })
-    wrapper.vm.open()
+    await wrapper.vm.open()
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
 })
