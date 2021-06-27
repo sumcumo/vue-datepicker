@@ -4,6 +4,7 @@ import Datepicker from '~/components/Datepicker.vue'
 describe('Datepicker mounted', () => {
   let wrapper
   let date
+
   beforeEach(() => {
     date = new Date(2016, 1, 15)
     wrapper = mount(Datepicker, {

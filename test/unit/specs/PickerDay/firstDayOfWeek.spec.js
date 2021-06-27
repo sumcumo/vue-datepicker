@@ -7,6 +7,7 @@ const dateUtils = makeDateUtils(false)
 
 describe('PickerDay: Set first day of week', () => {
   let wrapper
+
   beforeEach(() => {
     wrapper = shallowMount(PickerDay, {
       propsData: {
@@ -58,6 +59,7 @@ describe('PickerDay: Set first day of week', () => {
 
 describe('PickerDay: Datepicker with Saturday as first day of week', () => {
   let wrapper
+
   beforeEach(() => {
     wrapper = shallowMount(PickerDay, {
       propsData: {

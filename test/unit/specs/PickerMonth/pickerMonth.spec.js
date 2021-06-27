@@ -4,6 +4,7 @@ import { en } from '~/locale'
 
 describe('PickerMonth', () => {
   let wrapper
+
   beforeEach(() => {
     wrapper = shallowMount(PickerMonth, {
       propsData: {
