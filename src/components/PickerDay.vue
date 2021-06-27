@@ -225,9 +225,12 @@ export default {
      * @param {Object} day
      * @return {Object}
      */
+    // eslint-disable-next-line complexity
     dayClasses(day) {
       return {
-        'selected': day.isSelected,
+        'selected': this.showEdgeDates
+          ? day.isSelected
+          : day.isSelected && !day.isPreviousMonth && !day.isNextMonth,
         'disabled': day.isDisabled,
         'highlighted': day.isHighlighted,
         'muted': day.isPreviousMonth || day.isNextMonth,

@@ -102,4 +102,54 @@ describe('PickerDay: DOM', () => {
 
     expect(wrapper.emitted('select')[0][0].date).toBe(3)
   })
+
+  it("only highlights today's edge date if shown", async () => {
+    const day = {
+      date: 1,
+      isToday: true,
+      isPreviousMonth: false,
+      isNextMonth: true,
+    }
+
+    await wrapper.setProps({
+      showEdgeDates: true,
+    })
+
+    let dayClasses = wrapper.vm.dayClasses(day)
+
+    expect(dayClasses.today).toBeTruthy()
+
+    await wrapper.setProps({
+      showEdgeDates: false,
+    })
+
+    dayClasses = wrapper.vm.dayClasses(day)
+
+    expect(dayClasses.today).toBeFalsy()
+  })
+
+  it('only highlights selected edge date if shown', async () => {
+    const day = {
+      date: 1,
+      isSelected: true,
+      isPreviousMonth: false,
+      isNextMonth: true,
+    }
+
+    await wrapper.setProps({
+      showEdgeDates: true,
+    })
+
+    let dayClasses = wrapper.vm.dayClasses(day)
+
+    expect(dayClasses.selected).toBeTruthy()
+
+    await wrapper.setProps({
+      showEdgeDates: false,
+    })
+
+    dayClasses = wrapper.vm.dayClasses(day)
+
+    expect(dayClasses.selected).toBeFalsy()
+  })
 })
