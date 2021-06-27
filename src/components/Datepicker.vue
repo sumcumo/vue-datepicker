@@ -363,9 +363,7 @@ export default {
      */
     handleSelect(cell) {
       if (this.allowedToShowView(this.nextView.down)) {
-        this.setPageDate(new Date(cell.timestamp))
-        this.$emit(`changed-${this.view}`, cell)
-        this.setView(this.nextView.down)
+        this.showNextViewDown(cell)
         return
       }
 
@@ -499,6 +497,15 @@ export default {
       if (this.allowedToShowView(view)) {
         this.view = view
       }
+    },
+    /**
+     * Set the view to the next view down e.g. from `month` to `day`
+     * @param {Object} cell The currently focused cell
+     */
+    showNextViewDown(cell) {
+      this.setPageDate(new Date(cell.timestamp))
+      this.$emit(`changed-${this.view}`, cell)
+      this.setView(this.nextView.down)
     },
     /**
      * Capitalizes the first letter
