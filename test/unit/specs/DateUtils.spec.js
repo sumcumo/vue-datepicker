@@ -111,8 +111,11 @@ describe('dateUtils', () => {
     expect(dateUtils.parseDate('16 April 2020', 'd MMMM yyyy')).toEqual(
       '2020-04-16T00:00:00',
     )
-    expect(dateUtils.parseDate('16th Apr 2020', 'do MMM yyyy')).toEqual(
-      '2020-04-16T00:00:00',
+    expect(dateUtils.parseDate('16th Nov 2020', 'do MMM yyyy')).toEqual(
+      '2020-11-16T00:00:00',
+    )
+    expect(dateUtils.parseDate('16th November 2020', 'do MMMM yyyy')).toEqual(
+      '2020-11-16T00:00:00',
     )
     expect(dateUtils.parseDate('Thu 16th Apr 2020', 'E do MMM yyyy')).toEqual(
       '2020-04-16T00:00:00',
