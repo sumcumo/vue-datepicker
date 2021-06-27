@@ -205,7 +205,7 @@ describe('Datepicker shallowMounted', () => {
     await wrapper.vm.close()
     expect(wrapper.vm.isOpen).toEqual(false)
 
-    wrapper.vm.setView('nonsense')
+    wrapper.vm.setView('invalid date')
     expect(wrapper.vm.isOpen).toEqual(false)
   })
 
@@ -438,7 +438,7 @@ describe('Datepicker.vue inline', () => {
   })
 
   afterEach(() => {
-    wrapper.vm.$destroy()
+    wrapper.destroy()
   })
 
   it('shows calendar as already open', () => {
@@ -514,7 +514,9 @@ describe('Datepicker on body', () => {
 
     expect(wrapper.vm.$el.querySelector('.vdp-datepicker__calendar')).toBeNull()
     expect(document.querySelector('.vdp-datepicker__calendar')).toBeDefined()
-    wrapper.vm.$destroy()
+
+    await wrapper.vm.close()
+    wrapper.destroy()
   })
 
   it('removes popup on body on component removal', async () => {
@@ -525,8 +527,9 @@ describe('Datepicker on body', () => {
     })
 
     await wrapper.vm.open()
+    await wrapper.vm.close()
 
-    wrapper.vm.$destroy()
+    wrapper.destroy()
     expect(document.querySelector('.vdp-datepicker__calendar')).toBeNull()
   })
 })
