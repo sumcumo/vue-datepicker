@@ -21,23 +21,23 @@ describe('DateInput', () => {
     wrapper.destroy()
   })
 
-  it('does not format the date when typed', () => {
+  it('does not format the date when typed', async () => {
     const dateString = '2018-04-24'
     wrapper.vm.input.value = dateString
     expect(wrapper.vm.input.value).toEqual(dateString)
-    wrapper.setData({
+    await wrapper.setData({
       typedDate: dateString,
     })
-    wrapper.setProps({
+    await wrapper.setProps({
       selectedDate: new Date(dateString),
     })
     expect(wrapper.vm.typedDate).toEqual(dateString)
     expect(wrapper.vm.formattedValue).toEqual(dateString)
   })
 
-  it('allows international custom date format d.M.yyyy', () => {
+  it('allows international custom date format d.M.yyyy', async () => {
     const dateString = '24.06.2018'
-    wrapper.setProps({
+    await wrapper.setProps({
       selectedDate: new Date(dateString),
       typeable: true,
       format: 'd.M.yyyy',
@@ -45,13 +45,13 @@ describe('DateInput', () => {
     const input = wrapper.find('input')
     wrapper.vm.input.value = dateString
     expect(wrapper.vm.input.value).toEqual(dateString)
-    input.trigger('keyup')
+    await input.trigger('keyup')
     expect(wrapper.vm.formattedValue).toEqual(dateString)
   })
 
-  it('allows international custom date format dd/MM/yyyy', () => {
+  it('allows international custom date format dd/MM/yyyy', async () => {
     const dateString = '24/06/2018'
-    wrapper.setProps({
+    await wrapper.setProps({
       selectedDate: new Date(dateString),
       typeable: true,
       format: 'dd/MM/yyyy',
@@ -59,13 +59,13 @@ describe('DateInput', () => {
     const input = wrapper.find('input')
     wrapper.vm.input.value = dateString
     expect(wrapper.vm.input.value).toEqual(dateString)
-    input.trigger('keyup')
+    await input.trigger('keyup')
     expect(wrapper.vm.formattedValue).toEqual(dateString)
   })
 
-  it('allows international custom date format dd MM yyyy', () => {
+  it('allows international custom date format dd MM yyyy', async () => {
     const dateString = '24 06 2018'
-    wrapper.setProps({
+    await wrapper.setProps({
       selectedDate: new Date(dateString),
       typeable: true,
       format: 'dd MM yyyy',
@@ -73,13 +73,13 @@ describe('DateInput', () => {
     const input = wrapper.find('input')
     wrapper.vm.input.value = dateString
     expect(wrapper.vm.input.value).toEqual(dateString)
-    input.trigger('keyup')
+    await input.trigger('keyup')
     expect(wrapper.vm.formattedValue).toEqual(dateString)
   })
 
-  it('allows function format', () => {
+  it('allows function format', async () => {
     const dateString = '2018-08-12'
-    wrapper.setProps({
+    await wrapper.setProps({
       selectedDate: new Date(dateString),
       typeable: true,
       format(date) {
@@ -92,11 +92,11 @@ describe('DateInput', () => {
     const input = wrapper.find('input')
     input.element.value = dateString
     expect(input.element.value).toEqual(dateString)
-    input.trigger('keyup')
+    await input.trigger('keyup')
     expect(wrapper.vm.formattedValue).toEqual('12.08.2018')
   })
 
-  it('emits the date when typed', () => {
+  it('emits the date when typed', async () => {
     const input = wrapper.find('input')
     wrapper.vm.input.value = '2018-04-24'
     input.trigger('keyup')
@@ -104,20 +104,20 @@ describe('DateInput', () => {
     expect(wrapper.emitted()['typed-date'][0][0]).toBeInstanceOf(Date)
   })
 
-  it('emits `close` when return is pressed', () => {
+  it('emits `close` when return is pressed', async () => {
     const input = wrapper.find('input')
-    input.trigger('keydown.enter')
+    await input.trigger('keydown.enter')
     expect(wrapper.emitted('close')).toBeTruthy()
   })
 
-  it('clears a typed date if it does not parse', () => {
+  it('clears a typed date if it does not parse', async () => {
     const input = wrapper.find('input')
     wrapper.setData({ typedDate: 'not a date' })
-    input.trigger('blur')
+    await input.trigger('blur')
     expect(wrapper.emitted()['clear-date']).toBeDefined()
   })
 
-  it("doesn't emit the date if typeable=false", () => {
+  it("doesn't emit the date if typeable=false", async () => {
     const wrapperNotTypeAble = shallowMount(DateInput, {
       propsData: {
         format: 'dd MMM yyyy',
@@ -127,8 +127,8 @@ describe('DateInput', () => {
     })
     const input = wrapperNotTypeAble.find('input')
     wrapperNotTypeAble.vm.input.value = '2018-04-24'
-    input.trigger('keydown')
-    input.trigger('keyup')
+    await input.trigger('keydown')
+    await input.trigger('keyup')
     expect(wrapperNotTypeAble.emitted().typedDate).not.toBeDefined()
   })
 })
@@ -172,8 +172,8 @@ describe('Datepicker mount', () => {
   it('formats the date on blur', async () => {
     const input = wrapper.find('input')
     input.element.value = '2018-04-24'
-    input.trigger('blur')
-    await wrapper.vm.$nextTick()
+    await input.trigger('blur')
+
     expect(input.element.value).toEqual('24 Apr 2018')
   })
 })

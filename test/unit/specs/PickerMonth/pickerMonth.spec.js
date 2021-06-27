@@ -17,18 +17,18 @@ describe('PickerMonth', () => {
     wrapper.destroy()
   })
 
-  it('knows the selected month', () => {
+  it('knows the selected month', async () => {
     const newDate = new Date(2016, 9, 15)
-    wrapper.setProps({
+    await wrapper.setProps({
       selectedDate: newDate,
     })
     expect(wrapper.vm.isSelectedMonth(newDate)).toEqual(true)
     expect(wrapper.vm.isSelectedMonth(new Date(2017, 1, 1))).toEqual(false)
   })
 
-  it('knows the selected month when useUtc = true', () => {
+  it('knows the selected month when useUtc = true', async () => {
     const newDate = new Date(2016, 9, 15)
-    wrapper.setProps({
+    await wrapper.setProps({
       selectedDate: newDate,
       useUtc: true,
     })
@@ -36,11 +36,11 @@ describe('PickerMonth', () => {
     expect(wrapper.vm.isSelectedMonth(new Date(2017, 1, 1))).toEqual(false)
   })
 
-  it('can set the next year', () => {
+  it('can set the next year', async () => {
     wrapper.vm.nextPage()
     expect(wrapper.emitted('page-change')[0][0].getFullYear()).toEqual(2019)
 
-    wrapper.setProps({
+    await wrapper.setProps({
       disabledDates: {
         from: new Date(2018, 1, 1),
       },
@@ -50,11 +50,11 @@ describe('PickerMonth', () => {
     expect(wrapper.emitted('page-change')[0][0].getFullYear()).toEqual(2019)
   })
 
-  it('can set the previous year', () => {
+  it('can set the previous year', async () => {
     wrapper.vm.previousPage()
     expect(wrapper.emitted('page-change')[0][0].getFullYear()).toEqual(2017)
 
-    wrapper.setProps({
+    await wrapper.setProps({
       disabledDates: {
         to: new Date(2018, 1, 1),
       },
@@ -71,9 +71,9 @@ describe('PickerMonth', () => {
     expect(wrapper.emitted('select')[0][0].timestamp).toEqual(time)
   })
 
-  it('emits set-view event with `year` when the up button is clicked', () => {
+  it('emits set-view event with `year` when the up button is clicked', async () => {
     const upButton = wrapper.find('.month__year_btn')
-    upButton.trigger('click')
+    await upButton.trigger('click')
     expect(wrapper.emitted()['set-view'][0][0]).toBe('year')
   })
 })

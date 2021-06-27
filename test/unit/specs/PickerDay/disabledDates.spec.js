@@ -43,8 +43,8 @@ describe('PickerDay: disabled', () => {
     expect(wrapper.vm.isNextDisabled).toBeTruthy()
   })
 
-  it('detects disabled dates', () => {
-    wrapper.setProps({
+  it('detects disabled dates', async () => {
+    await wrapper.setProps({
       disabledDates: {
         ranges: [
           {
@@ -62,8 +62,8 @@ describe('PickerDay: disabled', () => {
     expect(wrapper.vm.isDisabledDate(new Date(2026, 9, 2))).toEqual(true)
   })
 
-  it('accepts an array of disabled dates', () => {
-    wrapper.setProps({
+  it('accepts an array of disabled dates', async () => {
+    await wrapper.setProps({
       disabledDates: {
         dates: [
           new Date(2016, 9, 2),
@@ -76,8 +76,8 @@ describe('PickerDay: disabled', () => {
     expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 3))).toEqual(false)
   })
 
-  it('accepts an array of disabled days of the week', () => {
-    wrapper.setProps({
+  it('accepts an array of disabled days of the week', async () => {
+    await wrapper.setProps({
       disabledDates: {
         days: [6, 0],
       },
@@ -86,8 +86,8 @@ describe('PickerDay: disabled', () => {
     expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 3))).toEqual(false)
   })
 
-  it('accepts an array of disabled days of the month', () => {
-    wrapper.setProps({
+  it('accepts an array of disabled days of the month', async () => {
+    await wrapper.setProps({
       disabledDates: {
         daysOfMonth: [29, 30, 31],
       },
@@ -98,8 +98,8 @@ describe('PickerDay: disabled', () => {
     expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 11))).toEqual(false)
   })
 
-  it('accepts a customPredictor to check if the date is disabled', () => {
-    wrapper.setProps({
+  it('accepts a customPredictor to check if the date is disabled', async () => {
+    await wrapper.setProps({
       disabledDates: {
         customPredictor(date) {
           if (date.getDate() % 4 === 0) {
@@ -120,8 +120,8 @@ describe('PickerDay: disabled', () => {
     expect(wrapper.emitted('select-disabled')).toBeTruthy()
   })
 
-  it('closes without warning when disabledDates is undefined', () => {
-    wrapper.setProps({
+  it('closes without warning when disabledDates is undefined', async () => {
+    await wrapper.setProps({
       disabledDates: undefined,
     })
     expect(wrapper.vm.isDisabledDate(new Date(2016, 8, 29))).toEqual(false)

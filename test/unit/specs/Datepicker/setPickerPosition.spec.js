@@ -27,8 +27,7 @@ describe('Datepicker mounted', () => {
     wrapper.vm.$refs.popup.$el.getBoundingClientRect = getBoundingClientRect
     wrapper.vm.$el.getBoundingClientRect = getBoundingClientRect
 
-    wrapper.vm.open()
-    await wrapper.vm.$nextTick()
+    await wrapper.vm.open()
 
     const calendar = wrapper.vm.$refs.popup
     expect(calendar.$el.style.left).toBe('0px')
@@ -52,8 +51,7 @@ describe('Datepicker mounted', () => {
     wrapper.vm.$refs.popup.$el.getBoundingClientRect = getBoundingClientRect
     wrapper.vm.$el.getBoundingClientRect = getBoundingClientRect
 
-    wrapper.vm.open()
-    await wrapper.vm.$nextTick()
+    await wrapper.vm.open()
 
     const calendar = wrapper.vm.$refs.popup
     expect(calendar.$el.style.left).toBe('0px')
@@ -75,12 +73,11 @@ describe('Datepicker mounted', () => {
     }))
     wrapper.vm.$refs.popup.$el.getBoundingClientRect = getBoundingClientRect
     wrapper.vm.$el.getBoundingClientRect = getBoundingClientRect
-    wrapper.setProps({
+    await wrapper.setProps({
       fixedPosition: 'top-right',
     })
 
-    wrapper.vm.open()
-    await wrapper.vm.$nextTick()
+    await wrapper.vm.open()
 
     const calendar = wrapper.vm.$refs.popup
     expect(calendar.$el.style.left).toBe('10px')
@@ -88,12 +85,11 @@ describe('Datepicker mounted', () => {
   })
 
   it('has a fixed position of `top-left`', async () => {
-    wrapper.setProps({
+    await wrapper.setProps({
       fixedPosition: 'bottom-left',
     })
 
-    wrapper.vm.open()
-    await wrapper.vm.$nextTick()
+    await wrapper.vm.open()
 
     const calendar = wrapper.vm.$refs.popup
     expect(calendar.$el.style.left).toBe('0px')
@@ -118,8 +114,7 @@ describe('Datepicker mounted', () => {
     wrapper.vm.$refs.popup.$el.getBoundingClientRect = getBoundingClientRect
     wrapper.vm.$el.getBoundingClientRect = getBoundingClientRect
 
-    wrapper.vm.open()
-    await wrapper.vm.$nextTick()
+    await wrapper.vm.open()
 
     const calendar = wrapper.vm.$refs.popup
     expect(calendar.$el.style.left).toBe('-9px')
