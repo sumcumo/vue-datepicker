@@ -90,7 +90,7 @@ describe('DateInput', () => {
       },
     })
     const input = wrapper.find('input')
-    input.element.value = dateString
+    input.setValue(dateString)
     expect(input.element.value).toEqual(dateString)
     await input.trigger('keyup')
     expect(wrapper.vm.formattedValue).toEqual('12.08.2018')
@@ -98,7 +98,7 @@ describe('DateInput', () => {
 
   it('emits the date when typed', async () => {
     const input = wrapper.find('input')
-    wrapper.vm.input.value = '2018-04-24'
+    input.setValue('2018-04-24')
     input.trigger('keyup')
     expect(wrapper.emitted()['typed-date']).toBeDefined()
     expect(wrapper.emitted()['typed-date'][0][0]).toBeInstanceOf(Date)
@@ -126,7 +126,7 @@ describe('DateInput', () => {
       },
     })
     const input = wrapperNotTypeAble.find('input')
-    wrapperNotTypeAble.vm.input.value = '2018-04-24'
+    input.setValue('2018-04-24')
     await input.trigger('keydown')
     await input.trigger('keyup')
     expect(wrapperNotTypeAble.emitted().typedDate).not.toBeDefined()
@@ -156,14 +156,14 @@ describe('Datepicker mount', () => {
     const input = wrapper.find('input')
 
     await input.trigger('click')
-    input.element.value = 'Jan'
+    input.setValue('Jan')
     await input.trigger('keyup')
 
     expect(spySelectDate).toHaveBeenCalled()
     expect(wrapper.vm.isOpen).toBeTruthy()
     expect(new Date(wrapper.vm.pageDate).getMonth()).toBe(0)
 
-    input.element.value = 'Feb'
+    input.setValue('Feb')
     await input.trigger('keyup')
 
     expect(new Date(wrapper.vm.pageDate).getMonth()).toBe(1)
@@ -171,7 +171,7 @@ describe('Datepicker mount', () => {
 
   it('formats the date on blur', async () => {
     const input = wrapper.find('input')
-    input.element.value = '2018-04-24'
+    input.setValue('2018-04-24')
     await input.trigger('blur')
 
     expect(input.element.value).toEqual('24 Apr 2018')
