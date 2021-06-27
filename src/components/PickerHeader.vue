@@ -44,6 +44,7 @@ export default {
      * Is the left hand navigation button disabled?
      * @return {Boolean}
      */
+    /* istanbul ignore next */
     isLeftNavDisabled() {
       return this.isRtl ? this.isNextDisabled : this.isPreviousDisabled
     },
@@ -51,6 +52,7 @@ export default {
      * Is the right hand navigation button disabled?
      * @return {Boolean}
      */
+    /* istanbul ignore next */
     isRightNavDisabled() {
       return this.isRtl ? this.isPreviousDisabled : this.isNextDisabled
     },
