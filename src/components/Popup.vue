@@ -34,11 +34,9 @@ export default {
     visible: {
       immediate: true,
       handler(val) {
-        this.$nextTick(() => {
-          if (val) {
-            this.displayPopup()
-          }
-        })
+        if (val) {
+          this.displayPopup()
+        }
       },
     },
   },
