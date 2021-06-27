@@ -2,6 +2,7 @@ import en from '~/locale/translations/en'
 
 // eslint-disable-next-line complexity,max-statements
 const getParsedDate = ({ formatStr, dateStr, translation }) => {
+  /* istanbul ignore next */
   const splitter = formatStr.match(/-|\/|\s|\./) || ['-']
   const df = formatStr.split(splitter[0])
   const ds = dateStr.split(splitter[0])
@@ -21,6 +22,7 @@ const getParsedDate = ({ formatStr, dateStr, translation }) => {
       ymd[2] = ds[i]
     } else if (/d/i.test(df[i])) {
       const tmp = ds[i].replace(/st|rd|nd|th/g, '')
+      /* istanbul ignore next */
       ymd[2] = tmp < 10 ? `0${tmp}` : `${tmp}`
     }
   }
@@ -274,6 +276,7 @@ const utils = {
     }
 
     const REGEX_FORMAT = /y{4}|y{2}|M{1,4}(?![aäe])|d{1,2}|o{1}|E{1}(?![eéi])/g
+    /* istanbul ignore next */
     return formatStr.replace(REGEX_FORMAT, (match) => matches[match] || match)
   },
 
