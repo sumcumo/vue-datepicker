@@ -11,6 +11,7 @@ describe('DateInput unmounted', () => {
 
 describe('DateInput', () => {
   let wrapper
+
   const createWrapper = () => {
     return shallowMount(DateInput, {
       propsData: {
@@ -20,6 +21,7 @@ describe('DateInput', () => {
       },
     })
   }
+
   beforeEach(() => {
     wrapper = createWrapper()
   })

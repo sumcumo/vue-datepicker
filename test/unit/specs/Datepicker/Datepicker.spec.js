@@ -134,6 +134,7 @@ describe('Datepicker mounted', () => {
 describe('Datepicker shallowMounted', () => {
   let wrapper
   let date
+
   beforeEach(() => {
     date = new Date(2016, 1, 15)
     wrapper = shallowMount(Datepicker, {
@@ -356,6 +357,7 @@ describe('Datepicker shallowMounted', () => {
 
 describe('Datepicker.vue set by string', () => {
   let wrapper
+
   it('can parse a string date', () => {
     wrapper = shallowMount(Datepicker, {
       propsData: {
@@ -381,6 +383,7 @@ describe('Datepicker.vue set by string', () => {
 
 describe('Datepicker.vue set by timestamp', () => {
   let wrapper
+
   it('can parse unix timestamp', () => {
     wrapper = shallowMount(Datepicker, {
       propsData: {
@@ -425,6 +428,7 @@ describe('Datepicker.vue using UTC', () => {
 
 describe('Datepicker.vue inline', () => {
   let wrapper
+
   beforeEach(() => {
     wrapper = mount(Datepicker, {
       propsData: {
@@ -453,6 +457,7 @@ describe('Datepicker.vue inline', () => {
 
 describe('Datepicker with initial-view', () => {
   let wrapper
+
   beforeEach(() => {
     wrapper = mount(Datepicker)
   })
@@ -497,6 +502,7 @@ describe('Datepicker with initial-view', () => {
 
 describe('Datepicker on body', () => {
   let wrapper
+
   it('appends popup to body', async () => {
     wrapper = mount(Datepicker, {
       propsData: {

@@ -3,6 +3,7 @@ import Datepicker from '~/components/Datepicker.vue'
 
 describe('Datepicker with restricted views', () => {
   let wrapper
+
   it('sets initialView to minimumView by default', () => {
     wrapper = mount(Datepicker, {
       propsData: {
