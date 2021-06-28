@@ -261,34 +261,6 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapper.vm.picker).toEqual('PickerMonth')
   })
 
-  it('resets the default page date', () => {
-    const wrapperTemp = shallowMount(Datepicker)
-    const today = new Date()
-    expect(wrapperTemp.vm.pageDate.getFullYear()).toEqual(today.getFullYear())
-    expect(wrapperTemp.vm.pageDate.getMonth()).toEqual(today.getMonth())
-    expect(wrapperTemp.vm.pageDate.getDate()).toEqual(1)
-    wrapperTemp.vm.resetDefaultPageDate()
-    expect(wrapperTemp.vm.pageDate.getFullYear()).toEqual(today.getFullYear())
-    expect(wrapperTemp.vm.pageDate.getMonth()).toEqual(today.getMonth())
-    expect(wrapperTemp.vm.pageDate.getDate()).toEqual(1)
-  })
-
-  it('does not set the default page date if a date is selected', () => {
-    const wrapperTemp = shallowMount(Datepicker)
-    const today = new Date()
-    const pastDate = new Date(2018, 3, 20)
-    expect(wrapperTemp.vm.pageDate.getFullYear()).toEqual(today.getFullYear())
-    expect(wrapperTemp.vm.pageDate.getMonth()).toEqual(today.getMonth())
-    expect(wrapperTemp.vm.pageDate.getDate()).toEqual(1)
-    wrapperTemp.vm.selectDate(pastDate.valueOf())
-    wrapperTemp.vm.resetDefaultPageDate()
-    expect(wrapperTemp.vm.pageDate.getFullYear()).toEqual(
-      pastDate.getFullYear(),
-    )
-    expect(wrapperTemp.vm.pageDate.getMonth()).toEqual(pastDate.getMonth())
-    expect(wrapperTemp.vm.pageDate.getDate()).toEqual(1)
-  })
-
   it('sets the date on typedDate event', () => {
     const wrapperTemp = shallowMount(Datepicker)
     const today = new Date()

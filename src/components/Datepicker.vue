@@ -336,7 +336,6 @@ export default {
     close() {
       if (!this.isInline) {
         this.view = ''
-        this.resetDefaultPageDate()
         this.$emit('closed')
       }
     },
@@ -435,17 +434,6 @@ export default {
         dateTemp = Number.isNaN(parsed.valueOf()) ? null : parsed
       }
       return dateTemp
-    },
-    /**
-     * Called in the event that the user navigates to date pages and
-     * closes the picker without selecting a date.
-     */
-    resetDefaultPageDate() {
-      if (this.selectedDate === null) {
-        this.setPageDate()
-        return
-      }
-      this.setPageDate(this.selectedDate)
     },
     /**
      * Select the date
