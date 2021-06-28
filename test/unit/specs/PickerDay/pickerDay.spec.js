@@ -10,6 +10,7 @@ describe('PickerDay: DOM', () => {
       propsData: {
         translation: en,
         pageDate: new Date(2018, 1, 1),
+        view: 'day',
       },
     })
   })
@@ -28,12 +29,12 @@ describe('PickerDay: DOM', () => {
   })
 
   it('can set the next month', () => {
-    wrapper.vm.nextPage()
+    wrapper.vm.changePage(1)
     expect(wrapper.emitted('page-change')[0][0].getMonth()).toEqual(2)
   })
 
   it('can set the previous month', () => {
-    wrapper.vm.previousPage()
+    wrapper.vm.changePage(-1)
     expect(wrapper.emitted('page-change')[0][0].getMonth()).toEqual(0)
   })
 

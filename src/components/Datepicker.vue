@@ -73,6 +73,7 @@
           :show-header="showHeader"
           :translation="translation"
           :use-utc="useUtc"
+          :view="view || computedInitialView"
           :year-range="yearPickerRange"
           @page-change="handlePageChange"
           @select="handleSelect"

@@ -15,6 +15,7 @@ describe('PickerYear', () => {
           to: new Date(2018, 2, 14),
           from: new Date(2018, 4, 15),
         },
+        view: 'year',
       },
     })
   })
@@ -29,10 +30,10 @@ describe('PickerYear', () => {
   })
 
   it("can't navigate to a disabled year", () => {
-    wrapper.vm.previousPage()
+    wrapper.vm.changePage(-1)
     expect(wrapper.emitted('changed-decade')).toBeFalsy()
 
-    wrapper.vm.nextPage()
+    wrapper.vm.changePage(1)
     expect(wrapper.emitted('changed-decade')).toBeFalsy()
   })
 
