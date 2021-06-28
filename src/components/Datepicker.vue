@@ -2,6 +2,7 @@
   <div class="vdp-datepicker" :class="[wrapperClass, { rtl: isRtl }]">
     <DateInput
       :id="id"
+      ref="dateInput"
       :autofocus="autofocus"
       :bootstrap-styling="bootstrapStyling"
       :calendar-button="calendarButton"
@@ -21,7 +22,6 @@
       :placeholder="placeholder"
       :ref-name="refName"
       :required="required"
-      :reset-typed-date="resetTypedDate"
       :selected-date="selectedDate"
       :show-calendar-on-button-click="showCalendarOnButtonClick"
       :show-calendar-on-focus="showCalendarOnFocus"
@@ -219,7 +219,6 @@ export default {
        * {Number}
        */
       pageTimestamp,
-      resetTypedDate: utils.getNewDateObject(),
       /*
        * Selected Date
        * {Date}
@@ -367,7 +366,7 @@ export default {
         return
       }
 
-      this.resetTypedDate = this.utils.getNewDateObject()
+      this.$refs.dateInput.typedDate = ''
       this.selectDate(cell.timestamp)
       this.close()
     },
