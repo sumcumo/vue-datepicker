@@ -7,8 +7,7 @@
       :is-next-disabled="isNextDisabled"
       :is-previous-disabled="isPreviousDisabled"
       :is-rtl="isRtl"
-      @next="nextPage"
-      @previous="previousPage"
+      @page-change="changePage($event)"
     >
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
       <span

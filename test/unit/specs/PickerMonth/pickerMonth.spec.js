@@ -10,6 +10,7 @@ describe('PickerMonth', () => {
       propsData: {
         translation: en,
         pageDate: new Date(2018, 1, 1),
+        view: 'month',
       },
     })
   })
@@ -38,30 +39,12 @@ describe('PickerMonth', () => {
   })
 
   it('can set the next year', async () => {
-    wrapper.vm.nextPage()
-    expect(wrapper.emitted('page-change')[0][0].getFullYear()).toEqual(2019)
-
-    await wrapper.setProps({
-      disabledDates: {
-        from: new Date(2018, 1, 1),
-      },
-    })
-
-    wrapper.vm.nextPage()
+    wrapper.vm.changePage(1)
     expect(wrapper.emitted('page-change')[0][0].getFullYear()).toEqual(2019)
   })
 
   it('can set the previous year', async () => {
-    wrapper.vm.previousPage()
-    expect(wrapper.emitted('page-change')[0][0].getFullYear()).toEqual(2017)
-
-    await wrapper.setProps({
-      disabledDates: {
-        to: new Date(2018, 1, 1),
-      },
-    })
-
-    wrapper.vm.previousPage()
+    wrapper.vm.changePage(-1)
     expect(wrapper.emitted('page-change')[0][0].getFullYear()).toEqual(2017)
   })
 

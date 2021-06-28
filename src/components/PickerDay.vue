@@ -7,8 +7,7 @@
       :is-next-disabled="isNextDisabled"
       :is-previous-disabled="isPreviousDisabled"
       :is-rtl="isRtl"
-      @next="nextPage"
-      @previous="previousPage"
+      @page-change="changePage($event)"
     >
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
       <span
@@ -213,16 +212,6 @@ export default {
     },
   },
   methods: {
-    /**
-     * Changes the page up or down (overrides changePage in pickerMixin)
-     * @param {Number} incrementBy
-     */
-    changePage(incrementBy) {
-      const date = this.pageDate
-      this.utils.setMonth(date, this.utils.getMonth(date) + incrementBy)
-
-      this.$emit('page-change', date)
-    },
     /**
      * Set the class for a specific day
      * @param {Object} day

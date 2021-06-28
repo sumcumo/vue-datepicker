@@ -7,8 +7,7 @@
       :is-next-disabled="isNextDisabled"
       :is-previous-disabled="isPreviousDisabled"
       :is-rtl="isRtl"
-      @next="nextPage"
-      @previous="previousPage"
+      @page-change="changePage($event)"
     >
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
       <span>
@@ -144,22 +143,6 @@ export default {
       return (
         this.selectedDate && year === this.utils.getFullYear(this.selectedDate)
       )
-    },
-    /**
-     * Increments the page (overrides nextPage in pickerMixin)
-     */
-    nextPage() {
-      if (!this.isNextDisabled) {
-        this.changePage(this.yearRange)
-      }
-    },
-    /**
-     * Decrements the page (overrides previousPage in pickerMixin)
-     */
-    previousPage() {
-      if (!this.isPreviousDisabled) {
-        this.changePage(-this.yearRange)
-      }
     },
   },
 }

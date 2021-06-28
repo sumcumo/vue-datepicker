@@ -10,6 +10,7 @@ describe('PickerYear', () => {
       propsData: {
         translation: en,
         pageDate: new Date(2018, 1, 1),
+        view: 'year',
       },
     })
   })
@@ -42,12 +43,12 @@ describe('PickerYear', () => {
   })
 
   it('can set the next decade', () => {
-    wrapper.vm.nextPage()
+    wrapper.vm.changePage(1)
     expect(wrapper.emitted('page-change')[0][0].getFullYear()).toEqual(2028)
   })
 
   it('can set the previous decade', () => {
-    wrapper.vm.previousPage()
+    wrapper.vm.changePage(-1)
     expect(wrapper.emitted('page-change')[0][0].getFullYear()).toEqual(2008)
   })
 

@@ -3,7 +3,7 @@
     <span
       class="prev"
       :class="{ disabled: isLeftNavDisabled }"
-      @click="$emit(isRtl ? 'next' : 'previous')"
+      @click="$emit('page-change', -1)"
     >
       <slot name="prevIntervalBtn">
         <span class="default">&lt;</span>
@@ -13,7 +13,7 @@
     <span
       class="next"
       :class="{ disabled: isRightNavDisabled }"
-      @click="$emit(isRtl ? 'previous' : 'next')"
+      @click="$emit('page-change', 1)"
     >
       <slot name="nextIntervalBtn">
         <span class="default">&gt;</span>
