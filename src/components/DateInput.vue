@@ -76,10 +76,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    resetTypedDate: {
-      type: [Date],
-      default: null,
-    },
     selectedDate: {
       type: Date,
       default: null,
@@ -127,11 +123,6 @@ export default {
         return this.typedDate
       }
       return this.formattedDate
-    },
-  },
-  watch: {
-    resetTypedDate() {
-      this.typedDate = ''
     },
   },
   mounted() {
