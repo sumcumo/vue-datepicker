@@ -27,17 +27,21 @@
         </span>
       </div>
 
-      <PickerCells
-        ref="cells"
-        :key="pageTitleDay"
-        v-slot="{ cell }"
-        :cells="cells"
-        :show-edge-dates="showEdgeDates"
-        view="day"
-        @select="select($event)"
-      >
-        {{ dayCellContent(cell) }}
-      </PickerCells>
+      <div ref="cellsWrapper" class="cells-wrapper">
+        <Transition :name="transitionName">
+          <PickerCells
+            ref="cells"
+            :key="pageTitleDay"
+            v-slot="{ cell }"
+            :cells="cells"
+            :show-edge-dates="showEdgeDates"
+            view="day"
+            @select="select($event)"
+          >
+            {{ dayCellContent(cell) }}
+          </PickerCells>
+        </Transition>
+      </div>
     </div>
 
     <slot name="calendarFooterDay" />

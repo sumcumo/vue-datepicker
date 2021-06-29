@@ -190,6 +190,42 @@
 
   .picker-view {
     width: inherit;
+
+    .cells-wrapper {
+      overflow: hidden;
+      position: relative;
+      transition-duration: 250ms;
+      transition-timing-function: ease-in-out;
+
+      .picker-cells {
+        transition-duration: 250ms;
+        transition-timing-function: ease-in-out;
+      }
+    }
+
+    .slide-right-leave-active,
+    .slide-right-enter-active {
+      position: absolute;
+      top: 0;
+    }
+    .slide-right-enter {
+      transform: translate(100%, 0);
+    }
+    .slide-right-leave-to {
+      transform: translate(-100%, 0);
+    }
+
+    .slide-left-leave-active,
+    .slide-left-enter-active {
+      position: absolute;
+      top: 0;
+    }
+    .slide-left-enter {
+      transform: translate(-100%, 0);
+    }
+    .slide-left-leave-to {
+      transform: translate(100%, 0);
+    }
   }
 }
 

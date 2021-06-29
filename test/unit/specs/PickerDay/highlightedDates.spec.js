@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import PickerDay from '~/components/PickerDay.vue'
 import { en } from '~/locale'
 
@@ -6,7 +6,7 @@ describe('PickerDay highlight date', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = shallowMount(PickerDay, {
+    wrapper = mount(PickerDay, {
       propsData: {
         translation: en,
         pageDate: new Date(2016, 9, 1),

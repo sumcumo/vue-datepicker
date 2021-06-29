@@ -353,6 +353,22 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapperTemp.vm.selectedDate).toEqual(null)
     expect(wrapperTemp.emitted('input')).toBeTruthy()
   })
+
+  it('sets the transition correctly', () => {
+    wrapper.vm.setTransitionName(1)
+    expect(wrapper.vm.transitionName).toBe('slide-right')
+
+    wrapper.vm.setTransitionName(-1)
+    expect(wrapper.vm.transitionName).toBe('slide-left')
+
+    wrapper.setData({ translation: { rtl: true } })
+
+    wrapper.vm.setTransitionName(1)
+    expect(wrapper.vm.transitionName).toBe('slide-left')
+
+    wrapper.vm.setTransitionName(-1)
+    expect(wrapper.vm.transitionName).toBe('slide-right')
+  })
 })
 
 describe('Datepicker.vue set by string', () => {

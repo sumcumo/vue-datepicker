@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import PickerDay from '~/components/PickerDay.vue'
 import { en } from '~/locale'
 import makeDateUtils from '~/utils/DateUtils'
@@ -9,7 +9,7 @@ describe('PickerDay: Set first day of week', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = shallowMount(PickerDay, {
+    wrapper = mount(PickerDay, {
       propsData: {
         firstDayOfWeek: 'mon',
         translation: en,
@@ -61,7 +61,7 @@ describe('PickerDay: Datepicker with Saturday as first day of week', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = shallowMount(PickerDay, {
+    wrapper = mount(PickerDay, {
       propsData: {
         firstDayOfWeek: 'sat',
         translation: en,
