@@ -436,17 +436,6 @@ export default {
       return dateTemp
     },
     /**
-     * Called in the event that the user navigates to date pages and
-     * closes the picker without selecting a date.
-     */
-    resetDefaultPageDate() {
-      if (this.selectedDate === null) {
-        this.setPageDate()
-        return
-      }
-      this.setPageDate(this.selectedDate)
-    },
-    /**
      * Select the date
      * @param {Number} timestamp
      */
