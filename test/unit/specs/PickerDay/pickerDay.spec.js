@@ -1,12 +1,12 @@
-import { mount, shallowMount } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import PickerDay from '~/components/PickerDay.vue'
 import { en, mn } from '~/locale'
 
-describe('PickerDay: shallowMounted', () => {
+describe('PickerDay', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = shallowMount(PickerDay, {
+    wrapper = mount(PickerDay, {
       propsData: {
         translation: en,
         pageDate: new Date(2018, 1, 1),
@@ -67,24 +67,6 @@ describe('PickerDay: shallowMounted', () => {
     const upButton = wrapper.find('.day__month_btn')
     await upButton.trigger('click')
     expect(wrapper.emitted('set-view')[0][0]).toBe('month')
-  })
-})
-
-describe('PickerDay: mounted', () => {
-  let wrapper
-
-  beforeEach(() => {
-    wrapper = mount(PickerDay, {
-      propsData: {
-        translation: en,
-        pageDate: new Date(2018, 1, 1),
-        view: 'day',
-      },
-    })
-  })
-
-  afterEach(() => {
-    wrapper.destroy()
   })
 
   it('displays edge dates by default', () => {
