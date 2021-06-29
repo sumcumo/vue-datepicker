@@ -33,6 +33,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    transitionName: {
+      type: String,
+      default: '',
+    },
     translation: {
       type: Object,
       default() {
@@ -79,6 +83,8 @@ export default {
       const units =
         this.view === 'year' ? incrementBy * this.yearRange : incrementBy
 
+      this.$emit('set-transition-name', incrementBy)
+
       if (this.view === 'day') {
         utils.setMonth(pageDate, utils.getMonth(pageDate) + units)
       } else {
@@ -88,15 +94,24 @@ export default {
       this.$emit('page-change', pageDate)
     },
     /**
-     * Emits a 'select' or 'select-disabled' event
+     * Determines which transition to use (for edge dates) and emits a 'select' or 'select-disabled' event
      * @param {Object} cell
      */
     select(cell) {
       if (cell.isDisabled) {
         this.$emit('select-disabled', cell)
-      } else {
-        this.$emit('select', cell)
+        return
       }
+
+      if (cell.isPreviousMonth) {
+        this.$emit('set-transition-name', -1)
+      }
+
+      if (cell.isNextMonth) {
+        this.$emit('set-transition-name', 1)
+      }
+
+      this.$emit('select', cell)
     },
   },
 }
