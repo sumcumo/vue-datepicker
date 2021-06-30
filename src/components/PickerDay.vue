@@ -21,9 +21,11 @@
     </PickerHeader>
 
     <div>
-      <span v-for="day in daysOfWeek" :key="day" class="day-header">
-        {{ day }}
-      </span>
+      <div class="day-header">
+        <span v-for="day in daysOfWeek" :key="day">
+          {{ day }}
+        </span>
+      </div>
 
       <PickerCells
         ref="cells"
