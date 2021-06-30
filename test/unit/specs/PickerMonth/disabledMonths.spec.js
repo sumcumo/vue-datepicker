@@ -4,6 +4,7 @@ import { en } from '~/locale'
 
 describe('PickerMonth', () => {
   let wrapper
+
   beforeEach(() => {
     wrapper = shallowMount(PickerMonth, {
       propsData: {
@@ -14,6 +15,7 @@ describe('PickerMonth', () => {
           to: new Date(2018, 2, 14),
           from: new Date(2018, 4, 15),
         },
+        view: 'month',
       },
     })
   })
@@ -27,8 +29,8 @@ describe('PickerMonth', () => {
     expect(wrapper.emitted('select')).toBeFalsy()
   })
 
-  it('should detect a disabled month when the `to` year is in the past', () => {
-    wrapper.setProps({
+  it('detects a disabled month when the `to` year is in the past', async () => {
+    await wrapper.setProps({
       disabledDates: {
         to: new Date(2017, 0, 1),
       },
@@ -37,8 +39,8 @@ describe('PickerMonth', () => {
     expect(wrapper.vm.isDisabledMonth(new Date(2016, 0, 1))).toEqual(true)
   })
 
-  it('should detect a disabled month when the `from` year is in the future', () => {
-    wrapper.setProps({
+  it('detects a disabled month when the `from` year is in the future', async () => {
+    await wrapper.setProps({
       disabledDates: {
         from: new Date(2019, 0, 1),
       },
@@ -47,30 +49,30 @@ describe('PickerMonth', () => {
     expect(wrapper.vm.isDisabledMonth(new Date(2020, 0, 1))).toEqual(true)
   })
 
-  it('should close without warning when its undefined', () => {
-    wrapper.setProps({
+  it('closes without warning when it is undefined', async () => {
+    await wrapper.setProps({
       disabledDates: undefined,
     })
     expect(wrapper.vm.isDisabledMonth(new Date(2016, 8, 29))).toEqual(false)
   })
 
-  it('should disable previous', () => {
+  it('disables the `previous` button', () => {
     expect(wrapper.vm.isPreviousDisabled).toEqual(true)
   })
 
-  it('should not disable previous', () => {
-    wrapper.setProps({
+  it('does not disable the `previous` button', async () => {
+    await wrapper.setProps({
       disabledDates: {},
     })
     expect(wrapper.vm.isPreviousDisabled).toEqual(false)
   })
 
-  it('should disable next', () => {
+  it('disables the `next` button', () => {
     expect(wrapper.vm.isNextDisabled).toEqual(true)
   })
 
-  it('should not disable next', () => {
-    wrapper.setProps({
+  it('does not disable the `next` button', async () => {
+    await wrapper.setProps({
       disabledDates: {},
     })
     expect(wrapper.vm.isNextDisabled).toEqual(false)

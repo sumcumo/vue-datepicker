@@ -4,6 +4,7 @@ import Datepicker from '~/components/Datepicker.vue'
 describe('Datepicker mounted', () => {
   let wrapper
   let date
+
   beforeEach(() => {
     date = new Date(2016, 1, 15)
     wrapper = mount(Datepicker, {
@@ -18,7 +19,7 @@ describe('Datepicker mounted', () => {
     wrapper.destroy()
   })
 
-  it('no out of bound', async () => {
+  it('is not out of bounds', async () => {
     const getBoundingClientRect = jest.fn(() => ({
       right: 10,
       bottom: 10,
@@ -27,15 +28,20 @@ describe('Datepicker mounted', () => {
     wrapper.vm.$refs.popup.$el.getBoundingClientRect = getBoundingClientRect
     wrapper.vm.$el.getBoundingClientRect = getBoundingClientRect
 
-    wrapper.vm.open()
-    await wrapper.vm.$nextTick()
+    await wrapper.vm.open()
 
     const calendar = wrapper.vm.$refs.popup
     expect(calendar.$el.style.left).toBe('0px')
     expect(calendar.$el.style.top).toBe('10px')
+
+    await wrapper.vm.close()
+    await wrapper.vm.open()
+
+    expect(calendar.$el.style.left).toBe('0px')
+    expect(calendar.$el.style.top).toBe('10px')
   })
 
-  it('everything out of bound', async () => {
+  it('has everything out of bounds', async () => {
     const getBoundingClientRect = jest.fn(() => ({
       right: 2000,
       bottom: 1000,
@@ -52,15 +58,14 @@ describe('Datepicker mounted', () => {
     wrapper.vm.$refs.popup.$el.getBoundingClientRect = getBoundingClientRect
     wrapper.vm.$el.getBoundingClientRect = getBoundingClientRect
 
-    wrapper.vm.open()
-    await wrapper.vm.$nextTick()
+    await wrapper.vm.open()
 
     const calendar = wrapper.vm.$refs.popup
     expect(calendar.$el.style.left).toBe('0px')
     expect(calendar.$el.style.top).toBe('10px')
   })
 
-  it('fixed position top right', async () => {
+  it('has a fixed position of `top-right`', async () => {
     const getBoundingClientRect = jest.fn(() => ({
       right: 10,
       bottom: 10,
@@ -75,32 +80,30 @@ describe('Datepicker mounted', () => {
     }))
     wrapper.vm.$refs.popup.$el.getBoundingClientRect = getBoundingClientRect
     wrapper.vm.$el.getBoundingClientRect = getBoundingClientRect
-    wrapper.setProps({
+    await wrapper.setProps({
       fixedPosition: 'top-right',
     })
 
-    wrapper.vm.open()
-    await wrapper.vm.$nextTick()
+    await wrapper.vm.open()
 
     const calendar = wrapper.vm.$refs.popup
     expect(calendar.$el.style.left).toBe('10px')
     expect(calendar.$el.style.top).toBe('0px')
   })
 
-  it('fixed position bottom left', async () => {
-    wrapper.setProps({
+  it('has a fixed position of `top-left`', async () => {
+    await wrapper.setProps({
       fixedPosition: 'bottom-left',
     })
 
-    wrapper.vm.open()
-    await wrapper.vm.$nextTick()
+    await wrapper.vm.open()
 
     const calendar = wrapper.vm.$refs.popup
     expect(calendar.$el.style.left).toBe('0px')
     expect(calendar.$el.style.top).toBe('0px')
   })
 
-  it('should have relative position', async () => {
+  it('has a relative position', async () => {
     const getBoundingClientRect = jest.fn(() => ({
       left: 10,
       right: 10,
@@ -118,8 +121,7 @@ describe('Datepicker mounted', () => {
     wrapper.vm.$refs.popup.$el.getBoundingClientRect = getBoundingClientRect
     wrapper.vm.$el.getBoundingClientRect = getBoundingClientRect
 
-    wrapper.vm.open()
-    await wrapper.vm.$nextTick()
+    await wrapper.vm.open()
 
     const calendar = wrapper.vm.$refs.popup
     expect(calendar.$el.style.left).toBe('-9px')

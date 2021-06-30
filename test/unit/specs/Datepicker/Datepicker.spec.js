@@ -34,19 +34,19 @@ describe('Datepicker mounted', () => {
     wrapper.destroy()
   })
 
-  it('should emit blur', () => {
+  it('emits blur', async () => {
     const input = wrapper.find('input')
-    input.trigger('blur')
-    expect(wrapper.emitted().blur).toBeTruthy()
+    await input.trigger('blur')
+    expect(wrapper.emitted('blur')).toBeTruthy()
   })
 
-  it('should emit focus', () => {
+  it('emits focus', async () => {
     const input = wrapper.find('input')
-    input.trigger('focus')
-    expect(wrapper.emitted().focus).toBeTruthy()
+    await input.trigger('focus')
+    expect(wrapper.emitted('focus')).toBeTruthy()
   })
 
-  it('should toggle when the input field is clicked', async () => {
+  it('toggles when the input field is clicked', async () => {
     const input = wrapper.find('input')
     await input.trigger('click')
 
@@ -56,7 +56,7 @@ describe('Datepicker mounted', () => {
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
 
-  it('should open on focusing the input when showCalendarOnFocus = true', async () => {
+  it('opens on focusing the input when showCalendarOnFocus = true', async () => {
     await wrapper.setProps({
       showCalendarOnFocus: true,
     })
@@ -67,7 +67,7 @@ describe('Datepicker mounted', () => {
     expect(wrapper.vm.isOpen).toBeTruthy()
   })
 
-  it('should toggle via the calendar button', async () => {
+  it('toggles via the calendar button', async () => {
     await wrapper.setProps({
       calendarButton: true,
     })
@@ -80,7 +80,7 @@ describe('Datepicker mounted', () => {
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
 
-  it('should toggle via the calendar button when showCalendarOnFocus = true', async () => {
+  it('toggles via the calendar button when showCalendarOnFocus = true', async () => {
     await wrapper.setProps({
       calendarButton: true,
       showCalendarOnFocus: true,
@@ -95,7 +95,7 @@ describe('Datepicker mounted', () => {
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
 
-  it('should close via the calendar button, despite input being focused', async () => {
+  it('closes via the calendar button, despite input being focused', async () => {
     await wrapper.setProps({
       calendarButton: true,
       showCalendarOnFocus: true,
@@ -113,7 +113,7 @@ describe('Datepicker mounted', () => {
   })
 
   it('resets the date correctly when typeable', async () => {
-    wrapper.setProps({
+    await wrapper.setProps({
       typeable: true,
     })
 
@@ -134,6 +134,7 @@ describe('Datepicker mounted', () => {
 describe('Datepicker shallowMounted', () => {
   let wrapper
   let date
+
   beforeEach(() => {
     date = new Date(2016, 1, 15)
     wrapper = shallowMount(Datepicker, {
@@ -167,25 +168,15 @@ describe('Datepicker shallowMounted', () => {
   })
 
   it('sets the date', () => {
-    const dateTemp = new Date(2016, 9, 9)
-    const wrapperTemp = shallowMount(Datepicker, {
-      propsData: {
-        format: 'yyyy-MM-dd',
-      },
-    })
-    wrapperTemp.vm.selectDate(dateTemp.valueOf())
-    expect(wrapperTemp.vm.selectedDate.valueOf()).toEqual(dateTemp.valueOf())
+    expect(wrapper.vm.selectedDate.valueOf()).toEqual(date.valueOf())
   })
 
   it('clears the date', () => {
-    const dateTemp = new Date(2016, 9, 9)
-    const wrapperTemp = shallowMount(Datepicker)
-    wrapperTemp.vm.selectDate(dateTemp.valueOf())
-    wrapperTemp.vm.clearDate()
-    expect(wrapperTemp.vm.selectedDate).toEqual(null)
+    wrapper.vm.clearDate()
+    expect(wrapper.vm.selectedDate).toEqual(null)
   })
 
-  it('should set pageTimestamp to be now', () => {
+  it('sets pageTimestamp to be now', () => {
     const data = Datepicker.data()
     const d = new Date(data.pageTimestamp)
     expect(d.getFullYear()).toEqual(new Date().getFullYear())
@@ -193,33 +184,32 @@ describe('Datepicker shallowMounted', () => {
     expect(d.getDate()).toEqual(1)
   })
 
-  it('should open and close the calendar', () => {
-    wrapper.vm.close()
+  it('toggles the calendar', async () => {
     expect(wrapper.vm.isOpen).toEqual(false)
 
     wrapper.vm.setView('month')
     expect(wrapper.vm.isOpen).toEqual(true)
 
-    wrapper.vm.close()
+    await wrapper.vm.close()
     expect(wrapper.vm.isOpen).toEqual(false)
 
     wrapper.vm.setView('year')
     expect(wrapper.vm.isOpen).toEqual(true)
 
-    wrapper.vm.close()
+    await wrapper.vm.close()
     expect(wrapper.vm.isOpen).toEqual(false)
 
     wrapper.vm.setView('day')
     expect(wrapper.vm.isOpen).toEqual(true)
 
-    wrapper.vm.close()
+    await wrapper.vm.close()
     expect(wrapper.vm.isOpen).toEqual(false)
 
-    wrapper.vm.setView('nonsense')
+    wrapper.vm.setView('invalid date')
     expect(wrapper.vm.isOpen).toEqual(false)
   })
 
-  it('should emit `selected-disabled` on selecting a disabled cell', () => {
+  it('emits `selected-disabled` on selecting a disabled cell', () => {
     wrapper.vm.handleSelectDisabled({ isDisabled: true })
     expect(wrapper.emitted('selected-disabled')).toBeTruthy()
   })
@@ -230,7 +220,7 @@ describe('Datepicker shallowMounted', () => {
     wrapper.vm.handleSelect({ timestamp: dateTemp.valueOf() })
     expect(wrapper.vm.pageTimestamp).toEqual(dateTemp.valueOf())
     expect(wrapper.vm.selectedDate.getMonth()).toEqual(9)
-    expect(wrapper.emitted().selected).toBeTruthy()
+    expect(wrapper.emitted('selected')).toBeTruthy()
   })
 
   it('can select a month', () => {
@@ -262,45 +252,36 @@ describe('Datepicker shallowMounted', () => {
   })
 
   it('sets the date on typedDate event', () => {
-    const wrapperTemp = shallowMount(Datepicker)
     const today = new Date()
-    wrapperTemp.vm.handleTypedDate(today)
-    expect(wrapperTemp.vm.selectedDate).toEqual(today)
+    wrapper.vm.handleTypedDate(today)
+    expect(wrapper.vm.selectedDate).toEqual(today)
   })
 
   it('watches value', async () => {
-    const wrapperTemp = shallowMount(Datepicker, {
-      propsData: {
-        value: '2018-01-01',
-      },
-    })
-    const spy = jest.spyOn(wrapperTemp.vm, 'setValue')
-    wrapperTemp.setProps({ value: '2018-04-26' })
-    await wrapperTemp.vm.$nextTick()
+    const spy = jest.spyOn(wrapper.vm, 'setValue')
+    await wrapper.setProps({ value: '2018-04-26' })
+
     expect(spy).toHaveBeenCalled()
   })
 
   it('watches openDate', async () => {
-    const wrapperTemp = shallowMount(Datepicker, {
-      propsData: {
-        openDate: new Date(2018, 0, 1),
-      },
+    await wrapper.setProps({
+      openDate: new Date(2018, 0, 1),
     })
-    const spy = jest.spyOn(wrapperTemp.vm, 'setPageDate')
-    wrapperTemp.setProps({ openDate: new Date(2018, 3, 26) })
-    await wrapperTemp.vm.$nextTick()
+    const spy = jest.spyOn(wrapper.vm, 'setPageDate')
+    await wrapper.setProps({ openDate: new Date(2018, 3, 26) })
+
     expect(spy).toHaveBeenCalled()
   })
 
   it('watches initialView', async () => {
-    const wrapperTemp = shallowMount(Datepicker, {
-      propsData: {
-        initialView: 'day',
-      },
+    await wrapper.setProps({
+      initialView: 'day',
     })
-    const spy = jest.spyOn(wrapperTemp.vm, 'setInitialView')
 
-    await wrapperTemp.setProps({ initialView: 'month' })
+    const spy = jest.spyOn(wrapper.vm, 'setInitialView')
+
+    await wrapper.setProps({ initialView: 'month' })
 
     expect(spy).toHaveBeenCalled()
   })
@@ -322,7 +303,6 @@ describe('Datepicker shallowMounted', () => {
       inline: true,
     })
 
-    await wrapper.vm.$nextTick()
     const datepicker = wrapper.find('.vdp-datepicker__calendar')
 
     expect(datepicker.element.className).toContain('vdp-datepicker__calendar')
@@ -354,7 +334,7 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapper.emitted('changed-decade')).toBeTruthy()
   })
 
-  it('should clear date on default date disabled', async () => {
+  it('clears date on default date disabled', async () => {
     const someDate = new Date('2021-01-15')
     const wrapperTemp = shallowMount(Datepicker, {
       propsData: {
@@ -369,14 +349,15 @@ describe('Datepicker shallowMounted', () => {
         },
       },
     })
-    await wrapperTemp.vm.$nextTick()
+
     expect(wrapperTemp.vm.selectedDate).toEqual(null)
-    expect(wrapperTemp.emitted().input).toBeTruthy()
+    expect(wrapperTemp.emitted('input')).toBeTruthy()
   })
 })
 
 describe('Datepicker.vue set by string', () => {
   let wrapper
+
   it('can parse a string date', () => {
     wrapper = shallowMount(Datepicker, {
       propsData: {
@@ -390,7 +371,7 @@ describe('Datepicker.vue set by string', () => {
     expect(wrapper.vm.selectedDate.getDate()).toEqual(date.getDate())
   })
 
-  it('should nullify malformed value', () => {
+  it('nullifies malformed value', () => {
     wrapper = shallowMount(Datepicker, {
       propsData: {
         value: 'today',
@@ -402,6 +383,7 @@ describe('Datepicker.vue set by string', () => {
 
 describe('Datepicker.vue set by timestamp', () => {
   let wrapper
+
   it('can parse unix timestamp', () => {
     wrapper = shallowMount(Datepicker, {
       propsData: {
@@ -446,6 +428,7 @@ describe('Datepicker.vue using UTC', () => {
 
 describe('Datepicker.vue inline', () => {
   let wrapper
+
   beforeEach(() => {
     wrapper = mount(Datepicker, {
       propsData: {
@@ -455,15 +438,15 @@ describe('Datepicker.vue inline', () => {
   })
 
   afterEach(() => {
-    wrapper.vm.$destroy()
+    wrapper.destroy()
   })
 
-  it('should show calendar as already open', () => {
+  it('shows calendar as already open', () => {
     expect(wrapper.vm.isOpen).toEqual(true)
     expect(wrapper.vm.isInline).toEqual(true)
   })
 
-  it('should not close the calendar when date is selected', () => {
+  it('does not close the calendar when date is selected', () => {
     const date = new Date()
     wrapper.vm.handleSelect({ timestamp: date.valueOf() })
     expect(wrapper.vm.isOpen).toEqual(true)
@@ -474,70 +457,79 @@ describe('Datepicker.vue inline', () => {
 
 describe('Datepicker with initial-view', () => {
   let wrapper
-  it('should open in Day view', () => {
-    wrapper = shallowMount(Datepicker)
-    wrapper.vm.open()
+
+  beforeEach(() => {
+    wrapper = mount(Datepicker)
+  })
+
+  afterEach(() => {
+    wrapper.destroy()
+  })
+
+  it('opens in `day` view', async () => {
+    await wrapper.vm.open()
+
     expect(wrapper.vm.computedInitialView).toEqual('day')
     expect(wrapper.vm.picker).toEqual('PickerDay')
   })
 
-  it('should open in Month view', () => {
-    wrapper = shallowMount(Datepicker, {
-      propsData: {
-        initialView: 'month',
-      },
+  it('opens in `month` view', async () => {
+    await wrapper.setProps({
+      initialView: 'month',
     })
-    wrapper.vm.open()
+    await wrapper.vm.open()
     expect(wrapper.vm.computedInitialView).toEqual('month')
     expect(wrapper.vm.picker).toEqual('PickerMonth')
   })
 
-  it('should open in Year view', () => {
-    wrapper = shallowMount(Datepicker, {
-      propsData: {
-        initialView: 'year',
-      },
+  it('opens in `year` view', async () => {
+    await wrapper.setProps({
+      initialView: 'year',
     })
-    wrapper.vm.open()
+    await wrapper.vm.open()
     expect(wrapper.vm.computedInitialView).toEqual('year')
     expect(wrapper.vm.picker).toEqual('PickerYear')
   })
 
-  it('should not open if the calendar is disabled', () => {
-    wrapper = shallowMount(Datepicker, {
-      propsData: {
-        disabled: true,
-      },
+  it('does not open if the calendar is disabled', async () => {
+    await wrapper.setProps({
+      disabled: true,
     })
-    wrapper.vm.open()
+    await wrapper.vm.open()
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
 })
 
 describe('Datepicker on body', () => {
   let wrapper
-  it('should append popup to body', async () => {
+
+  it('appends popup to body', async () => {
     wrapper = mount(Datepicker, {
       propsData: {
         appendToBody: true,
       },
     })
-    wrapper.vm.open()
-    await wrapper.vm.$nextTick()
+
+    await wrapper.vm.open()
+
     expect(wrapper.vm.$el.querySelector('.vdp-datepicker__calendar')).toBeNull()
     expect(document.querySelector('.vdp-datepicker__calendar')).toBeDefined()
-    wrapper.vm.$destroy()
+
+    await wrapper.vm.close()
+    wrapper.destroy()
   })
 
-  it('should remove popup on body on component removal', async () => {
+  it('removes popup on body on component removal', async () => {
     wrapper = mount(Datepicker, {
       propsData: {
         appendToBody: true,
       },
     })
-    wrapper.vm.open()
-    await wrapper.vm.$nextTick()
-    wrapper.vm.$destroy()
+
+    await wrapper.vm.open()
+    await wrapper.vm.close()
+
+    wrapper.destroy()
     expect(document.querySelector('.vdp-datepicker__calendar')).toBeNull()
   })
 })

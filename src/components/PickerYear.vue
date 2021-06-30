@@ -1,31 +1,33 @@
 <template>
-  <div class="picker-view">
+  <div>
     <slot name="beforeCalendarHeaderYear" />
+
     <PickerHeader
       v-if="showHeader"
       :is-next-disabled="isNextDisabled"
       :is-previous-disabled="isPreviousDisabled"
       :is-rtl="isRtl"
-      @next="nextPage"
-      @previous="previousPage"
+      @page-change="changePage($event)"
     >
+      <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
       <span>
         {{ pageTitleYear }}
       </span>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
-      <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
+
     <div ref="cells">
       <span
         v-for="cell in cells"
         :key="cell.timestamp"
-        :class="{ selected: cell.isSelected, disabled: cell.isDisabled }"
         class="cell year"
+        :class="{ selected: cell.isSelected, disabled: cell.isDisabled }"
         @click="select(cell)"
       >
         {{ cell.year }}
       </span>
     </div>
+
     <slot name="calendarFooterYear" />
   </div>
 </template>
@@ -54,7 +56,7 @@ export default {
       const year = this.useUtc
         ? Math.floor(d.getUTCFullYear() / this.yearRange) * this.yearRange
         : Math.floor(d.getFullYear() / this.yearRange) * this.yearRange
-      // set up a new date object to the beginning of the current 'page'7
+      // set up a new date object to the beginning of the current 'page'
       const dObj = this.useUtc
         ? new Date(Date.UTC(year, d.getUTCMonth(), d.getUTCDate()))
         : new Date(
@@ -141,22 +143,6 @@ export default {
       return (
         this.selectedDate && year === this.utils.getFullYear(this.selectedDate)
       )
-    },
-    /**
-     * Increments the page (overrides nextPage in pickerMixin)
-     */
-    nextPage() {
-      if (!this.isNextDisabled) {
-        this.changePage(this.yearRange)
-      }
-    },
-    /**
-     * Decrements the page (overrides previousPage in pickerMixin)
-     */
-    previousPage() {
-      if (!this.isPreviousDisabled) {
-        this.changePage(-this.yearRange)
-      }
     },
   },
 }

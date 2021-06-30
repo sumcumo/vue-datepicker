@@ -32,19 +32,18 @@
   }
 
   header {
-    display: block;
+    display: flex;
+    justify-content: space-between;
     line-height: 40px;
 
     span {
       display: inline-block;
-      float: left;
       text-align: center;
       width: 71.42857142857143%;
     }
 
     .prev,
     .next {
-      float: left;
       max-height: 40px;
       position: relative;
       width: 14.285714285714286%;
@@ -60,6 +59,10 @@
           top: 50%;
           transform: translateX(-50%) translateY(-50%);
         }
+      }
+
+      &.rtl {
+        transform: rotate(180deg);
       }
     }
 

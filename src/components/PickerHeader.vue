@@ -2,8 +2,8 @@
   <header>
     <span
       class="prev"
-      :class="{ disabled: isLeftNavDisabled }"
-      @click="$emit(isRtl ? 'next' : 'previous')"
+      :class="{ disabled: isPreviousDisabled, rtl: isRtl }"
+      @click="isPreviousDisabled ? null : $emit('page-change', -1)"
     >
       <slot name="prevIntervalBtn">
         <span class="default">&lt;</span>
@@ -12,8 +12,8 @@
     <slot />
     <span
       class="next"
-      :class="{ disabled: isRightNavDisabled }"
-      @click="$emit(isRtl ? 'previous' : 'next')"
+      :class="{ disabled: isNextDisabled, rtl: isRtl }"
+      @click="isNextDisabled ? null : $emit('page-change', 1)"
     >
       <slot name="nextIntervalBtn">
         <span class="default">&gt;</span>
@@ -37,22 +37,6 @@ export default {
     isRtl: {
       type: Boolean,
       required: true,
-    },
-  },
-  computed: {
-    /**
-     * Is the left hand navigation button disabled?
-     * @return {Boolean}
-     */
-    isLeftNavDisabled() {
-      return this.isRtl ? this.isNextDisabled : this.isPreviousDisabled
-    },
-    /**
-     * Is the right hand navigation button disabled?
-     * @return {Boolean}
-     */
-    isRightNavDisabled() {
-      return this.isRtl ? this.isPreviousDisabled : this.isNextDisabled
     },
   },
 }

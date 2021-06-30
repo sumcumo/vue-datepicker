@@ -4,6 +4,7 @@ import { en } from '~/locale'
 
 describe('PickerDay: DOM', () => {
   let wrapper
+
   beforeEach(() => {
     wrapper = shallowMount(PickerDay, {
       propsData: {
@@ -18,7 +19,7 @@ describe('PickerDay: DOM', () => {
     wrapper.destroy()
   })
 
-  it('should render correct contents', () => {
+  it('renders correct contents', () => {
     expect(wrapper.findAll('.cell').length).toBeGreaterThan(0)
   })
 })
