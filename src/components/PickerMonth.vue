@@ -1,5 +1,5 @@
 <template>
-  <div class="picker-view">
+  <div>
     <slot name="beforeCalendarHeaderMonth" />
 
     <PickerHeader
