@@ -151,14 +151,12 @@ export default {
      * Toggles the calendar (unless `show-calendar-on-button-click` is true)
      */
     handleInputClick() {
-      /* istanbul ignore next */
       const isFocusedUsed = this.showCalendarOnFocus && !this.isFocusedUsed
 
       if (!this.showCalendarOnButtonClick && !isFocusedUsed) {
         this.toggle()
       }
 
-      /* istanbul ignore next */
       if (this.showCalendarOnFocus) {
         this.isFocusedUsed = true
       }
