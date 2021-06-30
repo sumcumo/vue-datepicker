@@ -60,6 +60,7 @@
         <slot name="beforeCalendarHeader" />
         <Component
           :is="picker"
+          class="picker-view"
           :day-cell-content="dayCellContent"
           :disabled-dates="disabledDates"
           :first-day-of-week="firstDayOfWeek"
