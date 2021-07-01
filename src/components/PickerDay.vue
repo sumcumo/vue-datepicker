@@ -24,19 +24,18 @@
       <span v-for="day in daysOfWeek" :key="day" class="day-header">
         {{ day }}
       </span>
-      <div ref="cells">
-        <span
-          v-for="cell in cells"
-          :key="cell.timestamp"
-          class="cell day"
-          :class="dayClasses(cell)"
-          @click="select(cell)"
-        >
-          <slot name="dayCellContent" :cell="cell">
-            {{ dayCellContent(cell) }}
-          </slot>
-        </span>
-      </div>
+
+      <PickerCells
+        ref="cells"
+        :key="pageTitleDay"
+        v-slot="{ cell }"
+        :cells="cells"
+        :show-edge-dates="showEdgeDates"
+        view="day"
+        @select="select($event)"
+      >
+        {{ dayCellContent(cell) }}
+      </PickerCells>
     </div>
 
     <slot name="calendarFooterDay" />
@@ -47,9 +46,11 @@
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
 import HighlightedDate from '~/utils/HighlightedDate'
+import PickerCells from './PickerCells.vue'
 
 export default {
   name: 'PickerDay',
+  components: { PickerCells },
   mixins: [pickerMixin],
   props: {
     dayCellContent: {
@@ -212,30 +213,6 @@ export default {
     },
   },
   methods: {
-    /**
-     * Set the class for a specific day
-     * @param {Object} day
-     * @return {Object}
-     */
-    // eslint-disable-next-line complexity
-    dayClasses(day) {
-      return {
-        'selected': this.showEdgeDates
-          ? day.isSelected
-          : day.isSelected && !day.isPreviousMonth && !day.isNextMonth,
-        'disabled': day.isDisabled,
-        'highlighted': day.isHighlighted,
-        'muted': day.isPreviousMonth || day.isNextMonth,
-        'today': this.showEdgeDates
-          ? day.isToday
-          : day.isToday && !day.isPreviousMonth && !day.isNextMonth,
-        'weekend': day.isWeekend,
-        'sat': day.isSaturday,
-        'sun': day.isSunday,
-        'highlight-start': day.isHighlightStart,
-        'highlight-end': day.isHighlightEnd,
-      }
-    },
     /**
      * Set up a new date object to the first day of the current 'page'
      * @return Date

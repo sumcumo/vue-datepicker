@@ -20,6 +20,6 @@ describe('PickerDay: DOM', () => {
   })
 
   it('renders correct contents', () => {
-    expect(wrapper.findAll('.cell').length).toBeGreaterThan(0)
+    expect(wrapper.vm.cells.length).toBeGreaterThan(0)
   })
 })
