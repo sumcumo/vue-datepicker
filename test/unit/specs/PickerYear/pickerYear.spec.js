@@ -77,6 +77,6 @@ describe('PickerYear', () => {
     })
 
     expect(wrapper.vm.pageTitleYear).toEqual('2016 - 2027')
-    expect(wrapper.vm.$el.querySelectorAll('.cell.year').length).toEqual(12)
+    expect(wrapper.vm.cells.length).toEqual(12)
   })
 })
