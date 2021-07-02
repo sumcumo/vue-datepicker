@@ -69,13 +69,15 @@ export default {
     /**
      * Sets the `left` and `top` style attributes of the popup
      */
+    // eslint-disable-next-line max-statements
     displayPopup() {
       if (this.inline || !this.visible) return
       this.setTopStyle()
       const popup = this.$el
+      const pickerView = this.$parent.$refs.pickerView.$el
       const relativeElement = this.$parent.$el
       if (!this.popupRect) {
-        this.popupRect = getPopupElementSize(popup)
+        this.popupRect = getPopupElementSize(popup, pickerView)
       }
       const { width, height } = this.popupRect
       const { left, top } = getRelativePosition({
@@ -88,8 +90,8 @@ export default {
         rtl: this.rtl,
       })
 
-      this.$el.style.left = left
-      this.$el.style.top = top
+      popup.style.left = left
+      popup.style.top = top
     },
   },
   render() {

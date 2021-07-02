@@ -50,46 +50,54 @@
       :rtl="isRtl"
       :visible="isOpen"
     >
-      <div
-        v-show="isOpen"
-        ref="datepicker"
-        class="vdp-datepicker__calendar"
-        :class="pickerClasses"
-        @mousedown.prevent
-      >
-        <slot name="beforeCalendarHeader" />
-        <Component
-          :is="picker"
-          class="picker-view"
-          :day-cell-content="dayCellContent"
-          :disabled-dates="disabledDates"
-          :first-day-of-week="firstDayOfWeek"
-          :highlighted="highlighted"
-          :is-rtl="isRtl"
-          :is-up-disabled="isUpDisabled"
-          :page-date="pageDate"
-          :selected-date="selectedDate"
-          :show-edge-dates="showEdgeDates"
-          :show-full-month-name="fullMonthName"
-          :show-header="showHeader"
-          :translation="translation"
-          :use-utc="useUtc"
-          :view="view || computedInitialView"
-          :year-range="yearPickerRange"
-          @page-change="handlePageChange"
-          @select="handleSelect"
-          @select-disabled="handleSelectDisabled"
-          @set-view="setView"
+      <Transition name="fade">
+        <div
+          v-show="isOpen"
+          ref="datepicker"
+          class="vdp-datepicker__calendar"
+          :class="pickerClasses"
+          @mousedown.prevent
         >
-          <template v-for="slotKey of calendarSlots">
-            <slot :slot="slotKey" :name="slotKey" />
-          </template>
-          <template #dayCellContent="{ cell }">
-            <slot v-if="cell" name="dayCellContent" :cell="cell" />
-          </template>
-        </Component>
-        <slot name="calendarFooter" />
-      </div>
+          <Transition name="fade">
+            <slot name="beforeCalendarHeader" />
+            <Component
+              :is="picker"
+              ref="pickerView"
+              :key="view"
+              class="picker-view"
+              :day-cell-content="dayCellContent"
+              :disabled-dates="disabledDates"
+              :first-day-of-week="firstDayOfWeek"
+              :highlighted="highlighted"
+              :is-rtl="isRtl"
+              :is-up-disabled="isUpDisabled"
+              :page-date="pageDate"
+              :selected-date="selectedDate"
+              :show-edge-dates="showEdgeDates"
+              :show-full-month-name="fullMonthName"
+              :show-header="showHeader"
+              :transition-name="transitionName"
+              :translation="translation"
+              :use-utc="useUtc"
+              :view="view || computedInitialView"
+              :year-range="yearPickerRange"
+              @page-change="handlePageChange"
+              @select="handleSelect"
+              @select-disabled="handleSelectDisabled"
+              @set-transition-name="setTransitionName($event)"
+              @set-view="setView"
+            >
+              <template v-for="slotKey of calendarSlots">
+                <slot :slot="slotKey" :name="slotKey" />
+              </template>
+              <template #dayCellContent="{ cell }">
+                <slot v-if="cell" name="dayCellContent" :cell="cell" />
+              </template>
+            </Component>
+            <slot name="calendarFooter" />
+          </Transition>
+        </div>
+      </Transition>
     </Popup>
   </div>
 </template>
@@ -226,6 +234,7 @@ export default {
        * {Date}
        */
       selectedDate: null,
+      transitionName: '',
       utils,
       view: '',
     }
@@ -476,6 +485,19 @@ export default {
         dateTemp = this.utils.resetDateTime(dateTemp)
       }
       this.pageTimestamp = this.utils.setDate(new Date(dateTemp), 1)
+    },
+    /**
+     * Sets the direction of the slide transition
+     * @param {Number} plusOrMinus Positive for the future; negative for the past
+     */
+    setTransitionName(plusOrMinus) {
+      const isInTheFuture = plusOrMinus > 0
+
+      if (this.isRtl) {
+        this.transitionName = isInTheFuture ? 'slide-left' : 'slide-right'
+      } else {
+        this.transitionName = isInTheFuture ? 'slide-right' : 'slide-left'
+      }
     },
     /**
      * Set the datepicker value

@@ -1,24 +1,51 @@
-/* eslint no-param-reassign: 0 */
 /**
- * get the hidden element width, height
- * @param {HTMLElement} element dom
+ * Get the element width
+ * @param {HTMLElement} element
+ * @param {Object}      styles
  */
-export function getPopupElementSize(element) {
-  const originalDisplay = element.style.display
-  const originalVisibility = element.style.visibility
-  element.style.display = 'block'
-  element.style.visibility = 'hidden'
-  const styles = window.getComputedStyle(element)
-  const width =
+function getWidth(element, styles) {
+  return (
     element.offsetWidth +
     parseInt(styles.marginLeft, 10) +
     parseInt(styles.marginRight, 10)
-  const height =
+  )
+}
+
+/**
+ * Get the element height
+ * @param {HTMLElement} element
+ * @param {Object}      styles
+ */
+function getHeight(element, styles) {
+  return (
     element.offsetHeight +
     parseInt(styles.marginTop, 10) +
     parseInt(styles.marginBottom, 10)
-  element.style.display = originalDisplay
-  element.style.visibility = originalVisibility
+  )
+}
+
+/**
+ * Get the hidden element width, height
+ * @param {HTMLElement} popup      The popup element
+ * @param {HTMLElement} pickerView The pickerView element
+ */
+/* eslint no-param-reassign: 0 */
+// eslint-disable-next-line max-statements
+export function getPopupElementSize(popup, pickerView) {
+  const originalDisplay = popup.style.display
+  const originalVisibility = popup.style.visibility
+
+  popup.style.display = 'block'
+  popup.style.visibility = 'hidden'
+  pickerView.style.position = 'relative'
+
+  const styles = window.getComputedStyle(popup)
+  const width = getWidth(popup, styles)
+  const height = getHeight(popup, styles)
+
+  popup.style.display = originalDisplay
+  popup.style.visibility = originalVisibility
+  pickerView.style.position = 'absolute'
 
   return {
     width,
@@ -27,7 +54,7 @@ export function getPopupElementSize(element) {
 }
 
 /**
- * get the popup position
+ * Get the popup position
  * @param {Element} el element
  * @param {Element} elRelative relative element
  * @param {Number} targetWidth target element's width

@@ -14,8 +14,8 @@
 
 .vdp-datepicker__calendar {
   background: #fff;
-  border: 1px solid #ccc;
   position: absolute;
+  transition-duration: 250ms;
   width: 300px;
   z-index: 10000;
 
@@ -112,12 +112,6 @@
     //}
   }
 
-  .flex-rtl {
-    display: flex;
-    flex-wrap: wrap;
-    width: inherit;
-  }
-
   .cell {
     border: 1px solid transparent;
     display: inline-block;
@@ -177,7 +171,7 @@
     }
   }
 
-  .day-header {
+  .day-header span {
     display: inline-block;
     font-size: 75%;
     height: 40px;
@@ -195,8 +189,53 @@
   }
 
   .picker-view {
+    background: #fff;
+    border: 1px solid #ccc;
+    position: absolute;
+    transition-duration: 250ms;
     width: inherit;
+
+    .cells-wrapper {
+      overflow: hidden;
+      position: relative;
+      transition-duration: 250ms;
+      transition-timing-function: ease-in-out;
+
+      .picker-cells {
+        transition-duration: 250ms;
+        transition-timing-function: ease-in-out;
+      }
+    }
+
+    .slide-right-leave-active,
+    .slide-right-enter-active {
+      position: absolute;
+      top: 0;
+    }
+    .slide-right-enter {
+      transform: translate(100%, 0);
+    }
+    .slide-right-leave-to {
+      transform: translate(-100%, 0);
+    }
+
+    .slide-left-leave-active,
+    .slide-left-enter-active {
+      position: absolute;
+      top: 0;
+    }
+    .slide-left-enter {
+      transform: translate(-100%, 0);
+    }
+    .slide-left-leave-to {
+      transform: translate(100%, 0);
+    }
   }
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 
 .vdp-datepicker__clear-button,
