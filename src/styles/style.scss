@@ -190,6 +190,9 @@
   }
 
   .picker-view {
+    background: #fff;
+    position: absolute;
+    transition-duration: 250ms;
     width: inherit;
 
     .cells-wrapper {
@@ -232,6 +235,11 @@
 
 .toggle-enter,
 .toggle-leave-to {
+  opacity: 0;
+}
+
+.view-enter,
+.view-leave-to {
   opacity: 0;
 }
 
