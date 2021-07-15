@@ -16,6 +16,7 @@
   background: #fff;
   border: 1px solid #ccc;
   position: absolute;
+  transition-duration: 250ms;
   width: 300px;
   z-index: 10000;
 
@@ -227,6 +228,11 @@
       transform: translate(100%, 0);
     }
   }
+}
+
+.toggle-enter,
+.toggle-leave-to {
+  opacity: 0;
 }
 
 .vdp-datepicker__clear-button,
