@@ -1,337 +1,343 @@
 <template>
   <div id="app">
     <h1>Datepicker Examples</h1>
-    <div class="example">
+    <div class="example" style="background: #333399; margin-top: 100px">
       <h3>Default datepicker...</h3>
-      <Datepicker placeholder="Select Date" />
-      <code>
-        &lt;datepicker placeholder="Select Date"&gt;&lt;/datepicker&gt;
-      </code>
+<!--      <Datepicker placeholder="Select Date" fixed-position="bottom-right">-->
+      <Datepicker placeholder="Select Date" :inline="false">
+        <template #beforeCalendarHeader><div style="padding:10px; height: 50px">This is the beforeCalendarHeader slot</div></template>
+        <template #beforeCalendarHeaderDay><div style="padding:10px">This is the beforeCalendarHeaderDay slot</div></template>
+        <template #calendarFooterDay><div style="padding:10px">This is the calendarFooterDay slot</div></template>
+        <template #calendarFooter><div style="padding:10px; height: 50px">This is the calendarFooter slot</div></template>
+      </Datepicker>
+<!--      <code>-->
+<!--        &lt;datepicker placeholder="Select Date"&gt;&lt;/datepicker&gt;-->
+<!--      </code>-->
     </div>
 
-    <div class="example">
-      <h3>Custom first-day-of-week datepicker</h3>
-      <Datepicker placeholder="Type or select date" first-day-of-week="mon" />
-      <code>
-        &lt;datepicker placeholder="Type or select date" first-day-of-week="mon"
-        &gt;&lt;/datepicker&gt;
-      </code>
-    </div>
+<!--    <div class="example" style="background: #000066">-->
+<!--      <h3>Custom first-day-of-week datepicker</h3>-->
+<!--      <Datepicker placeholder="Type or select date" first-day-of-week="mon" />-->
+<!--      <code>-->
+<!--        &lt;datepicker placeholder="Type or select date" first-day-of-week="mon"-->
+<!--        &gt;&lt;/datepicker&gt;-->
+<!--      </code>-->
+<!--    </div>-->
 
-    <div class="example">
-      <h3>Typeable datepicker</h3>
-      <Datepicker placeholder="Type or select date" :typeable="true" />
-      <code>
-        &lt;datepicker placeholder="Type or select date"
-        :typeable="true"&gt;&lt;/datepicker&gt;
-      </code>
-    </div>
+<!--    <div class="example">-->
+<!--      <h3>Typeable datepicker</h3>-->
+<!--      <Datepicker placeholder="Type or select date" :typeable="true" />-->
+<!--      <code>-->
+<!--        &lt;datepicker placeholder="Type or select date"-->
+<!--        :typeable="true"&gt;&lt;/datepicker&gt;-->
+<!--      </code>-->
+<!--    </div>-->
 
-    <div class="example">
-      <h3>Only show dates from current month datepicker</h3>
-      <Datepicker placeholder="Type or select date" :show-edge-dates="false" />
-      <code>
-        &lt;datepicker placeholder="Type or select date"
-        :show-edge-dates="false"&gt;&lt;/datepicker&gt;
-      </code>
-    </div>
+<!--    <div class="example">-->
+<!--      <h3>Only show dates from current month datepicker</h3>-->
+<!--      <Datepicker placeholder="Type or select date" :show-edge-dates="false" />-->
+<!--      <code>-->
+<!--        &lt;datepicker placeholder="Type or select date"-->
+<!--        :show-edge-dates="false"&gt;&lt;/datepicker&gt;-->
+<!--      </code>-->
+<!--    </div>-->
 
-    <div class="example">
-      <h3>Bootstrap styled datepicker</h3>
-      <Datepicker
-        :bootstrap-styling="true"
-        :calendar-button="true"
-        :clear-button="true"
-      />
-      <code>
-        &lt;datepicker placeholder="Select Date"&gt;&lt;/datepicker&gt;
-      </code>
-    </div>
+<!--    <div class="example">-->
+<!--      <h3>Bootstrap styled datepicker</h3>-->
+<!--      <Datepicker-->
+<!--        :bootstrap-styling="true"-->
+<!--        :calendar-button="true"-->
+<!--        :clear-button="true"-->
+<!--      />-->
+<!--      <code>-->
+<!--        &lt;datepicker placeholder="Select Date"&gt;&lt;/datepicker&gt;-->
+<!--      </code>-->
+<!--    </div>-->
 
-    <div class="example">
-      <h3>v-model datepicker</h3>
-      <Datepicker
-        v-model="vModelExample"
-        placeholder="Select Date"
-        :append-to-body="true"
-      />
-      <code>
-        &lt;datepicker placeholder="Select Date"
-        v-model="vmodelexample"&gt;&lt;/datepicker&gt;
-      </code>
-      <hr />
-      <p>{{ vModelExample }}</p>
-    </div>
+<!--    <div class="example">-->
+<!--      <h3>v-model datepicker</h3>-->
+<!--      <Datepicker-->
+<!--        v-model="vModelExample"-->
+<!--        placeholder="Select Date"-->
+<!--        :append-to-body="true"-->
+<!--      />-->
+<!--      <code>-->
+<!--        &lt;datepicker placeholder="Select Date"-->
+<!--        v-model="vmodelexample"&gt;&lt;/datepicker&gt;-->
+<!--      </code>-->
+<!--      <hr />-->
+<!--      <p>{{ vModelExample }}</p>-->
+<!--    </div>-->
 
-    <div class="example overflow-scroll">
-      <h3>Append datepicker to body</h3>
-      <Datepicker :append-to-body="true" />
-      <h3>Don't append datepicker to body</h3>
-      <Datepicker />
-      <code>&lt;datepicker :append-to-body="true"&gt;&lt;/datepicker&gt;</code>
-    </div>
+<!--    <div class="example overflow-scroll">-->
+<!--      <h3>Append datepicker to body</h3>-->
+<!--      <Datepicker :append-to-body="true" />-->
+<!--      <h3>Don't append datepicker to body</h3>-->
+<!--      <Datepicker />-->
+<!--      <code>&lt;datepicker :append-to-body="true"&gt;&lt;/datepicker&gt;</code>-->
+<!--    </div>-->
 
-    <div class="example">
-      <h3>Format datepicker</h3>
-      <Datepicker :format="format" />
-      <code>&lt;datepicker :format="format"&gt;&lt;/datepicker&gt;</code>
-      <div class="settings">
-        <h5>Settings</h5>
-        <div class="form-group">
-          <label>Format</label>
-          <select v-model="format">
-            <option value="d MMM yyyy" selected>
-              d MMM yyyy - e.g 12 Feb 2016
-            </option>
-            <option value="d MMMM yyyy">
-              d MMMM yyyy - e.g 12 February 2016
-            </option>
-            <option value="yyyy-MM-dd">yyyy-MM-dd - e.g 2016-02-12</option>
-            <option value="do MMM yyyy">do MMM yyyy - e.g 12th Feb 2016</option>
-            <option value="E do MMM yyyy">
-              E do MMM yyyy - e.g Sat 12th Feb 2016
-            </option>
-          </select>
-        </div>
-      </div>
-    </div>
+<!--    <div class="example">-->
+<!--      <h3>Format datepicker</h3>-->
+<!--      <Datepicker :format="format" />-->
+<!--      <code>&lt;datepicker :format="format"&gt;&lt;/datepicker&gt;</code>-->
+<!--      <div class="settings">-->
+<!--        <h5>Settings</h5>-->
+<!--        <div class="form-group">-->
+<!--          <label>Format</label>-->
+<!--          <select v-model="format">-->
+<!--            <option value="d MMM yyyy" selected>-->
+<!--              d MMM yyyy - e.g 12 Feb 2016-->
+<!--            </option>-->
+<!--            <option value="d MMMM yyyy">-->
+<!--              d MMMM yyyy - e.g 12 February 2016-->
+<!--            </option>-->
+<!--            <option value="yyyy-MM-dd">yyyy-MM-dd - e.g 2016-02-12</option>-->
+<!--            <option value="do MMM yyyy">do MMM yyyy - e.g 12th Feb 2016</option>-->
+<!--            <option value="E do MMM yyyy">-->
+<!--              E do MMM yyyy - e.g Sat 12th Feb 2016-->
+<!--            </option>-->
+<!--          </select>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
 
-    <div class="example">
-      <h3>With minimum and maximum date range</h3>
-      <Datepicker :disabled-dates="disabledDates" />
-      <code>
-        &lt;datepicker :disabled-dates="disabledDates"&gt;&lt;/datepicker&gt;
-      </code>
-      <div class="settings">
-        <h5>Settings</h5>
-        <div class="form-group">
-          <label>Disabled to:</label>
-          <Datepicker @selected="disableTo" />
-        </div>
-        <div class="form-group">
-          <label>Disabled from:</label>
-          <Datepicker @selected="disableFrom" />
-        </div>
-        <div class="form-group">
-          <label>Disabled Days of Month:</label>
-          <input
-            type="text"
-            value=""
-            placeholder="5,6,12,13"
-            @change="setDisabledDays"
-          />
-        </div>
-        <pre>disabledDates: {{ disabledDates }}</pre>
+<!--    <div class="example">-->
+<!--      <h3>With minimum and maximum date range</h3>-->
+<!--      <Datepicker :disabled-dates="disabledDates" />-->
+<!--      <code>-->
+<!--        &lt;datepicker :disabled-dates="disabledDates"&gt;&lt;/datepicker&gt;-->
+<!--      </code>-->
+<!--      <div class="settings">-->
+<!--        <h5>Settings</h5>-->
+<!--        <div class="form-group">-->
+<!--          <label>Disabled to:</label>-->
+<!--          <Datepicker @selected="disableTo" />-->
+<!--        </div>-->
+<!--        <div class="form-group">-->
+<!--          <label>Disabled from:</label>-->
+<!--          <Datepicker @selected="disableFrom" />-->
+<!--        </div>-->
+<!--        <div class="form-group">-->
+<!--          <label>Disabled Days of Month:</label>-->
+<!--          <input-->
+<!--            type="text"-->
+<!--            value=""-->
+<!--            placeholder="5,6,12,13"-->
+<!--            @change="setDisabledDays"-->
+<!--          />-->
+<!--        </div>-->
+<!--        <pre>disabledDates: {{ disabledDates }}</pre>-->
 
-        <h5>Resulting Date picker</h5>
-        <Datepicker :disabled-dates="disabledDates" />
-      </div>
-    </div>
+<!--        <h5>Resulting Date picker</h5>-->
+<!--        <Datepicker :disabled-dates="disabledDates" />-->
+<!--      </div>-->
+<!--    </div>-->
 
-    <div class="example">
-      <h3>Disabled dates</h3>
-      <div class="settings">
-        <h5>Settings</h5>
-        <div class="form-group">
-          <label>Disabled Function:</label>
-        </div>
-        <pre>{{ disabledFnContent }}</pre>
-        <h5>Resulting Date picker</h5>
-        <Datepicker :disabled-dates="disabledFn" />
-      </div>
-    </div>
+<!--    <div class="example">-->
+<!--      <h3>Disabled dates</h3>-->
+<!--      <div class="settings">-->
+<!--        <h5>Settings</h5>-->
+<!--        <div class="form-group">-->
+<!--          <label>Disabled Function:</label>-->
+<!--        </div>-->
+<!--        <pre>{{ disabledFnContent }}</pre>-->
+<!--        <h5>Resulting Date picker</h5>-->
+<!--        <Datepicker :disabled-dates="disabledFn" />-->
+<!--      </div>-->
+<!--    </div>-->
 
-    <div class="example">
-      <h3>Highlighting Dates Matching Given Function</h3>
-      <Datepicker :highlighted="highlighted" />
-      <code>
-        &lt;datepicker :highlighted="highlighted"&gt;&lt;/datepicker&gt;
-      </code>
-      <div class="settings">
-        <h5>Settings</h5>
-        <pre>
-          highlighted: {
-            customPredictor: function (date) {
-              // highlights every day of a month which is a multiple of 4
-              if (date.getDate() % 4 === 0) {
-                return true
-              }
-            }
-          }
-        </pre>
+<!--    <div class="example">-->
+<!--      <h3>Highlighting Dates Matching Given Function</h3>-->
+<!--      <Datepicker :highlighted="highlighted" />-->
+<!--      <code>-->
+<!--        &lt;datepicker :highlighted="highlighted"&gt;&lt;/datepicker&gt;-->
+<!--      </code>-->
+<!--      <div class="settings">-->
+<!--        <h5>Settings</h5>-->
+<!--        <pre>-->
+<!--          highlighted: {-->
+<!--            customPredictor: function (date) {-->
+<!--              // highlights every day of a month which is a multiple of 4-->
+<!--              if (date.getDate() % 4 === 0) {-->
+<!--                return true-->
+<!--              }-->
+<!--            }-->
+<!--          }-->
+<!--        </pre>-->
 
-        <h5>Resulting Date picker</h5>
-        <Datepicker :highlighted="highlightedFn" />
-      </div>
-    </div>
+<!--        <h5>Resulting Date picker</h5>-->
+<!--        <Datepicker :highlighted="highlightedFn" />-->
+<!--      </div>-->
+<!--    </div>-->
 
-    <div class="example">
-      <h3>Highlighting Dates</h3>
-      <code>
-        &lt;datepicker :highlighted="highlighted"&gt;&lt;/datepicker&gt;
-      </code>
-      <div class="settings">
-        <h5>Settings</h5>
-        <div class="form-group">
-          <label>Highlight from:</label>
-          <Datepicker @selected="highlightFrom" />
-        </div>
-        <div class="form-group">
-          <label>Highlight to:</label>
-          <Datepicker @selected="highlightTo" />
-        </div>
-        <div class="form-group">
-          <label>Highlight Days of Month:</label>
-          <input type="text" value="" @change="setHighlightedDays" />
-        </div>
-        <pre>highlighted: {{ highlighted }}</pre>
+<!--    <div class="example">-->
+<!--      <h3>Highlighting Dates</h3>-->
+<!--      <code>-->
+<!--        &lt;datepicker :highlighted="highlighted"&gt;&lt;/datepicker&gt;-->
+<!--      </code>-->
+<!--      <div class="settings">-->
+<!--        <h5>Settings</h5>-->
+<!--        <div class="form-group">-->
+<!--          <label>Highlight from:</label>-->
+<!--          <Datepicker @selected="highlightFrom" />-->
+<!--        </div>-->
+<!--        <div class="form-group">-->
+<!--          <label>Highlight to:</label>-->
+<!--          <Datepicker @selected="highlightTo" />-->
+<!--        </div>-->
+<!--        <div class="form-group">-->
+<!--          <label>Highlight Days of Month:</label>-->
+<!--          <input type="text" value="" @change="setHighlightedDays" />-->
+<!--        </div>-->
+<!--        <pre>highlighted: {{ highlighted }}</pre>-->
 
-        <h5>Resulting Date picker</h5>
-        <Datepicker :highlighted="highlighted" />
-      </div>
-    </div>
+<!--        <h5>Resulting Date picker</h5>-->
+<!--        <Datepicker :highlighted="highlighted" />-->
+<!--      </div>-->
+<!--    </div>-->
 
-    <div class="example">
-      <h3>With default open date</h3>
-      <Datepicker :open-date="openDate" />
-      <code>&lt;datepicker :disabled="disabled"&gt;&lt;/datepicker&gt;</code>
-      <div class="settings">
-        <h5>Settings</h5>
-        <div class="form-group">
-          <label>Open date:</label>
-          <Datepicker v-model="openDate" />
-        </div>
-        <pre>open-date: {{ openDate }}</pre>
-      </div>
-    </div>
+<!--    <div class="example">-->
+<!--      <h3>With default open date</h3>-->
+<!--      <Datepicker :open-date="openDate" />-->
+<!--      <code>&lt;datepicker :disabled="disabled"&gt;&lt;/datepicker&gt;</code>-->
+<!--      <div class="settings">-->
+<!--        <h5>Settings</h5>-->
+<!--        <div class="form-group">-->
+<!--          <label>Open date:</label>-->
+<!--          <Datepicker v-model="openDate" />-->
+<!--        </div>-->
+<!--        <pre>open-date: {{ openDate }}</pre>-->
+<!--      </div>-->
+<!--    </div>-->
 
-    <div class="example">
-      <h3>Translations</h3>
-      <h5>{{ languages[language].language }} datepicker</h5>
+<!--    <div class="example">-->
+<!--      <h3>Translations</h3>-->
+<!--      <h5>{{ languages[language].language }} datepicker</h5>-->
 
-      <Datepicker :language="languages[language]" format="d MMMM yyyy" />
-      <code>
-        &lt;datepicker :language="languages.{{
-          language
-        }}"&gt;&lt;/datepicker&gt;
-      </code>
-      <div class="settings">
-        <h5>Settings</h5>
-        <select v-model="language">
-          <option v-for="(language, key) in languages" :key="key" :value="key">
-            {{ language.language }}
-          </option>
-        </select>
-      </div>
-    </div>
+<!--      <Datepicker :language="languages[language]" format="d MMMM yyyy" />-->
+<!--      <code>-->
+<!--        &lt;datepicker :language="languages.{{-->
+<!--          language-->
+<!--        }}"&gt;&lt;/datepicker&gt;-->
+<!--      </code>-->
+<!--      <div class="settings">-->
+<!--        <h5>Settings</h5>-->
+<!--        <select v-model="language">-->
+<!--          <option v-for="(language, key) in languages" :key="key" :value="key">-->
+<!--            {{ language.language }}-->
+<!--          </option>-->
+<!--        </select>-->
+<!--      </div>-->
+<!--    </div>-->
 
-    <div class="example">
-      <h3>Inline datepicker</h3>
-      <Datepicker :inline="true" />
-      <code>&lt;datepicker :inline="true"&gt;&lt;/datepicker&gt;</code>
-    </div>
+<!--    <div class="example">-->
+<!--      <h3>Inline datepicker</h3>-->
+<!--      <Datepicker :inline="true" />-->
+<!--      <code>&lt;datepicker :inline="true"&gt;&lt;/datepicker&gt;</code>-->
+<!--    </div>-->
 
-    <div class="example">
-      <h3>RTL datepicker</h3>
-      <Datepicker :language="languages.he" />
-      <code>
-        &lt;datepicker :language="languages.he"&gt;&lt;/datepicker&gt;
-      </code>
-    </div>
+<!--    <div class="example">-->
+<!--      <h3>RTL datepicker</h3>-->
+<!--      <Datepicker :language="languages.he" />-->
+<!--      <code>-->
+<!--        &lt;datepicker :language="languages.he"&gt;&lt;/datepicker&gt;-->
+<!--      </code>-->
+<!--    </div>-->
 
-    <div class="example">
-      <h3>Day view only</h3>
-      <Datepicker minimum-view="day" maximum-view="day" />
-      <code>
-        &lt;datepicker minimum-view="day"
-        maximum-view="day"&gt;&lt;/datepicker&gt;
-      </code>
-    </div>
+<!--    <div class="example">-->
+<!--      <h3>Day view only</h3>-->
+<!--      <Datepicker minimum-view="day" maximum-view="day" />-->
+<!--      <code>-->
+<!--        &lt;datepicker minimum-view="day"-->
+<!--        maximum-view="day"&gt;&lt;/datepicker&gt;-->
+<!--      </code>-->
+<!--    </div>-->
 
-    <div class="example">
-      <h3>Day view only RTL</h3>
-      <Datepicker
-        minimum-view="day"
-        maximum-view="day"
-        :language="languages.he"
-      />
-      <code>
-        &lt;datepicker minimum-view="day" maximum-view="day"
-        language="languages.he"&gt;&lt;/datepicker&gt;
-      </code>
-    </div>
+<!--    <div class="example">-->
+<!--      <h3>Day view only RTL</h3>-->
+<!--      <Datepicker-->
+<!--        minimum-view="day"-->
+<!--        maximum-view="day"-->
+<!--        :language="languages.he"-->
+<!--      />-->
+<!--      <code>-->
+<!--        &lt;datepicker minimum-view="day" maximum-view="day"-->
+<!--        language="languages.he"&gt;&lt;/datepicker&gt;-->
+<!--      </code>-->
+<!--    </div>-->
 
-    <div class="example">
-      <h3>Month view only</h3>
-      <Datepicker minimum-view="month" maximum-view="month" />
-      <code>
-        &lt;datepicker minimum-view="month"
-        maximum-view="month"&gt;&lt;/datepicker&gt;
-      </code>
-    </div>
+<!--    <div class="example">-->
+<!--      <h3>Month view only</h3>-->
+<!--      <Datepicker minimum-view="month" maximum-view="month" />-->
+<!--      <code>-->
+<!--        &lt;datepicker minimum-view="month"-->
+<!--        maximum-view="month"&gt;&lt;/datepicker&gt;-->
+<!--      </code>-->
+<!--    </div>-->
 
-    <div class="example">
-      <h3>Day and month view only</h3>
-      <Datepicker
-        minimum-view="day"
-        maximum-view="month"
-        initial-view="month"
-      />
-      <code>
-        &lt;datepicker minimum-view="day" maximum-view="month"
-        initial-view="month"&gt;&lt;/datepicker&gt;
-      </code>
-    </div>
+<!--    <div class="example">-->
+<!--      <h3>Day and month view only</h3>-->
+<!--      <Datepicker-->
+<!--        minimum-view="day"-->
+<!--        maximum-view="month"-->
+<!--        initial-view="month"-->
+<!--      />-->
+<!--      <code>-->
+<!--        &lt;datepicker minimum-view="day" maximum-view="month"-->
+<!--        initial-view="month"&gt;&lt;/datepicker&gt;-->
+<!--      </code>-->
+<!--    </div>-->
 
-    <div class="example">
-      <h3>Year and month view only</h3>
-      <Datepicker
-        minimum-view="month"
-        maximum-view="year"
-        initial-view="year"
-      />
-      <code>
-        &lt;datepicker minimum-view="month" maximum-view="year"
-        initial-view="year"&gt;&lt;/datepicker&gt;
-      </code>
-    </div>
+<!--    <div class="example">-->
+<!--      <h3>Year and month view only</h3>-->
+<!--      <Datepicker-->
+<!--        minimum-view="month"-->
+<!--        maximum-view="year"-->
+<!--        initial-view="year"-->
+<!--      />-->
+<!--      <code>-->
+<!--        &lt;datepicker minimum-view="month" maximum-view="year"-->
+<!--        initial-view="year"&gt;&lt;/datepicker&gt;-->
+<!--      </code>-->
+<!--    </div>-->
 
-    <div class="example">
-      <h3>Year picker range</h3>
-      <Datepicker :year-picker-range="yearPickerRange" />
-      <code>
-        &lt;datepicker
-        :year-picker-range="yearPickerRange"&gt;&lt;/datepicker&gt;
-      </code>
-      <div class="settings">
-        <h5>Settings</h5>
-        <div class="form-group">
-          <label>Year picker range:</label>
-          <input v-model.number="yearPickerRange" type="number" />
-        </div>
-        <pre>yearPickerRange: {{ yearPickerRange }}</pre>
-      </div>
-    </div>
+<!--    <div class="example">-->
+<!--      <h3>Year picker range</h3>-->
+<!--      <Datepicker :year-picker-range="yearPickerRange" />-->
+<!--      <code>-->
+<!--        &lt;datepicker-->
+<!--        :year-picker-range="yearPickerRange"&gt;&lt;/datepicker&gt;-->
+<!--      </code>-->
+<!--      <div class="settings">-->
+<!--        <h5>Settings</h5>-->
+<!--        <div class="form-group">-->
+<!--          <label>Year picker range:</label>-->
+<!--          <input v-model.number="yearPickerRange" type="number" />-->
+<!--        </div>-->
+<!--        <pre>yearPickerRange: {{ yearPickerRange }}</pre>-->
+<!--      </div>-->
+<!--    </div>-->
 
-    <div class="example">
-      <h3>Fixed positions</h3>
-      <Datepicker :fixed-position="fixedPosition" :append-to-body="true" />
-      <code>
-        &lt;datepicker :fixed-position="fixedPosition"&gt;&lt;/datepicker&gt;
-      </code>
-      <div class="settings">
-        <h5>Settings</h5>
-        <select v-model="fixedPosition">
-          <option
-            v-for="position in fixedPositions"
-            :key="position"
-            :value="position"
-          >
-            {{ position }}
-          </option>
-        </select>
-      </div>
-    </div>
+<!--    <div class="example">-->
+<!--      <h3>Fixed positions</h3>-->
+<!--      <Datepicker :fixed-position="fixedPosition" :append-to-body="true" />-->
+<!--      <code>-->
+<!--        &lt;datepicker :fixed-position="fixedPosition"&gt;&lt;/datepicker&gt;-->
+<!--      </code>-->
+<!--      <div class="settings">-->
+<!--        <h5>Settings</h5>-->
+<!--        <select v-model="fixedPosition">-->
+<!--          <option-->
+<!--            v-for="position in fixedPositions"-->
+<!--            :key="position"-->
+<!--            :value="position"-->
+<!--          >-->
+<!--            {{ position }}-->
+<!--          </option>-->
+<!--        </select>-->
+<!--      </div>-->
+<!--    </div>-->
   </div>
 </template>
 
