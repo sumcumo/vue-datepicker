@@ -20,9 +20,9 @@ export default {
       type: Boolean,
       default: false,
     },
-    visible: {
-      type: Boolean,
-      default: false,
+    view: {
+      type: String,
+      default: '',
     },
   },
   data() {
@@ -31,12 +31,14 @@ export default {
     }
   },
   watch: {
-    visible: {
+    view: {
       immediate: true,
       handler(val) {
-        if (val) {
-          this.displayPopup()
-        }
+        this.$nextTick(() => {
+          if (val) {
+            this.displayPopup()
+          }
+        })
       },
     },
   },
@@ -71,14 +73,12 @@ export default {
      */
     // eslint-disable-next-line max-statements
     displayPopup() {
-      if (this.inline || !this.visible) return
+      if (this.inline || !this.view) return
       this.setTopStyle()
       const popup = this.$el
-      const pickerView = this.$parent.$refs.pickerView.$el
       const relativeElement = this.$parent.$el
-      if (!this.popupRect) {
-        this.popupRect = getPopupElementSize(popup, pickerView)
-      }
+
+      this.popupRect = getPopupElementSize(popup.children[1])
       const { width, height } = this.popupRect
       const { left, top } = getRelativePosition({
         el: popup,
@@ -89,6 +89,8 @@ export default {
         fixedPosition: this.fixedPosition,
         rtl: this.rtl,
       })
+
+      this.$emit('popup-height-change', height)
 
       popup.style.left = left
       popup.style.top = top

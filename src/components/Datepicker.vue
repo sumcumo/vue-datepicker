@@ -48,7 +48,8 @@
       :fixed-position="fixedPosition"
       :inline="inline"
       :rtl="isRtl"
-      :visible="isOpen"
+      :view="view"
+      @popup-height-change="changePopupHeight"
     >
       <Transition name="toggle">
         <div
@@ -59,42 +60,43 @@
           @mousedown.prevent
         >
           <Transition name="view">
-            <slot name="beforeCalendarHeader" />
-            <Component
-              :is="picker"
-              ref="pickerView"
-              :key="view"
-              class="picker-view"
-              :day-cell-content="dayCellContent"
-              :disabled-dates="disabledDates"
-              :first-day-of-week="firstDayOfWeek"
-              :highlighted="highlighted"
-              :is-rtl="isRtl"
-              :is-up-disabled="isUpDisabled"
-              :page-date="pageDate"
-              :selected-date="selectedDate"
-              :show-edge-dates="showEdgeDates"
-              :show-full-month-name="fullMonthName"
-              :show-header="showHeader"
-              :transition-name="transitionName"
-              :translation="translation"
-              :use-utc="useUtc"
-              :view="view || computedInitialView"
-              :year-range="yearPickerRange"
-              @page-change="handlePageChange"
-              @select="handleSelect"
-              @select-disabled="handleSelectDisabled"
-              @set-transition-name="setTransitionName($event)"
-              @set-view="setView"
-            >
-              <template v-for="slotKey of calendarSlots">
-                <slot :slot="slotKey" :name="slotKey" />
-              </template>
-              <template #dayCellContent="{ cell }">
-                <slot v-if="cell" name="dayCellContent" :cell="cell" />
-              </template>
-            </Component>
-            <slot name="calendarFooter" />
+            <div :key="view">
+              <slot name="beforeCalendarHeader" />
+              <Component
+                :is="picker"
+                ref="pickerView"
+                class="picker-view"
+                :day-cell-content="dayCellContent"
+                :disabled-dates="disabledDates"
+                :first-day-of-week="firstDayOfWeek"
+                :highlighted="highlighted"
+                :is-rtl="isRtl"
+                :is-up-disabled="isUpDisabled"
+                :page-date="pageDate"
+                :selected-date="selectedDate"
+                :show-edge-dates="showEdgeDates"
+                :show-full-month-name="fullMonthName"
+                :show-header="showHeader"
+                :transition-name="transitionName"
+                :translation="translation"
+                :use-utc="useUtc"
+                :view="view || computedInitialView"
+                :year-range="yearPickerRange"
+                @page-change="handlePageChange"
+                @select="handleSelect"
+                @select-disabled="handleSelectDisabled"
+                @set-transition-name="setTransitionName($event)"
+                @set-view="setView"
+              >
+                <template v-for="slotKey of calendarSlots">
+                  <slot :slot="slotKey" :name="slotKey" />
+                </template>
+                <template #dayCellContent="{ cell }">
+                  <slot v-if="cell" name="dayCellContent" :cell="cell" />
+                </template>
+              </Component>
+              <slot name="calendarFooter" />
+            </div>
           </Transition>
         </div>
       </Transition>
@@ -329,6 +331,9 @@ export default {
       const viewIndex = views.indexOf(view)
 
       return viewIndex >= minimumViewIndex && viewIndex <= maximumViewIndex
+    },
+    changePopupHeight(height) {
+      this.$refs.datepicker.style.height = `${height}px`
     },
     /**
      * Clear the selected date

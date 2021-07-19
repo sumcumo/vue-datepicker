@@ -31,13 +31,12 @@ function getHeight(element, styles) {
  */
 /* eslint no-param-reassign: 0 */
 // eslint-disable-next-line max-statements
-export function getPopupElementSize(popup, pickerView) {
+export function getPopupElementSize(popup) {
   const originalDisplay = popup.style.display
   const originalVisibility = popup.style.visibility
 
   popup.style.display = 'block'
   popup.style.visibility = 'hidden'
-  pickerView.style.position = 'relative'
 
   const styles = window.getComputedStyle(popup)
   const width = getWidth(popup, styles)
@@ -45,7 +44,6 @@ export function getPopupElementSize(popup, pickerView) {
 
   popup.style.display = originalDisplay
   popup.style.visibility = originalVisibility
-  pickerView.style.position = 'absolute'
 
   return {
     width,
