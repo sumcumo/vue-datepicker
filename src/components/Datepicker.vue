@@ -72,6 +72,7 @@
           :show-edge-dates="showEdgeDates"
           :show-full-month-name="fullMonthName"
           :show-header="showHeader"
+          :transition-name="transitionName"
           :translation="translation"
           :use-utc="useUtc"
           :view="view || computedInitialView"
@@ -79,6 +80,7 @@
           @page-change="handlePageChange"
           @select="handleSelect"
           @select-disabled="handleSelectDisabled"
+          @set-transition-name="setTransitionName($event)"
           @set-view="setView"
         >
           <template v-for="slotKey of calendarSlots">
@@ -226,6 +228,7 @@ export default {
        * {Date}
        */
       selectedDate: null,
+      transitionName: '',
       utils,
       view: '',
     }
@@ -476,6 +479,19 @@ export default {
         dateTemp = this.utils.resetDateTime(dateTemp)
       }
       this.pageTimestamp = this.utils.setDate(new Date(dateTemp), 1)
+    },
+    /**
+     * Sets the direction of the slide transition
+     * @param {Number} plusOrMinus Positive for the future; negative for the past
+     */
+    setTransitionName(plusOrMinus) {
+      const isInTheFuture = plusOrMinus > 0
+
+      if (this.isRtl) {
+        this.transitionName = isInTheFuture ? 'slide-left' : 'slide-right'
+      } else {
+        this.transitionName = isInTheFuture ? 'slide-right' : 'slide-left'
+      }
     },
     /**
      * Set the datepicker value
