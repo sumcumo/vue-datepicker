@@ -194,17 +194,16 @@
     .cells-wrapper {
       overflow: hidden;
       position: relative;
-      transition-duration: 250ms;
-      transition-timing-function: ease-in-out;
 
       .picker-cells {
-        transition-duration: 250ms;
-        transition-timing-function: ease-in-out;
+        transition: all 250ms ease-in-out;
       }
     }
 
-    .slide-right-leave-active,
     .slide-right-enter-active {
+      top: 0;
+    }
+    .slide-right-leave-active {
       position: absolute;
       top: 0;
     }
@@ -215,8 +214,10 @@
       transform: translate(-100%, 0);
     }
 
-    .slide-left-leave-active,
     .slide-left-enter-active {
+      top: 0;
+    }
+    .slide-left-leave-active {
       position: absolute;
       top: 0;
     }

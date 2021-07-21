@@ -33,27 +33,6 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      cellHeight: 0,
-    }
-  },
-  computed: {
-    wrapperHeight() {
-      const columns = this.view === 'day' ? 7 : 3
-      const rows = Math.ceil(this.cells.length / columns)
-
-      return rows * this.cellHeight
-    },
-  },
-  watch: {
-    wrapperHeight() {
-      this.$parent.$refs.cellsWrapper.style.height = `${this.wrapperHeight}px`
-    },
-  },
-  mounted() {
-    this.cellHeight = this.getCellHeight()
-  },
   methods: {
     /**
      * Set the classes for a specific cell
@@ -81,22 +60,6 @@ export default {
           'weekend': cell.isWeekend,
         },
       ]
-    },
-
-    /**
-     * Get the cell height
-     */
-    /* eslint no-param-reassign: 0 */
-    getCellHeight() {
-      const popup = this.$parent.$parent.$el
-      const originalDisplay = popup.style.display
-      const originalVisibility = popup.style.visibility
-      popup.style.display = 'block'
-      popup.style.visibility = 'hidden'
-      const height = this.$el.children[0].offsetHeight
-      popup.style.display = originalDisplay
-      popup.style.visibility = originalVisibility
-      return height
     },
   },
 }
