@@ -16,7 +16,7 @@
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
     </PickerHeader>
 
-    <div ref="cellsWrapper" class="cells-wrapper">
+    <div class="cells-wrapper">
       <Transition :name="transitionName">
         <PickerCells
           ref="cells"
