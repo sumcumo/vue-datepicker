@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import PickerDay from '~/components/PickerDay.vue'
 import { en } from '~/locale'
 
@@ -6,7 +6,7 @@ describe('PickerDay: DOM', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = shallowMount(PickerDay, {
+    wrapper = mount(PickerDay, {
       propsData: {
         translation: en,
         pageDate: new Date(2018, 1, 1),
@@ -20,6 +20,6 @@ describe('PickerDay: DOM', () => {
   })
 
   it('renders correct contents', () => {
-    expect(wrapper.findAll('.cell').length).toBeGreaterThan(0)
+    expect(wrapper.vm.cells.length).toBeGreaterThan(0)
   })
 })

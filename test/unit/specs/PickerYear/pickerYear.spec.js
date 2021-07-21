@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import PickerYear from '~/components/PickerYear.vue'
 import { en } from '~/locale'
 
@@ -6,7 +6,7 @@ describe('PickerYear', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = shallowMount(PickerYear, {
+    wrapper = mount(PickerYear, {
       propsData: {
         translation: en,
         pageDate: new Date(2018, 1, 1),
@@ -77,6 +77,6 @@ describe('PickerYear', () => {
     })
 
     expect(wrapper.vm.pageTitleYear).toEqual('2016 - 2027')
-    expect(wrapper.vm.$el.querySelectorAll('.cell.year').length).toEqual(12)
+    expect(wrapper.vm.cells.length).toEqual(12)
   })
 })

@@ -1,12 +1,12 @@
-import { shallowMount } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import PickerDay from '~/components/PickerDay.vue'
 import { en, mn } from '~/locale'
 
-describe('PickerDay: DOM', () => {
+describe('PickerDay', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = shallowMount(PickerDay, {
+    wrapper = mount(PickerDay, {
       propsData: {
         translation: en,
         pageDate: new Date(2018, 1, 1),
@@ -106,7 +106,7 @@ describe('PickerDay: DOM', () => {
   })
 
   it("only highlights today's edge date if shown", async () => {
-    const day = {
+    const cell = {
       date: 1,
       isToday: true,
       isPreviousMonth: false,
@@ -117,17 +117,17 @@ describe('PickerDay: DOM', () => {
       showEdgeDates: true,
     })
 
-    let dayClasses = wrapper.vm.dayClasses(day)
+    let cellClasses = wrapper.vm.$refs.cells.cellClasses(cell)
 
-    expect(dayClasses.today).toBeTruthy()
+    expect(cellClasses[2].today).toBeTruthy()
 
     await wrapper.setProps({
       showEdgeDates: false,
     })
 
-    dayClasses = wrapper.vm.dayClasses(day)
+    cellClasses = wrapper.vm.$refs.cells.cellClasses(cell)
 
-    expect(dayClasses.today).toBeFalsy()
+    expect(cellClasses[2].today).toBeFalsy()
   })
 
   it('only highlights selected edge date if shown', async () => {
@@ -142,16 +142,16 @@ describe('PickerDay: DOM', () => {
       showEdgeDates: true,
     })
 
-    let dayClasses = wrapper.vm.dayClasses(day)
+    let cellClasses = wrapper.vm.$refs.cells.cellClasses(day)
 
-    expect(dayClasses.selected).toBeTruthy()
+    expect(cellClasses[2].selected).toBeTruthy()
 
     await wrapper.setProps({
       showEdgeDates: false,
     })
 
-    dayClasses = wrapper.vm.dayClasses(day)
+    cellClasses = wrapper.vm.$refs.cells.cellClasses(day)
 
-    expect(dayClasses.selected).toBeFalsy()
+    expect(cellClasses[2].selected).toBeFalsy()
   })
 })
