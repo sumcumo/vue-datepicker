@@ -293,7 +293,7 @@ export default {
     pickerClasses() {
       return [
         this.calendarClass,
-        this.isInline && 'inline',
+        this.isInline && 'vdp-datepicker__calendar--inline',
         this.isRtl && this.appendToBody && 'rtl',
       ]
     },
