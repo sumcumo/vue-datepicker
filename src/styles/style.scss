@@ -14,10 +14,14 @@
 
 .vdp-datepicker__calendar {
   background: #fff;
-  border: 1px solid #ccc;
   position: absolute;
   width: 300px;
   z-index: 10000;
+
+  > div {
+    background: #fff;
+    border: 1px solid #ccc;
+  }
 
   .today {
     background-color: #eee;
@@ -237,6 +241,20 @@
 
 .toggle-enter,
 .toggle-leave-to {
+  opacity: 0;
+}
+
+.view-leave-active {
+  position: absolute;
+}
+
+.view-enter-active,
+.view-leave-active {
+  transition: all 250ms ease;
+}
+
+.view-enter,
+.view-leave-to {
   opacity: 0;
 }
 
