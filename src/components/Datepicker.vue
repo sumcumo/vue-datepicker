@@ -50,48 +50,54 @@
       :rtl="isRtl"
       :visible="isOpen"
     >
-      <div
-        v-show="isOpen"
-        ref="datepicker"
-        class="vdp-datepicker__calendar"
-        :class="pickerClasses"
-        @mousedown.prevent
-      >
-        <slot name="beforeCalendarHeader" />
-        <Component
-          :is="picker"
-          class="picker-view"
-          :day-cell-content="dayCellContent"
-          :disabled-dates="disabledDates"
-          :first-day-of-week="firstDayOfWeek"
-          :highlighted="highlighted"
-          :is-rtl="isRtl"
-          :is-up-disabled="isUpDisabled"
-          :page-date="pageDate"
-          :selected-date="selectedDate"
-          :show-edge-dates="showEdgeDates"
-          :show-full-month-name="fullMonthName"
-          :show-header="showHeader"
-          :transition-name="transitionName"
-          :translation="translation"
-          :use-utc="useUtc"
-          :view="view || computedInitialView"
-          :year-range="yearPickerRange"
-          @page-change="handlePageChange"
-          @select="handleSelect"
-          @select-disabled="handleSelectDisabled"
-          @set-transition-name="setTransitionName($event)"
-          @set-view="setView"
+      <Transition name="toggle">
+        <div
+          v-show="isOpen"
+          ref="datepicker"
+          class="vdp-datepicker__calendar"
+          :class="pickerClasses"
+          @mousedown.prevent
         >
-          <template v-for="slotKey of calendarSlots">
-            <slot :slot="slotKey" :name="slotKey" />
-          </template>
-          <template #dayCellContent="{ cell }">
-            <slot v-if="cell" name="dayCellContent" :cell="cell" />
-          </template>
-        </Component>
-        <slot name="calendarFooter" />
-      </div>
+          <Transition name="view">
+            <div :key="view">
+              <slot name="beforeCalendarHeader" />
+              <Component
+                :is="picker"
+                class="picker-view"
+                :day-cell-content="dayCellContent"
+                :disabled-dates="disabledDates"
+                :first-day-of-week="firstDayOfWeek"
+                :highlighted="highlighted"
+                :is-rtl="isRtl"
+                :is-up-disabled="isUpDisabled"
+                :page-date="pageDate"
+                :selected-date="selectedDate"
+                :show-edge-dates="showEdgeDates"
+                :show-full-month-name="fullMonthName"
+                :show-header="showHeader"
+                :transition-name="transitionName"
+                :translation="translation"
+                :use-utc="useUtc"
+                :view="view || computedInitialView"
+                :year-range="yearPickerRange"
+                @page-change="handlePageChange"
+                @select="handleSelect"
+                @select-disabled="handleSelectDisabled"
+                @set-transition-name="setTransitionName($event)"
+                @set-view="setView"
+              >
+                <template v-for="slotKey of calendarSlots">
+                  <slot :slot="slotKey" :name="slotKey" />
+                </template>
+                <template #dayCellContent="{ cell }">
+                  <slot v-if="cell" name="dayCellContent" :cell="cell" />
+                </template>
+              </Component>
+              <slot name="calendarFooter" />
+            </div>
+          </Transition>
+        </div>
+      </Transition>
     </Popup>
   </div>
 </template>
