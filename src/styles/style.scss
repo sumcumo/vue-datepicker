@@ -230,6 +230,16 @@
   }
 }
 
+.toggle-enter-active,
+.toggle-leave-active {
+  transition: all 250ms ease;
+}
+
+.toggle-enter,
+.toggle-leave-to {
+  opacity: 0;
+}
+
 .vdp-datepicker__clear-button,
 .vdp-datepicker__calendar-button {
   cursor: pointer;
