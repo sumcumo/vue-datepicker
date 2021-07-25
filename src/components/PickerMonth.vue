@@ -71,6 +71,10 @@ export default {
             d.getMinutes(),
           )
 
+      const todayMonth = new Date(
+        this.utils.setDate(this.utils.getNewDateObject(), 1),
+      )
+
       for (let i = 0; i < 12; i += 1) {
         months.push({
           month: this.utils.getMonthName(i, this.translation.months),
@@ -81,6 +85,7 @@ export default {
             this.openDate &&
             this.utils.compareDates(dObj, this.openDate),
           isSelected: this.isSelectedMonth(dObj),
+          isToday: this.utils.compareDates(dObj, todayMonth),
         })
         this.utils.setMonth(dObj, this.utils.getMonth(dObj) + 1)
       }
