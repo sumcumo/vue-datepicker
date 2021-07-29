@@ -19,7 +19,9 @@
   "main": "dist/Datepicker.common.js",
   "module": "dist/Datepicker.esm.js",
   "unpkg": "dist/Datepicker.min.js",
-  "sideEffects": false,
+  "sideEffects": [
+    "*.css"
+  ],
   "files": [
     "src",
     "dist",
