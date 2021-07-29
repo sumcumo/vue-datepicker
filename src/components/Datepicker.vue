@@ -64,6 +64,7 @@
               <slot name="beforeCalendarHeader" />
               <Component
                 :is="picker"
+                ref="picker"
                 :bootstrap-styling="bootstrapStyling"
                 class="picker-view"
                 :day-cell-content="dayCellContent"
@@ -112,6 +113,7 @@ import DateInput from '~/components/DateInput.vue'
 import DisabledDate from '~/utils/DisabledDate'
 import inputProps from '~/mixins/inputProps.vue'
 import makeDateUtils from '~/utils/DateUtils'
+import navMixin from '~/mixins/navMixin.vue'
 import PickerDay from '~/components/PickerDay.vue'
 import PickerMonth from '~/components/PickerMonth.vue'
 import PickerYear from '~/components/PickerYear.vue'
@@ -126,7 +128,7 @@ export default {
     PickerYear,
     Popup,
   },
-  mixins: [inputProps],
+  mixins: [inputProps, navMixin],
   props: {
     appendToBody: {
       type: Boolean,
@@ -438,6 +440,10 @@ export default {
       }
 
       this.setInitialView()
+      this.$nextTick(() => {
+        this.setTabbableCell()
+      })
+
       this.$emit('opened')
     },
     /**
