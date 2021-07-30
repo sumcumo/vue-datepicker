@@ -4,6 +4,7 @@ export default {
     return {
       navElements: [],
       tabbableCell: null,
+      navElementsFocusedIndex: 0,
     }
   },
   methods: {
@@ -110,6 +111,47 @@ export default {
         pickerCells.querySelector('button.open:not(.muted):enabled') ||
         pickerCells.querySelector('button.today:not(.muted):enabled') ||
         pickerCells.querySelector('button.cell:not(.muted):enabled')
+    },
+    /**
+     * Tab backwards through the focus-trapped elements
+     */
+    tabBackwards() {
+      this.navElementsFocusedIndex -= 1
+
+      if (this.navElementsFocusedIndex < 0) {
+        this.navElementsFocusedIndex = this.navElements.length - 1
+      }
+
+      this.navElements[this.navElementsFocusedIndex].focus()
+    },
+    /**
+     * Tab forwards through the focus-trapped elements
+     */
+    tabForwards() {
+      this.navElementsFocusedIndex += 1
+
+      if (this.navElementsFocusedIndex >= this.navElements.length) {
+        this.navElementsFocusedIndex = 0
+      }
+
+      this.navElements[this.navElementsFocusedIndex].focus()
+    },
+    /**
+     * Tab through the focus-trapped elements
+     * @param event
+     */
+    tabThroughNavigation(event) {
+      // Allow normal tabbing when closed
+      if (!this.isOpen) {
+        return
+      }
+      event.preventDefault()
+
+      if (event.shiftKey) {
+        this.tabBackwards()
+      } else {
+        this.tabForwards()
+      }
     },
   },
 }

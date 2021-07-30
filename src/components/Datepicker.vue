@@ -1,5 +1,9 @@
 <template>
-  <div class="vdp-datepicker" :class="[wrapperClass, { rtl: isRtl }]">
+  <div
+    class="vdp-datepicker"
+    :class="[wrapperClass, { rtl: isRtl }]"
+    @keydown.tab="tabThroughNavigation($event)"
+  >
     <DateInput
       :id="id"
       ref="dateInput"
