@@ -491,6 +491,15 @@ export default {
       this.isRevertingToOpenDate = false
     },
     /**
+     * Returns true if element has the given className
+     * @param   {HTMLElement} element
+     * @param   {String}      className
+     * @returns {Boolean}
+     */
+    hasClass(element, className) {
+      return element && element.className.split(' ').includes(className)
+    },
+    /**
      * Initiate the component
      */
     init() {

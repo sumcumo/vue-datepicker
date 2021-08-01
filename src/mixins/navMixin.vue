@@ -9,6 +9,7 @@ export default {
       },
       navElements: [],
       navElementsFocusedIndex: 0,
+      resetTabbableCell: false,
       tabbableCell: null,
     }
   },
@@ -38,6 +39,19 @@ export default {
           break
         }
       }
+    },
+    /**
+     * Returns the currently focused cell element, if there is one...
+     */
+    getActiveCell() {
+      const isActiveElementACell = this.hasClass(document.activeElement, 'cell')
+      const isOnSameView = this.hasClass(document.activeElement, this.view)
+
+      if (isActiveElementACell && isOnSameView && !this.resetTabbableCell) {
+        return document.activeElement
+      }
+
+      return null
     },
     /**
      * Returns true if the calendar has been passed the given slot
@@ -162,13 +176,17 @@ export default {
         return
       }
 
+      this.tabbableCell = null
+      this.resetTabbableCell = true
+
       this.$nextTick(() => {
-        this.setTabbableCell()
         this.setNavElements()
 
         setTimeout(() => {
           this.applyFocus()
         }, this.focus.delay)
+
+        this.resetTabbableCell = false
       })
     },
     /**
@@ -190,6 +208,8 @@ export default {
      */
     setNavElements() {
       if (!this.view) return
+
+      this.updateTabbableCell()
 
       const view = this.ucFirst(this.view)
 
@@ -230,6 +250,7 @@ export default {
       const pickerCells = this.$refs.picker.$refs.cells.$el
 
       this.tabbableCell =
+        this.getActiveCell() ||
         pickerCells.querySelector('button.selected:not(.muted):enabled') ||
         pickerCells.querySelector('button.open:not(.muted):enabled') ||
         pickerCells.querySelector('button.today:not(.muted):enabled') ||
@@ -274,6 +295,17 @@ export default {
         this.tabBackwards()
       } else {
         this.tabForwards()
+      }
+    },
+    /**
+     * Update which cell in the picker should be focus-trapped
+     */
+    updateTabbableCell() {
+      const isActiveElementACell = this.hasClass(document.activeElement, 'cell')
+      const needToUpdate = !this.tabbableCell || isActiveElementACell
+
+      if (needToUpdate) {
+        this.setTabbableCell()
       }
     },
   },
