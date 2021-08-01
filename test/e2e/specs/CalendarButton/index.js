@@ -73,8 +73,7 @@ describe('Calendar button', () => {
     })
 
     When('the user presses the enter key', () => {
-      // TODO: Remove arbitrary wait
-      focusThe('calendar-button').wait(100).type(`{enter}`)
+      the('calendar-button').type('{enter}')
     })
 
     Then('the calendar opens', () => {

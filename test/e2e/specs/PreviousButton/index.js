@@ -21,7 +21,7 @@ describe('Previous Button', () => {
         return
       }
 
-      focusThe('previous-button').type(`{${action}}`)
+      the('previous-button').type(`{${action}}`)
     })
 
     Then('the page is `Dec 2020`', () => {

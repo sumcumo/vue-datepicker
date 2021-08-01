@@ -33,45 +33,49 @@ Feature: Calendar Button
       | 4 | open         | invalid  | closes        | cleared            | calendar-button |
 
 
-  @id-3
-  Scenario: Press the enter key
-    Given the calendar is closed
-    When the user presses the enter key
-    Then the calendar opens
-    And today's cell has focus
+# N.B. These tests have been disabled until native events are supported by Cypress
+# See https://github.com/cypress-io/cypress/issues/311
+# and https://github.com/cypress-io/cypress/issues/8267
+
+#  @id-3
+#  Scenario: Press the enter key
+#    Given the calendar is closed
+#    When the user presses the enter key
+#    Then the calendar opens
+#    And today's cell has focus
 
 
-  @id-4
-  Scenario Outline: Press the enter key: typeable, <openOrClosed>, <validity> date
-    Given the typeable calendar is "<openOrClosed>" and a "<validity>" date is typed
-    When the user presses the enter key
-    Then the calendar "<opensOrCloses>"
-    And the date is "<formattedOrCleared>"
-    And the input has focus
-
-    Examples:
-      | # | openOrClosed | validity | opensOrCloses | formattedOrCleared |
-      | 1 | closed       | valid    | opens         | formatted          |
-      | 2 | closed       | invalid  | opens         | cleared            |
-
-
-  @id-5
-  Scenario: Press the space bar
-    Given the calendar is closed
-    When the user presses the space bar
-    Then the calendar opens
-    And today's cell has focus
+#  @id-4
+#  Scenario Outline: Press the enter key: typeable, <openOrClosed>, <validity> date
+#    Given the typeable calendar is "<openOrClosed>" and a "<validity>" date is typed
+#    When the user presses the enter key
+#    Then the calendar "<opensOrCloses>"
+#    And the date is "<formattedOrCleared>"
+#    And the input has focus
+#
+#    Examples:
+#      | # | openOrClosed | validity | opensOrCloses | formattedOrCleared |
+#      | 1 | closed       | valid    | opens         | formatted          |
+#      | 2 | closed       | invalid  | opens         | cleared            |
 
 
-  @id-6
-  Scenario Outline: Press the space bar: typeable, <openOrClosed>, <validity> date
-    Given the typeable calendar is "<openOrClosed>" and a "<validity>" date is typed
-    When the user presses the space bar
-    Then the calendar "<opensOrCloses>"
-    And the date is "<formattedOrCleared>"
-    And the input has focus
+#  @id-5
+#  Scenario: Press the space bar
+#    Given the calendar is closed
+#    When the user presses the space bar
+#    Then the calendar opens
+#    And today's cell has focus
 
-    Examples:
-      | # | openOrClosed | validity | opensOrCloses | formattedOrCleared |
-      | 1 | closed       | valid    | opens         | formatted          |
-      | 2 | closed       | invalid  | opens         | cleared            |
+
+#  @id-6
+#  Scenario Outline: Press the space bar: typeable, <openOrClosed>, <validity> date
+#    Given the typeable calendar is "<openOrClosed>" and a "<validity>" date is typed
+#    When the user presses the space bar
+#    Then the calendar "<opensOrCloses>"
+#    And the date is "<formattedOrCleared>"
+#    And the input has focus
+#
+#    Examples:
+#      | # | openOrClosed | validity | opensOrCloses | formattedOrCleared |
+#      | 1 | closed       | valid    | opens         | formatted          |
+#      | 2 | closed       | invalid  | opens         | cleared            |

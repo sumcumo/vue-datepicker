@@ -4,6 +4,10 @@ Feature: Previous Button
   So that I can navigate to the previous page
 
 
+# N.B. The enter and space bar tests have been disabled until native events are supported by Cypress
+# See https://github.com/cypress-io/cypress/issues/311
+# and https://github.com/cypress-io/cypress/issues/8267
+
   @id-1
   Scenario Outline: Select by <action>
     Given the calendar is open on `Jan 2021`
@@ -14,8 +18,8 @@ Feature: Previous Button
     Examples:
       | # | action |
       | 1 | click  |
-      | 2 | enter  |
-      | 3 | space  |
+#      | 2 | enter  |
+#      | 3 | space  |
 
   @id-2
   Scenario: Arrow down to tabbable cell

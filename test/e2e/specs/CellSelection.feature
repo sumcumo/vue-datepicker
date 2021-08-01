@@ -3,6 +3,9 @@ Feature: Cell Selection
   I want to select a cell
   So that I pick a date
 
+# N.B. The enter and space bar tests have been disabled until native events are supported by Cypress
+# See https://github.com/cypress-io/cypress/issues/311
+# and https://github.com/cypress-io/cypress/issues/8267
 
   @id-1
   Scenario Outline: Select by <action>: minimum view
@@ -14,8 +17,8 @@ Feature: Cell Selection
     Examples:
       | # | action |
       | 1 | click  |
-      | 2 | enter  |
-      | 3 | space  |
+#      | 2 | enter  |
+#      | 3 | space  |
 
 
   @id-2
@@ -28,5 +31,5 @@ Feature: Cell Selection
     Examples:
       | # | action |
       | 1 | click  |
-      | 2 | enter  |
-      | 3 | space  |
+#      | 2 | enter  |
+#      | 3 | space  |

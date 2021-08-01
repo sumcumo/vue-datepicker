@@ -24,7 +24,8 @@ describe('@id-1: Press the enter key', () => {
   )
 
   When('the user presses the enter key', () => {
-    focusThe('input').type(`{enter}`)
+    // Until Cypress supports native events, we can simulate this by blurring the input first
+    the('input').blur().type('{enter}')
   })
 
   Then('the calendar {string}', (opensOrCloses) => {

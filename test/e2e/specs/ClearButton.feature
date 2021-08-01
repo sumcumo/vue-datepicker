@@ -31,20 +31,23 @@ Feature: Clear Button
       | 1 | closed       |
       | 2 | open         |
 
+# N.B. These tests have been disabled until native events are supported by Cypress
+# See https://github.com/cypress-io/cypress/issues/311
+# and https://github.com/cypress-io/cypress/issues/8267
 
-  @id-3
-  Scenario: Press the enter key
-    Given the calendar is closed and a date is selected
-    When the user focuses the clear button and presses the enter key
-    Then the calendar remains closed
-    And the date is cleared
-    And the input field has focus
+#  @id-3
+#  Scenario: Press the enter key
+#    Given the calendar is closed and a date is selected
+#    When the user focuses the clear button and presses the enter key
+#    Then the calendar remains closed
+#    And the date is cleared
+#    And the input field has focus
 
 
-  @id-4
-  Scenario: Press the space bar
-    Given the calendar is closed and a date is selected
-    When the user focuses the clear button and presses the space bar
-    Then the calendar remains closed
-    And the date is cleared
-    And the input field has focus
+#  @id-4
+#  Scenario: Press the space bar
+#    Given the calendar is closed and a date is selected
+#    When the user focuses the clear button and presses the space bar
+#    Then the calendar remains closed
+#    And the date is cleared
+#    And the input field has focus

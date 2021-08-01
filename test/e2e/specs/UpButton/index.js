@@ -21,7 +21,7 @@ describe('Up Button', () => {
         return
       }
 
-      focusThe('up-button').type(`{${action}}`)
+      the('up-button').type(`{${action}}`)
     })
 
     Then('the page is `2021`', () => {
