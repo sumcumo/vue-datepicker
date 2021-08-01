@@ -58,7 +58,7 @@ export default {
      * Sets an array with all years to show this decade (or yearRange)
      * @return {Array}
      */
-    // eslint-disable-next-line max-statements
+    // eslint-disable-next-line complexity,max-statements
     cells() {
       const d = this.pageDate
       const years = []
@@ -79,8 +79,12 @@ export default {
         years.push({
           year: this.utils.getFullYear(dObj),
           timestamp: dObj.valueOf(),
-          isSelected: this.isSelectedYear(dObj),
           isDisabled: this.isDisabledYear(dObj),
+          isOpenDate:
+            this.isMinimumView &&
+            this.openDate &&
+            this.utils.compareDates(dObj, this.openDate),
+          isSelected: this.isSelectedYear(dObj),
         })
         this.utils.setFullYear(dObj, this.utils.getFullYear(dObj) + 1)
       }

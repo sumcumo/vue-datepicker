@@ -71,6 +71,8 @@
                 :highlighted="highlighted"
                 :is-rtl="isRtl"
                 :is-up-disabled="isUpDisabled"
+                :is-minimum-view="isMinimumView"
+                :open-date="computedOpenDate"
                 :page-date="pageDate"
                 :selected-date="selectedDate"
                 :show-edge-dates="showEdgeDates"
@@ -243,11 +245,25 @@ export default {
     computedInitialView() {
       return this.initialView || this.minimumView
     },
+    computedOpenDate() {
+      // If `openDate` is not set, open on today's date
+      const openDate = this.openDate
+        ? new Date(this.openDate)
+        : this.utils.getNewDateObject()
+
+      // If the `minimum-view` is `month` or `year`, convert `openDate` accordingly
+      return this.minimumView === 'day'
+        ? openDate
+        : new Date(this.utils.setDate(openDate, 1))
+    },
     isInline() {
       return !!this.inline
     },
     isOpen() {
       return this.view !== ''
+    },
+    isMinimumView() {
+      return this.view === this.minimumView
     },
     isRtl() {
       return this.translation.rtl

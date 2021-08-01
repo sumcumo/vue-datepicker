@@ -52,6 +52,7 @@ export default {
           'highlight-end': cell.isHighlightEnd,
           'highlighted': cell.isHighlighted,
           'muted': cell.isPreviousMonth || cell.isNextMonth,
+          'open': cell.isOpenDate,
           'sat': cell.isSaturday,
           'sun': cell.isSunday,
           'selected': this.showEdgeDates
