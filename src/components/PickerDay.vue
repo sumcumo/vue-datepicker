@@ -38,7 +38,9 @@
             view="day"
             @select="select($event)"
           >
-            {{ dayCellContent(cell) }}
+            <slot name="dayCellContent" :cell="cell">
+              {{ dayCellContent(cell) }}
+            </slot>
           </PickerCells>
         </Transition>
       </div>
