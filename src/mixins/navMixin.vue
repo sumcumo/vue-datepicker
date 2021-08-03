@@ -23,6 +23,20 @@ export default {
     fallbackElementToFocus() {
       return this.typeable ? 'input' : 'tabbableCell'
     },
+    focusedDateTimestamp() {
+      const pageDate = new Date(this.pageTimestamp)
+
+      if (this.hasClass(this.tabbableCell, 'day')) {
+        return this.utils.setDate(pageDate, this.tabbableCell.innerHTML.trim())
+      }
+
+      if (this.hasClass(this.tabbableCell, 'month')) {
+        return this.utils.setMonth(pageDate, this.tabbableCellId)
+      }
+
+      const fullYear = this.utils.getFullYear(pageDate) - 1
+      return this.utils.setFullYear(pageDate, fullYear + this.tabbableCellId)
+    },
   },
   methods: {
     /**
@@ -177,6 +191,10 @@ export default {
      */
     resetFocusToOpenDate() {
       this.focus.refs = ['openDate']
+      this.setTransitionAndFocusDelay(
+        this.focusedDateTimestamp,
+        this.computedOpenDate,
+      )
 
       if (!this.isMinimumView) {
         this.isRevertingToOpenDate = true
