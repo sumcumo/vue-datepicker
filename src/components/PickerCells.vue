@@ -23,10 +23,6 @@ export default {
       type: Boolean,
       default: true,
     },
-    transitionName: {
-      type: String,
-      default: '',
-    },
     view: {
       type: String,
       validator: (val) => ['day', 'month', 'year'].includes(val),
