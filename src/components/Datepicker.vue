@@ -252,7 +252,6 @@ export default {
        */
       selectedDate: null,
       slideDuration: 250,
-      transitionName: '',
       utils,
       view: '',
     }
@@ -476,7 +475,12 @@ export default {
      * @param {Date} date
      */
     handleTypedDate(date) {
+      if (this.selectedDate) {
+        this.setTransitionAndFocusDelay(this.selectedDate, date)
+      }
+
       this.selectDate(date ? date.valueOf() : null)
+      this.reviewFocus()
     },
     /**
      * Focus the relevant element when the view changes
@@ -618,19 +622,6 @@ export default {
         dateTemp = this.utils.resetDateTime(dateTemp)
       }
       this.pageTimestamp = this.utils.setDate(new Date(dateTemp), 1)
-    },
-    /**
-     * Sets the direction of the slide transition
-     * @param {Number} plusOrMinus Positive for the future; negative for the past
-     */
-    setTransitionName(plusOrMinus) {
-      const isInTheFuture = plusOrMinus > 0
-
-      if (this.isRtl) {
-        this.transitionName = isInTheFuture ? 'slide-left' : 'slide-right'
-      } else {
-        this.transitionName = isInTheFuture ? 'slide-right' : 'slide-left'
-      }
     },
     /**
      * Sets the slide duration in milliseconds by looking up the stylesheet

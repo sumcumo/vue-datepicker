@@ -12,6 +12,7 @@ export default {
       navElementsFocusedIndex: 0,
       resetTabbableCell: false,
       tabbableCell: null,
+      transitionName: '',
     }
   },
   computed: {
@@ -311,6 +312,19 @@ export default {
         pickerCells.querySelector('button.open:not(.muted):enabled') ||
         pickerCells.querySelector('button.today:not(.muted):enabled') ||
         pickerCells.querySelector('button.cell:not(.muted):enabled')
+    },
+    /**
+     * Sets the direction of the slide transition
+     * @param {Number} plusOrMinus Positive for the future; negative for the past
+     */
+    setTransitionName(plusOrMinus) {
+      const isInTheFuture = plusOrMinus > 0
+
+      if (this.isRtl) {
+        this.transitionName = isInTheFuture ? 'slide-left' : 'slide-right'
+      } else {
+        this.transitionName = isInTheFuture ? 'slide-right' : 'slide-left'
+      }
     },
     /**
      * Tab backwards through the focus-trapped elements
