@@ -55,6 +55,7 @@ export default {
      * Sets an array with all years to show this decade (or yearRange)
      * @return {Array}
      */
+    // eslint-disable-next-line max-statements
     cells() {
       const d = this.pageDate
       const years = []
@@ -79,6 +80,15 @@ export default {
           isDisabled: this.isDisabledYear(dObj),
         })
         this.utils.setFullYear(dObj, this.utils.getFullYear(dObj) + 1)
+      }
+
+      // Fill any remaining cells with blanks to position trailing cells correctly when rtl
+      const cellsInGrid = Math.ceil(this.yearRange / 3) * 3
+      for (let i = years.length; i < cellsInGrid; i += 1) {
+        years.push({
+          id: i,
+          isDisabled: true,
+        })
       }
 
       return years
