@@ -33,6 +33,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    transitionName: {
+      type: String,
+      default: '',
+    },
     translation: {
       type: Object,
       default() {
@@ -42,6 +46,10 @@ export default {
     useUtc: {
       type: Boolean,
       default: false,
+    },
+    view: {
+      type: String,
+      default: 'day',
     },
   },
   data() {
@@ -71,37 +79,39 @@ export default {
      * @param {Number} incrementBy
      */
     changePage(incrementBy) {
-      const date = this.pageDate
-      this.utils.setFullYear(date, this.utils.getFullYear(date) + incrementBy)
+      const { pageDate, utils } = this
+      const units =
+        this.view === 'year' ? incrementBy * this.yearRange : incrementBy
 
-      this.$emit('page-change', date)
+      this.$emit('set-transition-name', incrementBy)
+
+      if (this.view === 'day') {
+        utils.setMonth(pageDate, utils.getMonth(pageDate) + units)
+      } else {
+        utils.setFullYear(pageDate, utils.getFullYear(pageDate) + units)
+      }
+
+      this.$emit('page-change', pageDate)
     },
     /**
-     * Emits a 'select' or 'select-disabled' event
+     * Determines which transition to use (for edge dates) and emits a 'select' or 'select-disabled' event
      * @param {Object} cell
      */
     select(cell) {
       if (cell.isDisabled) {
         this.$emit('select-disabled', cell)
-      } else {
-        this.$emit('select', cell)
+        return
       }
-    },
-    /**
-     * Increment the current page
-     */
-    nextPage() {
-      if (!this.isNextDisabled) {
-        this.changePage(+1)
+
+      if (cell.isPreviousMonth) {
+        this.$emit('set-transition-name', -1)
       }
-    },
-    /**
-     * Decrement the page
-     */
-    previousPage() {
-      if (!this.isPreviousDisabled) {
-        this.changePage(-1)
+
+      if (cell.isNextMonth) {
+        this.$emit('set-transition-name', 1)
       }
+
+      this.$emit('select', cell)
     },
   },
 }

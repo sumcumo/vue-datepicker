@@ -1,14 +1,15 @@
 <template>
-  <div class="picker-view">
+  <div>
     <slot name="beforeCalendarHeaderMonth" />
+
     <PickerHeader
       v-if="showHeader"
       :is-next-disabled="isNextDisabled"
       :is-previous-disabled="isPreviousDisabled"
       :is-rtl="isRtl"
-      @next="nextPage"
-      @previous="previousPage"
+      @page-change="changePage($event)"
     >
+      <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
       <span
         class="month__year_btn"
         :class="{ up: !isUpDisabled }"
@@ -17,19 +18,23 @@
         {{ pageTitleMonth }}
       </span>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
-      <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
     </PickerHeader>
-    <div ref="cells">
-      <span
-        v-for="cell in cells"
-        :key="cell.timestamp"
-        :class="{ selected: cell.isSelected, disabled: cell.isDisabled }"
-        class="cell month"
-        @click="select(cell)"
-      >
-        {{ cell.month }}
-      </span>
+
+    <div class="cells-wrapper">
+      <Transition :name="transitionName">
+        <PickerCells
+          ref="cells"
+          :key="pageTitleMonth"
+          v-slot="{ cell }"
+          :cells="cells"
+          view="month"
+          @select="select($event)"
+        >
+          {{ cell.month }}
+        </PickerCells>
+      </Transition>
     </div>
+
     <slot name="calendarFooterMonth" />
   </div>
 </template>
@@ -37,9 +42,11 @@
 <script>
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
+import PickerCells from './PickerCells.vue'
 
 export default {
   name: 'PickerMonth',
+  components: { PickerCells },
   mixins: [pickerMixin],
   computed: {
     /**
@@ -64,8 +71,8 @@ export default {
         months.push({
           month: this.utils.getMonthName(i, this.translation.months),
           timestamp: dObj.valueOf(),
-          isSelected: this.isSelectedMonth(dObj),
           isDisabled: this.isDisabledMonth(dObj),
+          isSelected: this.isSelectedMonth(dObj),
         })
         this.utils.setMonth(dObj, this.utils.getMonth(dObj) + 1)
       }

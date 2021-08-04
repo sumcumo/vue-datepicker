@@ -2,6 +2,7 @@
   <div class="vdp-datepicker" :class="[wrapperClass, { rtl: isRtl }]">
     <DateInput
       :id="id"
+      ref="dateInput"
       :autofocus="autofocus"
       :bootstrap-styling="bootstrapStyling"
       :calendar-button="calendarButton"
@@ -12,8 +13,8 @@
       :disabled="disabled"
       :format="format"
       :inline="inline"
-      :is-open="isOpen"
       :input-class="inputClass"
+      :is-open="isOpen"
       :maxlength="maxlength"
       :name="name"
       :parser="parser"
@@ -21,7 +22,6 @@
       :placeholder="placeholder"
       :ref-name="refName"
       :required="required"
-      :reset-typed-date="resetTypedDate"
       :selected-date="selectedDate"
       :show-calendar-on-button-click="showCalendarOnButtonClick"
       :show-calendar-on-focus="showCalendarOnFocus"
@@ -50,44 +50,54 @@
       :rtl="isRtl"
       :visible="isOpen"
     >
-      <div
-        v-show="isOpen"
-        ref="datepicker"
-        class="vdp-datepicker__calendar"
-        :class="pickerClasses"
-        @mousedown.prevent
-      >
-        <slot name="beforeCalendarHeader" />
-        <Component
-          :is="picker"
-          :day-cell-content="dayCellContent"
-          :disabled-dates="disabledDates"
-          :first-day-of-week="firstDayOfWeek"
-          :highlighted="highlighted"
-          :is-rtl="isRtl"
-          :is-up-disabled="isUpDisabled"
-          :page-date="pageDate"
-          :selected-date="selectedDate"
-          :show-edge-dates="showEdgeDates"
-          :show-full-month-name="fullMonthName"
-          :show-header="showHeader"
-          :translation="translation"
-          :use-utc="useUtc"
-          :year-range="yearPickerRange"
-          @page-change="handlePageChange"
-          @select="handleSelect"
-          @select-disabled="handleSelectDisabled"
-          @set-view="setView"
+      <Transition name="toggle">
+        <div
+          v-show="isOpen"
+          ref="datepicker"
+          class="vdp-datepicker__calendar"
+          :class="pickerClasses"
+          @mousedown.prevent
         >
-          <template v-for="slotKey of calendarSlots">
-            <slot :slot="slotKey" :name="slotKey" />
-          </template>
-          <template #dayCellContent="{ cell }">
-            <slot name="dayCellContent" :cell="cell" v-if="cell" />
-          </template>
-        </Component>
-        <slot name="calendarFooter" />
-      </div>
+          <Transition name="view">
+            <div :key="view">
+              <slot name="beforeCalendarHeader" />
+              <Component
+                :is="picker"
+                class="picker-view"
+                :day-cell-content="dayCellContent"
+                :disabled-dates="disabledDates"
+                :first-day-of-week="firstDayOfWeek"
+                :highlighted="highlighted"
+                :is-rtl="isRtl"
+                :is-up-disabled="isUpDisabled"
+                :page-date="pageDate"
+                :selected-date="selectedDate"
+                :show-edge-dates="showEdgeDates"
+                :show-full-month-name="fullMonthName"
+                :show-header="showHeader"
+                :transition-name="transitionName"
+                :translation="translation"
+                :use-utc="useUtc"
+                :view="view || computedInitialView"
+                :year-range="yearPickerRange"
+                @page-change="handlePageChange"
+                @select="handleSelect"
+                @select-disabled="handleSelectDisabled"
+                @set-transition-name="setTransitionName($event)"
+                @set-view="setView"
+              >
+                <template v-for="slotKey of calendarSlots">
+                  <slot :slot="slotKey" :name="slotKey" />
+                </template>
+                <template #dayCellContent="{ cell }">
+                  <slot v-if="cell" name="dayCellContent" :cell="cell" />
+                </template>
+              </Component>
+              <slot name="calendarFooter" />
+            </div>
+          </Transition>
+        </div>
+      </Transition>
     </Popup>
   </div>
 </template>
@@ -219,12 +229,12 @@ export default {
        * {Number}
        */
       pageTimestamp,
-      resetTypedDate: utils.getNewDateObject(),
       /*
        * Selected Date
        * {Date}
        */
       selectedDate: null,
+      transitionName: '',
       utils,
       view: '',
     }
@@ -283,7 +293,7 @@ export default {
     pickerClasses() {
       return [
         this.calendarClass,
-        this.isInline && 'inline',
+        this.isInline && 'vdp-datepicker__calendar--inline',
         this.isRtl && this.appendToBody && 'rtl',
       ]
     },
@@ -331,20 +341,13 @@ export default {
       this.$emit('cleared')
     },
     /**
-     * Close the calendar views
+     * Close the calendar
      */
     close() {
       if (!this.isInline) {
         this.view = ''
         this.$emit('closed')
       }
-    },
-    /**
-     * Set the new pageDate and emit `changed-<view>` event
-     */
-    handlePageChange(pageDate) {
-      this.setPageDate(pageDate)
-      this.$emit(`changed-${this.nextView.up}`, pageDate)
     },
     /**
      * Emits a 'blur' event
@@ -359,17 +362,22 @@ export default {
       this.$emit('focus')
     },
     /**
+     * Set the new pageDate and emit `changed-<view>` event
+     */
+    handlePageChange(pageDate) {
+      this.setPageDate(pageDate)
+      this.$emit(`changed-${this.nextView.up}`, pageDate)
+    },
+    /**
      * Set the date, or go to the next view down
      */
     handleSelect(cell) {
       if (this.allowedToShowView(this.nextView.down)) {
-        this.setPageDate(new Date(cell.timestamp))
-        this.$emit(`changed-${this.view}`, cell)
-        this.setView(this.nextView.down)
+        this.showNextViewDown(cell)
         return
       }
 
-      this.resetTypedDate = this.utils.getNewDateObject()
+      this.$refs.dateInput.typedDate = ''
       this.selectDate(cell.timestamp)
       this.close()
     },
@@ -381,6 +389,7 @@ export default {
     },
     /**
      * Set the date from a 'typed-date' event
+     * @param {Date} date
      */
     handleTypedDate(date) {
       this.selectDate(date.valueOf())
@@ -420,12 +429,14 @@ export default {
       if (this.disabled || this.isInline) {
         return
       }
+
       this.setInitialView()
       this.$emit('opened')
     },
     /**
      * Parse a datepicker value from string/number to date
-     * @param {Date|String|Number|null} date
+     * @param   {Date|String|Number|null} date
+     * @returns {Date}
      */
     parseValue(date) {
       let dateTemp = date
@@ -434,17 +445,6 @@ export default {
         dateTemp = Number.isNaN(parsed.valueOf()) ? null : parsed
       }
       return dateTemp
-    },
-    /**
-     * Called in the event that the user navigates to date pages and
-     * closes the picker without selecting a date.
-     */
-    resetDefaultPageDate() {
-      if (this.selectedDate === null) {
-        this.setPageDate()
-        return
-      }
-      this.setPageDate(this.selectedDate)
     },
     /**
      * Select the date
@@ -487,6 +487,19 @@ export default {
       this.pageTimestamp = this.utils.setDate(new Date(dateTemp), 1)
     },
     /**
+     * Sets the direction of the slide transition
+     * @param {Number} plusOrMinus Positive for the future; negative for the past
+     */
+    setTransitionName(plusOrMinus) {
+      const isInTheFuture = plusOrMinus > 0
+
+      if (this.isRtl) {
+        this.transitionName = isInTheFuture ? 'slide-left' : 'slide-right'
+      } else {
+        this.transitionName = isInTheFuture ? 'slide-right' : 'slide-left'
+      }
+    },
+    /**
      * Set the datepicker value
      * @param {Date|String|Number|null} date
      */
@@ -501,6 +514,7 @@ export default {
     },
     /**
      * Set the picker view
+     * @param {String} view
      */
     setView(view) {
       if (this.allowedToShowView(view)) {
@@ -508,7 +522,18 @@ export default {
       }
     },
     /**
+     * Set the view to the next view down e.g. from `month` to `day`
+     * @param {Object} cell The currently focused cell
+     */
+    showNextViewDown(cell) {
+      this.setPageDate(new Date(cell.timestamp))
+      this.$emit(`changed-${this.view}`, cell)
+      this.setView(this.nextView.down)
+    },
+    /**
      * Capitalizes the first letter
+     * @param {String} str The string to capitalize
+     * @returns {String}
      */
     ucFirst(str) {
       return str[0].toUpperCase() + str.substring(1)

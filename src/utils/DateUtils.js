@@ -294,7 +294,7 @@ const utils = {
     if (typeof formatStr === 'function') {
       if (!parser || typeof parser !== 'function') {
         throw new Error(
-          'Parser need to be a function if you are using a custom formatter',
+          'Parser needs to be a function if you are using a custom formatter',
         )
       }
       return parser(dateStr)

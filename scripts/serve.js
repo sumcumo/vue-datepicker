@@ -32,6 +32,7 @@ export default {
     }),
     replace({
       'process.env.NODE_ENV': JSON.stringify('development'),
+      'preventAssignment': true,
     }),
     resolve({
       module: true,
