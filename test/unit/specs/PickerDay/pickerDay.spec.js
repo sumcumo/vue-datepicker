@@ -155,3 +155,23 @@ describe('PickerDay', () => {
     expect(cellClasses[2].selected).toBeFalsy()
   })
 })
+
+describe('PickerDay with scoped slot', () => {
+  it('displays the dayCellContent scoped slot correctly', () => {
+    const wrapper = mount(PickerDay, {
+      propsData: {
+        translation: en,
+        pageDate: new Date(2018, 1, 1),
+      },
+      scopedSlots: {
+        dayCellContent: `<template #dayCellContent="{ cell }">
+                          <span>test{{ cell.date }}</span>
+                        </template>`,
+      },
+    })
+
+    const firstCell = wrapper.find('.cell')
+
+    expect(firstCell.text()).toBe('test28')
+  })
+})
