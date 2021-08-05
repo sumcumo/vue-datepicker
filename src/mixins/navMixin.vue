@@ -12,6 +12,11 @@ export default {
     }
   },
   computed: {
+    tabbableCellId() {
+      return (
+        this.tabbableCell && Number(this.tabbableCell.getAttribute('data-id'))
+      )
+    },
     fallbackElementToFocus() {
       return this.typeable ? 'input' : 'tabbableCell'
     },

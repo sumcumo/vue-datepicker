@@ -50,6 +50,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    tabbableCellId: {
+      type: Number,
+      default: null,
+    },
     transitionName: {
       type: String,
       default: '',

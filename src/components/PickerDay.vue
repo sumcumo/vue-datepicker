@@ -39,6 +39,7 @@
             :bootstrap-styling="bootstrapStyling"
             :cells="cells"
             :show-edge-dates="showEdgeDates"
+            :tabbable-cell-id="tabbableCellId"
             view="day"
             @select="select($event)"
           >

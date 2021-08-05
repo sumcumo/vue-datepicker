@@ -1,9 +1,11 @@
 <template>
   <div class="picker-cells" data-test-picker-cells>
     <button
-      v-for="cell in cells"
+      v-for="(cell, id) in cells"
       :key="cell.timestamp"
       :class="cellClasses(cell)"
+      :data-id="id"
+      :data-test-tabbable-cell="id === tabbableCellId"
       :data-test-open-date="cell.isOpenDate"
       :data-test-today-cell="cell.isToday"
       :disabled="cell.isDisabled"
@@ -30,6 +32,10 @@ export default {
     showEdgeDates: {
       type: Boolean,
       default: true,
+    },
+    tabbableCellId: {
+      type: Number,
+      default: null,
     },
     view: {
       type: String,

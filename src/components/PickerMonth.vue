@@ -31,6 +31,7 @@
           v-slot="{ cell }"
           :bootstrap-styling="bootstrapStyling"
           :cells="cells"
+          :tabbable-cell-id="tabbableCellId"
           view="month"
           @select="select($event)"
         >
