@@ -290,7 +290,7 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapper.vm.nextView.up).toBe('decade')
   })
 
-  it('should emit changed-month/year/decade', async () => {
+  it('emits changed-month/year/decade', async () => {
     const pageDate = new Date(2016, 2, 1)
     await wrapper.vm.setView('day')
     await wrapper.vm.handlePageChange(pageDate)
@@ -392,7 +392,7 @@ describe('Datepicker.vue using UTC', () => {
   it('correctly sets the value using UTC', async () => {
     const timezoneOffset = new Date().getTimezoneOffset() / 60
 
-    // this is ambiguous because localzone differs by one day than UTC
+    // This is ambiguous because localzone differs from UTC by one day
     const ambiguousHour = 25 - timezoneOffset
     const ambiguousDate = new Date(2018, 3, 15, ambiguousHour)
     const ambiguousYear = ambiguousDate.getUTCFullYear()
@@ -408,6 +408,7 @@ describe('Datepicker.vue using UTC', () => {
         useUtc: true, // This should fail if `useUtc=false`
       },
     })
+
     // It's important to assert the input rendered output
     await wrapper.vm.$nextTick()
     expect(wrapper.findComponent(DateInput).vm.formattedValue).toEqual(

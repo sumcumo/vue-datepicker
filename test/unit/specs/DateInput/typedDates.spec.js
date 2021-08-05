@@ -91,7 +91,7 @@ describe('DateInput', () => {
     const input = wrapper.find('input')
     input.setValue(dateString)
     expect(input.element.value).toEqual(dateString)
-    await input.trigger('keyup')
+    input.trigger('keyup')
     expect(wrapper.vm.formattedValue).toEqual('12.08.2018')
   })
 
