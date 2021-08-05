@@ -142,7 +142,6 @@ describe('Datepicker mount', () => {
         format: 'dd MMM yyyy',
         translation: en,
         typeable: true,
-        useUtc: true,
       },
     })
   })
