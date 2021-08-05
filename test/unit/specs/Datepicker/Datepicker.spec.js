@@ -326,14 +326,16 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapperTemp.emitted('input')).toBeTruthy()
   })
 
-  it('sets the transition correctly', () => {
+  it('sets the transition correctly', async () => {
     wrapper.vm.setTransitionName(1)
     expect(wrapper.vm.transitionName).toBe('slide-right')
 
     wrapper.vm.setTransitionName(-1)
     expect(wrapper.vm.transitionName).toBe('slide-left')
 
-    wrapper.setData({ translation: { rtl: true } })
+    await wrapper.setData({
+      translation: { rtl: true },
+    })
 
     wrapper.vm.setTransitionName(1)
     expect(wrapper.vm.transitionName).toBe('slide-left')
