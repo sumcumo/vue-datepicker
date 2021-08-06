@@ -6,10 +6,6 @@
   position: relative;
   text-align: left;
   box-sizing: border-box;
-
-  .calendar-btn-disabled {
-    cursor: not-allowed;
-  }
 }
 
 .vdp-datepicker__calendar {
@@ -34,6 +30,15 @@
 
   &.vdp-datepicker__calendar--inline {
     position: static;
+  }
+
+  button {
+    background: inherit;
+    text-align: center;
+
+    &:disabled {
+      color: #ddd;
+    }
   }
 
   header {
@@ -261,11 +266,11 @@
 
 .vdp-datepicker__clear-button,
 .vdp-datepicker__calendar-button {
-  cursor: pointer;
+  border: none;
   font-style: normal;
 
-  &.disabled {
-    color: #999;
-    cursor: default;
+  &.input-group-prepend,
+  &.input-group-append {
+    padding: 0;
   }
 }

@@ -2,13 +2,12 @@
   <div :class="{ 'input-group': bootstrapStyling }">
     <slot name="beforeDateInput" />
     <!-- Calendar Button -->
-    <span
+    <button
       v-if="calendarButton"
       class="vdp-datepicker__calendar-button"
-      :class="{
-        'input-group-prepend': bootstrapStyling,
-        'calendar-btn-disabled': disabled,
-      }"
+      :class="{ 'btn input-group-prepend': bootstrapStyling }"
+      :disabled="disabled"
+      type="button"
       @click="toggle"
     >
       <span :class="{ 'input-group-text': bootstrapStyling }">
@@ -19,7 +18,7 @@
           </i>
         </slot>
       </span>
-    </span>
+    </button>
     <!-- Input -->
     <input
       :id="id"
@@ -46,11 +45,13 @@
       @keyup="parseTypedDate"
     />
     <!-- Clear Button -->
-    <span
+    <button
       v-if="clearButton && selectedDate"
       class="vdp-datepicker__clear-button"
-      :class="{ 'input-group-append': bootstrapStyling }"
-      @click="clearDate()"
+      :class="{ 'btn input-group-append': bootstrapStyling }"
+      :disabled="disabled"
+      type="button"
+      @click="clearDate"
     >
       <span :class="{ 'input-group-text': bootstrapStyling }">
         <slot name="clearBtn">
@@ -59,7 +60,7 @@
           </i>
         </slot>
       </span>
-    </span>
+    </button>
     <slot name="afterDateInput" />
   </div>
 </template>
