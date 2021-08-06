@@ -247,6 +247,7 @@ export default {
        * {Date}
        */
       selectedDate: null,
+      slideDuration: 250,
       transitionName: '',
       utils,
       view: '',
@@ -438,6 +439,7 @@ export default {
     /**
      * Set the date, or go to the next view down
      */
+    // eslint-disable-next-line max-statements,complexity
     handleSelect(cell) {
       if (this.allowedToShowView(this.nextView.down)) {
         this.showNextViewDown(cell)
@@ -446,10 +448,14 @@ export default {
 
       this.$refs.dateInput.typedDate = ''
       this.selectDate(cell.timestamp)
+      this.focus.delay = cell.isNextMonth ? this.slideDuration : 0
+      this.focus.refs = this.isInline ? ['tabbableCell'] : ['input']
       this.close()
 
       if (this.showCalendarOnFocus && !this.inline) {
         this.$refs.dateInput.shouldToggleOnClick = true
+      } else {
+        this.reviewFocus()
       }
     },
     /**
@@ -497,6 +503,8 @@ export default {
       if (this.isInline) {
         this.setInitialView()
       }
+
+      this.setSlideDuration()
     },
     /**
      * Returns true if a date is disabled
@@ -590,6 +598,18 @@ export default {
       } else {
         this.transitionName = isInTheFuture ? 'slide-right' : 'slide-left'
       }
+    },
+    /**
+     * Sets the slide duration in milliseconds by looking up the stylesheet
+     */
+    setSlideDuration() {
+      if (!this.$refs.picker || !this.$refs.picker.$refs.cells) {
+        return
+      }
+      const cells = this.$refs.picker.$refs.cells.$el
+      const durationInSecs = window.getComputedStyle(cells).transitionDuration
+
+      this.slideDuration = parseFloat(durationInSecs) * 1000
     },
     /**
      * Set the datepicker value
