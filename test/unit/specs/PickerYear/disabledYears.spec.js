@@ -24,11 +24,6 @@ describe('PickerYear', () => {
     wrapper.destroy()
   })
 
-  it("can't select a disabled year", () => {
-    wrapper.vm.select({ isDisabled: true })
-    expect(wrapper.emitted('select')).toBeFalsy()
-  })
-
   it("can't navigate to a disabled year", () => {
     wrapper.vm.changePage(-1)
     expect(wrapper.emitted('changed-decade')).toBeFalsy()

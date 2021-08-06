@@ -24,11 +24,6 @@ describe('PickerMonth', () => {
     wrapper.destroy()
   })
 
-  it("can't select a disabled month", () => {
-    wrapper.vm.select({ isDisabled: true })
-    expect(wrapper.emitted('select')).toBeFalsy()
-  })
-
   it('detects a disabled month when the `to` year is in the past', async () => {
     await wrapper.setProps({
       disabledDates: {

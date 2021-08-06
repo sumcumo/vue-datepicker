@@ -28,11 +28,6 @@ describe('PickerDay: disabled', () => {
     expect(wrapper.vm.isDisabledDate(new Date(2026, 9, 2))).toEqual(true)
   })
 
-  it('does not select a disabled date', () => {
-    wrapper.vm.select({ isDisabled: true })
-    expect(wrapper.emitted('select')).toBeFalsy()
-  })
-
   it('sets `isNextDisabled` and `isPreviousDisabled` correctly', () => {
     expect(wrapper.vm.isNextDisabled).toBeTruthy()
     expect(wrapper.vm.isPreviousDisabled).toBeTruthy()
@@ -112,11 +107,6 @@ describe('PickerDay: disabled', () => {
     expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 28))).toEqual(true)
     expect(wrapper.vm.isDisabledDate(new Date(2016, 10, 24))).toEqual(true)
     expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 11))).toEqual(false)
-  })
-
-  it('emits a select-disabled event for a disabled date', () => {
-    wrapper.vm.select({ isDisabled: true })
-    expect(wrapper.emitted('select-disabled')).toBeTruthy()
   })
 
   it('closes without warning when disabledDates is undefined', async () => {

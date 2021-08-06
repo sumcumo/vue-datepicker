@@ -83,7 +83,6 @@
                 :year-range="yearPickerRange"
                 @page-change="handlePageChange"
                 @select="handleSelect"
-                @select-disabled="handleSelectDisabled"
                 @set-transition-name="setTransitionName($event)"
                 @set-view="setView"
               >
@@ -377,12 +376,6 @@ export default {
       this.$refs.dateInput.typedDate = ''
       this.selectDate(cell.timestamp)
       this.close()
-    },
-    /**
-     * Emit a 'selected-disabled' event
-     */
-    handleSelectDisabled(cell) {
-      this.$emit('selected-disabled', cell)
     },
     /**
      * Set the date from a 'typed-date' event

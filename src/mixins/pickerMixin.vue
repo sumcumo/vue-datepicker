@@ -98,15 +98,10 @@ export default {
       this.$emit('page-change', pageDate)
     },
     /**
-     * Determines which transition to use (for edge dates) and emits a 'select' or 'select-disabled' event
+     * Determines which transition to use (for edge dates) and emits a 'select' event
      * @param {Object} cell
      */
     select(cell) {
-      if (cell.isDisabled) {
-        this.$emit('select-disabled', cell)
-        return
-      }
-
       if (cell.isPreviousMonth) {
         this.$emit('set-transition-name', -1)
       }
