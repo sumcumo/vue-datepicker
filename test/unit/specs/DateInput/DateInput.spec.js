@@ -126,13 +126,6 @@ describe('DateInput', () => {
     expect(wrapper.find('input').element.value).toEqual('!')
   })
 
-  it('emits close on blur', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('blur')
-
-    expect(wrapper.emitted('close')).toBeTruthy()
-  })
-
   it('emits close when escape is pressed', async () => {
     const input = wrapper.find('input')
     await input.trigger('keydown.escape')

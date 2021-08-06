@@ -148,7 +148,6 @@ export default {
         this.submitTypedDate()
       }
       this.$emit('blur')
-      this.$emit('close')
       this.isFocusedUsed = false
     },
     /**
