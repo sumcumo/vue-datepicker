@@ -43,13 +43,20 @@
 
   header {
     display: flex;
+    height: 40px;
     justify-content: space-between;
-    line-height: 40px;
 
-    span {
-      display: inline-block;
-      text-align: center;
-      width: 71.42857142857143%;
+    button {
+      border: none;
+
+      &:hover:not(:disabled) {
+        background: #eee;
+      }
+
+      &.vdp-datepicker__up {
+        color: #000;
+        flex-grow: 5;
+      }
     }
 
     .prev,
@@ -59,6 +66,7 @@
       width: 14.285714285714286%;
 
       .default {
+        display: flex;
         text-indent: -10000px;
 
         &:after {
@@ -82,9 +90,13 @@
           border-right: 10px solid #000;
           margin-left: -5px;
         }
+      }
 
-        &.disabled:after {
-          border-right: 10px solid #ddd;
+      &:disabled {
+        .default {
+          &:after {
+            border-right: 10px solid #ddd;
+          }
         }
       }
     }
@@ -95,31 +107,16 @@
           border-left: 10px solid #000;
           margin-left: 5px;
         }
+      }
 
-        &.disabled:after {
-          border-left: 10px solid #ddd;
+      &:disabled {
+        .default {
+          &:after {
+            border-left: 10px solid #ddd;
+          }
         }
       }
     }
-
-    .prev:not(.disabled),
-    .next:not(.disabled),
-    .up:not(.disabled) {
-      cursor: pointer;
-
-      &:hover {
-        background: #eee;
-      }
-    }
-  }
-
-  .disabled {
-    color: #ddd;
-    cursor: default;
-
-    //&.selected {
-    //  color: #104756;
-    //}
   }
 
   .cell {

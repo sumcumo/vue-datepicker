@@ -4,19 +4,21 @@
 
     <PickerHeader
       v-if="showHeader"
+      :bootstrap-styling="bootstrapStyling"
       :is-next-disabled="isNextDisabled"
       :is-previous-disabled="isPreviousDisabled"
       :is-rtl="isRtl"
       @page-change="changePage($event)"
     >
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
-      <span
-        :class="{ up: !isUpDisabled }"
-        class="day__month_btn"
-        @click="$emit('set-view', 'month')"
+      <UpButton
+        ref="up"
+        :class="{ btn: bootstrapStyling }"
+        :is-disabled="isUpDisabled"
+        @select="$emit('set-view', 'month')"
       >
         {{ pageTitleDay }}
-      </span>
+      </UpButton>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
     </PickerHeader>
 
@@ -55,10 +57,11 @@ import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
 import HighlightedDate from '~/utils/HighlightedDate'
 import PickerCells from './PickerCells.vue'
+import UpButton from './UpButton.vue'
 
 export default {
   name: 'PickerDay',
-  components: { PickerCells },
+  components: { PickerCells, UpButton },
   mixins: [pickerMixin],
   props: {
     dayCellContent: {

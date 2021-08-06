@@ -7,6 +7,10 @@ export default {
   components: { PickerHeader },
   inheritAttrs: false,
   props: {
+    bootstrapStyling: {
+      type: Boolean,
+      default: false,
+    },
     disabledDates: {
       type: Object,
       default() {

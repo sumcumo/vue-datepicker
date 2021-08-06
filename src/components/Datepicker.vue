@@ -63,6 +63,7 @@
               <slot name="beforeCalendarHeader" />
               <Component
                 :is="picker"
+                :bootstrap-styling="bootstrapStyling"
                 class="picker-view"
                 :day-cell-content="dayCellContent"
                 :disabled-dates="disabledDates"

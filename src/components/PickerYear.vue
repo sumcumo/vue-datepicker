@@ -4,15 +4,16 @@
 
     <PickerHeader
       v-if="showHeader"
+      :bootstrap-styling="bootstrapStyling"
       :is-next-disabled="isNextDisabled"
       :is-previous-disabled="isPreviousDisabled"
       :is-rtl="isRtl"
       @page-change="changePage($event)"
     >
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
-      <span>
+      <UpButton ref="up" :class="{ btn: bootstrapStyling }" :is-disabled="true">
         {{ pageTitleYear }}
-      </span>
+      </UpButton>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
     </PickerHeader>
 
@@ -39,10 +40,11 @@
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
 import PickerCells from './PickerCells.vue'
+import UpButton from './UpButton.vue'
 
 export default {
   name: 'PickerYear',
-  components: { PickerCells },
+  components: { PickerCells, UpButton },
   mixins: [pickerMixin],
   props: {
     yearRange: {
