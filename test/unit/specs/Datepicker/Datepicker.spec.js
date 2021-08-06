@@ -72,7 +72,7 @@ describe('Datepicker mounted', () => {
       calendarButton: true,
     })
 
-    const calendarButton = wrapper.find('.vdp-datepicker__calendar-button')
+    const calendarButton = wrapper.find('button[data-test-calendar-button]')
     await calendarButton.trigger('click')
     expect(wrapper.vm.isOpen).toBeTruthy()
 
@@ -86,7 +86,7 @@ describe('Datepicker mounted', () => {
       showCalendarOnFocus: true,
     })
 
-    const calendarButton = wrapper.find('.vdp-datepicker__calendar-button')
+    const calendarButton = wrapper.find('button[data-test-calendar-button]')
 
     await calendarButton.trigger('click')
     expect(wrapper.vm.isOpen).toBeTruthy()

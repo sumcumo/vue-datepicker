@@ -1,9 +1,11 @@
 <template>
-  <div class="picker-cells">
+  <div class="picker-cells" data-test-picker-cells>
     <button
       v-for="cell in cells"
       :key="cell.timestamp"
       :class="cellClasses(cell)"
+      :data-test-open-date="cell.isOpenDate"
+      :data-test-today-cell="cell.isToday"
       :disabled="cell.isDisabled"
       type="button"
       @click="$emit('select', cell)"

@@ -185,7 +185,7 @@ describe('Datepicker mount', () => {
     })
 
     const input = wrapper.find('input')
-    const calendarButton = wrapper.find('.vdp-datepicker__calendar-button')
+    const calendarButton = wrapper.find('button[data-test-calendar-button]')
 
     await input.trigger('focus')
     expect(wrapper.vm.isOpen).toBeTruthy()

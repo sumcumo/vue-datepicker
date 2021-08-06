@@ -6,6 +6,7 @@
       v-if="calendarButton"
       class="vdp-datepicker__calendar-button"
       :class="{ 'btn input-group-prepend': bootstrapStyling }"
+      data-test-calendar-button
       :disabled="disabled"
       type="button"
       @click="toggle"
@@ -27,6 +28,7 @@
       :autofocus="autofocus"
       :class="computedInputClass"
       :clear-button="clearButton"
+      data-test-input
       :disabled="disabled"
       :maxlength="maxlength"
       :name="name"
@@ -49,6 +51,7 @@
       v-if="clearButton && selectedDate"
       class="vdp-datepicker__clear-button"
       :class="{ 'btn input-group-append': bootstrapStyling }"
+      data-test-clear-button
       :disabled="disabled"
       type="button"
       @click="clearDate"

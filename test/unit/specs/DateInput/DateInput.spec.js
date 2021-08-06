@@ -171,7 +171,7 @@ describe('DateInput', () => {
 
     expect(wrapper.emitted('open')).toBeFalsy()
 
-    const calendarButton = wrapper.find('.vdp-datepicker__calendar-button')
+    const calendarButton = wrapper.find('button[data-test-calendar-button]')
     await calendarButton.trigger('click')
 
     expect(wrapper.emitted('open')).toBeTruthy()

@@ -1,6 +1,7 @@
 <template>
   <button
     class="vdp-datepicker__up"
+    data-test-up-button
     :disabled="isDisabled"
     type="button"
     @click="$emit('select')"

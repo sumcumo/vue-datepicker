@@ -3,6 +3,7 @@
     <button
       class="prev"
       :class="{ btn: bootstrapStyling, rtl: isRtl }"
+      data-test-previous-button
       :disabled="isPreviousDisabled"
       type="button"
       @click="isPreviousDisabled ? null : $emit('page-change', -1)"
@@ -15,6 +16,7 @@
     <button
       class="next"
       :class="{ btn: bootstrapStyling, rtl: isRtl }"
+      data-test-next-button
       :disabled="isNextDisabled"
       type="button"
       @click="isNextDisabled ? null : $emit('page-change', 1)"
