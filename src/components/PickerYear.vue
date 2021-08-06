@@ -23,6 +23,7 @@
           ref="cells"
           :key="pageTitleYear"
           v-slot="{ cell }"
+          :bootstrap-styling="bootstrapStyling"
           :cells="cells"
           view="year"
           @select="select($event)"

@@ -1,13 +1,15 @@
 <template>
   <div class="picker-cells">
-    <span
+    <button
       v-for="cell in cells"
       :key="cell.timestamp"
       :class="cellClasses(cell)"
+      :disabled="cell.isDisabled"
+      type="button"
       @click="$emit('select', cell)"
     >
       <slot :cell="cell" />
-    </span>
+    </button>
   </div>
 </template>
 
@@ -15,6 +17,10 @@
 export default {
   name: 'PickerCells',
   props: {
+    bootstrapStyling: {
+      type: Boolean,
+      default: false,
+    },
     cells: {
       type: Array,
       required: true,
@@ -40,6 +46,7 @@ export default {
         'cell',
         this.view,
         {
+          'btn': this.bootstrapStyling,
           'disabled': cell.isDisabled,
           'highlight-start': cell.isHighlightStart,
           'highlight-end': cell.isHighlightEnd,

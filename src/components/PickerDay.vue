@@ -35,6 +35,7 @@
             ref="cells"
             :key="pageTitleDay"
             v-slot="{ cell }"
+            :bootstrap-styling="bootstrapStyling"
             :cells="cells"
             :show-edge-dates="showEdgeDates"
             view="day"

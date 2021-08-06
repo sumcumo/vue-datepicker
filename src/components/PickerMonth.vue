@@ -28,6 +28,7 @@
           ref="cells"
           :key="pageTitleMonth"
           v-slot="{ cell }"
+          :bootstrap-styling="bootstrapStyling"
           :cells="cells"
           view="month"
           @select="select($event)"
