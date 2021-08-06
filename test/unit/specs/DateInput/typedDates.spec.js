@@ -150,12 +150,6 @@ describe('Datepicker mount', () => {
     wrapper.destroy()
   })
 
-  it('sets the date on typedDate event', () => {
-    const today = new Date()
-    wrapper.vm.handleTypedDate(today)
-    expect(wrapper.vm.selectedDate).toEqual(today)
-  })
-
   it('shows the correct month as you type', async () => {
     const spySelectDate = jest.spyOn(wrapper.vm, 'selectDate')
     const input = wrapper.find('input')

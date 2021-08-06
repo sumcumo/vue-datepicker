@@ -114,10 +114,6 @@ describe('Datepicker shallowMounted', () => {
     wrapper.destroy()
   })
 
-  it('correctly sets the value when created', () => {
-    expect(wrapper.vm.value).toEqual(date)
-  })
-
   it('correctly sets the value from method', () => {
     const newDate = new Date(2016, 9, 15)
     expect(typeof wrapper.vm.setValue).toEqual('function')
