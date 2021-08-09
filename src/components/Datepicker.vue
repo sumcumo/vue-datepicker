@@ -240,11 +240,6 @@ export default {
     }
   },
   computed: {
-    allowedViews() {
-      const views = ['day', 'month', 'year']
-
-      return views.filter((view) => this.allowedToShowView(view))
-    },
     computedInitialView() {
       return this.initialView || this.minimumView
     },
@@ -261,21 +256,22 @@ export default {
       return !this.allowedToShowView(this.nextView.up)
     },
     nextView() {
+      const views = ['day', 'month', 'year']
       const isCurrentView = (view) => view === this.view
-      const viewIndex = this.allowedViews.findIndex(isCurrentView)
+      const viewIndex = views.findIndex(isCurrentView)
       const nextViewDown = (index) => {
-        return index <= 0 ? undefined : this.allowedViews[index - 1]
+        return index <= 0 ? undefined : views[index - 1]
       }
       const nextViewUp = (index) => {
         if (index < 0) {
           return undefined
         }
 
-        if (index === this.allowedViews.length - 1) {
+        if (index === views.length - 1) {
           return 'decade'
         }
 
-        return this.allowedViews[index + 1]
+        return views[index + 1]
       }
 
       return {
