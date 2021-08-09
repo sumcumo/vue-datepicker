@@ -318,6 +318,23 @@ describe('Datepicker shallowMounted', () => {
     expect(datepicker.element.className).toContain('rtl')
   })
 
+  it('knows the next view up / down', async () => {
+    wrapper.vm.setView('day')
+
+    expect(wrapper.vm.nextView.down).toBeUndefined()
+    expect(wrapper.vm.nextView.up).toBe('month')
+
+    wrapper.vm.setView('month')
+
+    expect(wrapper.vm.nextView.down).toBe('day')
+    expect(wrapper.vm.nextView.up).toBe('year')
+
+    wrapper.vm.setView('year')
+
+    expect(wrapper.vm.nextView.down).toBe('month')
+    expect(wrapper.vm.nextView.up).toBe('decade')
+  })
+
   it('should emit changed-month/year/decade', async () => {
     const pageDate = new Date(2016, 2, 1)
     await wrapper.vm.setView('day')
