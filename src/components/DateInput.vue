@@ -112,6 +112,10 @@ export default {
       return this.inputClass
     },
     formattedDate() {
+      if (!this.selectedDate) {
+        return null
+      }
+
       return typeof this.format === 'function'
         ? this.format(new Date(this.selectedDate))
         : this.utils.formatDate(
@@ -205,6 +209,11 @@ export default {
      * Parses a typed date and submits it, if valid
      */
     handleKeyup() {
+      if (this.input.value === '') {
+        this.$emit('typed-date', null)
+        return
+      }
+
       this.parsedDate = Date.parse(
         this.utils.parseDate(
           this.input.value,

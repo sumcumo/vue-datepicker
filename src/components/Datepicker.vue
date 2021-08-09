@@ -449,7 +449,7 @@ export default {
      * @param {Date} date
      */
     handleTypedDate(date) {
-      this.selectDate(date.valueOf())
+      this.selectDate(date ? date.valueOf() : null)
     },
     /**
      * Focus the relevant element when the view changes
@@ -530,6 +530,11 @@ export default {
      * @param {Number} timestamp
      */
     selectDate(timestamp) {
+      if (!timestamp) {
+        this.selectedDate = null
+        return
+      }
+
       const date = new Date(timestamp)
       this.selectedDate = date
       this.setPageDate(date)
