@@ -88,6 +88,7 @@
                 :show-edge-dates="showEdgeDates"
                 :show-full-month-name="fullMonthName"
                 :show-header="showHeader"
+                :slide-duration="slideDuration"
                 :tabbable-cell-id="tabbableCellId"
                 :transition-name="transitionName"
                 :translation="translation"

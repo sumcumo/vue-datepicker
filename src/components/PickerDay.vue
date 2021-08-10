@@ -43,9 +43,11 @@
             v-slot="{ cell }"
             :bootstrap-styling="bootstrapStyling"
             :cells="cells"
+            :is-rtl="isRtl"
             :show-edge-dates="showEdgeDates"
             :tabbable-cell-id="tabbableCellId"
             view="day"
+            @arrow="handleArrow($event)"
             @select="select($event)"
           >
             <slot name="dayCellContent" :cell="cell">

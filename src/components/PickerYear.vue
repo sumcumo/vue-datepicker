@@ -33,8 +33,10 @@
           v-slot="{ cell }"
           :bootstrap-styling="bootstrapStyling"
           :cells="cells"
+          :is-rtl="isRtl"
           :tabbable-cell-id="tabbableCellId"
           view="year"
+          @arrow="handleArrow($event)"
           @select="select($event)"
         >
           {{ cell.year }}

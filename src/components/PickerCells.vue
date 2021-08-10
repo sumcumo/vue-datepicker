@@ -11,6 +11,10 @@
       :disabled="cell.isDisabled"
       type="button"
       @click="$emit('select', cell)"
+      @keydown.up.prevent="handleArrow(id, -columns)"
+      @keydown.down.prevent="handleArrow(id, columns)"
+      @keydown.left.prevent="handleArrow(id, isRtl ? 1 : -1)"
+      @keydown.right.prevent="handleArrow(id, isRtl ? -1 : 1)"
     >
       <slot :cell="cell" />
     </button>
@@ -29,6 +33,10 @@ export default {
       type: Array,
       required: true,
     },
+    isRtl: {
+      type: Boolean,
+      default: false,
+    },
     showEdgeDates: {
       type: Boolean,
       default: true,
@@ -41,6 +49,15 @@ export default {
       type: String,
       validator: (val) => ['day', 'month', 'year'].includes(val),
       required: true,
+    },
+  },
+  computed: {
+    /**
+     * The number of columns in the picker
+     * @return {Number}
+     */
+    columns() {
+      return this.view === 'day' ? 7 : 3
     },
   },
   methods: {
@@ -72,6 +89,12 @@ export default {
           'weekend': cell.isWeekend,
         },
       ]
+    },
+    /**
+     * Emits an `arrow` event
+     */
+    handleArrow(cellId, delta) {
+      this.$emit('arrow', { cellId, delta })
     },
   },
 }

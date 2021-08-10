@@ -148,9 +148,20 @@ export default {
       }
     },
     /**
+     * Returns true if the user has arrowed to a new page
+     * @return {Boolean}
+     */
+    hasArrowedToNewPage() {
+      return this.focus.refs && this.focus.refs[0] === 'arrow-to-cell'
+    },
+    /**
      * Sets the correct focus on next tick
      */
     reviewFocus() {
+      if (this.hasArrowedToNewPage()) {
+        return
+      }
+
       this.$nextTick(() => {
         this.setTabbableCell()
         this.setNavElements()

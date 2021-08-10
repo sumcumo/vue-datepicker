@@ -54,6 +54,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    slideDuration: {
+      type: Number,
+      default: 250,
+    },
     tabbableCellId: {
       type: Number,
       default: null,
@@ -100,6 +104,16 @@ export default {
   },
   methods: {
     /**
+     * Used when an arrow key press would cause the focus to land on a disabled date
+     * @param {Object} options
+     */
+    addMoreSteps(options) {
+      if (options.stepsRemaining <= 0 && Math.abs(options.delta) > 1) {
+        return Math.abs(options.delta)
+      }
+      return options.stepsRemaining
+    },
+    /**
      * Changes the page up or down
      * @param {Number} incrementBy
      * @param {[String]} focusRefs
@@ -120,12 +134,104 @@ export default {
       this.$emit('page-change', { focusRefs, pageDate })
     },
     /**
+     * Changes the page and focuses the cell that is being 'arrowed' to
+     * @param {Object} options
+     */
+    changePageAndSetFocus(options) {
+      const { delta } = options
+      const isPageDisabled =
+        (delta > 0 && this.isNextDisabled) ||
+        (delta < 0 && this.isPreviousDisabled)
+
+      if (isPageDisabled) {
+        return
+      }
+
+      this.changePage({
+        incrementBy: Math.sign(delta),
+        focusRefs: ['arrow-to-cell'],
+      })
+
+      this.$nextTick(() => {
+        this.setFocusOnNewPage(options)
+      })
+    },
+    /**
      * Focuses the input field, if typeable
      */
     focusInput() {
       if (this.isTypeable) {
         this.$emit('set-focus', ['input'])
       }
+    },
+    /**
+     * Returns the element that should be focused when navigating via an arrow key
+     * @param  {HTMLElement} currentElement  The element currently being iterated on
+     * @param  {Number}      delta           The number of cells that the focus should move
+     * @param  {Number}      stepsRemaining  The number of steps remaining in the iteration
+     * @return {HTMLElement}
+     */
+    getElement({ currentElement, delta, stepsRemaining }) {
+      const element = this.getElementSibling(currentElement, delta)
+      const options = {
+        currentElement: element,
+        delta,
+        stepsRemaining: stepsRemaining - 1,
+      }
+
+      if (!element) {
+        return this.changePageAndSetFocus(options)
+      }
+
+      if (this.isMutedOrDisabled(element)) {
+        options.stepsRemaining = this.addMoreSteps(options)
+
+        return this.getElement(options)
+      }
+
+      if (stepsRemaining > 1 && options.currentElement) {
+        return this.getElement(options)
+      }
+
+      return element
+    },
+    /**
+     * Returns the element directly next to the currentElement
+     * @param  {HTMLElement} currentElement  The element currently being iterated on
+     * @param  {Number}      delta           The number of cells that the focus should move
+     * @return {HTMLElement}
+     */
+    getElementSibling(currentElement, delta) {
+      const isNext = delta > 0
+
+      return isNext
+        ? currentElement.nextElementSibling
+        : currentElement.previousElementSibling
+    },
+    /**
+     * Returns the first or last cell, depending on the direction of the search
+     * @param  {Number} delta The number of cells that the focus should move
+     * @return {HTMLElement}
+     */
+    getFirstOrLastElement(delta) {
+      const isNext = delta > 0
+      const elements = this.$refs.cells.$el.children
+
+      return isNext ? elements[0] : elements[elements.length - 1]
+    },
+    /**
+     * Moves the focused cell up/down/left/right
+     * @param {Object}
+     */
+    handleArrow({ delta }) {
+      const stepsRemaining = Math.abs(delta)
+      const options = {
+        currentElement: document.activeElement,
+        delta,
+        stepsRemaining,
+      }
+
+      this.setFocusToAvailableCell(options)
     },
     /**
      * Determines which transition to use (for edge dates) and emits a 'select' event
@@ -141,6 +247,62 @@ export default {
       }
 
       this.$emit('select', cell)
+    },
+    /**
+     * Returns true if the given element cannot be focused
+     * @param {HTMLElement} element The element in question
+     * @return {Boolean}
+     */
+    isMutedOrDisabled(element) {
+      const isMuted = element.classList.value.split(' ').includes('muted')
+      const isDisabled = element.disabled
+
+      return isMuted || isDisabled
+    },
+    /**
+     * Sets the focus on the correct cell following a page change
+     * @param {Object} options
+     */
+    setFocusOnNewPage({ delta, stepsRemaining }) {
+      const currentElement = this.getFirstOrLastElement(delta)
+      const options = {
+        currentElement,
+        delta,
+        stepsRemaining,
+      }
+
+      if (stepsRemaining <= 0) {
+        if (this.isMutedOrDisabled(currentElement)) {
+          options.stepsRemaining = Math.abs(options.delta)
+
+          setTimeout(() => {
+            this.setFocusToAvailableCell(options)
+          }, this.slideDuration)
+
+          return
+        }
+
+        setTimeout(() => {
+          currentElement.focus()
+        }, this.slideDuration)
+
+        return
+      }
+
+      setTimeout(() => {
+        this.setFocusToAvailableCell(options)
+      }, this.slideDuration)
+    },
+    /**
+     * Sets the focus on the next focusable cell when an arrow key is pressed
+     * @param {Object} options
+     */
+    setFocusToAvailableCell(options) {
+      const element = this.getElement(options)
+
+      if (element) {
+        element.focus()
+      }
     },
   },
 }

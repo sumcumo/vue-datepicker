@@ -16,6 +16,21 @@ describe('PickerCells', () => {
     wrapper.destroy()
   })
 
+  it('knows the number of columns', async () => {
+    expect(wrapper.vm.columns).toEqual(7)
+
+    await wrapper.setProps({
+      view: 'month',
+    })
+
+    expect(wrapper.vm.columns).toEqual(3)
+  })
+
+  it('emits an `arrow` event when an arrow key is pressed', () => {
+    wrapper.vm.handleArrow({ cellId: 0, delta: 1 })
+    expect(wrapper.emitted('arrow')).toBeTruthy()
+  })
+
   it("does not highlight today's date when show-edge-dates = false", async () => {
     const cell = {
       date: 1,
