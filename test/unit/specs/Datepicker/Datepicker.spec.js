@@ -365,16 +365,16 @@ describe('Datepicker shallowMounted', () => {
   it('emits changed-month/year/decade', async () => {
     const pageDate = new Date(2016, 2, 1)
     await wrapper.vm.setView('day')
-    await wrapper.vm.handlePageChange(pageDate)
+    await wrapper.vm.handlePageChange({ pageDate })
 
     expect(wrapper.emitted('changed-month')).toBeTruthy()
 
     await wrapper.vm.setView('month')
-    await wrapper.vm.handlePageChange(pageDate)
+    await wrapper.vm.handlePageChange({ pageDate })
     expect(wrapper.emitted('changed-year')).toBeTruthy()
 
     await wrapper.vm.setView('year')
-    await wrapper.vm.handlePageChange(pageDate)
+    await wrapper.vm.handlePageChange({ pageDate })
     expect(wrapper.emitted('changed-decade')).toBeTruthy()
   })
 

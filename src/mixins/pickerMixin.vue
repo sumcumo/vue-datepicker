@@ -94,8 +94,9 @@ export default {
     /**
      * Changes the page up or down
      * @param {Number} incrementBy
+     * @param {[String]} focusRefs
      */
-    changePage(incrementBy) {
+    changePage({ incrementBy, focusRefs }) {
       const { pageDate, utils } = this
       const units =
         this.view === 'year' ? incrementBy * this.yearRange : incrementBy
@@ -108,7 +109,7 @@ export default {
         utils.setFullYear(pageDate, utils.getFullYear(pageDate) + units)
       }
 
-      this.$emit('page-change', pageDate)
+      this.$emit('page-change', { focusRefs, pageDate })
     },
     /**
      * Determines which transition to use (for edge dates) and emits a 'select' event

@@ -381,10 +381,12 @@ export default {
       this.$emit('focus')
     },
     /**
-     * Set the new pageDate and emit `changed-<view>` event
+     * Set the new pageDate, focus the relevant element and emit a `changed-<view>` event
      */
-    handlePageChange(pageDate) {
+    handlePageChange({ focusRefs, pageDate }) {
       this.setPageDate(pageDate)
+      this.focus.refs = focusRefs
+      this.reviewFocus()
       this.$emit(`changed-${this.nextView.up}`, pageDate)
     },
     /**

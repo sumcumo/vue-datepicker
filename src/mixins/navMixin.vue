@@ -46,12 +46,23 @@ export default {
      * @param {string} ref        The `ref` name of the wanted element
      * @returns {HTMLElement|Vue} A Vue element
      */
+    // eslint-disable-next-line complexity
     getElementByRef(ref) {
       if (ref === 'tabbableCell') {
         return this.tabbableCell
       }
       if (ref === 'input') {
         return this.$refs.dateInput && this.$refs.dateInput.$refs[this.refName]
+      }
+      if (this.showHeader) {
+        if (ref === 'up') {
+          return this.$refs.picker && this.$refs.picker.$refs.up.$el
+        }
+        return (
+          this.$refs.picker &&
+          this.$refs.picker.$refs.pickerHeader &&
+          this.$refs.picker.$refs.pickerHeader.$refs[ref]
+        )
       }
       return null
     },

@@ -29,13 +29,13 @@ describe('PickerDay', () => {
   })
 
   it('can set the next month', () => {
-    wrapper.vm.changePage(1)
-    expect(wrapper.emitted('page-change')[0][0].getMonth()).toEqual(2)
+    wrapper.vm.changePage({ incrementBy: 1, focusRefs: ['next'] })
+    expect(wrapper.emitted('page-change')[0][0].pageDate.getMonth()).toEqual(2)
   })
 
   it('can set the previous month', () => {
-    wrapper.vm.changePage(-1)
-    expect(wrapper.emitted('page-change')[0][0].getMonth()).toEqual(0)
+    wrapper.vm.changePage({ incrementBy: -1, focusRefs: ['prev'] })
+    expect(wrapper.emitted('page-change')[0][0].pageDate.getMonth()).toEqual(0)
   })
 
   it('emits an event when selected', () => {

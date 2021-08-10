@@ -4,6 +4,7 @@
 
     <PickerHeader
       v-if="showHeader"
+      ref="pickerHeader"
       :bootstrap-styling="bootstrapStyling"
       :is-next-disabled="isNextDisabled"
       :is-previous-disabled="isPreviousDisabled"
