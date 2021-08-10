@@ -46,7 +46,7 @@
       @focus="handleInputFocus"
       @keydown.down.prevent="handleKeydownDown"
       @keydown.enter.prevent="handleKeydownEnter"
-      @keydown.escape.prevent="$emit('close')"
+      @keydown.esc.prevent="clearDate"
       @keydown.space="handleKeydownSpace($event)"
       @keyup="handleKeyup"
       @keyup.space="handleKeyupSpace($event)"
@@ -170,6 +170,7 @@ export default {
      * Emits a `clear-date` event
      */
     clearDate() {
+      this.input.value = ''
       this.$emit('clear-date')
     },
     /**

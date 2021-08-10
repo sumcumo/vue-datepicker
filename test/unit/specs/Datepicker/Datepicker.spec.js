@@ -729,6 +729,137 @@ describe('Datepicker mounted to body with openDate', () => {
     jest.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellDown.element)
   })
+
+  it('reverts focus to the `open-date` when another date on the same page has focus and the `escape` key is pressed', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    jest.advanceTimersByTime(250)
+
+    const openDateCell = wrapper.find('button.open')
+    expect(document.activeElement).toBe(openDateCell.element)
+
+    await openDateCell.trigger('keydown.down')
+
+    const downCell = wrapper.findAll('button.cell').at(10)
+    await downCell.trigger('keydown.esc')
+
+    jest.advanceTimersByTime(250)
+
+    expect(document.activeElement).toBe(openDateCell.element)
+  })
+
+  it('reverts focus to the `open-date` when a date on a different page has focus and the `escape` key is pressed', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    jest.advanceTimersByTime(250)
+
+    let openDateCell = wrapper.find('button.open')
+    expect(document.activeElement).toStrictEqual(openDateCell.element)
+
+    await openDateCell.trigger('keydown.up')
+    jest.advanceTimersByTime(250)
+
+    const upCell = wrapper.findAll('button.cell').at(24)
+    expect(document.activeElement).toBe(upCell.element)
+
+    await upCell.trigger('keydown.esc')
+
+    jest.advanceTimersByTime(250)
+    openDateCell = wrapper.find('button.open')
+    expect(document.activeElement).toBe(openDateCell.element)
+  })
+
+  it('reverts focus to the `open-date` when a month has focus and the `escape` key is pressed', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+    jest.advanceTimersByTime(250)
+    expect(wrapper.vm.view).toBe('day')
+
+    let upButton = wrapper.find('button.vdp-datepicker__up')
+    await upButton.trigger('click')
+    jest.advanceTimersByTime(250)
+    expect(wrapper.vm.view).toBe('month')
+
+    upButton = wrapper.find('button.vdp-datepicker__up')
+    await upButton.trigger('keydown.down')
+
+    const firstCell = wrapper.find('button.cell:not(.muted)')
+    await firstCell.trigger('keydown.esc')
+    jest.advanceTimersByTime(250)
+    expect(wrapper.vm.view).toBe('day')
+
+    const openDateCell = wrapper.find('button.open')
+    expect(document.activeElement).toBe(openDateCell.element)
+  })
+
+  it('reverts focus to the `open-date` when a year has focus and the `escape` key is pressed', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+    jest.advanceTimersByTime(250)
+    expect(wrapper.vm.view).toBe('day')
+
+    let upButton = wrapper.find('button.vdp-datepicker__up')
+    await upButton.trigger('click')
+    jest.advanceTimersByTime(250)
+    expect(wrapper.vm.view).toBe('month')
+
+    upButton = wrapper.find('button.vdp-datepicker__up')
+    await upButton.trigger('click')
+    jest.advanceTimersByTime(250)
+    expect(wrapper.vm.view).toBe('year')
+
+    const firstCell = wrapper.find('button.cell:not(.muted)')
+    upButton = wrapper.find('button.vdp-datepicker__up')
+    await upButton.trigger('keydown.down')
+
+    await firstCell.element.focus()
+    await firstCell.trigger('keydown.esc')
+    jest.advanceTimersByTime(250)
+    expect(wrapper.vm.view).toBe('day')
+
+    const openDateCell = wrapper.find('button.open')
+    expect(document.activeElement).toBe(openDateCell.element)
+  })
+
+  it('clears the date and closes the calendar on pressing the `escape` key, if the `open-date` is focused', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+    jest.advanceTimersByTime(250)
+
+    expect(wrapper.vm.isOpen).toBeTruthy()
+    const openDateCell = wrapper.find('button.open')
+    await openDateCell.trigger('focus')
+    expect(document.activeElement).toStrictEqual(openDateCell.element)
+
+    await openDateCell.trigger('keydown.esc')
+    expect(wrapper.vm.isOpen).toBeFalsy()
+    expect(wrapper.vm.selectedDate).toEqual(null)
+  })
+
+  it('clears the date and reverts the calendar to `minimumView` on pressing the `escape` key', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    const upButton = wrapper.find('button.vdp-datepicker__up')
+    await upButton.trigger('click')
+    expect(wrapper.vm.view).toBe('month')
+
+    const firstCell = wrapper.find('button.cell')
+    await firstCell.element.focus()
+    expect(document.activeElement).toBe(firstCell.element)
+
+    await firstCell.trigger('keydown.esc')
+    jest.advanceTimersByTime(250)
+
+    const openDate = wrapper.find('button.open')
+    expect(wrapper.vm.view).toBe('day')
+    expect(wrapper.vm.selectedDate).toEqual(null)
+    expect(document.activeElement).toBe(openDate.element)
+  })
 })
 
 describe('Datepicker shallowMounted', () => {

@@ -5,6 +5,7 @@
     class="vdp-datepicker"
     :class="[wrapperClass, { rtl: isRtl }]"
     @focusin="handleFocusChange($event)"
+    @keydown.esc="clearDate"
     @keydown.tab="tabThroughNavigation($event)"
   >
     <DateInput
@@ -380,8 +381,15 @@ export default {
      * Clear the selected date
      */
     clearDate() {
+      if (this.isResetFocus()) {
+        this.resetFocusToOpenDate()
+        return
+      }
+
       this.selectedDate = null
-      this.setPageDate()
+      this.focus.refs = ['input']
+      this.close()
+
       this.$emit('selected', null)
       this.$emit('input', null)
       this.$emit('cleared')
@@ -527,6 +535,17 @@ export default {
     isDateDisabled(date) {
       return new DisabledDate(this.utils, this.disabledDates).isDateDisabled(
         date,
+      )
+    },
+    /**
+     * Returns true if we should reset the focus to the open date
+     * @returns {Boolean}
+     */
+    isResetFocus() {
+      return (
+        this.isOpen &&
+        this.hasClass(document.activeElement, 'cell') &&
+        (!this.isMinimumView || !this.hasClass(document.activeElement, 'open'))
       )
     },
     /**

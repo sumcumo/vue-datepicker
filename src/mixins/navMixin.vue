@@ -7,6 +7,7 @@ export default {
         delay: 0,
         refs: [],
       },
+      isRevertingToOpenDate: false,
       navElements: [],
       navElementsFocusedIndex: 0,
       resetTabbableCell: false,
@@ -76,6 +77,9 @@ export default {
       }
       if (ref === 'calendarButton') {
         return this.$refs.dateInput.$refs.calendarButton
+      }
+      if (ref === 'openDate') {
+        return this.$refs.picker.$refs.cells.$refs.openDate[0]
       }
       if (this.showHeader) {
         if (ref === 'up') {
@@ -169,6 +173,22 @@ export default {
       return this.focus.refs && this.focus.refs[0] === 'arrow-to-cell'
     },
     /**
+     * Resets the focus to the open date
+     */
+    resetFocusToOpenDate() {
+      this.focus.refs = ['openDate']
+
+      if (!this.isMinimumView) {
+        this.isRevertingToOpenDate = true
+        this.view = this.minimumView
+      }
+
+      this.setTabbableCell()
+      this.reviewFocus()
+      this.selectedDate = null
+      this.setPageDate()
+    },
+    /**
      * Sets the correct focus on next tick
      */
     reviewFocus() {
@@ -188,6 +208,24 @@ export default {
 
         this.resetTabbableCell = false
       })
+    },
+    /**
+     * Sets the direction of the slide transition and whether or not to delay application of the focus
+     * @param {Date|Number} startDate     The date from which to measure
+     * @param {Date|Number} endDate       Is this before or after the startDate? And is it on the same page?
+     */
+    setTransitionAndFocusDelay(startDate, endDate) {
+      const startPageDate = this.utils.setDate(new Date(startDate), 1)
+      const endPageDate = this.utils.setDate(new Date(endDate), 1)
+      const isInTheFuture = startPageDate < endPageDate
+
+      if (this.isMinimumView) {
+        this.focus.delay = isInTheFuture ? this.slideDuration : 0
+      } else {
+        this.focus.delay = 0
+      }
+
+      this.setTransitionName(endDate - startDate)
     },
     /**
      * Records all focusable elements (so that we know whether any element in the datepicker is focused)

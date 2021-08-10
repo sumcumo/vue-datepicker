@@ -160,11 +160,11 @@ describe('DateInput', () => {
     expect(wrapper.find('input').element.value).toEqual('!')
   })
 
-  it('emits close when escape is pressed', async () => {
+  it('emits `clear-date` when escape is pressed', async () => {
     const input = wrapper.find('input')
-    await input.trigger('keydown.escape')
+    await input.trigger('keydown.esc')
 
-    expect(wrapper.emitted('close')).toBeTruthy()
+    expect(wrapper.emitted('clear-date')).toBeTruthy()
   })
 
   it('opens the calendar on click', async () => {

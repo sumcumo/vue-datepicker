@@ -3,6 +3,7 @@
     <button
       v-for="(cell, id) in cells"
       :key="cell.timestamp"
+      :ref="cell.isOpenDate ? 'openDate' : null"
       :class="cellClasses(cell)"
       :data-id="id"
       :data-test-tabbable-cell="id === tabbableCellId"
