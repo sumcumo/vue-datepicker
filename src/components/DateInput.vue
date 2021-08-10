@@ -44,6 +44,7 @@
       @blur="handleInputBlur"
       @click="handleInputClick"
       @focus="handleInputFocus"
+      @keydown.down.prevent="handleKeydownDown"
       @keydown.enter.prevent="handleKeydownEnter"
       @keydown.escape.prevent="$emit('close')"
       @keydown.space="handleKeydownSpace($event)"
@@ -233,6 +234,20 @@ export default {
       }
 
       this.$emit('focus')
+    },
+    /**
+     * Opens the calendar, or sets the focus to the next focusable element down
+     */
+    handleKeydownDown() {
+      if (!this.isOpen) {
+        this.$emit('open')
+      }
+
+      if (!this.typeable) {
+        return
+      }
+
+      this.$emit('set-focus', ['prev', 'up', 'next', 'tabbableCell'])
     },
     /**
      * Formats a typed date and closes the calendar

@@ -260,11 +260,36 @@ describe('Datepicker mounted to document body', () => {
     wrapper.destroy()
   })
 
+  it('arrows down from the input field to the previous button when the calendar is open', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+    await input.trigger('keydown.down')
+
+    const prevButton = wrapper.find('button.prev')
+
+    expect(document.activeElement).toBe(prevButton.element)
+  })
+
+  it('arrows down from the input field to the `tabbable-cell` when `show-header` is false', async () => {
+    await wrapper.setProps({
+      showHeader: false,
+    })
+
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+    await input.trigger('keydown.down')
+
+    const tabbableCell = wrapper.find('button.cell[data-test-tabbable-cell]')
+
+    expect(document.activeElement).toBe(tabbableCell.element)
+  })
+
   it('arrows up from the previous button to the input field', async () => {
     const input = wrapper.find('input')
 
     await input.trigger('click')
-    await wrapper.vm.$nextTick()
 
     const prevButton = wrapper.find('button.prev')
     await prevButton.trigger('keydown.up')
@@ -276,7 +301,6 @@ describe('Datepicker mounted to document body', () => {
     const input = wrapper.find('input')
 
     await input.trigger('click')
-    await wrapper.vm.$nextTick()
 
     const nextButton = wrapper.find('button.next')
     await nextButton.trigger('keydown.up')
@@ -288,7 +312,6 @@ describe('Datepicker mounted to document body', () => {
     const input = wrapper.find('input')
 
     await input.trigger('click')
-    await wrapper.vm.$nextTick()
 
     const upButton = wrapper.find('button.vdp-datepicker__up')
     await upButton.trigger('keydown.up')

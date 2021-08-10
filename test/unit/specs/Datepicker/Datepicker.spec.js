@@ -316,6 +316,37 @@ describe('Datepicker mounted to body', () => {
   })
 })
 
+describe('Datepicker mounted to body with openDate', () => {
+  let wrapper
+
+  beforeEach(() => {
+    jest.useFakeTimers()
+
+    wrapper = mount(Datepicker, {
+      attachTo: document.body,
+      propsData: {
+        openDate: new Date(2020, 0, 1),
+      },
+    })
+  })
+
+  afterEach(() => {
+    jest.clearAllTimers()
+    wrapper.destroy()
+  })
+
+  it('opens the calendar on pressing the `down` arrow when the input is focused', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('focus')
+    await input.trigger('keydown.down')
+    jest.advanceTimersByTime(250)
+
+    const openDateCell = wrapper.find('button.open')
+    expect(document.activeElement).toBe(openDateCell.element)
+  })
+})
+
 describe('Datepicker shallowMounted', () => {
   let wrapper
   let date
