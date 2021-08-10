@@ -235,3 +235,56 @@ describe('Datepicker mount', () => {
     expect(wrapper.vm.selectedDate).toEqual(new Date(2016, 1, 15))
   })
 })
+
+describe('Datepicker mounted to document body', () => {
+  let wrapper
+
+  beforeEach(() => {
+    wrapper = mount(Datepicker, {
+      attachTo: document.body,
+      propsData: {
+        typeable: true,
+      },
+    })
+  })
+
+  afterEach(() => {
+    wrapper.destroy()
+  })
+
+  it('arrows up from the previous button to the input field', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+    await wrapper.vm.$nextTick()
+
+    const prevButton = wrapper.find('button.prev')
+    await prevButton.trigger('keydown.up')
+
+    expect(document.activeElement).toBe(input.element)
+  })
+
+  it('arrows up from the next button to the input field', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+    await wrapper.vm.$nextTick()
+
+    const nextButton = wrapper.find('button.next')
+    await nextButton.trigger('keydown.up')
+
+    expect(document.activeElement).toBe(input.element)
+  })
+
+  it('arrows up from the up button to the input field', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+    await wrapper.vm.$nextTick()
+
+    const upButton = wrapper.find('button.vdp-datepicker__up')
+    await upButton.trigger('keydown.up')
+
+    expect(document.activeElement).toBe(input.element)
+  })
+})

@@ -9,10 +9,17 @@
       :is-next-disabled="isNextDisabled"
       :is-previous-disabled="isPreviousDisabled"
       :is-rtl="isRtl"
+      @focus-input="focusInput"
       @page-change="changePage($event)"
+      @set-focus="$emit('set-focus', $event)"
     >
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
-      <UpButton ref="up" :class="{ btn: bootstrapStyling }" :is-disabled="true">
+      <UpButton
+        ref="up"
+        :class="{ btn: bootstrapStyling }"
+        :is-disabled="true"
+        :is-rtl="isRtl"
+      >
         {{ pageTitleYear }}
       </UpButton>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />

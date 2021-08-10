@@ -79,6 +79,7 @@
                 :first-day-of-week="firstDayOfWeek"
                 :highlighted="highlighted"
                 :is-rtl="isRtl"
+                :is-typeable="typeable"
                 :is-up-disabled="isUpDisabled"
                 :is-minimum-view="isMinimumView"
                 :open-date="computedOpenDate"
@@ -95,6 +96,7 @@
                 :year-range="yearPickerRange"
                 @page-change="handlePageChange"
                 @select="handleSelect"
+                @set-focus="setFocus($event)"
                 @set-transition-name="setTransitionName($event)"
                 @set-view="setView"
               >

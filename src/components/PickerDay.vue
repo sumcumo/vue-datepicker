@@ -9,14 +9,19 @@
       :is-next-disabled="isNextDisabled"
       :is-previous-disabled="isPreviousDisabled"
       :is-rtl="isRtl"
+      @focus-input="focusInput"
       @page-change="changePage($event)"
+      @set-focus="$emit('set-focus', $event)"
     >
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
       <UpButton
         ref="up"
         :class="{ btn: bootstrapStyling }"
         :is-disabled="isUpDisabled"
+        :is-rtl="isRtl"
+        @focus-input="focusInput"
         @select="$emit('set-view', 'month')"
+        @set-focus="$emit('set-focus', $event)"
       >
         {{ pageTitleDay }}
       </UpButton>

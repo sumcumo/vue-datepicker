@@ -21,6 +21,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isTypeable: {
+      type: Boolean,
+      default: false,
+    },
     isUpDisabled: {
       type: Boolean,
       default: false,
@@ -114,6 +118,14 @@ export default {
       }
 
       this.$emit('page-change', { focusRefs, pageDate })
+    },
+    /**
+     * Focuses the input field, if typeable
+     */
+    focusInput() {
+      if (this.isTypeable) {
+        this.$emit('set-focus', ['input'])
+      }
     },
     /**
      * Determines which transition to use (for edge dates) and emits a 'select' event
