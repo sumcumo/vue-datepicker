@@ -44,7 +44,7 @@
       @focus="handleInputFocus"
       @keydown.enter.prevent="handleKeydownEnter"
       @keydown.escape.prevent="$emit('close')"
-      @keyup="parseTypedDate"
+      @keyup="handleKeyup"
     />
     <!-- Clear Button -->
     <button
@@ -96,6 +96,7 @@ export default {
       input: null,
       isFocusedUsed: false,
       isBlurred: false,
+      parsedDate: null,
       typedDate: '',
       utils: makeDateUtils(this.useUtc),
     }
@@ -140,12 +141,23 @@ export default {
       this.$emit('clear-date')
     },
     /**
-     * Submit typedDate and emit a `blur` event
+     * Formats a typed date, or clears it if invalid
+     */
+    formatTypedDate() {
+      if (Number.isNaN(this.parsedDate)) {
+        this.input.value = ''
+        this.typedDate = ''
+      } else {
+        this.typedDate = this.formattedDate
+      }
+    },
+    /**
+     * Validate typedDate and emit a `blur` event
      */
     handleInputBlur() {
       this.isBlurred = this.isOpen
       if (this.typeable) {
-        this.submitTypedDate()
+        this.formatTypedDate()
       }
       this.$emit('blur')
       this.isFocusedUsed = false
@@ -176,52 +188,35 @@ export default {
       this.$emit('focus')
     },
     /**
-     * Submits a typed date
+     * Formats a typed date and closes the calendar
      */
     handleKeydownEnter() {
-      if (this.typeable) {
-        this.submitTypedDate()
+      if (!this.typeable) {
+        return
       }
-      this.$emit('close')
-    },
-    /**
-     * Parses a date from a string
-     * @param {String} value
-     */
-    parseDate(value) {
-      return this.utils.parseDate(
-        value,
-        this.format,
-        this.translation,
-        this.parser,
-      )
-    },
-    /**
-     * Attempt to parse a typed date
-     */
-    parseTypedDate() {
-      if (this.typeable) {
-        const parsableDate = this.parseDate(this.input.value)
-        const parsedDate = Date.parse(parsableDate)
-        if (!Number.isNaN(parsedDate)) {
-          this.typedDate = this.input.value
-          this.$emit('typed-date', new Date(parsedDate))
-        }
-      }
-    },
-    /**
-     * Submits a typed date if it's valid
-     */
-    submitTypedDate() {
-      const parsableDate = this.parseDate(this.input.value)
-      const parsedDate = Date.parse(parsableDate)
 
-      if (Number.isNaN(parsedDate)) {
-        this.clearDate()
-      } else {
-        this.input.value = this.formattedDate
-        this.typedDate = ''
-        this.$emit('typed-date', parsedDate)
+      this.formatTypedDate()
+
+      if (this.isOpen) {
+        this.$emit('close')
+      }
+    },
+    /**
+     * Parses a typed date and submits it, if valid
+     */
+    handleKeyup() {
+      this.parsedDate = Date.parse(
+        this.utils.parseDate(
+          this.input.value,
+          this.format,
+          this.translation,
+          this.parser,
+        ),
+      )
+
+      if (!Number.isNaN(this.parsedDate)) {
+        this.typedDate = this.input.value
+        this.$emit('typed-date', new Date(this.parsedDate))
       }
     },
     /**

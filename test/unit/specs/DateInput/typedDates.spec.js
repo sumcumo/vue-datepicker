@@ -103,17 +103,14 @@ describe('DateInput', () => {
     expect(wrapper.emitted('typed-date')[0][0]).toBeInstanceOf(Date)
   })
 
-  it('emits `close` when return is pressed', async () => {
+  it('emits `close` when the calendar is open and return is pressed', async () => {
+    await wrapper.setProps({
+      isOpen: true,
+    })
+
     const input = wrapper.find('input')
     await input.trigger('keydown.enter')
     expect(wrapper.emitted('close')).toBeTruthy()
-  })
-
-  it('clears a typed date if it does not parse', async () => {
-    const input = wrapper.find('input')
-    wrapper.setData({ typedDate: 'not a date' })
-    await input.trigger('blur')
-    expect(wrapper.emitted('clear-date')).toBeDefined()
   })
 
   it("doesn't emit the date if typeable=false", async () => {
@@ -170,12 +167,27 @@ describe('Datepicker mount', () => {
     expect(new Date(wrapper.vm.pageDate).getMonth()).toBe(1)
   })
 
-  it('formats the date on blur', async () => {
+  it('formats a valid date when the input field is blurred', async () => {
     const input = wrapper.find('input')
     input.setValue('2018-04-24')
+    await input.trigger('keyup')
     await input.trigger('blur')
 
     expect(input.element.value).toEqual('24 Apr 2018')
+  })
+
+  it('clears an invalid date when the input field is blurred', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    input.setValue('invalid date')
+    await input.trigger('keyup')
+    await input.trigger('blur')
+
+    expect(input.element.value).toBe('')
+    expect(wrapper.vm.selectedDate).toBeNull()
   })
 
   it('closes via the calendar button when showCalendarOnFocus = true, despite input being focused', async () => {
@@ -198,7 +210,8 @@ describe('Datepicker mount', () => {
   it('resets the date correctly', async () => {
     const input = wrapper.find('input')
     await input.trigger('click')
-    await input.setValue('1 Jan 2000')
+    input.setValue('1 Jan 2000')
+    await input.trigger('keyup')
     await input.trigger('keydown.enter')
     expect(wrapper.vm.selectedDate).toEqual(new Date(2000, 0, 1))
 
