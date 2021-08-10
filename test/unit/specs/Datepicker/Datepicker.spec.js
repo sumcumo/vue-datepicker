@@ -96,6 +96,55 @@ describe('Datepicker mounted', () => {
   })
 })
 
+describe('Datepicker mounted with slots', () => {
+  let wrapper
+
+  beforeEach(() => {
+    const beforeCalendarHeader =
+      '<div key="0">Example <a href="#">beforeCalendarHeader</a> slot</div>'
+    const beforeCalendarHeaderDay =
+      '<div key="1">Example <a href="#">beforeCalendarHeaderDay</a> slot</div>'
+    const calendarFooterDay =
+      '<div key="2">Example <a href="#">calendarFooterDay</a> slot</div>'
+    const beforeCalendarHeaderMonth =
+      '<div key="3">Example <a href="#">beforeCalendarHeaderMonth</a> slot</div>'
+    const calendarFooterMonth =
+      '<div key="4">Example <a href="#">calendarFooterMonth</a> slot</div>'
+    const beforeCalendarHeaderYear =
+      '<div key="5">Example <a href="#">beforeCalendarHeaderYear</a> slot</div>'
+    const calendarFooterYear =
+      '<div key="6">Example <a href="#">calendarFooterYear</a> slot</div>'
+    const calendarFooter =
+      '<div key="7">Example <a href="#">calendarFooter</a> slot</div>'
+
+    wrapper = mount(Datepicker, {
+      slots: {
+        beforeCalendarHeader,
+        beforeCalendarHeaderDay,
+        calendarFooterDay,
+        beforeCalendarHeaderMonth,
+        calendarFooterMonth,
+        beforeCalendarHeaderYear,
+        calendarFooterYear,
+        calendarFooter,
+      },
+    })
+  })
+
+  afterEach(() => {
+    wrapper.destroy()
+  })
+
+  it('knows how many navElements there are', async () => {
+    expect(wrapper.vm.navElements.length).toEqual(0)
+
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    expect(wrapper.vm.navElements.length).toEqual(8)
+  })
+})
+
 describe('Datepicker shallowMounted', () => {
   let wrapper
   let date

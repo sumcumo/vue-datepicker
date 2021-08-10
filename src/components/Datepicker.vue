@@ -60,7 +60,7 @@
           @mousedown.prevent
         >
           <Transition name="view">
-            <div :key="view">
+            <div ref="view" :key="view">
               <slot name="beforeCalendarHeader" />
               <Component
                 :is="picker"
@@ -442,6 +442,7 @@ export default {
       this.setInitialView()
       this.$nextTick(() => {
         this.setTabbableCell()
+        this.setNavElements()
       })
 
       this.$emit('opened')
