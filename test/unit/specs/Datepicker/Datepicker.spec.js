@@ -94,6 +94,19 @@ describe('Datepicker mounted', () => {
     await calendarButton.trigger('click')
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
+
+  it('selects an edge date', async () => {
+    await wrapper.setProps({
+      value: new Date(2020, 0, 1),
+    })
+
+    const cells = wrapper.findAll('button.cell')
+    const lastCell = cells.at(cells.length - 1)
+
+    await lastCell.trigger('click')
+
+    expect(wrapper.vm.selectedDate).toStrictEqual(new Date(2020, 1, 1))
+  })
 })
 
 describe('Datepicker mounted with slots', () => {
@@ -170,6 +183,40 @@ describe('Datepicker mounted to body', () => {
 
     expect(todayCell.text()).toBe(new Date().getDate().toString())
     expect(document.activeElement).toStrictEqual(todayCell.element)
+  })
+
+  it('focuses the up button on increasing the view', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    jest.advanceTimersByTime(250)
+    let upButton = wrapper.find('button.vdp-datepicker__up')
+
+    await upButton.trigger('click')
+    jest.advanceTimersByTime(250)
+    upButton = wrapper.find('button.vdp-datepicker__up')
+
+    expect(document.activeElement).toBe(upButton.element)
+  })
+
+  it('focuses the tabbable-cell on decreasing the view', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+    await wrapper.vm.$nextTick()
+    jest.advanceTimersByTime(250)
+
+    const upButton = wrapper.find('button.vdp-datepicker__up')
+
+    await upButton.trigger('click')
+    jest.advanceTimersByTime(250)
+    const firstCell = wrapper.find('button.cell')
+
+    await firstCell.trigger('click')
+    await wrapper.vm.$nextTick()
+    jest.advanceTimersByTime(250)
+
+    const tabbableCell = wrapper.find('button.cell[data-test-tabbable-cell]')
+    expect(document.activeElement).toBe(tabbableCell.element)
   })
 })
 

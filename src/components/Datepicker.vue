@@ -332,6 +332,9 @@ export default {
       const parsedValue = this.parseValue(value)
       this.setValue(parsedValue)
     },
+    view(newView, oldView) {
+      this.handleViewChange(newView, oldView)
+    },
   },
   mounted() {
     this.init()
@@ -409,6 +412,26 @@ export default {
      */
     handleTypedDate(date) {
       this.selectDate(date.valueOf())
+    },
+    /**
+     * Focus the relevant element when the view changes
+     * @param {String} newView
+     * @param {String} oldView
+     */
+    handleViewChange(newView, oldView) {
+      const isClosing = newView === ''
+      const isOpeningInline = oldView === '' && this.isInline
+
+      if (isClosing || isOpeningInline) {
+        return
+      }
+
+      if (!this.isRevertingToOpenDate) {
+        this.setViewChangeFocusRefs(newView, oldView)
+        this.reviewFocus()
+      }
+
+      this.isRevertingToOpenDate = false
     },
     /**
      * Initiate the component
@@ -538,6 +561,28 @@ export default {
       if (this.allowedToShowView(view)) {
         this.view = view
       }
+    },
+    /**
+     * Sets the array of `refs` that might be focused following a view change
+     * @param {String} newView The view being changed to
+     * @param {String} oldView The previous view
+     */
+    setViewChangeFocusRefs(newView, oldView) {
+      if (oldView === '') {
+        this.focus.refs = []
+        return
+      }
+
+      const views = ['day', 'month', 'year']
+      const isNewView = (view) => view === newView
+      const isOldView = (view) => view === oldView
+      const newViewIndex = views.findIndex(isNewView)
+      const oldViewIndex = views.findIndex(isOldView)
+      const isViewChangeUp = newViewIndex - oldViewIndex > 0
+
+      this.focus.refs = isViewChangeUp
+        ? ['up', 'tabbableCell']
+        : ['tabbableCell', 'up']
     },
     /**
      * Set the view to the next view down e.g. from `month` to `day`
