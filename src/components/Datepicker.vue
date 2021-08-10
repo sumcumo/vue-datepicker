@@ -339,7 +339,9 @@ export default {
   },
   watch: {
     initialView() {
-      this.setInitialView()
+      if (this.isOpen) {
+        this.setInitialView()
+      }
     },
     openDate() {
       this.setPageDate()

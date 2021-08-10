@@ -431,12 +431,9 @@ describe('Datepicker shallowMounted', () => {
     expect(spy).toHaveBeenCalled()
   })
 
-  it('watches initialView', async () => {
-    await wrapper.setProps({
-      initialView: 'day',
-    })
-
+  it('watches initialView when open', async () => {
     const spy = jest.spyOn(wrapper.vm, 'setInitialView')
+    await wrapper.vm.open()
 
     await wrapper.setProps({ initialView: 'month' })
 
