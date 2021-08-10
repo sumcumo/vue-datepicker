@@ -4,12 +4,13 @@
     <!-- Calendar Button -->
     <button
       v-if="calendarButton"
+      ref="calendarButton"
       class="vdp-datepicker__calendar-button"
       :class="{ 'btn input-group-prepend': bootstrapStyling }"
       data-test-calendar-button
       :disabled="disabled"
       type="button"
-      @click="toggle"
+      @click="toggle('calendarButton')"
       @focus="handleButtonFocus"
     >
       <span :class="{ 'input-group-text': bootstrapStyling }">
@@ -271,7 +272,11 @@ export default {
     /**
      * Opens or closes the calendar
      */
-    toggle() {
+    toggle(calendarButton) {
+      if (this.isOpen) {
+        this.$emit('set-focus', [calendarButton || 'input'])
+      }
+
       this.$emit(this.isOpen ? 'close' : 'open')
     },
   },

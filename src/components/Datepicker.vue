@@ -41,6 +41,7 @@
       @close="close"
       @focus="handleInputFocus"
       @open="open"
+      @set-focus="setFocus($event)"
       @typed-date="handleTypedDate"
     >
       <slot slot="beforeDateInput" name="beforeDateInput" />
@@ -392,6 +393,8 @@ export default {
       if (this.showCalendarOnFocus || !this.focus.refs.length) {
         this.$refs.dateInput.shouldToggleOnClick = true
         document.body.focus()
+      } else {
+        this.reviewFocus()
       }
 
       this.$emit('closed')

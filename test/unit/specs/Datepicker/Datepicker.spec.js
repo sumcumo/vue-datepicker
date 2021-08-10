@@ -252,6 +252,27 @@ describe('Datepicker mounted to body', () => {
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
 
+  it('focuses the calendar button when closed via the calendar button', async () => {
+    await wrapper.setProps({
+      calendarButton: true,
+    })
+
+    const calendarButton = wrapper.find('button[data-test-calendar-button]')
+    await calendarButton.trigger('click')
+    jest.advanceTimersByTime(250)
+
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    const openDateCell = wrapper.find('button.open')
+    expect(document.activeElement).toStrictEqual(openDateCell.element)
+
+    await calendarButton.trigger('click')
+    jest.advanceTimersByTime(250)
+
+    expect(wrapper.vm.isOpen).toBeFalsy()
+    expect(document.activeElement).toBe(calendarButton.element)
+  })
+
   it('does not arrow up from the previous button to the input field', async () => {
     const input = wrapper.find('input')
 

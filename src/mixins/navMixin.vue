@@ -52,13 +52,16 @@ export default {
      * @param {string} ref        The `ref` name of the wanted element
      * @returns {HTMLElement|Vue} A Vue element
      */
-    // eslint-disable-next-line complexity
+    // eslint-disable-next-line complexity,max-statements
     getElementByRef(ref) {
       if (ref === 'tabbableCell') {
         return this.tabbableCell
       }
       if (ref === 'input') {
         return this.$refs.dateInput && this.$refs.dateInput.$refs[this.refName]
+      }
+      if (ref === 'calendarButton') {
+        return this.$refs.dateInput.$refs.calendarButton
       }
       if (this.showHeader) {
         if (ref === 'up') {
@@ -162,6 +165,14 @@ export default {
      */
     setAllElements() {
       this.allElements = this.getFocusableElements(this.$refs.datepicker)
+    },
+    /**
+     * Set the focus
+     * @param {Array} refs An array of `refs` to focus (in order of preference)
+     */
+    setFocus(refs) {
+      this.focus.refs = refs
+      this.applyFocus()
     },
     /**
      * Determines which elements in datepicker should be focus-trapped
