@@ -174,6 +174,14 @@ describe('DateInput', () => {
     expect(wrapper.emitted('open')).toBeTruthy()
   })
 
+  it('opens the calendar when the space bar is pressed on the input field', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('keydown.space')
+    await input.trigger('keyup.space')
+
+    expect(wrapper.emitted('open')).toBeTruthy()
+  })
+
   it('opens the calendar on focus', async () => {
     const input = wrapper.find('input')
     await input.trigger('focus')

@@ -67,6 +67,19 @@ describe('Datepicker mounted', () => {
     expect(wrapper.vm.isOpen).toBeTruthy()
   })
 
+  it('toggles on clicking the input when showCalendarOnFocus = true', async () => {
+    await wrapper.setProps({
+      showCalendarOnFocus: true,
+    })
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    await input.trigger('click')
+    expect(wrapper.vm.isOpen).toBeFalsy()
+  })
+
   it('toggles via the calendar button', async () => {
     await wrapper.setProps({
       calendarButton: true,

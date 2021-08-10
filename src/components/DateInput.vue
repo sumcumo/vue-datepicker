@@ -46,7 +46,9 @@
       @focus="handleInputFocus"
       @keydown.enter.prevent="handleKeydownEnter"
       @keydown.escape.prevent="$emit('close')"
+      @keydown.space="handleKeydownSpace($event)"
       @keyup="handleKeyup"
+      @keyup.space="handleKeyupSpace($event)"
     />
     <!-- Clear Button -->
     <button
@@ -247,6 +249,14 @@ export default {
       }
     },
     /**
+     * Prevents scrolling when not typeable
+     */
+    handleKeydownSpace(event) {
+      if (!this.typeable) {
+        event.preventDefault()
+      }
+    },
+    /**
      * Parses a typed date and submits it, if valid
      */
     handleKeyup() {
@@ -267,6 +277,22 @@ export default {
       if (!Number.isNaN(this.parsedDate)) {
         this.typedDate = this.input.value
         this.$emit('typed-date', new Date(this.parsedDate))
+      }
+    },
+    /**
+     * Toggles the calendar unless a typed date has been entered or `show-calendar-on-button-click` is true
+     */
+    handleKeyupSpace(event) {
+      if (this.typeable) {
+        if (this.input.value === '') {
+          this.toggle()
+        }
+        return
+      }
+
+      event.preventDefault()
+      if (!this.showCalendarOnButtonClick) {
+        this.toggle()
       }
     },
     /**

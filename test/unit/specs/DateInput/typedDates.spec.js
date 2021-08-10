@@ -234,6 +234,14 @@ describe('Datepicker mount', () => {
 
     expect(wrapper.vm.selectedDate).toEqual(new Date(2016, 1, 15))
   })
+
+  it('opens the calendar when the space bar is pressed on the input field', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('keydown.space')
+    await input.trigger('keyup.space')
+
+    expect(wrapper.vm.isOpen).toBeTruthy()
+  })
 })
 
 describe('Datepicker mounted to document body', () => {
