@@ -10,7 +10,6 @@ describe('DateInput', () => {
   beforeEach(() => {
     wrapper = shallowMount(DateInput, {
       propsData: {
-        format: 'dd MMM yyyy',
         translation: en,
         typeable: true,
       },
@@ -120,7 +119,6 @@ describe('DateInput', () => {
   it("doesn't emit the date if typeable=false", async () => {
     const wrapperNotTypeAble = shallowMount(DateInput, {
       propsData: {
-        format: 'dd MMM yyyy',
         translation: en,
         typeable: false,
       },
@@ -139,8 +137,6 @@ describe('Datepicker mount', () => {
   beforeEach(() => {
     wrapper = mount(Datepicker, {
       propsData: {
-        format: 'dd MMM yyyy',
-        translation: en,
         typeable: true,
       },
     })

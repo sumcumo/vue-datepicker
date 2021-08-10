@@ -1,5 +1,4 @@
 import { shallowMount } from '@vue/test-utils'
-import { en } from '~/locale'
 import pickerMixin from '~/mixins/pickerMixin.vue'
 
 const Component = {
@@ -10,9 +9,7 @@ const Component = {
 const options = {
   mixins: [pickerMixin],
   propsData: {
-    format: 'dd MMM yyyy',
     selectedDate: new Date(2018, 2, 24),
-    translation: en,
   },
 }
 
