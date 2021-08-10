@@ -150,6 +150,12 @@ describe('Datepicker mount', () => {
     wrapper.destroy()
   })
 
+  it('sets the date on typedDate event', () => {
+    const today = new Date()
+    wrapper.vm.handleTypedDate(today)
+    expect(wrapper.vm.selectedDate).toEqual(today)
+  })
+
   it('shows the correct month as you type', async () => {
     const spySelectDate = jest.spyOn(wrapper.vm, 'selectDate')
     const input = wrapper.find('input')
@@ -174,5 +180,36 @@ describe('Datepicker mount', () => {
     await input.trigger('blur')
 
     expect(input.element.value).toEqual('24 Apr 2018')
+  })
+
+  it('closes via the calendar button when showCalendarOnFocus = true, despite input being focused', async () => {
+    await wrapper.setProps({
+      calendarButton: true,
+      showCalendarOnFocus: true,
+    })
+
+    const input = wrapper.find('input')
+    const calendarButton = wrapper.find('span.vdp-datepicker__calendar-button')
+
+    await input.trigger('focus')
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    await input.trigger('blur')
+    await calendarButton.trigger('click')
+    expect(wrapper.vm.isOpen).toBeFalsy()
+  })
+
+  it('resets the date correctly', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+    await input.setValue('1 Jan 2000')
+    await input.trigger('keydown.enter')
+    expect(wrapper.vm.selectedDate).toEqual(new Date(2000, 0, 1))
+
+    await wrapper.setProps({
+      value: new Date(2016, 1, 15),
+    })
+
+    expect(wrapper.vm.selectedDate).toEqual(new Date(2016, 1, 15))
   })
 })

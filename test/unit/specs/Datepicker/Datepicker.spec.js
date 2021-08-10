@@ -94,41 +94,6 @@ describe('Datepicker mounted', () => {
     await calendarButton.trigger('click')
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
-
-  it('closes via the calendar button, despite input being focused', async () => {
-    await wrapper.setProps({
-      calendarButton: true,
-      showCalendarOnFocus: true,
-    })
-
-    const input = wrapper.find('input')
-    const calendarButton = wrapper.find('span.vdp-datepicker__calendar-button')
-
-    await input.trigger('focus')
-    expect(wrapper.vm.isOpen).toBeTruthy()
-
-    await input.trigger('blur')
-    await calendarButton.trigger('click')
-    expect(wrapper.vm.isOpen).toBeFalsy()
-  })
-
-  it('resets the date correctly when typeable', async () => {
-    await wrapper.setProps({
-      typeable: true,
-    })
-
-    const input = wrapper.find('input')
-    await input.trigger('click')
-    await input.setValue('1 Jan 2000')
-    await input.trigger('keydown.enter')
-    expect(wrapper.vm.selectedDate).toEqual(new Date(2000, 0, 1))
-
-    await wrapper.setProps({
-      value: new Date(2016, 1, 15),
-    })
-
-    expect(wrapper.vm.selectedDate).toEqual(new Date(2016, 1, 15))
-  })
 })
 
 describe('Datepicker shallowMounted', () => {
@@ -249,12 +214,6 @@ describe('Datepicker shallowMounted', () => {
       dateTemp.getFullYear(),
     )
     expect(wrapper.vm.picker).toEqual('PickerMonth')
-  })
-
-  it('sets the date on typedDate event', () => {
-    const today = new Date()
-    wrapper.vm.handleTypedDate(today)
-    expect(wrapper.vm.selectedDate).toEqual(today)
   })
 
   it('watches value', async () => {
