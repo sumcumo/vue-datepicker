@@ -202,7 +202,6 @@ describe('Datepicker mounted to body', () => {
   it('focuses the tabbable-cell on decreasing the view', async () => {
     const input = wrapper.find('input')
     await input.trigger('click')
-    await wrapper.vm.$nextTick()
     jest.advanceTimersByTime(250)
 
     const upButton = wrapper.find('button.vdp-datepicker__up')
@@ -217,6 +216,23 @@ describe('Datepicker mounted to body', () => {
 
     const tabbableCell = wrapper.find('button.cell[data-test-tabbable-cell]')
     expect(document.activeElement).toBe(tabbableCell.element)
+  })
+
+  it('closes when the calendar loses focus', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+    jest.advanceTimersByTime(250)
+
+    const todayCell = wrapper.find('button.today')
+    expect(wrapper.vm.isOpen).toBeTruthy()
+    expect(document.activeElement).toStrictEqual(todayCell.element)
+
+    await document.activeElement.blur()
+    await document.body.click()
+    jest.advanceTimersByTime(250)
+
+    expect(wrapper.vm.isOpen).toBeFalsy()
   })
 })
 

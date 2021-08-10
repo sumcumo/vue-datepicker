@@ -2,6 +2,7 @@
 export default {
   data() {
     return {
+      allElements: [],
       focus: {
         delay: 0,
         refs: [],
@@ -131,6 +132,19 @@ export default {
       return this.$refs.dateInput.$refs[this.refName]
     },
     /**
+     * Sets `datepickerId` (as a global) and keeps track of focusable elements
+     */
+    handleFocusChange() {
+      document.datepickerId = this.datepickerId
+
+      this.setAllElements()
+      this.setNavElements()
+
+      if (this.inline) {
+        this.setTabbableCell()
+      }
+    },
+    /**
      * Sets the correct focus on next tick
      */
     reviewFocus() {
@@ -142,6 +156,12 @@ export default {
           this.applyFocus()
         }, this.focus.delay)
       })
+    },
+    /**
+     * Records all focusable elements (so that we know whether any element in the datepicker is focused)
+     */
+    setAllElements() {
+      this.allElements = this.getFocusableElements(this.$refs.datepicker)
     },
     /**
      * Determines which elements in datepicker should be focus-trapped
