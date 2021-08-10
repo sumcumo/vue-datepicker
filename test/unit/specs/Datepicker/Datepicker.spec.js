@@ -145,6 +145,34 @@ describe('Datepicker mounted with slots', () => {
   })
 })
 
+describe('Datepicker mounted to body', () => {
+  let wrapper
+
+  beforeEach(() => {
+    jest.useFakeTimers()
+
+    wrapper = mount(Datepicker, {
+      attachTo: document.body,
+    })
+  })
+
+  afterEach(() => {
+    jest.clearAllTimers()
+
+    wrapper.destroy()
+  })
+
+  it("focuses today's date by default", async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+    jest.advanceTimersByTime(250)
+    const todayCell = wrapper.find('button.today')
+
+    expect(todayCell.text()).toBe(new Date().getDate().toString())
+    expect(document.activeElement).toStrictEqual(todayCell.element)
+  })
+})
+
 describe('Datepicker shallowMounted', () => {
   let wrapper
   let date

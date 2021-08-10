@@ -444,10 +444,7 @@ export default {
       }
 
       this.setInitialView()
-      this.$nextTick(() => {
-        this.setTabbableCell()
-        this.setNavElements()
-      })
+      this.reviewFocus()
 
       this.$emit('opened')
     },

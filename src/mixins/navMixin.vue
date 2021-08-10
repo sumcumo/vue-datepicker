@@ -2,12 +2,37 @@
 export default {
   data() {
     return {
+      focus: {
+        delay: 0,
+        refs: [],
+      },
       navElements: [],
-      tabbableCell: null,
       navElementsFocusedIndex: 0,
+      tabbableCell: null,
     }
   },
+  computed: {
+    fallbackElementToFocus() {
+      return this.typeable ? 'input' : 'tabbableCell'
+    },
+  },
   methods: {
+    /**
+     * Focuses the first non-disabled element found in the `focus.refs` array and sets `navElementsFocusedIndex`
+     */
+    applyFocus() {
+      const focusRefs = [...this.focus.refs, this.fallbackElementToFocus]
+
+      for (let i = 0; i < focusRefs.length; i += 1) {
+        const element = this.getElementByRef(focusRefs[i])
+
+        if (element && !element.getAttribute('disabled')) {
+          element.focus()
+          this.setNavElementsFocusedIndex()
+          break
+        }
+      }
+    },
     /**
      * Returns true if the calendar has been passed the given slot
      * @param  {String} slotName The name of the slot
@@ -15,6 +40,20 @@ export default {
      */
     hasSlot(slotName) {
       return !!this.$slots[slotName]
+    },
+    /**
+     * Finds an element by its `ref` attribute
+     * @param {string} ref        The `ref` name of the wanted element
+     * @returns {HTMLElement|Vue} A Vue element
+     */
+    getElementByRef(ref) {
+      if (ref === 'tabbableCell') {
+        return this.tabbableCell
+      }
+      if (ref === 'input') {
+        return this.$refs.dateInput && this.$refs.dateInput.$refs[this.refName]
+      }
+      return null
     },
     /**
      * Returns an array of all HTML elements which should be focus-trapped in the specified slot
@@ -76,6 +115,19 @@ export default {
       return this.$refs.dateInput.$refs[this.refName]
     },
     /**
+     * Sets the correct focus on next tick
+     */
+    reviewFocus() {
+      this.$nextTick(() => {
+        this.setTabbableCell()
+        this.setNavElements()
+
+        setTimeout(() => {
+          this.applyFocus()
+        }, this.focus.delay)
+      })
+    },
+    /**
      * Determines which elements in datepicker should be focus-trapped
      */
     setNavElements() {
@@ -94,6 +146,19 @@ export default {
       ]
         .filter((item) => !!item)
         .reduce((acc, val) => acc.concat(val), [])
+    },
+    /**
+     * Keeps track of the currently focused index in the navElements array
+     */
+    setNavElementsFocusedIndex() {
+      for (let i = 0; i < this.navElements.length; i += 1) {
+        if (document.activeElement === this.navElements[i]) {
+          this.navElementsFocusedIndex = i
+          return
+        }
+      }
+
+      this.navElementsFocusedIndex = 0
     },
     /**
      * Sets the focus-trapped cell in the picker
