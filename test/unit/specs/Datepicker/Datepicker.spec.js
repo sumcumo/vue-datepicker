@@ -94,41 +94,6 @@ describe('Datepicker mounted', () => {
     await calendarButton.trigger('click')
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
-
-  it('closes via the calendar button, despite input being focused', async () => {
-    await wrapper.setProps({
-      calendarButton: true,
-      showCalendarOnFocus: true,
-    })
-
-    const input = wrapper.find('input')
-    const calendarButton = wrapper.find('span.vdp-datepicker__calendar-button')
-
-    await input.trigger('focus')
-    expect(wrapper.vm.isOpen).toBeTruthy()
-
-    await input.trigger('blur')
-    await calendarButton.trigger('click')
-    expect(wrapper.vm.isOpen).toBeFalsy()
-  })
-
-  it('resets the date correctly when typeable', async () => {
-    await wrapper.setProps({
-      typeable: true,
-    })
-
-    const input = wrapper.find('input')
-    await input.trigger('click')
-    await input.setValue('1 Jan 2000')
-    await input.trigger('keydown.enter')
-    expect(wrapper.vm.selectedDate).toEqual(new Date(2000, 0, 1))
-
-    await wrapper.setProps({
-      value: new Date(2016, 1, 15),
-    })
-
-    expect(wrapper.vm.selectedDate).toEqual(new Date(2016, 1, 15))
-  })
 })
 
 describe('Datepicker shallowMounted', () => {
@@ -147,10 +112,6 @@ describe('Datepicker shallowMounted', () => {
 
   afterEach(() => {
     wrapper.destroy()
-  })
-
-  it('correctly sets the value when created', () => {
-    expect(wrapper.vm.value).toEqual(date)
   })
 
   it('correctly sets the value from method', () => {
@@ -251,12 +212,6 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapper.vm.picker).toEqual('PickerMonth')
   })
 
-  it('sets the date on typedDate event', () => {
-    const today = new Date()
-    wrapper.vm.handleTypedDate(today)
-    expect(wrapper.vm.selectedDate).toEqual(today)
-  })
-
   it('watches value', async () => {
     const spy = jest.spyOn(wrapper.vm, 'setValue')
     await wrapper.setProps({ value: '2018-04-26' })
@@ -335,7 +290,7 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapper.vm.nextView.up).toBe('decade')
   })
 
-  it('should emit changed-month/year/decade', async () => {
+  it('emits changed-month/year/decade', async () => {
     const pageDate = new Date(2016, 2, 1)
     await wrapper.vm.setView('day')
     await wrapper.vm.handlePageChange(pageDate)
@@ -371,14 +326,16 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapperTemp.emitted('input')).toBeTruthy()
   })
 
-  it('sets the transition correctly', () => {
+  it('sets the transition correctly', async () => {
     wrapper.vm.setTransitionName(1)
     expect(wrapper.vm.transitionName).toBe('slide-right')
 
     wrapper.vm.setTransitionName(-1)
     expect(wrapper.vm.transitionName).toBe('slide-left')
 
-    wrapper.setData({ translation: { rtl: true } })
+    await wrapper.setData({
+      translation: { rtl: true },
+    })
 
     wrapper.vm.setTransitionName(1)
     expect(wrapper.vm.transitionName).toBe('slide-left')
@@ -435,7 +392,7 @@ describe('Datepicker.vue using UTC', () => {
   it('correctly sets the value using UTC', async () => {
     const timezoneOffset = new Date().getTimezoneOffset() / 60
 
-    // this is ambiguous because localzone differs by one day than UTC
+    // This is ambiguous because localzone differs from UTC by one day
     const ambiguousHour = 25 - timezoneOffset
     const ambiguousDate = new Date(2018, 3, 15, ambiguousHour)
     const ambiguousYear = ambiguousDate.getUTCFullYear()
@@ -451,6 +408,7 @@ describe('Datepicker.vue using UTC', () => {
         useUtc: true, // This should fail if `useUtc=false`
       },
     })
+
     // It's important to assert the input rendered output
     await wrapper.vm.$nextTick()
     expect(wrapper.findComponent(DateInput).vm.formattedValue).toEqual(

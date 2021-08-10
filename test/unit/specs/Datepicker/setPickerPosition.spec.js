@@ -91,7 +91,7 @@ describe('Datepicker mounted', () => {
     expect(calendar.$el.style.top).toBe('0px')
   })
 
-  it('has a fixed position of `top-left`', async () => {
+  it('has a fixed position of `bottom-left`', async () => {
     await wrapper.setProps({
       fixedPosition: 'bottom-left',
     })

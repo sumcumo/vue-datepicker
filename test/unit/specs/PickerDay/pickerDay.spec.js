@@ -70,8 +70,9 @@ describe('PickerDay', () => {
   })
 
   it('displays edge dates by default', () => {
-    const firstCell = wrapper.findAll('.day').at(0)
-    const lastCell = wrapper.findAll('.day').at(34)
+    const cells = wrapper.findAll('.day')
+    const firstCell = cells.at(0)
+    const lastCell = cells.at(34)
 
     expect(firstCell.text()).toBe('28')
     expect(lastCell.text()).toBe('3')
@@ -82,15 +83,17 @@ describe('PickerDay', () => {
       showEdgeDates: false,
     })
 
-    const firstCell = wrapper.findAll('.day').at(0)
-    const lastCell = wrapper.findAll('.day').at(34)
+    const cells = wrapper.findAll('.day')
+    const firstCell = cells.at(0)
+    const lastCell = cells.at(34)
 
     expect(firstCell.text()).toBe('')
     expect(lastCell.text()).toBe('')
   })
 
   it('selects an edge date from the previous month', async () => {
-    const firstCell = wrapper.findAll('.day').at(0)
+    const cells = wrapper.findAll('.day')
+    const firstCell = cells.at(0)
 
     await firstCell.trigger('click')
 
@@ -98,7 +101,8 @@ describe('PickerDay', () => {
   })
 
   it('selects an edge date from the next month', async () => {
-    const lastCell = wrapper.findAll('.day').at(34)
+    const cells = wrapper.findAll('.day')
+    const lastCell = cells.at(34)
 
     await lastCell.trigger('click')
 

@@ -10,7 +10,6 @@ describe('DateInput', () => {
   beforeEach(() => {
     wrapper = shallowMount(DateInput, {
       propsData: {
-        format: 'dd MMM yyyy',
         translation: en,
         typeable: true,
       },
@@ -92,7 +91,7 @@ describe('DateInput', () => {
     const input = wrapper.find('input')
     input.setValue(dateString)
     expect(input.element.value).toEqual(dateString)
-    await input.trigger('keyup')
+    input.trigger('keyup')
     expect(wrapper.vm.formattedValue).toEqual('12.08.2018')
   })
 
@@ -120,7 +119,6 @@ describe('DateInput', () => {
   it("doesn't emit the date if typeable=false", async () => {
     const wrapperNotTypeAble = shallowMount(DateInput, {
       propsData: {
-        format: 'dd MMM yyyy',
         translation: en,
         typeable: false,
       },
@@ -139,10 +137,7 @@ describe('Datepicker mount', () => {
   beforeEach(() => {
     wrapper = mount(Datepicker, {
       propsData: {
-        format: 'dd MMM yyyy',
-        translation: en,
         typeable: true,
-        useUtc: true,
       },
     })
   })
@@ -175,5 +170,36 @@ describe('Datepicker mount', () => {
     await input.trigger('blur')
 
     expect(input.element.value).toEqual('24 Apr 2018')
+  })
+
+  it('closes via the calendar button when showCalendarOnFocus = true, despite input being focused', async () => {
+    await wrapper.setProps({
+      calendarButton: true,
+      showCalendarOnFocus: true,
+    })
+
+    const input = wrapper.find('input')
+    const calendarButton = wrapper.find('span.vdp-datepicker__calendar-button')
+
+    await input.trigger('focus')
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    await input.trigger('blur')
+    await calendarButton.trigger('click')
+    expect(wrapper.vm.isOpen).toBeFalsy()
+  })
+
+  it('resets the date correctly', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+    await input.setValue('1 Jan 2000')
+    await input.trigger('keydown.enter')
+    expect(wrapper.vm.selectedDate).toEqual(new Date(2000, 0, 1))
+
+    await wrapper.setProps({
+      value: new Date(2016, 1, 15),
+    })
+
+    expect(wrapper.vm.selectedDate).toEqual(new Date(2016, 1, 15))
   })
 })

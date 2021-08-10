@@ -16,7 +16,6 @@ describe('DateInput', () => {
     return shallowMount(DateInput, {
       propsData: {
         selectedDate: new Date(2018, 2, 24),
-        format: 'dd MMM yyyy',
         translation: en,
       },
     })

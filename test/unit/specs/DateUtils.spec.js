@@ -107,6 +107,10 @@ describe('dateUtils', () => {
     )
   })
 
+  it('should return the original date if no format is specified', () => {
+    expect(dateUtils.parseDate('April 2020', '')).toEqual('April 2020')
+  })
+
   it('parses English dates', () => {
     expect(dateUtils.parseDate('16 April 2020', 'd MMMM yyyy')).toEqual(
       '2020-04-16T00:00:00',
