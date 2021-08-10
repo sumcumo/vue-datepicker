@@ -10,6 +10,7 @@
       :disabled="disabled"
       type="button"
       @click="toggle"
+      @focus="handleButtonFocus"
     >
       <span :class="{ 'input-group-text': bootstrapStyling }">
         <slot name="calendarBtn">
@@ -94,8 +95,9 @@ export default {
   data() {
     return {
       input: null,
-      isFocusedUsed: false,
-      isBlurred: false,
+      isInputFocused: false,
+      shouldToggleOnFocus: false,
+      shouldToggleOnClick: true,
       parsedDate: null,
       typedDate: '',
       utils: makeDateUtils(this.useUtc),
@@ -134,6 +136,28 @@ export default {
       return this.formattedDate
     },
   },
+  watch: {
+    showCalendarOnFocus: {
+      immediate: true,
+      handler(showCalendarOnFocus) {
+        if (showCalendarOnFocus) {
+          this.shouldToggleOnFocus = !this.isOpen
+        }
+      },
+    },
+    isOpen(isOpen, wasOpen) {
+      this.$nextTick(() => {
+        if (this.showCalendarOnFocus) {
+          if (isOpen) {
+            this.shouldToggleOnFocus = false
+          }
+          if (wasOpen && !this.isInputFocused) {
+            this.shouldToggleOnFocus = true
+          }
+        }
+      })
+    },
+  },
   mounted() {
     this.input = this.$el.querySelector('input')
   },
@@ -159,36 +183,52 @@ export default {
      * Validate typedDate and emit a `blur` event
      */
     handleInputBlur() {
-      this.isBlurred = this.isOpen
+      if (this.showCalendarOnFocus && !this.isOpen) {
+        this.shouldToggleOnFocus = true
+      }
+
       if (this.typeable) {
         this.formatTypedDate()
       }
+      this.isInputFocused = false
       this.$emit('blur')
-      this.isFocusedUsed = false
+    },
+    /**
+     * Resets `shouldToggleOnFocus` to true
+     */
+    handleButtonFocus() {
+      if (this.showCalendarOnFocus) {
+        this.shouldToggleOnFocus = true
+      }
     },
     /**
      * Toggles the calendar (unless `show-calendar-on-button-click` is true)
      */
     handleInputClick() {
-      const isFocusedUsed = this.showCalendarOnFocus && !this.isFocusedUsed
+      if (this.showCalendarOnButtonClick) return
 
-      if (!this.showCalendarOnButtonClick && !isFocusedUsed) {
+      if (this.shouldToggleOnClick) {
         this.toggle()
-      }
-
-      if (this.showCalendarOnFocus) {
-        this.isFocusedUsed = true
       }
     },
     /**
-     * Opens the calendar when `show-calendar-on-focus` is true
+     * Emits a `focus` event and opens the calendar when `show-calendar-on-focus` is true
      */
     handleInputFocus() {
-      if (this.showCalendarOnFocus) {
-        this.$emit('open')
+      this.isInputFocused = true
+
+      if (!this.isOpen && this.shouldToggleOnFocus) {
+        this.shouldToggleOnClick = false
       }
 
-      this.isBlurred = false
+      if (this.shouldToggleOnFocus && !this.isOpen) {
+        this.$emit('open')
+
+        setTimeout(() => {
+          this.shouldToggleOnClick = true
+        }, 300)
+      }
+
       this.$emit('focus')
     },
     /**
@@ -232,10 +272,6 @@ export default {
      * Opens or closes the calendar
      */
     toggle() {
-      if (!this.isOpen && this.isBlurred) {
-        this.isBlurred = false
-        return
-      }
       this.$emit(this.isOpen ? 'close' : 'open')
     },
   },

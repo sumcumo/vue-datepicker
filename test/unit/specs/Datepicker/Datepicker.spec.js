@@ -95,6 +95,23 @@ describe('Datepicker mounted', () => {
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
 
+  it('closes via the calendar button when typeable and showCalendarOnFocus = true, despite input being focused', async () => {
+    await wrapper.setProps({
+      calendarButton: true,
+      showCalendarOnFocus: true,
+      typeable: true,
+    })
+
+    const input = wrapper.find('input')
+    const calendarButton = wrapper.find('button[data-test-calendar-button]')
+
+    await input.trigger('focus')
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    await calendarButton.trigger('click')
+    expect(wrapper.vm.isOpen).toBeFalsy()
+  })
+
   it('selects an edge date', async () => {
     await wrapper.setProps({
       value: new Date(2020, 0, 1),
@@ -233,6 +250,35 @@ describe('Datepicker mounted to body', () => {
     jest.advanceTimersByTime(250)
 
     expect(wrapper.vm.isOpen).toBeFalsy()
+  })
+
+  it('does not arrow up from the previous button to the input field', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+
+    jest.advanceTimersByTime(250)
+
+    const prevButton = wrapper.find('button.prev')
+    await prevButton.trigger('focus')
+    await prevButton.trigger('keydown.up')
+
+    expect(document.activeElement).not.toBe(input.element)
+  })
+
+  it('does not focus the input on selecting a date when show-calendar-on-focus = true', async () => {
+    await wrapper.setProps({
+      showCalendarOnFocus: true,
+    })
+
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+
+    const openDate = wrapper.find('button.open')
+    await openDate.trigger('click')
+
+    expect(document.activeElement).toBe(document.body)
   })
 })
 
@@ -578,6 +624,40 @@ describe('Datepicker.vue inline', () => {
     expect(wrapper.vm.isOpen).toEqual(true)
     document.body.click()
     expect(wrapper.vm.isOpen).toEqual(true)
+  })
+})
+
+describe('Datepicker.vue inline mounted to body', () => {
+  let wrapper
+  beforeEach(() => {
+    jest.useFakeTimers()
+
+    wrapper = mount(Datepicker, {
+      attachTo: document.body,
+      propsData: {
+        inline: true,
+      },
+    })
+  })
+
+  afterEach(() => {
+    jest.clearAllTimers()
+
+    wrapper.destroy()
+  })
+
+  it('focuses the date when selected', async () => {
+    const openDate = wrapper.find('button.open')
+    await openDate.element.focus()
+    await openDate.trigger('click')
+
+    expect(document.activeElement).toBe(openDate.element)
+
+    const anotherDate = wrapper.findAll('button.cell').at(10)
+    await anotherDate.element.focus()
+    await anotherDate.trigger('click')
+
+    expect(document.activeElement).toBe(anotherDate.element)
   })
 })
 

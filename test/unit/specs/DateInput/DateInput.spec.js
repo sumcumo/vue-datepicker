@@ -84,6 +84,40 @@ describe('DateInput', () => {
     expect(wrapper.emitted('open')).toBeFalsy()
   })
 
+  it('closes calendar via button and reopens via focus when `show-calendar-on-focus` is true', async () => {
+    await wrapper.setProps({
+      calendarButton: true,
+      showCalendarOnFocus: true,
+    })
+
+    const input = wrapper.find('input')
+    const calendarButton = wrapper.find('button[data-test-calendar-button]')
+
+    await input.trigger('focus')
+    expect(wrapper.emitted('open')).toBeTruthy()
+
+    await input.trigger('blur')
+    await calendarButton.trigger('focus')
+    await calendarButton.trigger('click')
+    expect(wrapper.emitted('close')).toBeFalsy()
+
+    await input.trigger('focus')
+    expect(wrapper.emitted('open')).toBeTruthy()
+  })
+
+  it('opens calendar on click when `show-calendar-on-focus` is true', async () => {
+    await wrapper.setProps({
+      showCalendarOnFocus: true,
+    })
+
+    const input = wrapper.find('input')
+
+    expect(wrapper.vm.isOpen).toBeFalsy()
+    await input.trigger('focus')
+    await input.trigger('click')
+    expect(wrapper.emitted('open')).toBeTruthy()
+  })
+
   it('adds bootstrap classes', async () => {
     await wrapper.setProps({
       bootstrapStyling: true,

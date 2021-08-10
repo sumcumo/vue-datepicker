@@ -389,7 +389,8 @@ export default {
 
       this.view = ''
 
-      if (!this.focus.refs.length) {
+      if (this.showCalendarOnFocus || !this.focus.refs.length) {
+        this.$refs.dateInput.shouldToggleOnClick = true
         document.body.focus()
       }
 
@@ -443,6 +444,10 @@ export default {
       this.$refs.dateInput.typedDate = ''
       this.selectDate(cell.timestamp)
       this.close()
+
+      if (this.showCalendarOnFocus && !this.inline) {
+        this.$refs.dateInput.shouldToggleOnClick = true
+      }
     },
     /**
      * Set the date from a 'typed-date' event
