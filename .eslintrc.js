@@ -174,10 +174,7 @@ module.exports = {
     // https://github.com/johvin/eslint-import-resolver-alias#readme
     'import/resolver': {
       alias: {
-        map: [
-          ['~', './'],
-          ['@', './src'],
-        ],
+        map: [['~', './src']],
         extensions: ['.js', '.ts', '.d.ts'],
       },
     },

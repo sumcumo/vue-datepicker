@@ -2,6 +2,7 @@ import { shallowMount } from '@vue/test-utils'
 import pickerMixin from '~/mixins/pickerMixin.vue'
 
 const Component = {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   render() {},
   mixins: [pickerMixin],
 }
