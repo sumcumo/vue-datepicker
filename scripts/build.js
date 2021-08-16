@@ -4,6 +4,7 @@ import alias from '@rollup/plugin-alias'
 import babel from '@rollup/plugin-babel'
 import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
+import typescript from '@rollup/plugin-typescript'
 import del from 'rollup-plugin-delete'
 import vue from 'rollup-plugin-vue'
 import postcss from 'rollup-plugin-postcss'
@@ -18,6 +19,7 @@ const banner = `/*
 */`
 
 let generateCounter = 0
+// eslint-disable-next-line max-statements
 const generateConfig = ({ type, extraPlugins = [], extraName = '' }) => {
   let babelrc = true
   const output = {
@@ -30,7 +32,17 @@ const generateConfig = ({ type, extraPlugins = [], extraName = '' }) => {
     banner,
     name: 'vuejsDatepicker',
   }
+
+  let typescriptOptions = {
+    declaration: false,
+  }
   if (type === 'esm') {
+    typescriptOptions = {
+      declarationDir: `dist/`,
+      declaration: true,
+      rootDir: 'src/',
+      exclude: ['test/**/*', 'dist/**/*'],
+    }
     output.entryFileNames = '[name].esm.js'
     output.assetFileNames = '[name].esm.js'
     babelrc = false
@@ -71,6 +83,7 @@ const generateConfig = ({ type, extraPlugins = [], extraName = '' }) => {
       }),
       resolve(),
       commonjs(),
+      typescript(typescriptOptions),
       vue({
         css: false,
       }),
@@ -80,7 +93,7 @@ const generateConfig = ({ type, extraPlugins = [], extraName = '' }) => {
         plugins: [autoprefixer()],
       }),
       babel({
-        extensions: ['.js'],
+        extensions: ['.ts'],
         babelHelpers: 'bundled',
         babelrc,
       }),
