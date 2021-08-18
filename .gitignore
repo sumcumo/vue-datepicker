@@ -5,7 +5,10 @@ npm-debug.log
 .coveralls.yml
 example/demo.js
 example/demo.js.map
+example-e2e/app.js
+example-e2e/app.js.map
 test/unit/coverage
+test/e2e/cucumber-json
 yarn-debug.log*
 yarn-error.log*
 .idea
