@@ -214,6 +214,10 @@ export default {
       type: Number,
       default: 10,
     },
+    preserveTime: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     const utils = makeDateUtils(this.useUtc)
@@ -448,6 +452,12 @@ export default {
      */
     selectDate(timestamp) {
       const date = new Date(timestamp)
+
+      if (this.preserveTime) {
+        date.setHours(this.selectedDate.getHours())
+        date.setMinutes(this.selectedDate.getMinutes())
+        date.setSeconds(this.selectedDate.getSeconds())
+      }
       this.selectedDate = date
       this.setPageDate(date)
       this.$emit('selected', date)
