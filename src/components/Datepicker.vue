@@ -398,7 +398,7 @@ export default {
 
       if (this.showCalendarOnFocus || !this.focus.refs.length) {
         this.$refs.dateInput.shouldToggleOnClick = true
-        document.body.focus()
+        document.activeElement.blur()
       } else {
         this.reviewFocus()
       }
