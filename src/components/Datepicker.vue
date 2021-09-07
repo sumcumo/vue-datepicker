@@ -240,6 +240,7 @@ export default {
     return {
       calendarHeight: 0,
       calendarSlots,
+      isClickOutside: false,
       /*
        * Vue cannot observe changes to a Date Object so date must be stored as a timestamp
        * This represents the first day of the current viewing month
@@ -350,10 +351,10 @@ export default {
   },
   mounted() {
     this.init()
-    document.addEventListener('click', this.handleClick)
+    document.addEventListener('click', this.handleClickOutside)
   },
   beforeDestroy() {
-    document.removeEventListener('click', this.handleClick)
+    document.removeEventListener('click', this.handleClickOutside)
   },
   methods: {
     /**
@@ -396,9 +397,12 @@ export default {
 
       this.view = ''
 
-      if (this.showCalendarOnFocus || !this.focus.refs.length) {
+      if (this.showCalendarOnFocus) {
         this.$refs.dateInput.shouldToggleOnClick = true
-        document.activeElement.blur()
+      }
+
+      if (this.isClickOutside) {
+        this.isClickOutside = false
       } else {
         this.reviewFocus()
       }
@@ -408,7 +412,7 @@ export default {
     /**
      * Closes the calendar when no element within it has focus
      */
-    handleClick() {
+    handleClickOutside() {
       if (document.datepickerId !== this.datepickerId) {
         return
       }
@@ -416,7 +420,7 @@ export default {
       const isFocused = this.allElements.includes(document.activeElement)
 
       if (!isFocused && this.isOpen) {
-        this.focus.refs = []
+        this.isClickOutside = true
         this.close()
       }
     },
