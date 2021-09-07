@@ -78,8 +78,7 @@ describe('Show calendar on focus', () => {
 
   describe('@id-4: Click on the input field when {string}', () => {
     Given('the calendar is {string}', (openOrClosed) => {
-      const isNot = openOrClosed === 'closed' ? 'not.' :
-        ''
+      const isNot = openOrClosed === 'closed' ? 'not.' : ''
 
       createCalendar({
         showCalendarOnFocus: true,
