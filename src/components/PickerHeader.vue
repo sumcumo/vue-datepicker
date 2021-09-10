@@ -7,7 +7,7 @@
       data-test-previous-button
       :disabled="isPreviousDisabled"
       type="button"
-      @click="$emit('page-change', previousPage)"
+      @click.stop="$emit('page-change', previousPage)"
       @keydown.down.prevent="focusTabbableCell"
       @keydown.up.prevent="$emit('focus-input')"
       @keydown.left.prevent="arrowLeftPrev"
@@ -25,7 +25,7 @@
       data-test-next-button
       :disabled="isNextDisabled"
       type="button"
-      @click="$emit('page-change', nextPage)"
+      @click.stop="$emit('page-change', nextPage)"
       @keydown.down.prevent="focusTabbableCell"
       @keydown.up.prevent="$emit('focus-input')"
       @keydown.left.prevent="arrowLeftNext"
