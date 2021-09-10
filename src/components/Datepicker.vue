@@ -442,6 +442,7 @@ export default {
     handlePageChange({ focusRefs, pageDate }) {
       this.setPageDate(pageDate)
       this.focus.refs = focusRefs
+      this.focus.delay = this.slideDuration
       this.reviewFocus()
       this.$emit(`changed-${this.nextView.up}`, pageDate)
     },

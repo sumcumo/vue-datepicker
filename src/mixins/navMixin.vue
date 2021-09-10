@@ -21,8 +21,14 @@ export default {
         this.tabbableCell && Number(this.tabbableCell.getAttribute('data-id'))
       )
     },
-    fallbackElementToFocus() {
-      return this.typeable ? 'input' : 'tabbableCell'
+    fallbackElementsToFocus() {
+      const elements = ['tabbableCell', 'prev', 'next']
+
+      if (this.typeable) {
+        elements.unshift('input')
+      }
+
+      return elements
     },
     focusedDateTimestamp() {
       const pageDate = new Date(this.pageTimestamp)
@@ -44,7 +50,7 @@ export default {
      * Focuses the first non-disabled element found in the `focus.refs` array and sets `navElementsFocusedIndex`
      */
     applyFocus() {
-      const focusRefs = [...this.focus.refs, this.fallbackElementToFocus]
+      const focusRefs = [...this.focus.refs, ...this.fallbackElementsToFocus]
 
       for (let i = 0; i < focusRefs.length; i += 1) {
         const element = this.getElementByRef(focusRefs[i])

@@ -860,6 +860,96 @@ describe('Datepicker mounted to body with openDate', () => {
     expect(wrapper.vm.selectedDate).toEqual(null)
     expect(document.activeElement).toBe(openDate.element)
   })
+
+  it('opens with focus on the first available date when the open date and all previous dates are disabled', async () => {
+    const openDate = new Date(2021, 6, 15)
+    const oneDayAfterOpenDate = new Date(2021, 6, 16)
+
+    await wrapper.setProps({
+      disabledDates: {
+        to: oneDayAfterOpenDate,
+      },
+      openDate,
+    })
+
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+    jest.advanceTimersByTime(250)
+
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    const firstAvailableDate = wrapper.find('button.cell:not(.muted):enabled')
+
+    expect(document.activeElement).toBe(firstAvailableDate.element)
+  })
+
+  it('opens with focus on the first available date when the open date and all future dates are disabled', async () => {
+    const openDate = new Date(2021, 6, 15)
+    const oneDayBeforeOpenDate = new Date(2021, 6, 14)
+
+    await wrapper.setProps({
+      disabledDates: {
+        from: oneDayBeforeOpenDate,
+      },
+      openDate,
+    })
+
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+    jest.advanceTimersByTime(250)
+
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    const firstAvailableDate = wrapper.find('button.cell:not(.muted):enabled')
+
+    expect(document.activeElement).toBe(firstAvailableDate.element)
+  })
+
+  it('opens with focus on the `next` button when all dates this month and in the past are disabled', async () => {
+    const openDate = new Date(2021, 8, 13)
+    const oneMonthAfterOpenDate = new Date(2021, 9, 13)
+
+    await wrapper.setProps({
+      disabledDates: {
+        to: oneMonthAfterOpenDate,
+      },
+      openDate,
+    })
+
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+    jest.advanceTimersByTime(250)
+
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    const nextButton = wrapper.find('button.next')
+    expect(document.activeElement).toBe(nextButton.element)
+  })
+
+  it('opens with focus on the `previous` button when all dates this month and in the future are disabled', async () => {
+    const openDate = new Date(2021, 8, 13)
+    const oneMonthBeforeOpenDate = new Date(2021, 7, 13)
+
+    await wrapper.setProps({
+      disabledDates: {
+        from: oneMonthBeforeOpenDate,
+      },
+      openDate,
+    })
+
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+    jest.advanceTimersByTime(250)
+
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    const prevButton = wrapper.find('button.prev')
+    expect(document.activeElement).toBe(prevButton.element)
+  })
 })
 
 describe('Datepicker shallowMounted', () => {
