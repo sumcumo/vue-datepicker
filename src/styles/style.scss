@@ -10,14 +10,14 @@
 
 .vdp-datepicker__calendar {
   background: #fff;
+  border: 1px solid #ccc;
   position: absolute;
   width: 300px;
   z-index: 10000;
 
   > div {
     background: #fff;
-    border: 1px solid #ccc;
-    width: inherit;
+    width: 298px;
   }
 
   .today {
@@ -61,9 +61,9 @@
 
     .prev,
     .next {
+      flex-grow: 1;
       max-height: 40px;
       position: relative;
-      width: 14.285714285714286%;
 
       .default {
         display: flex;
@@ -124,6 +124,7 @@
     display: inline-block;
     height: 40px;
     padding: 0 5px;
+    position: relative;
     text-align: center;
     vertical-align: middle;
     width: 14.285714285714286%;
@@ -135,6 +136,10 @@
 
       &:hover {
         border: 1px solid #4bd;
+      }
+
+      &:focus {
+        z-index: 1;
       }
     }
 
