@@ -1,6 +1,8 @@
 <template>
   <div>
-    <slot name="beforeCalendarHeaderYear" />
+    <div v-if="$slots.beforeCalendarHeaderYear">
+      <slot name="beforeCalendarHeaderYear" />
+    </div>
 
     <PickerHeader
       v-if="showHeader"
@@ -44,7 +46,9 @@
       </Transition>
     </div>
 
-    <slot name="calendarFooterYear" />
+    <div v-if="$slots.calendarFooterYear">
+      <slot name="calendarFooterYear" />
+    </div>
   </div>
 </template>
 

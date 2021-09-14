@@ -69,7 +69,9 @@
         >
           <Transition name="view">
             <div ref="view" :key="view">
-              <slot name="beforeCalendarHeader" />
+              <div v-if="$slots.beforeCalendarHeader">
+                <slot name="beforeCalendarHeader" />
+              </div>
               <Component
                 :is="picker"
                 ref="picker"
@@ -109,7 +111,9 @@
                   <slot v-if="cell" name="dayCellContent" :cell="cell" />
                 </template>
               </Component>
-              <slot name="calendarFooter" />
+              <div v-if="$slots.calendarFooter">
+                <slot name="calendarFooter" />
+              </div>
             </div>
           </Transition>
         </div>

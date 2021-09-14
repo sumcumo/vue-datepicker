@@ -1,6 +1,8 @@
 <template>
   <div>
-    <slot name="beforeCalendarHeaderDay" />
+    <div v-if="$slots.beforeCalendarHeaderDay">
+      <slot name="beforeCalendarHeaderDay" />
+    </div>
 
     <PickerHeader
       v-if="showHeader"
@@ -58,7 +60,9 @@
       </div>
     </div>
 
-    <slot name="calendarFooterDay" />
+    <div v-if="$slots.calendarFooterDay">
+      <slot name="calendarFooterDay" />
+    </div>
   </div>
 </template>
 

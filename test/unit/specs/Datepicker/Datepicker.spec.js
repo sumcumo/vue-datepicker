@@ -144,21 +144,21 @@ describe('Datepicker mounted with slots', () => {
 
   beforeEach(() => {
     const beforeCalendarHeader =
-      '<div key="0">Example <a href="#">beforeCalendarHeader</a> slot</div>'
+      'One tabbable element in the <a href="#" tabindex="0">beforeCalendarHeader</a> slot'
     const beforeCalendarHeaderDay =
-      '<div key="1">Example <a href="#">beforeCalendarHeaderDay</a> slot</div>'
+      'One tabbable element in the <a href="#" tabindex="0">beforeCalendarHeaderDay</a> slot'
     const calendarFooterDay =
-      '<div key="2">Example <a href="#">calendarFooterDay</a> slot</div>'
+      'One tabbable element in the <a href="#" tabindex="0">calendarFooterDay</a> slot'
     const beforeCalendarHeaderMonth =
-      '<div key="3">Example <a href="#">beforeCalendarHeaderMonth</a> slot</div>'
+      '<div>Two <a href="#" tabindex="0">tabbable elements</a> in the <a href="#" tabindex="0">beforeCalendarHeaderMonth</a> slot</div>'
     const calendarFooterMonth =
-      '<div key="4">Example <a href="#">calendarFooterMonth</a> slot</div>'
+      '<p>Two <button>tabbable elements</button></p> <p>in the <input placeholder="calendarFooterMonth"> slot</p>'
     const beforeCalendarHeaderYear =
-      '<div key="5">Example <a href="#">beforeCalendarHeaderYear</a> slot</div>'
+      'One tabbable element in the <select><option>beforeCalendarHeaderYear</option></select> slot'
     const calendarFooterYear =
-      '<div key="6">Example <a href="#">calendarFooterYear</a> slot</div>'
+      'One tabbable element in the <textarea>calendarFooterYear</textarea> slot'
     const calendarFooter =
-      '<div key="7">Example <a href="#">calendarFooter</a> slot</div>'
+      'One tabbable element in the <div tabindex="0">calendarFooter</div> slot'
 
     wrapper = mount(Datepicker, {
       slots: {
@@ -185,6 +185,16 @@ describe('Datepicker mounted with slots', () => {
     await input.trigger('click')
 
     expect(wrapper.vm.navElements.length).toEqual(8)
+
+    let upButton = wrapper.find('button.vdp-datepicker__up')
+    await upButton.trigger('click')
+
+    expect(wrapper.vm.navElements.length).toEqual(10)
+
+    upButton = wrapper.find('button.vdp-datepicker__up')
+    await upButton.trigger('click')
+
+    expect(wrapper.vm.navElements.length).toEqual(7)
   })
 })
 
