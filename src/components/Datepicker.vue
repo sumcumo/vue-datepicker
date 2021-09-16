@@ -454,9 +454,10 @@ export default {
       const date = new Date(timestamp)
 
       if (this.preserveTime) {
-        date.setHours(this.selectedDate.getHours())
-        date.setMinutes(this.selectedDate.getMinutes())
-        date.setSeconds(this.selectedDate.getSeconds())
+        const previousTime = this.selectedDate || new Date()
+        date.setHours(previousTime.getHours())
+        date.setMinutes(previousTime.getMinutes())
+        date.setSeconds(previousTime.getSeconds())
       }
       this.selectedDate = date
       this.setPageDate(date)
