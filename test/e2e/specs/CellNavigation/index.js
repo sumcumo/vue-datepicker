@@ -36,8 +36,17 @@ describe('Focusable Cell', () => {
     })
   })
 
-  describe('@id-2: Arrow {string} to {string} page (isRtl: {string})', () => {
-    Given('the calendar is open on {string} and isRtl is {string}')
+  describe('@id-2: Arrow {string} to {string} page', () => {
+    Given('the calendar is open on {string}', (openDate) => {
+      createCalendar({
+        openDate,
+      })
+
+      clickThe('input')
+
+      the('picker-cells').should('have.length', 1)
+      the('calendar').should('be.visible')
+    })
 
     When('the user presses the {string} arrow')
 
