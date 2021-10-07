@@ -166,10 +166,10 @@ export default {
     },
     /**
      * Returns the element that should be focused when navigating via an arrow key
-     * @param  {HTMLElement} currentElement  The element currently being iterated on
-     * @param  {Number}      delta           The number of cells that the focus should move
-     * @param  {Number}      stepsRemaining  The number of steps remaining in the iteration
-     * @return {HTMLElement}
+     * @param  {HTMLButtonElement} currentElement  The element currently being iterated on
+     * @param  {Number}            delta           The number of cells that the focus should move
+     * @param  {Number}            stepsRemaining  The number of steps remaining in the iteration
+     * @return {HTMLButtonElement | void}
      */
     getElement({ currentElement, delta, stepsRemaining }) {
       const element = this.getElementSibling(currentElement, delta)
@@ -197,9 +197,9 @@ export default {
     },
     /**
      * Returns the element directly next to the currentElement
-     * @param  {HTMLElement} currentElement  The element currently being iterated on
-     * @param  {Number}      delta           The number of cells that the focus should move
-     * @return {HTMLElement}
+     * @param  {HTMLButtonElement} currentElement The element currently being iterated on
+     * @param  {Number}            delta          The number of cells that the focus should move
+     * @return {HTMLButtonElement}
      */
     getElementSibling(currentElement, delta) {
       const isNext = delta > 0
@@ -211,7 +211,7 @@ export default {
     /**
      * Returns the first or last cell, depending on the direction of the search
      * @param  {Number} delta The number of cells that the focus should move
-     * @return {HTMLElement}
+     * @return {HTMLButtonElement}
      */
     getFirstOrLastElement(delta) {
       const isNext = delta > 0
@@ -250,7 +250,7 @@ export default {
     },
     /**
      * Returns true if the given element cannot be focused
-     * @param {HTMLElement} element The element in question
+     * @param {HTMLButtonElement} element The element in question
      * @return {Boolean}
      */
     isMutedOrDisabled(element) {
