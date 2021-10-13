@@ -59,7 +59,7 @@
           @mousedown.prevent
         >
           <Transition name="view">
-            <div :key="view">
+            <div :key="currentView">
               <slot name="beforeCalendarHeader" />
               <Component
                 :is="picker"
@@ -78,7 +78,7 @@
                 :transition-name="transitionName"
                 :translation="translation"
                 :use-utc="useUtc"
-                :view="view || computedInitialView"
+                :view="currentView"
                 :year-range="yearPickerRange"
                 @page-change="handlePageChange"
                 @select="handleSelect"
@@ -247,6 +247,9 @@ export default {
     computedInitialView() {
       return this.initialView || this.minimumView
     },
+    currentView() {
+      return this.view || this.computedInitialView
+    },
     isInline() {
       return !!this.inline
     },
@@ -287,7 +290,7 @@ export default {
       return new Date(this.pageTimestamp)
     },
     picker() {
-      const view = this.view || this.computedInitialView
+      const view = this.currentView
       return `Picker${this.ucFirst(view)}`
     },
     pickerClasses() {
