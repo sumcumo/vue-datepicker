@@ -59,7 +59,7 @@
           @mousedown.prevent
         >
           <Transition name="view">
-            <div :key="view">
+            <div :key="currentView">
               <slot name="beforeCalendarHeader" />
               <Component
                 :is="picker"
@@ -78,7 +78,7 @@
                 :transition-name="transitionName"
                 :translation="translation"
                 :use-utc="useUtc"
-                :view="view || computedInitialView"
+                :view="currentView"
                 :year-range="yearPickerRange"
                 @page-change="handlePageChange"
                 @select="handleSelect"
@@ -214,6 +214,10 @@ export default {
       type: Number,
       default: 10,
     },
+    preserveTime: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     const utils = makeDateUtils(this.useUtc)
@@ -242,6 +246,9 @@ export default {
   computed: {
     computedInitialView() {
       return this.initialView || this.minimumView
+    },
+    currentView() {
+      return this.view || this.computedInitialView
     },
     isInline() {
       return !!this.inline
@@ -283,7 +290,7 @@ export default {
       return new Date(this.pageTimestamp)
     },
     picker() {
-      const view = this.view || this.computedInitialView
+      const view = this.currentView
       return `Picker${this.ucFirst(view)}`
     },
     pickerClasses() {
@@ -448,6 +455,13 @@ export default {
      */
     selectDate(timestamp) {
       const date = new Date(timestamp)
+
+      if (this.preserveTime) {
+        const previousTime = this.selectedDate || new Date()
+        date.setHours(previousTime.getHours())
+        date.setMinutes(previousTime.getMinutes())
+        date.setSeconds(previousTime.getSeconds())
+      }
       this.selectedDate = date
       this.setPageDate(date)
       this.$emit('selected', date)

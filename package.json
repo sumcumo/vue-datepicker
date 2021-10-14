@@ -1,6 +1,6 @@
 {
-  "name": "@sum.cumo/vue-datepicker",
-  "version": "3.2.3",
+  "name": "@startinfinity/vue-datepicker",
+  "version": "3.2.6",
   "description": "A simple Vue.js datepicker component. Supports disabling of dates, inline mode, translations",
   "license": "Apache-2.0",
   "homepage": "https://github.com/sumcumo/vue-datepicker",

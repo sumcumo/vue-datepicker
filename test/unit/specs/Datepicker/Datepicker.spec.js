@@ -184,6 +184,50 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapper.emitted('selected')).toBeTruthy()
   })
 
+  it('can select a day preserving time', () => {
+    const selected = new Date(2021, 7, 1, 15, 12, 36)
+
+    wrapper.setProps({
+      preserveTime: true,
+    })
+
+    wrapper.vm.setValue(selected)
+
+    const dateTemp = new Date(2016, 9, 1)
+    wrapper.vm.handleSelect({ timestamp: dateTemp.valueOf() })
+
+    const [selectedEvents] = wrapper.emitted('selected')
+    const output = selectedEvents[0]
+
+    expect(output.getHours()).toEqual(selected.getHours())
+    expect(output.getMinutes()).toEqual(selected.getMinutes())
+    expect(output.getSeconds()).toEqual(selected.getSeconds())
+
+    expect(output.getDate()).toEqual(dateTemp.getDate())
+    expect(output.getMonth()).toEqual(dateTemp.getMonth())
+    expect(output.getFullYear()).toEqual(dateTemp.getFullYear())
+  })
+
+  it('should use current time when previous is not present', () => {
+    wrapper.setProps({
+      preserveTime: true,
+    })
+
+    const dateTemp = new Date(2016, 9, 1)
+    wrapper.vm.handleSelect({ timestamp: dateTemp.valueOf() })
+
+    const [selectedEvents] = wrapper.emitted('selected')
+    const output = selectedEvents[0]
+
+    expect(output.getHours()).toEqual(dateTemp.getHours())
+    expect(output.getMinutes()).toEqual(dateTemp.getMinutes())
+    expect(output.getSeconds()).toEqual(dateTemp.getSeconds())
+
+    expect(output.getDate()).toEqual(dateTemp.getDate())
+    expect(output.getMonth()).toEqual(dateTemp.getMonth())
+    expect(output.getFullYear()).toEqual(dateTemp.getFullYear())
+  })
+
   it('can select a month', () => {
     const dateTemp = new Date(2016, 9, 9)
     wrapper.vm.setView('month')
