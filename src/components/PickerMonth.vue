@@ -93,10 +93,7 @@ export default {
           month: this.utils.getMonthName(i, this.translation.months),
           timestamp: dObj.valueOf(),
           isDisabled: this.isDisabledMonth(dObj),
-          isOpenDate:
-            this.isMinimumView &&
-            this.openDate &&
-            this.utils.compareDates(dObj, this.openDate),
+          isOpenDate: this.isOpenMonth(dObj),
           isSelected: this.isSelectedMonth(dObj),
           isToday: this.utils.compareDates(dObj, todayMonth),
         })
@@ -144,6 +141,22 @@ export default {
       return new DisabledDate(this.utils, this.disabledDates).isMonthDisabled(
         date,
       )
+    },
+    /**
+     * Should the calendar open on this month?
+     * @return {Boolean}
+     */
+    isOpenMonth(date) {
+      if (!this.openDate) {
+        return false
+      }
+
+      const openDateMonth = this.utils.getMonth(this.openDate)
+      const openDateYear = this.utils.getFullYear(this.openDate)
+      const thisDateMonth = this.utils.getMonth(date)
+      const thisDateYear = this.utils.getFullYear(date)
+
+      return openDateMonth === thisDateMonth && openDateYear === thisDateYear
     },
     /**
      * Whether the selected date is in this month

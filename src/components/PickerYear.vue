@@ -99,10 +99,7 @@ export default {
           year: this.utils.getFullYear(dObj),
           timestamp: dObj.valueOf(),
           isDisabled: this.isDisabledYear(dObj),
-          isOpenDate:
-            this.isMinimumView &&
-            this.openDate &&
-            this.utils.compareDates(dObj, this.openDate),
+          isOpenDate: this.isOpenYear(dObj),
           isSelected: this.isSelectedYear(dObj),
           isToday: this.utils.compareDates(dObj, todayYear),
         })
@@ -173,6 +170,20 @@ export default {
       return new DisabledDate(this.utils, this.disabledDates).isYearDisabled(
         date,
       )
+    },
+    /**
+     * Should the calendar open on this year?
+     * @return {Boolean}
+     */
+    isOpenYear(date) {
+      if (!this.openDate) {
+        return false
+      }
+
+      const openDateYear = this.utils.getFullYear(this.openDate)
+      const thisDateYear = this.utils.getFullYear(date)
+
+      return openDateYear === thisDateYear
     },
     /**
      * Whether the selected date is in this year
