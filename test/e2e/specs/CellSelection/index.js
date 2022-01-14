@@ -36,13 +36,10 @@ describe('Focusable Cell', () => {
     Given('the calendar is open on a higher than minimum view', () => {
       createCalendar({
         openDate: new Date(2020, 2, 15),
+        initialView: 'month',
       })
 
       clickThe('input')
-      the('picker-cells').should('have.length', 1)
-      the('calendar').should('be.visible')
-
-      clickThe('up-button')
       the('picker-cells').should('have.length', 1)
       the('calendar').should('be.visible')
     })
@@ -51,7 +48,7 @@ describe('Focusable Cell', () => {
 
     Then('the `day` view is shown', () => {
       the('picker-cells').should('have.length', 1)
-      the('up-button').should('contain', 'Jan 2020')
+      the('up-button').should('contain', 'Mar 2020')
     })
 
     And('the tabbable cell has focus', () => {
