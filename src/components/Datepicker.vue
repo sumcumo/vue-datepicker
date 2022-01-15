@@ -4,7 +4,8 @@
     ref="datepicker"
     class="vdp-datepicker"
     :class="[wrapperClass, { rtl: isRtl }]"
-    @focusin="handleFocusChange($event)"
+    @focusin="handleFocusIn($event)"
+    @focusout="handleFocusOut($event)"
     @keydown.esc="clearDate"
     @keydown.tab="tabThroughNavigation($event)"
   >

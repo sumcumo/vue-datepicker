@@ -7,6 +7,7 @@ export default {
         delay: 0,
         refs: [],
       },
+      isActive: false,
       isRevertingToOpenDate: false,
       navElements: [],
       navElementsFocusedIndex: 0,
@@ -176,15 +177,19 @@ export default {
     /**
      * Sets `datepickerId` (as a global) and keeps track of focusable elements
      */
-    handleFocusChange() {
+    handleFocusIn() {
       document.datepickerId = this.datepickerId
+
+      this.isActive = true
 
       this.setAllElements()
       this.setNavElements()
-
-      if (this.inline) {
-        this.setTabbableCell()
-      }
+    },
+    /**
+     * Sets the datepicker's `isActive` state to false
+     */
+    handleFocusOut() {
+      this.isActive = false
     },
     /**
      * Returns true if the user has arrowed to a new page
