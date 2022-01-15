@@ -343,6 +343,12 @@ export default {
         this.setInitialView()
       }
     },
+    isActive(hasJustBecomeActive) {
+      if (hasJustBecomeActive && this.inline) {
+        this.setNavElementsFocusedIndex()
+        this.tabToCorrectInlineCell()
+      }
+    },
     openDate() {
       this.setPageDate()
     },

@@ -324,6 +324,14 @@ describe('Datepicker mounted to body', () => {
 
     expect(document.activeElement).toBe(document.body)
   })
+
+  it('tabs away from a closed calendar', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('keydown.tab')
+
+    expect(document.activeElement).toBe(document.body)
+  })
 })
 
 describe('Datepicker mounted to body with openDate', () => {
