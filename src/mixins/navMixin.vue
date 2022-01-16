@@ -18,11 +18,6 @@ export default {
     }
   },
   computed: {
-    tabbableCellId() {
-      return (
-        this.tabbableCell && Number(this.tabbableCell.getAttribute('data-id'))
-      )
-    },
     fallbackElementsToFocus() {
       const elements = ['tabbableCell', 'prev', 'next']
 
@@ -45,6 +40,11 @@ export default {
 
       const fullYear = this.utils.getFullYear(pageDate) - 1
       return this.utils.setFullYear(pageDate, fullYear + this.tabbableCellId)
+    },
+    tabbableCellId() {
+      return (
+        this.tabbableCell && Number(this.tabbableCell.getAttribute('data-id'))
+      )
     },
   },
   methods: {
@@ -103,14 +103,6 @@ export default {
       }
 
       return null
-    },
-    /**
-     * Returns true if the calendar has been passed the given slot
-     * @param  {String} slotName The name of the slot
-     * @return {Boolean}
-     */
-    hasSlot(slotName) {
-      return !!this.$slots[slotName]
     },
     /**
      * Finds an element by its `ref` attribute
@@ -236,6 +228,14 @@ export default {
      */
     hasArrowedToNewPage() {
       return this.focus.refs && this.focus.refs[0] === 'arrow-to-cell'
+    },
+    /**
+     * Returns true if the calendar has been passed the given slot
+     * @param  {String} slotName The name of the slot
+     * @return {Boolean}
+     */
+    hasSlot(slotName) {
+      return !!this.$slots[slotName]
     },
     /**
      * Returns true if the user is tabbing away from an inline datepicker
