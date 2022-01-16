@@ -144,6 +144,17 @@ export default {
       return null
     },
     /**
+     * Returns an array of all HTML elements which should be focus-trapped in the calendarFooter slot
+     * @returns {Array}   An array of HTML elements
+     */
+    getElementsFromCalendarFooter() {
+      const footerSlotIndex = this.hasSlot('beforeCalendarHeader') ? 2 : 1
+
+      return this.getFocusableElements(
+        this.$refs.view.children[footerSlotIndex],
+      )
+    },
+    /**
      * Returns an array of all HTML elements which should be focus-trapped in the specified slot
      * @returns {Array}   An array of HTML elements
      */
@@ -157,7 +168,7 @@ export default {
       }
 
       if (slotName === 'calendarFooter') {
-        return this.getFocusableElements(this.$refs.view.children[2])
+        return this.getElementsFromCalendarFooter()
       }
 
       const isBeforeHeader = slotName.indexOf('beforeCalendarHeader') > -1
