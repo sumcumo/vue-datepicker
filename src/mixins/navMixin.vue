@@ -197,7 +197,7 @@ export default {
      */
     getFocusableElements(fragment) {
       const navNodeList = fragment.querySelectorAll(
-        'button:enabled, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        'button:enabled, [href], input:not([type=hidden]), select:enabled, textarea:enabled, [tabindex]:not([tabindex="-1"])',
       )
 
       return [...Array.prototype.slice.call(navNodeList)]
