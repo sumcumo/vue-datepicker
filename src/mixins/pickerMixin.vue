@@ -94,6 +94,18 @@ export default {
     disabledConfig() {
       return new DisabledDate(this.utils, this.disabledDates).config
     },
+    earliestPossibleDate() {
+      return new DisabledDate(
+        this.utils,
+        this.disabledDates,
+      ).getEarliestPossibleDate(this.disabledDates.to)
+    },
+    latestPossibleDate() {
+      return new DisabledDate(
+        this.utils,
+        this.disabledDates,
+      ).getLatestPossibleDate(this.disabledDates.from)
+    },
     /**
      * Returns the current page's full year as an integer.
      * @return {Number}
@@ -171,6 +183,7 @@ export default {
      * @param  {Number}            stepsRemaining  The number of steps remaining in the iteration
      * @return {HTMLButtonElement | void}
      */
+    // eslint-disable-next-line complexity,max-statements
     getElement({ currentElement, delta, stepsRemaining }) {
       const element = this.getElementSibling(currentElement, delta)
       const options = {
@@ -181,6 +194,10 @@ export default {
 
       if (!element) {
         return this.changePageAndSetFocus(options)
+      }
+
+      if (this.isBeyondPossibleDate(options)) {
+        return this.firstOrLastPossibleDate(options)
       }
 
       if (this.isMutedOrDisabled(element)) {
@@ -220,6 +237,18 @@ export default {
       return isNext ? elements[0] : elements[elements.length - 1]
     },
     /**
+     * Returns the first or last non-disabled date, depending on the direction of the search
+     * @param  {HTMLButtonElement} currentElement  The element currently being iterated on
+     * @param  {Number}            delta           The number of cells that the focus should move
+     */
+    firstOrLastPossibleDate({ currentElement, delta }) {
+      if (delta > 0) {
+        return this.getElementSibling(currentElement, -1)
+      }
+
+      return this.getElementSibling(currentElement, 1)
+    },
+    /**
      * Moves the focused cell up/down/left/right
      * @param {Object}
      */
@@ -250,7 +279,40 @@ export default {
     },
     /**
      * Returns true if the given element cannot be focused
-     * @param {HTMLButtonElement} element The element in question
+     * @param  {HTMLButtonElement} currentElement  The element currently being iterated on
+     * @param  {Number}            delta           The number of cells that the focus should move
+     * @return {Boolean}
+     */
+    isBeyondPossibleDate({ currentElement, delta }) {
+      if (delta > 0 && this.latestPossibleDate) {
+        return this.isDatePossible(currentElement, delta)
+      }
+
+      if (delta < 0 && this.earliestPossibleDate) {
+        return this.isDatePossible(currentElement, delta)
+      }
+
+      return false
+    },
+    /**
+     * Returns true if the current element's date is NOT possible, given the `disabled-dates`
+     * @param  {HTMLButtonElement} element The element in question
+     * @param  {Number}            delta   Used to determine direction of travel
+     * @return {Boolean}
+     */
+    isDatePossible(element, delta) {
+      const cellId = element.getAttribute('data-id')
+      const cellDate = new Date(this.cells[cellId].timestamp)
+
+      if (delta > 0) {
+        return cellDate > this.latestPossibleDate
+      }
+
+      return cellDate < this.earliestPossibleDate
+    },
+    /**
+     * Returns true if the given element cannot be focused
+     * @param  {HTMLButtonElement} element The element in question
      * @return {Boolean}
      */
     isMutedOrDisabled(element) {
