@@ -48,7 +48,7 @@
       @keydown.enter.prevent="handleKeydownEnter"
       @keydown.esc.prevent="clearDate"
       @keydown.space="handleKeydownSpace($event)"
-      @keyup="handleKeyup"
+      @keyup="handleKeyup($event)"
       @keyup.space="handleKeyupSpace($event)"
     />
     <!-- Clear Button -->
@@ -274,8 +274,22 @@ export default {
     },
     /**
      * Parses a typed date and submits it, if valid
+     * @param  {object}  event Used to exclude certain keystrokes
      */
-    handleKeyup() {
+    handleKeyup(event) {
+      if (
+        [
+          'Shift',
+          'Tab',
+          'ArrowUp',
+          'ArrowDown',
+          'ArrowLeft',
+          'ArrowRight',
+        ].includes(event.key)
+      ) {
+        return
+      }
+
       if (this.input.value === '') {
         this.$emit('typed-date', null)
         return
