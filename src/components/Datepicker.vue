@@ -67,6 +67,10 @@
           :class="pickerClasses"
           data-test-calendar
           @mousedown.prevent
+          @focusin.stop="handleFocusIn($event)"
+          @focusout.stop="handleFocusOut($event)"
+          @keydown.esc.stop="clearDate"
+          @keydown.tab.stop="tabThroughNavigation($event)"
         >
           <Transition name="view">
             <div ref="view" :key="view">

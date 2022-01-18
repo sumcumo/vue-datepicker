@@ -363,6 +363,12 @@ export default {
      */
     setAllElements() {
       this.allElements = this.getFocusableElements(this.$refs.datepicker)
+
+      if (this.appendToBody) {
+        this.allElements = this.allElements.concat(
+          this.getFocusableElements(this.$refs.popup.$el),
+        )
+      }
     },
     /**
      * Set the focus
