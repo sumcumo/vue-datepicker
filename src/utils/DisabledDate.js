@@ -213,4 +213,42 @@ export default class DisabledDate {
 
     return true
   }
+
+  getEarliestPossibleDate(date) {
+    if (!date) {
+      return null
+    }
+    const utils = this._utils
+
+    if (this.isDateDisabled(date)) {
+      const nextDate = new Date(
+        utils.getFullYear(date),
+        utils.getMonth(date),
+        utils.getDate(date) + 1,
+      )
+
+      return this.getEarliestPossibleDate(nextDate)
+    }
+
+    return date
+  }
+
+  getLatestPossibleDate(date) {
+    if (!date) {
+      return null
+    }
+    const utils = this._utils
+
+    if (this.isDateDisabled(date)) {
+      const nextDate = new Date(
+        utils.getFullYear(date),
+        utils.getMonth(date),
+        utils.getDate(date) - 1,
+      )
+
+      return this.getLatestPossibleDate(nextDate)
+    }
+
+    return date
+  }
 }

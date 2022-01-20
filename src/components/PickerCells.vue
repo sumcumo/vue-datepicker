@@ -1,13 +1,24 @@
 <template>
-  <div class="picker-cells">
-    <span
-      v-for="cell in cells"
+  <div class="picker-cells" data-test-picker-cells>
+    <button
+      v-for="(cell, id) in cells"
       :key="cell.timestamp"
+      :ref="cell.isOpenDate ? 'openDate' : null"
       :class="cellClasses(cell)"
+      :data-id="id"
+      :data-test-tabbable-cell="id === tabbableCellId"
+      :data-test-open-date="cell.isOpenDate"
+      :data-test-today-cell="cell.isToday"
+      :disabled="cell.isDisabled"
+      type="button"
       @click="$emit('select', cell)"
+      @keydown.up.prevent="handleArrow(id, -columns)"
+      @keydown.down.prevent="handleArrow(id, columns)"
+      @keydown.left.prevent="handleArrow(id, isRtl ? 1 : -1)"
+      @keydown.right.prevent="handleArrow(id, isRtl ? -1 : 1)"
     >
       <slot :cell="cell" />
-    </span>
+    </button>
   </div>
 </template>
 
@@ -15,18 +26,39 @@
 export default {
   name: 'PickerCells',
   props: {
+    bootstrapStyling: {
+      type: Boolean,
+      default: false,
+    },
     cells: {
       type: Array,
       required: true,
+    },
+    isRtl: {
+      type: Boolean,
+      default: false,
     },
     showEdgeDates: {
       type: Boolean,
       default: true,
     },
+    tabbableCellId: {
+      type: Number,
+      default: null,
+    },
     view: {
       type: String,
       validator: (val) => ['day', 'month', 'year'].includes(val),
       required: true,
+    },
+  },
+  computed: {
+    /**
+     * The number of columns in the picker
+     * @return {Number}
+     */
+    columns() {
+      return this.view === 'day' ? 7 : 3
     },
   },
   methods: {
@@ -40,11 +72,13 @@ export default {
         'cell',
         this.view,
         {
+          'btn': this.bootstrapStyling,
           'disabled': cell.isDisabled,
           'highlight-start': cell.isHighlightStart,
           'highlight-end': cell.isHighlightEnd,
           'highlighted': cell.isHighlighted,
           'muted': cell.isPreviousMonth || cell.isNextMonth,
+          'open': cell.isOpenDate,
           'sat': cell.isSaturday,
           'sun': cell.isSunday,
           'selected': this.showEdgeDates
@@ -56,6 +90,12 @@ export default {
           'weekend': cell.isWeekend,
         },
       ]
+    },
+    /**
+     * Emits an `arrow` event
+     */
+    handleArrow(cellId, delta) {
+      this.$emit('arrow', { cellId, delta })
     },
   },
 }

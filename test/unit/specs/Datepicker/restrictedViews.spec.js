@@ -62,12 +62,12 @@ describe('Datepicker with restricted views', () => {
     expect(wrapper.vm.allowedToShowView('month')).toEqual(true)
     expect(wrapper.vm.picker).toBe('PickerDay')
 
-    let upButton = wrapper.find('.day__month_btn')
+    let upButton = wrapper.find('.vdp-datepicker__up')
     await upButton.trigger('click')
     expect(wrapper.vm.picker).toBe('PickerMonth')
 
-    upButton = wrapper.find('.month__year_btn')
-    expect(upButton.element.tabIndex).toBe(-1)
+    upButton = wrapper.find('.vdp-datepicker__up')
+    expect(upButton.element.disabled).toBe(true)
 
     await wrapper.setProps({
       minimumView: 'month',

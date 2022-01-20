@@ -84,6 +84,40 @@ describe('DateInput', () => {
     expect(wrapper.emitted('open')).toBeFalsy()
   })
 
+  it('closes calendar via button and reopens via focus when `show-calendar-on-focus` is true', async () => {
+    await wrapper.setProps({
+      calendarButton: true,
+      showCalendarOnFocus: true,
+    })
+
+    const input = wrapper.find('input')
+    const calendarButton = wrapper.find('button[data-test-calendar-button]')
+
+    await input.trigger('focus')
+    expect(wrapper.emitted('open')).toBeTruthy()
+
+    await input.trigger('blur')
+    await calendarButton.trigger('focus')
+    await calendarButton.trigger('click')
+    expect(wrapper.emitted('close')).toBeFalsy()
+
+    await input.trigger('focus')
+    expect(wrapper.emitted('open')).toBeTruthy()
+  })
+
+  it('opens calendar on click when `show-calendar-on-focus` is true', async () => {
+    await wrapper.setProps({
+      showCalendarOnFocus: true,
+    })
+
+    const input = wrapper.find('input')
+
+    expect(wrapper.vm.isOpen).toBeFalsy()
+    await input.trigger('focus')
+    await input.trigger('click')
+    expect(wrapper.emitted('open')).toBeTruthy()
+  })
+
   it('adds bootstrap classes', async () => {
     await wrapper.setProps({
       bootstrapStyling: true,
@@ -126,23 +160,24 @@ describe('DateInput', () => {
     expect(wrapper.find('input').element.value).toEqual('!')
   })
 
-  it('emits close on blur', async () => {
+  it('emits `clear-date` when escape is pressed', async () => {
     const input = wrapper.find('input')
-    await input.trigger('blur')
+    await input.trigger('keydown.esc')
 
-    expect(wrapper.emitted('close')).toBeTruthy()
-  })
-
-  it('emits close when escape is pressed', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('keydown.escape')
-
-    expect(wrapper.emitted('close')).toBeTruthy()
+    expect(wrapper.emitted('clear-date')).toBeTruthy()
   })
 
   it('opens the calendar on click', async () => {
     const input = wrapper.find('input')
     await input.trigger('click')
+
+    expect(wrapper.emitted('open')).toBeTruthy()
+  })
+
+  it('opens the calendar when the space bar is pressed on the input field', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('keydown.space')
+    await input.trigger('keyup.space')
 
     expect(wrapper.emitted('open')).toBeTruthy()
   })
@@ -171,7 +206,7 @@ describe('DateInput', () => {
 
     expect(wrapper.emitted('open')).toBeFalsy()
 
-    const calendarButton = wrapper.find('.vdp-datepicker__calendar-button')
+    const calendarButton = wrapper.find('button[data-test-calendar-button]')
     await calendarButton.trigger('click')
 
     expect(wrapper.emitted('open')).toBeTruthy()

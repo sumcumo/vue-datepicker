@@ -1,22 +1,32 @@
 <template>
   <div>
-    <slot name="beforeCalendarHeaderDay" />
+    <div v-if="$slots.beforeCalendarHeaderDay">
+      <slot name="beforeCalendarHeaderDay" />
+    </div>
 
     <PickerHeader
       v-if="showHeader"
+      ref="pickerHeader"
+      :bootstrap-styling="bootstrapStyling"
       :is-next-disabled="isNextDisabled"
       :is-previous-disabled="isPreviousDisabled"
       :is-rtl="isRtl"
+      @focus-input="focusInput"
       @page-change="changePage($event)"
+      @set-focus="$emit('set-focus', $event)"
     >
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
-      <span
-        :class="{ up: !isUpDisabled }"
-        class="day__month_btn"
-        @click="$emit('set-view', 'month')"
+      <UpButton
+        ref="up"
+        :class="{ btn: bootstrapStyling }"
+        :is-disabled="isUpDisabled"
+        :is-rtl="isRtl"
+        @focus-input="focusInput"
+        @select="$emit('set-view', 'month')"
+        @set-focus="$emit('set-focus', $event)"
       >
         {{ pageTitleDay }}
-      </span>
+      </UpButton>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
     </PickerHeader>
 
@@ -33,9 +43,13 @@
             ref="cells"
             :key="pageTitleDay"
             v-slot="{ cell }"
+            :bootstrap-styling="bootstrapStyling"
             :cells="cells"
+            :is-rtl="isRtl"
             :show-edge-dates="showEdgeDates"
+            :tabbable-cell-id="tabbableCellId"
             view="day"
+            @arrow="handleArrow($event)"
             @select="select($event)"
           >
             <slot name="dayCellContent" :cell="cell">
@@ -46,7 +60,9 @@
       </div>
     </div>
 
-    <slot name="calendarFooterDay" />
+    <div v-if="$slots.calendarFooterDay">
+      <slot name="calendarFooterDay" />
+    </div>
   </div>
 </template>
 
@@ -55,10 +71,11 @@ import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
 import HighlightedDate from '~/utils/HighlightedDate'
 import PickerCells from './PickerCells.vue'
+import UpButton from './UpButton.vue'
 
 export default {
   name: 'PickerDay',
-  components: { PickerCells },
+  components: { PickerCells, UpButton },
   mixins: [pickerMixin],
   props: {
     dayCellContent: {
@@ -331,6 +348,8 @@ export default {
         isHighlighted: this.isHighlightedDate(dObj),
         isHighlightStart: this.isHighlightStart(dObj),
         isHighlightEnd: this.isHighlightEnd(dObj),
+        isOpenDate:
+          this.openDate && this.utils.compareDates(dObj, this.openDate),
         isToday: this.utils.compareDates(dObj, new Date()),
         isWeekend: isSaturday || isSunday,
         isSaturday,

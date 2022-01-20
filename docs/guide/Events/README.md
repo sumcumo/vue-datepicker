@@ -12,6 +12,5 @@ These events are emitted on actions in the datepicker
 | input             | Date\|null | Input value has been modified     |
 | opened            |            | The picker has been opened        |
 | selected          | Date\|null | A date has been selected          |
-| selected-disabled | Object     | A disabled date has been selected |
 | blur              |            | Input blur event                  |
 | focus             |            | Input focus event                 |

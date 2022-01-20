@@ -36,12 +36,4 @@ describe('pickerMixin', () => {
   it('mounts', () => {
     expect(wrapper.vm).toBeTruthy()
   })
-
-  it('uses `isNextDisabled` correctly', () => {
-    expect(wrapper.vm.isNextDisabled).toBeFalsy()
-  })
-
-  it('uses `isPreviousDisabled` correctly', () => {
-    expect(wrapper.vm.isPreviousDisabled).toBeFalsy()
-  })
 })

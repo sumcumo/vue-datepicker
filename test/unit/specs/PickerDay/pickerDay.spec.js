@@ -29,13 +29,13 @@ describe('PickerDay', () => {
   })
 
   it('can set the next month', () => {
-    wrapper.vm.changePage(1)
-    expect(wrapper.emitted('page-change')[0][0].getMonth()).toEqual(2)
+    wrapper.vm.changePage({ incrementBy: 1, focusRefs: ['next'] })
+    expect(wrapper.emitted('page-change')[0][0].pageDate.getMonth()).toEqual(2)
   })
 
   it('can set the previous month', () => {
-    wrapper.vm.changePage(-1)
-    expect(wrapper.emitted('page-change')[0][0].getMonth()).toEqual(0)
+    wrapper.vm.changePage({ incrementBy: -1, focusRefs: ['prev'] })
+    expect(wrapper.emitted('page-change')[0][0].pageDate.getMonth()).toEqual(0)
   })
 
   it('emits an event when selected', () => {
@@ -64,13 +64,13 @@ describe('PickerDay', () => {
   })
 
   it('emits set-view event with `month` when the up button is clicked', async () => {
-    const upButton = wrapper.find('.day__month_btn')
+    const upButton = wrapper.find('.vdp-datepicker__up')
     await upButton.trigger('click')
     expect(wrapper.emitted('set-view')[0][0]).toBe('month')
   })
 
   it('displays edge dates by default', () => {
-    const cells = wrapper.findAll('.day')
+    const cells = wrapper.findAll('button.cell')
     const firstCell = cells.at(0)
     const lastCell = cells.at(34)
 
@@ -83,7 +83,7 @@ describe('PickerDay', () => {
       showEdgeDates: false,
     })
 
-    const cells = wrapper.findAll('.day')
+    const cells = wrapper.findAll('button.cell')
     const firstCell = cells.at(0)
     const lastCell = cells.at(34)
 
@@ -92,7 +92,7 @@ describe('PickerDay', () => {
   })
 
   it('selects an edge date from the previous month', async () => {
-    const cells = wrapper.findAll('.day')
+    const cells = wrapper.findAll('button.cell')
     const firstCell = cells.at(0)
 
     await firstCell.trigger('click')
@@ -101,7 +101,7 @@ describe('PickerDay', () => {
   })
 
   it('selects an edge date from the next month', async () => {
-    const cells = wrapper.findAll('.day')
+    const cells = wrapper.findAll('button.cell')
     const lastCell = cells.at(34)
 
     await lastCell.trigger('click')
