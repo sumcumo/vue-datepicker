@@ -271,10 +271,10 @@ export default {
       return this.initialView || this.minimumView
     },
     computedOpenDate() {
-      // If `openDate` is not set, open on today's date
-      const openDate = this.openDate
+      const openDateOrToday = this.openDate
         ? new Date(this.openDate)
         : this.utils.getNewDateObject()
+      const openDate = this.selectedDate || openDateOrToday
 
       // If the `minimum-view` is `month` or `year`, convert `openDate` accordingly
       return this.minimumView === 'day'
@@ -627,8 +627,8 @@ export default {
     setPageDate(date) {
       let dateTemp = date
       if (!dateTemp) {
-        if (this.openDate) {
-          dateTemp = new Date(this.openDate)
+        if (this.computedOpenDate) {
+          dateTemp = new Date(this.computedOpenDate)
         } else {
           dateTemp = new Date()
         }
@@ -654,8 +654,8 @@ export default {
      */
     setValue(date) {
       if (!date) {
-        this.setPageDate()
         this.selectedDate = null
+        this.setPageDate()
         return
       }
       this.selectedDate = date

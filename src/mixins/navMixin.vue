@@ -305,7 +305,6 @@ export default {
 
       this.setTabbableCell()
       this.reviewFocus()
-      this.selectedDate = null
       this.setPageDate()
     },
     /**
