@@ -296,6 +296,7 @@ export default {
      */
     handleKeyup(event) {
       if (
+        !this.typeable ||
         [
           'Shift',
           'Tab',
