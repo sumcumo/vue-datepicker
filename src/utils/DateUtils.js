@@ -197,7 +197,7 @@ const utils = {
    */
   getMonthNameAbbr(month, monthsAbbr) {
     if (!monthsAbbr) {
-      throw Error('missing 2nd paramter Months array')
+      throw Error('missing 2nd parameter Months array')
     }
     if (typeof month === 'object') {
       return monthsAbbr[this.getMonth(month)]
@@ -216,7 +216,7 @@ const utils = {
    */
   // eslint-disable-next-line complexity
   daysInMonth(year, month) {
-    if (/8|3|5|10/.test(month)) {
+    if (/8|3|5|10/.test(month.toString())) {
       return 30
     }
     if (month === 1) {
@@ -273,7 +273,7 @@ const utils = {
       E: this.getDayNameAbbr(date, translation.days),
     }
 
-    const REGEX_FORMAT = /y{4}|y{2}|M{1,4}(?![aäe])|d{1,2}|o{1}|E{1}(?![eéi])/g
+    const REGEX_FORMAT = /y{4}|y{2}|M{1,4}(?![aäe])|d{1,2}|o|E(?![eéi])/g
     return formatStr.replace(REGEX_FORMAT, (match) => matches[match] || match)
   },
 
@@ -351,7 +351,9 @@ const utils = {
   },
 
   /**
-   * Return a new date object with hours/minutes/seconds/milliseconds removed
+   * Return a new date object with hours/minutes/seconds/milliseconds removed.
+   * Defaults to today's date, if no parameter is provided
+   * @param {Date=} date
    * @return {Date}
    */
   getNewDateObject(date) {
