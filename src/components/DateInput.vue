@@ -44,6 +44,8 @@
       @blur="handleInputBlur"
       @click="handleInputClick"
       @focus="handleInputFocus"
+      @keydown.backspace="handleDelete"
+      @keydown.delete="handleDelete"
       @keydown.down.prevent="handleKeydownDown"
       @keydown.enter.prevent="handleKeydownEnter"
       @keydown.esc.prevent="handleKeydownEscape"
@@ -204,6 +206,14 @@ export default {
     handleButtonFocus() {
       if (this.showCalendarOnFocus) {
         this.shouldToggleOnFocus = true
+      }
+    },
+    /**
+     * Clears the calendar when the `delete` or `backspace` key is pressed
+     */
+    handleDelete() {
+      if (!this.typeable && this.selectedDate) {
+        this.clearDate()
       }
     },
     /**

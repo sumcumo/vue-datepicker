@@ -389,9 +389,14 @@ export default {
      * Clear the selected date
      */
     clearDate() {
+      if (!this.selectedDate) {
+        return
+      }
+
       this.selectedDate = null
       this.focus.refs = ['input']
       this.close()
+      this.setPageDate()
 
       this.$emit('selected', null)
       this.$emit('input', null)

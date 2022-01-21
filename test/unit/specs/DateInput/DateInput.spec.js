@@ -215,4 +215,18 @@ describe('DateInput', () => {
 
     expect(wrapper.emitted('open')).toBeTruthy()
   })
+
+  it('emits `clear-date` when delete is pressed', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('keydown.del')
+    expect(wrapper.emitted('clear-date')).toBeTruthy()
+  })
+
+  it('emits `clear-date` when backspace is pressed', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('keydown.backspace')
+    expect(wrapper.emitted('clear-date')).toBeTruthy()
+  })
 })
