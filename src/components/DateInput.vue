@@ -46,7 +46,7 @@
       @focus="handleInputFocus"
       @keydown.down.prevent="handleKeydownDown"
       @keydown.enter.prevent="handleKeydownEnter"
-      @keydown.esc.prevent="clearDate"
+      @keydown.esc.prevent="handleKeydownEscape"
       @keydown.space="handleKeydownSpace($event)"
       @keyup="handleKeyup($event)"
       @keyup.space="handleKeyupSpace($event)"
@@ -260,6 +260,14 @@ export default {
 
       this.formatTypedDate()
 
+      if (this.isOpen) {
+        this.$emit('close')
+      }
+    },
+    /**
+     * Closes the calendar
+     */
+    handleKeydownEscape() {
       if (this.isOpen) {
         this.$emit('close')
       }

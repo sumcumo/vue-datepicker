@@ -235,18 +235,6 @@ describe('Datepicker mount', () => {
     expect(wrapper.vm.selectedDate).toEqual(new Date(2016, 1, 15))
   })
 
-  it('clears the date when escape is pressed', async () => {
-    await wrapper.setProps({
-      value: new Date(2020, 0, 1),
-    })
-
-    const input = wrapper.find('input')
-    expect(wrapper.vm.selectedDate).toStrictEqual(new Date(2020, 0, 1))
-
-    await input.trigger('keydown.esc')
-    expect(wrapper.vm.selectedDate).toBeNull()
-  })
-
   it('closes the calendar when escape is pressed', async () => {
     const input = wrapper.find('input')
 

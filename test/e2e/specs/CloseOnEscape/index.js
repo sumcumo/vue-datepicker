@@ -3,30 +3,7 @@ import { Given, When, Then, And } from 'cypress-cucumber-preprocessor/steps'
 const { clickThe, createCalendar, focusThe, the } = cy
 
 describe('Close on escape', () => {
-  describe('@id-1: Clear date when calendar is closed', () => {
-    Given('the calendar is closed', () => {
-      createCalendar({
-        value: new Date(2020, 2, 15),
-      })
-      the('calendar').should('not.be.visible')
-      the('input').should('have.value', '15 Mar 2020')
-    })
-
-    When('the user focuses the input field and force presses escape', () => {
-      // Use force as a non-typeable calendar input is `read-only`
-      focusThe('input').type('{esc}', { force: true })
-    })
-
-    Then('the date is cleared', () => {
-      the('input').should('have.value', '')
-    })
-
-    And('the input field has focus', () => {
-      the('input').should('be.focused')
-    })
-  })
-
-  describe('@id-2: Clear date when a typeable calendar is {string}', () => {
+  describe('@id-1: Clear date when a typeable calendar is {string}', () => {
     Given(
       'the typeable calendar is {string} and a {string} date is typed',
       (openOrClosed, validity) => {
@@ -58,12 +35,12 @@ describe('Close on escape', () => {
       the('calendar').should(`${isNot}be.visible`)
     })
 
-    And('the date is cleared')
-
-    And('the input field has focus')
+    And('the input field has focus', () => {
+      the('input').should('be.focused')
+    })
   })
 
-  describe('@id-3: Close by pressing escape on the {string}', () => {
+  describe('@id-2: Close by pressing escape on the {string}', () => {
     Given('the calendar is open', () => {
       createCalendar({
         openDate: new Date(2020, 2, 15),
@@ -86,7 +63,7 @@ describe('Close on escape', () => {
     And('the input field has focus')
   })
 
-  describe('@id-4: Revert to open date when the focused cell is on the same page', () => {
+  describe('@id-3: Revert to open date when the focused cell is on the same page', () => {
     Given('the calendar is open')
 
     When('the user focuses another cell and presses the escape key', () => {
@@ -98,7 +75,7 @@ describe('Close on escape', () => {
     })
   })
 
-  describe('@id-5: Revert to open date when the focused cell is on a different page', () => {
+  describe('@id-4: Revert to open date when the focused cell is on a different page', () => {
     Given('the calendar is open')
 
     And('the user visits another page', () => {
@@ -112,7 +89,7 @@ describe('Close on escape', () => {
     Then('the open date has focus')
   })
 
-  describe('@id-6: Revert to open date when the focused cell is on a different view', () => {
+  describe('@id-5: Revert to open date when the focused cell is on a different view', () => {
     Given('the calendar is open')
 
     And('the user visits the next view up', () => {

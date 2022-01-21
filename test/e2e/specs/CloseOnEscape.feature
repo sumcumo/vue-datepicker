@@ -5,19 +5,10 @@ Feature: Close on escape
 
 
   @id-1
-  Scenario: Clear date when calendar is closed
-    Given the calendar is closed
-    When the user focuses the input field and force presses escape
-    Then the date is cleared
-    And the input field has focus
-
-
-  @id-2
   Scenario Outline: Clear date when a typeable calendar is <openOrClosed> and <validity>
     Given the typeable calendar is "<openOrClosed>" and a "<validity>" date is typed
     When the user focuses the input field and presses escape
     Then the calendar "<opensOrCloses>"
-    And the date is cleared
     And the input field has focus
 
     Examples:
@@ -28,7 +19,7 @@ Feature: Close on escape
       | 4 | open         | invalid  | closes        |
 
 
-  @id-3
+  @id-2
   Scenario Outline: Close by pressing escape on the <element>
     Given the calendar is open
     When the user focuses the "<element>" and presses escape
@@ -43,14 +34,14 @@ Feature: Close on escape
       | 4 | next-button     |
 
 
-  @id-4
+  @id-3
   Scenario: Revert to open date when the focused cell is on the same page
     Given the calendar is open
     When the user focuses another cell and presses the escape key
     Then the open date has focus
 
 
-  @id-5
+  @id-4
   Scenario: Revert to open date when the focused cell is on a different page
     Given the calendar is open
     And the user visits another page
@@ -58,7 +49,7 @@ Feature: Close on escape
     Then the open date has focus
 
 
-  @id-6
+  @id-5
   Scenario: Revert to open date when the focused cell is on a different view
     Given the calendar is open
     And the user visits the next view up

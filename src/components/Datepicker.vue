@@ -6,7 +6,7 @@
     :class="[wrapperClass, { rtl: isRtl }]"
     @focusin="handleFocusIn($event)"
     @focusout="handleFocusOut($event)"
-    @keydown.esc="clearDate"
+    @keydown.esc="resetOrClose"
     @keydown.tab="tabThroughNavigation($event)"
   >
     <DateInput
@@ -69,7 +69,7 @@
           @mousedown.prevent
           @focusin.stop="handleFocusIn($event)"
           @focusout.stop="handleFocusOut($event)"
-          @keydown.esc.stop="clearDate"
+          @keydown.esc.stop="resetOrClose"
           @keydown.tab.stop="tabThroughNavigation($event)"
         >
           <Transition name="view">
@@ -389,11 +389,6 @@ export default {
      * Clear the selected date
      */
     clearDate() {
-      if (this.isResetFocus()) {
-        this.resetFocusToOpenDate()
-        return
-      }
-
       this.selectedDate = null
       this.focus.refs = ['input']
       this.close()
@@ -555,15 +550,19 @@ export default {
       )
     },
     /**
-     * Returns true if we should reset the focus to the open date
-     * @returns {Boolean}
+     * Returns true if we should reset the focus should to computedOpenDate
+     @returns {Boolean}
      */
     isResetFocus() {
-      return (
-        this.isOpen &&
+      if (!this.isOpen) {
+        return false
+      }
+
+      const isOpenCellFocused =
         this.hasClass(document.activeElement, 'cell') &&
-        (!this.isMinimumView || !this.hasClass(document.activeElement, 'open'))
-      )
+        !this.hasClass(document.activeElement, 'open')
+
+      return !this.isMinimumView || isOpenCellFocused
     },
     /**
      * Opens the calendar with the relevant view: 'day', 'month', or 'year'
@@ -590,6 +589,20 @@ export default {
         dateTemp = Number.isNaN(parsed.valueOf()) ? null : parsed
       }
       return dateTemp
+    },
+    /**
+     * Focus the open date, or close the calendar if already focused
+     */
+    resetOrClose() {
+      if (this.isResetFocus()) {
+        this.resetFocusToOpenDate()
+        return
+      }
+
+      if (this.isOpen) {
+        this.focus.refs = ['input']
+        this.close()
+      }
     },
     /**
      * Select the date
