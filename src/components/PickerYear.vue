@@ -90,9 +90,7 @@ export default {
             d.getHours(),
             d.getMinutes(),
           )
-      const todayYear = new Date(
-        this.utils.setDate(this.utils.getNewDateObject(), 1),
-      )
+      const todayYear = this.utils.getFullYear(this.utils.getNewDateObject())
 
       for (let i = 0; i < this.yearRange; i += 1) {
         years.push({
@@ -101,7 +99,7 @@ export default {
           isDisabled: this.isDisabledYear(dObj),
           isOpenDate: this.isOpenYear(dObj),
           isSelected: this.isSelectedYear(dObj),
-          isToday: this.utils.compareDates(dObj, todayYear),
+          isToday: dObj.getFullYear() === todayYear,
         })
         this.utils.setFullYear(dObj, this.utils.getFullYear(dObj) + 1)
       }
