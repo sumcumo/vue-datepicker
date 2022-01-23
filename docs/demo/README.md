@@ -3,7 +3,7 @@
 ## Default
 
 <ClientOnly>
-  <Datepicker placeholder="Select Date" :append-to-body="true"/>
+  <Datepicker placeholder="Select Date" />
 </ClientOnly>
 
 ```html
