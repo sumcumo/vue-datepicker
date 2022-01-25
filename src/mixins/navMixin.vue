@@ -303,10 +303,8 @@ export default {
         this.view = this.minimumView
       }
 
-      this.setTabbableCell()
+      this.setPageDate(this.computedOpenDate)
       this.reviewFocus()
-      this.selectedDate = null
-      this.setPageDate()
     },
     /**
      * Sets the correct focus on next tick

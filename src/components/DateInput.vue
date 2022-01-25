@@ -44,9 +44,11 @@
       @blur="handleInputBlur"
       @click="handleInputClick"
       @focus="handleInputFocus"
+      @keydown.backspace="handleDelete"
+      @keydown.delete="handleDelete"
       @keydown.down.prevent="handleKeydownDown"
       @keydown.enter.prevent="handleKeydownEnter"
-      @keydown.esc.prevent="clearDate"
+      @keydown.esc.prevent="handleKeydownEscape"
       @keydown.space="handleKeydownSpace($event)"
       @keyup="handleKeyup($event)"
       @keyup.space="handleKeyupSpace($event)"
@@ -207,6 +209,14 @@ export default {
       }
     },
     /**
+     * Clears the calendar when the `delete` or `backspace` key is pressed
+     */
+    handleDelete() {
+      if (!this.typeable && this.selectedDate) {
+        this.clearDate()
+      }
+    },
+    /**
      * Toggles the calendar (unless `show-calendar-on-button-click` is true)
      */
     handleInputClick() {
@@ -265,6 +275,14 @@ export default {
       }
     },
     /**
+     * Closes the calendar
+     */
+    handleKeydownEscape() {
+      if (this.isOpen) {
+        this.$emit('close')
+      }
+    },
+    /**
      * Prevents scrolling when not typeable
      */
     handleKeydownSpace(event) {
@@ -278,6 +296,7 @@ export default {
      */
     handleKeyup(event) {
       if (
+        !this.typeable ||
         [
           'Shift',
           'Tab',

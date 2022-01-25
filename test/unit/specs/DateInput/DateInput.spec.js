@@ -160,11 +160,15 @@ describe('DateInput', () => {
     expect(wrapper.find('input').element.value).toEqual('!')
   })
 
-  it('emits `clear-date` when escape is pressed', async () => {
+  it('emits `close` when escape is pressed and calendar is open', async () => {
+    await wrapper.setProps({
+      isOpen: true,
+    })
+
     const input = wrapper.find('input')
     await input.trigger('keydown.esc')
 
-    expect(wrapper.emitted('clear-date')).toBeTruthy()
+    expect(wrapper.emitted('close')).toBeTruthy()
   })
 
   it('opens the calendar on click', async () => {
@@ -210,5 +214,19 @@ describe('DateInput', () => {
     await calendarButton.trigger('click')
 
     expect(wrapper.emitted('open')).toBeTruthy()
+  })
+
+  it('emits `clear-date` when delete is pressed', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('keydown.del')
+    expect(wrapper.emitted('clear-date')).toBeTruthy()
+  })
+
+  it('emits `clear-date` when backspace is pressed', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('keydown.backspace')
+    expect(wrapper.emitted('clear-date')).toBeTruthy()
   })
 })
