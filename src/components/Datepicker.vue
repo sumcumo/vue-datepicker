@@ -555,8 +555,8 @@ export default {
       )
     },
     /**
-     * Returns true if we should reset the focus should to computedOpenDate
-     @returns {Boolean}
+     * Returns true if we should reset the focus to computedOpenDate
+     * @returns {Boolean}
      */
     isResetFocus() {
       if (!this.isOpen) {
