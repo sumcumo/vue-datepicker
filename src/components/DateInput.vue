@@ -119,19 +119,6 @@ export default {
       }
       return this.inputClass
     },
-    formattedDate() {
-      if (!this.selectedDate) {
-        return null
-      }
-
-      return typeof this.format === 'function'
-        ? this.format(new Date(this.selectedDate))
-        : this.utils.formatDate(
-            new Date(this.selectedDate),
-            this.format,
-            this.translation,
-          )
-    },
     formattedValue() {
       if (!this.selectedDate) {
         return null
@@ -139,7 +126,8 @@ export default {
       if (this.typedDate.length) {
         return this.typedDate
       }
-      return this.formattedDate
+
+      return this.formatDate(this.selectedDate)
     },
   },
   watch: {
@@ -176,6 +164,20 @@ export default {
       this.$emit('clear-date')
     },
     /**
+     * Formats a date
+     * @param {Date} date The date to be formatted
+     * @returns {String}
+     */
+    formatDate(date) {
+      if (!date) {
+        return ''
+      }
+
+      return typeof this.format === 'function'
+        ? this.format(new Date(date))
+        : this.utils.formatDate(new Date(date), this.format, this.translation)
+    },
+    /**
      * Formats a typed date, or clears it if invalid
      */
     formatTypedDate() {
@@ -183,7 +185,7 @@ export default {
         this.input.value = ''
         this.typedDate = ''
       } else {
-        this.typedDate = this.formattedDate
+        this.typedDate = this.formatDate(this.typedDate)
       }
     },
     /**
