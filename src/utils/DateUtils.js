@@ -338,10 +338,8 @@ const utils = {
 
   getTime() {
     const time = 'T00:00:00'
-    if (this.useUtc) {
-      return `${time}Z`
-    }
-    return time
+
+    return this.useUtc ? `${time}Z` : time
   },
 
   /**
