@@ -92,6 +92,34 @@
     </div>
 
     <div class="example">
+      <h3>Format a date with the date-fns library</h3>
+      <Datepicker
+        :format="customFormatter"
+        v-model="state"
+      />
+      <code>
+        &lt;datepicker :format="customFormatter"&gt;&lt;/datepicker&gt;
+      </code>
+      <div class="settings">
+        <h5>Settings</h5>
+        <div class="form-group">
+          <label>Format</label>
+          <select v-model="formatDateFns">
+            <option value="qqq yyyy">qqq yyyy &nbsp;&nbsp;&nbsp;e.g. Q1 2022</option>
+            <option value="EEEE do MMMM yyyy">EEEE do MMMM yyyy &nbsp;&nbsp;&nbsp;e.g. Sunday 6th February 2022</option>
+            <option value="MMMM d, yyyy">MMMM d, yyyy &nbsp;&nbsp;&nbsp;e.g. February 6, 2022</option>
+            <option value="do MMM yyyy">do MMM yyyy &nbsp;&nbsp;&nbsp;e.g. 6th Feb 2022</option>
+            <option value="yyyy-MM-dd">yyyy-MM-dd &nbsp;&nbsp;&nbsp;e.g. 2022-02-06</option>
+            <option value="E do MMM yyyy">E do MMM yyyy &nbsp;&nbsp;&nbsp;e.g. Sun 6th Feb 2022</option>
+            <option value="dd/MM/yy">dd/MM/yy &nbsp;&nbsp;&nbsp;e.g. 06/02/22</option>
+            <option value="dd.MM.yyyy">dd.MM.yyyy &nbsp;&nbsp;&nbsp;e.g. 06.02.2022</option>
+            <option value="M/d/yyyy">M/d/yyyy &nbsp;&nbsp;&nbsp;e.g. 2/6/2022</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="example">
       <h3>With minimum and maximum date range</h3>
       <Datepicker :disabled-dates="disabledDates" />
       <code>
@@ -332,6 +360,7 @@
 
 <script>
 import Datepicker from '~/components/Datepicker.vue'
+import { format, parse } from 'date-fns'
 import * as lang from '~/locale/index'
 
 export default {
@@ -393,6 +422,7 @@ export default {
         'top-right',
       ],
       format: 'MMMM d, yyyy',
+      formatDateFns: 'MMMM d, yyyy',
       highlighted: {},
       highlightedFn: {
         customPredictor(date) {
@@ -417,6 +447,12 @@ export default {
     },
   },
   methods: {
+    customFormatter(date) {
+      return format(date, this.formatDateFns)
+    },
+    customParser(date) {
+      return parse(date, this.formatDateFns, new Date())
+    },
     disableTo(val) {
       if (typeof this.disabledDates.to === 'undefined') {
         this.disabledDates = {
