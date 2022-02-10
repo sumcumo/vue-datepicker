@@ -11,10 +11,10 @@
 
     <div class="example">
       <h3>Custom first-day-of-week datepicker</h3>
-      <Datepicker placeholder="Type or select date" first-day-of-week="mon" />
+      <Datepicker placeholder="Select date" first-day-of-week="mon" />
       <code>
-        &lt;datepicker placeholder="Type or select date" first-day-of-week="mon"
-        &gt;&lt;/datepicker&gt;
+        &lt;datepicker placeholder="Select date"
+        first-day-of-week="mon"&gt;&lt;/datepicker&gt;
       </code>
     </div>
 
@@ -29,9 +29,9 @@
 
     <div class="example">
       <h3>Only show dates from current month datepicker</h3>
-      <Datepicker placeholder="Type or select date" :show-edge-dates="false" />
+      <Datepicker placeholder="Select date" :show-edge-dates="false" />
       <code>
-        &lt;datepicker placeholder="Type or select date"
+        &lt;datepicker placeholder="Select date"
         :show-edge-dates="false"&gt;&lt;/datepicker&gt;
       </code>
     </div>
@@ -53,7 +53,6 @@
       <Datepicker
         v-model="vModelExample"
         placeholder="Select Date"
-        :append-to-body="true"
       />
       <code>
         &lt;datepicker placeholder="Select Date"
@@ -339,10 +338,6 @@
 import Datepicker from '~/components/Datepicker.vue'
 import * as lang from '~/locale/index'
 
-const state = {
-  date1: new Date(),
-}
-
 export default {
   name: 'Demo',
   components: {
@@ -350,10 +345,7 @@ export default {
   },
   data() {
     return {
-      styleInput: null,
-      format: 'd MMMM yyyy',
       disabledDates: {},
-      openDate: null,
       disabledFn: {
         customPredictor(date) {
           const year = date.getFullYear()
@@ -394,21 +386,8 @@ export default {
           return false
         }
       }`,
-      highlightedFn: {
-        customPredictor(date) {
-          if (date.getDate() % 4 === 0) {
-            return true
-          }
-          return false
-        },
-      },
-      highlighted: {},
       eventMsg: null,
-      state,
-      vModelExample: null,
-      languages: lang,
-      language: 'en',
-      yearPickerRange: 10,
+      fixedPosition: 'bottom',
       fixedPositions: [
         'bottom',
         'bottom-left',
@@ -417,7 +396,23 @@ export default {
         'top-left',
         'top-right',
       ],
-      fixedPosition: 'bottom',
+      format: 'MMMM d, yyyy',
+      highlighted: {},
+      highlightedFn: {
+        customPredictor(date) {
+          if (date.getDate() % 4 === 0) {
+            return true
+          }
+          return false
+        },
+      },
+      language: 'en',
+      languages: lang,
+      openDate: null,
+      state: new Date(),
+      styleInput: null,
+      vModelExample: null,
+      yearPickerRange: 10,
     }
   },
   computed: {
@@ -426,6 +421,26 @@ export default {
     },
   },
   methods: {
+    disableTo(val) {
+      if (typeof this.disabledDates.to === 'undefined') {
+        this.disabledDates = {
+          to: null,
+          daysOfMonth: this.disabledDates.daysOfMonth,
+          from: this.disabledDates.from,
+        }
+      }
+      this.disabledDates.to = val
+    },
+    disableFrom(val) {
+      if (typeof this.disabledDates.from === 'undefined') {
+        this.disabledDates = {
+          to: this.disabledDates.to,
+          daysOfMonth: this.disabledDates.daysOfMonth,
+          from: null,
+        }
+      }
+      this.disabledDates.from = val
+    },
     highlightTo(val) {
       if (typeof this.highlighted.to === 'undefined') {
         this.highlighted = {
@@ -446,19 +461,6 @@ export default {
       }
       this.highlighted.from = val
     },
-    setHighlightedDays(elem) {
-      if (elem.target.value === 'undefined') {
-        return
-      }
-      const highlightedDays = elem.target.value
-        .split(',')
-        .map((day) => parseInt(day, 10))
-      this.highlighted = {
-        from: this.highlighted.from,
-        to: this.highlighted.to,
-        daysOfMonth: highlightedDays,
-      }
-    },
     setDisabledDays(elem) {
       if (elem.target.value === 'undefined') {
         return
@@ -472,25 +474,18 @@ export default {
         daysOfMonth: disabledDays,
       }
     },
-    disableTo(val) {
-      if (typeof this.disabledDates.to === 'undefined') {
-        this.disabledDates = {
-          to: null,
-          daysOfMonth: this.disabledDates.daysOfMonth,
-          from: this.disabledDates.from,
-        }
+    setHighlightedDays(elem) {
+      if (elem.target.value === 'undefined') {
+        return
       }
-      this.disabledDates.to = val
-    },
-    disableFrom(val) {
-      if (typeof this.disabledDates.from === 'undefined') {
-        this.disabledDates = {
-          to: this.disabledDates.to,
-          daysOfMonth: this.disabledDates.daysOfMonth,
-          from: null,
-        }
+      const highlightedDays = elem.target.value
+        .split(',')
+        .map((day) => parseInt(day, 10))
+      this.highlighted = {
+        from: this.highlighted.from,
+        to: this.highlighted.to,
+        daysOfMonth: highlightedDays,
       }
-      this.disabledDates.from = val
     },
   },
 }
