@@ -104,7 +104,6 @@ export default {
       isInputFocused: false,
       shouldToggleOnFocus: false,
       shouldToggleOnClick: true,
-      parsedDate: null,
       typedDate: '',
       utils: makeDateUtils(this.useUtc),
     }
@@ -181,11 +180,13 @@ export default {
      * Formats a typed date, or clears it if invalid
      */
     formatTypedDate() {
-      if (Number.isNaN(this.parsedDate)) {
+      const parsedDate = this.parseInput()
+
+      if (Number.isNaN(parsedDate)) {
         this.input.value = ''
         this.typedDate = ''
       } else {
-        this.typedDate = this.formatDate(this.typedDate)
+        this.typedDate = this.formatDate(parsedDate)
       }
     },
     /**
@@ -316,18 +317,11 @@ export default {
         return
       }
 
-      this.parsedDate = Date.parse(
-        this.utils.parseDate(
-          this.input.value,
-          this.format,
-          this.translation,
-          this.parser,
-        ),
-      )
+      const parsedDate = this.parseInput()
 
-      if (!Number.isNaN(this.parsedDate)) {
+      if (!Number.isNaN(parsedDate)) {
         this.typedDate = this.input.value
-        this.$emit('typed-date', new Date(this.parsedDate))
+        this.$emit('typed-date', parsedDate)
       }
     },
     /**
@@ -345,6 +339,19 @@ export default {
       if (!this.showCalendarOnButtonClick) {
         this.toggle()
       }
+    },
+    /**
+     * Parses the value of the input field
+     */
+    parseInput() {
+      return new Date(
+        this.utils.parseDate(
+          this.input.value.trim(),
+          this.format,
+          this.translation,
+          this.parser,
+        ),
+      )
     },
     /**
      * Opens or closes the calendar
