@@ -72,24 +72,20 @@
 
     <div class="example">
       <h3>Format datepicker</h3>
-      <Datepicker :format="format" />
-      <code>&lt;datepicker :format="format"&gt;&lt;/datepicker&gt;</code>
+      <Datepicker :format="format" v-model="state"/>
+      <code>&lt;datepicker format="format"&gt;&lt;/datepicker&gt;</code>
       <div class="settings">
         <h5>Settings</h5>
         <div class="form-group">
           <label>Format</label>
           <select v-model="format">
-            <option value="d MMM yyyy" selected>
-              d MMM yyyy - e.g 12 Feb 2016
-            </option>
-            <option value="d MMMM yyyy">
-              d MMMM yyyy - e.g 12 February 2016
-            </option>
-            <option value="yyyy-MM-dd">yyyy-MM-dd - e.g 2016-02-12</option>
-            <option value="do MMM yyyy">do MMM yyyy - e.g 12th Feb 2016</option>
-            <option value="E do MMM yyyy">
-              E do MMM yyyy - e.g Sat 12th Feb 2016
-            </option>
+            <option value="MMMM d, yyyy">MMMM d, yyyy &nbsp;&nbsp;&nbsp;e.g. February 6, 2022</option>
+            <option value="do MMM yyyy">do MMM yyyy &nbsp;&nbsp;&nbsp;e.g. 6th Feb 2022</option>
+            <option value="yyyy-MM-dd">yyyy-MM-dd &nbsp;&nbsp;&nbsp;e.g. 2022-02-06</option>
+            <option value="E do MMM yyyy">E do MMM yyyy &nbsp;&nbsp;&nbsp;e.g. Sun 6th Feb 2022</option>
+            <option value="dd/MM/yy">dd/MM/yy &nbsp;&nbsp;&nbsp;e.g. 06/02/22</option>
+            <option value="dd.MM.yyyy">dd.MM.yyyy &nbsp;&nbsp;&nbsp;e.g. 06.02.2022</option>
+            <option value="M/d/yyyy">M/d/yyyy &nbsp;&nbsp;&nbsp;e.g. 2/6/2022</option>
           </select>
         </div>
       </div>
