@@ -287,16 +287,16 @@ const utils = {
     const day = this.getDate(date)
 
     const matches = {
-      dd: `0${day}`.slice(-2),
       d: day,
-      yyyy: year,
-      yy: String(year).slice(2),
-      MMMM: this.getMonthName(this.getMonth(date), translation.months),
-      MMM: this.getMonthNameAbbr(this.getMonth(date), translation.monthsAbbr),
-      MM: `0${month}`.slice(-2),
-      M: month,
-      o: this.getNthSuffix(this.getDate(date)),
+      dd: `0${day}`.slice(-2),
       E: this.getDayNameAbbr(date, translation.days),
+      o: this.getNthSuffix(this.getDate(date)),
+      M: month,
+      MM: `0${month}`.slice(-2),
+      MMM: this.getMonthNameAbbr(this.getMonth(date), translation.monthsAbbr),
+      MMMM: this.getMonthName(this.getMonth(date), translation.months),
+      yy: String(year).slice(2),
+      yyyy: year,
     }
 
     const REGEX_FORMAT = /y{4}|y{2}|M{1,4}(?![aäe])|d{1,2}|o|E(?![eéi])/g
