@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/sumcumo/vue-datepicker/compare/v3.2.3...v4.0.0) (2022-02-25)
+
+
+### Features
+
+* **datepicker:** Add keyboard support
+* **datepicker:** add e2e tests
+* **pickers:** Add slide transition on page change ([618e3d3](https://github.com/sumcumo/vue-datepicker/commit/618e3d39f90a893ada1677d4050ce70b0e5ad7dc))
+* **datepicker:** Add transition on toggle ([aa6a95c](https://github.com/sumcumo/vue-datepicker/commit/aa6a95cd3a466de925d0f46e65352c9b295677f1))
+* **datepicker:** Add transition on view change ([db98efb](https://github.com/sumcumo/vue-datepicker/commit/db98efbf4181a6414102c0956e8764fd075a209a))
+* *css* renamed inline to vdp-datepicker__calendar--inline ([41c081](https://github.com/sumcumo/vue-datepicker/pull/96/commits/41c081a334cddce6a091576ab9ddfb1d5fc977b1))
+
+### Bug Fixes
+* **dateinput:** Don't fire `handleKeyup` unless typeable ([5e0a7c1](https://github.com/sumcumo/vue-datepicker/commit/5e0a7c103ff047f8881fdd22769c63cbab313e93))
+* **datepicker:** Set typed date to null if zero length ([e483f0d](https://github.com/sumcumo/vue-datepicker/commit/e483f0df3cf2fc5f04ffc28f7184fff21e4346cc))
+* **datepicker:** Update openDate with selectedDate ([a23d494](https://github.com/sumcumo/vue-datepicker/commit/a23d494ccae646e7f0403d7d52c7cea1e8de34be))
+* **pickerday:** Only highlight selected edge date if shown ([f30b53f](https://github.com/sumcumo/vue-datepicker/commit/f30b53f70a8485b6dfc3f601db18bcfa97b0592b))
+* **pickerday:** Only highlight today if edge dates shown ([e3eece1](https://github.com/sumcumo/vue-datepicker/commit/e3eece1885981214a0d22384a2c672be2883ac07))
+* **pickerheader:** Prevent click on prev/next when disabled ([e52bb06](https://github.com/sumcumo/vue-datepicker/commit/e52bb064566d0dcd68016439071fbdef9e5ff600))
+* **pickerheader:** Reorder prev/next buttons when rtl ([d4ab12c](https://github.com/sumcumo/vue-datepicker/commit/d4ab12c28a47fe39d9a1acdb1f55a8f265967bae))
+* **pickerheader:** Stop disabled dates from closing calendar on next/prev ([d61647c](https://github.com/sumcumo/vue-datepicker/commit/d61647ce2cb6a3fd059ace1ecde55cfd6644a111))
+* **pickeryear:** Emphasize the current year ([fbb29f6](https://github.com/sumcumo/vue-datepicker/commit/fbb29f63ab45ba5bac61bc2e5d6d9aeeaf037af8))
+* **pickeryear:** Right position trailing cells ([e159622](https://github.com/sumcumo/vue-datepicker/commit/e1596223ee9c0f1e3d14d316aa83d17b94f70119))
+* **style:** Inherit correct calendar width ([#116](https://github.com/sumcumo/vue-datepicker/issues/116)) ([021d4e6](https://github.com/sumcumo/vue-datepicker/commit/021d4e6d17fbf0eee24f075024d700fab6d274fb))
+* **style:** Make focus outline pixel perfect ([9fc2a53](https://github.com/sumcumo/vue-datepicker/commit/9fc2a539002bbf804c431fa382a3a614eb6e74b0))
+
 ### [3.2.3](https://github.com/sumcumo/vue-datepicker/compare/v3.2.1...v3.2.3) (2021-08-04)
 
 
