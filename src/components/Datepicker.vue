@@ -641,6 +641,7 @@ export default {
     },
     /**
      * Sets the date that the calendar should open on
+     * @param {Date=} date The date to set for the page
      */
     setPageDate(date) {
       let dateTemp = date
