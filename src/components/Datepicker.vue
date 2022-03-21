@@ -359,6 +359,9 @@ export default {
         this.tabToCorrectInlineCell()
       }
     },
+    latestValidTypedDate(date) {
+      this.setPageDate(date)
+    },
     openDate() {
       this.setPageDate()
     },
