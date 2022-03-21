@@ -119,10 +119,7 @@ export default {
       return this.inputClass
     },
     formattedValue() {
-      if (!this.selectedDate) {
-        return null
-      }
-      if (this.typedDate.length) {
+      if (this.typeable) {
         return this.typedDate
       }
 

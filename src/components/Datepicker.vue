@@ -493,16 +493,29 @@ export default {
       }
     },
     /**
-     * Set the date from a 'typed-date' event
-     * @param {Date} date
+     * Updates the page (if necessary) after a 'typed-date' event and sets `tabbableCell` & `latestValidTypedDate`
+     * @param {Date=} date
      */
     handleTypedDate(date) {
-      if (this.selectedDate) {
-        this.setTransitionAndFocusDelay(this.selectedDate, date)
+      if (!date) {
+        return
       }
 
-      this.selectDate(date ? date.valueOf() : null)
-      this.reviewFocus()
+      const originalPageDateValue = new Date(this.pageDate)
+
+      this.setTransitionAndFocusDelay(this.latestValidTypedDate, date)
+      this.latestValidTypedDate = date
+      this.setPageDate(date)
+
+      if (this.isPageChange(originalPageDateValue)) {
+        this.handlePageChange({
+          focusRefs: [],
+          pageDate: this.pageDate,
+        })
+        return
+      }
+
+      this.setTabbableCell()
     },
     /**
      * Focus the relevant element when the view changes
@@ -532,6 +545,18 @@ export default {
      */
     hasClass(element, className) {
       return element && element.className.split(' ').includes(className)
+    },
+    /**
+     * Used for typeable datepicker: returns true if a typed date causes the page to change
+     * @param   {Date}    originalPageDate
+     * @returns {Boolean}
+     */
+    isPageChange(originalPageDate) {
+      if (!this.isOpen) {
+        return false
+      }
+
+      return originalPageDate.valueOf() !== this.pageDate.valueOf()
     },
     /**
      * Initiate the component

@@ -167,6 +167,30 @@ describe('Datepicker mount', () => {
     expect(wrapper.vm.selectedDate).toEqual(today)
   })
 
+  it('emits `selected` when a valid date is typed and the `enter` key is pressed', async () => {
+    const input = wrapper.find('input')
+
+    input.setValue('Jan')
+    await input.trigger('keyup')
+
+    expect(wrapper.emitted('selected')).toBeUndefined()
+
+    await input.trigger('keydown.enter')
+
+    expect(wrapper.emitted('selected')).toBeDefined()
+    expect(wrapper.emitted('selected')[0][0]).toBeInstanceOf(Date)
+  })
+
+  it('does not emit `selected` when an invalid date is typed and the `enter` key is pressed', async () => {
+    const input = wrapper.find('input')
+
+    input.setValue('invalid date')
+    await input.trigger('keyup')
+    await input.trigger('keydown.enter')
+
+    expect(wrapper.emitted('selected')).toBeUndefined()
+  })
+
   it('shows the correct month as you type', async () => {
     const input = wrapper.find('input')
 
