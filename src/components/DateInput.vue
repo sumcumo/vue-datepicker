@@ -301,6 +301,7 @@ export default {
       if (
         !this.typeable ||
         [
+          'Control',
           'Shift',
           'Tab',
           'ArrowUp',
