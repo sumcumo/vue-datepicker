@@ -150,6 +150,11 @@ export default {
         }
       })
     },
+    selectedDate(selectedDate) {
+      if (this.typeable) {
+        this.typedDate = this.formatDate(selectedDate)
+      }
+    },
   },
   mounted() {
     this.input = this.$el.querySelector('input')
