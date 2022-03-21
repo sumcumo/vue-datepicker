@@ -113,22 +113,22 @@ describe('dateUtils', () => {
 
   it('parses English dates', () => {
     expect(dateUtils.parseDate('16 April 2020', 'd MMMM yyyy')).toEqual(
-      '2020-04-16T00:00:00',
+      new Date('2020-04-16T00:00:00'),
     )
     expect(dateUtils.parseDate('16th Nov 2020', 'do MMM yyyy')).toEqual(
-      '2020-11-16T00:00:00',
+      new Date('2020-11-16T00:00:00'),
     )
     expect(dateUtils.parseDate('16th November 2020', 'do MMMM yyyy')).toEqual(
-      '2020-11-16T00:00:00',
+      new Date('2020-11-16T00:00:00'),
     )
     expect(dateUtils.parseDate('Thu 16th Apr 2020', 'E do MMM yyyy')).toEqual(
-      '2020-04-16T00:00:00',
+      new Date('2020-04-16T00:00:00'),
     )
     expect(dateUtils.parseDate('16.04.2020', 'dd.MM.yyyy')).toEqual(
-      '2020-04-16T00:00:00',
+      new Date('2020-04-16T00:00:00'),
     )
     expect(dateUtils.parseDate('04.16.2020', 'MM.dd.yyyy')).toEqual(
-      '2020-04-16T00:00:00',
+      new Date('2020-04-16T00:00:00'),
     )
   })
 
@@ -142,20 +142,20 @@ describe('dateUtils', () => {
 
   it('parses formats without day', () => {
     expect(dateUtils.parseDate('April 2020', 'MMMM yyyy')).toEqual(
-      '2020-04-01T00:00:00',
+      new Date('2020-04-01T00:00:00'),
     )
   })
 
   it('parses formats without month', () => {
     expect(dateUtils.parseDate('15 2020', 'dd yyyy')).toEqual(
-      '2020-01-15T00:00:00',
+      new Date('2020-01-15T00:00:00'),
     )
   })
 
   it('parses formats without year', () => {
     const currentYear = new Date().getFullYear()
     expect(dateUtils.parseDate('15 April', 'dd MMMM')).toEqual(
-      `${currentYear}-04-15T00:00:00`,
+      new Date(`${currentYear}-04-15T00:00:00`),
     )
   })
 

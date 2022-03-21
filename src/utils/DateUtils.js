@@ -1,11 +1,20 @@
 import en from '~/locale/translations/en'
 
+/**
+ * Attempts to return a parseable date in the format 'yyyy-MM-dd'
+ * @param {String} formatStr
+ * @param {String} dateStr
+ * @param {Object} translation
+ * @param {String} time
+ * @return String
+ */
 // eslint-disable-next-line complexity,max-statements
-const getParsedDate = ({ formatStr, dateStr, translation }) => {
+const getParsableDate = ({ formatStr, dateStr, translation, time }) => {
   const splitter = formatStr.match(/-|\/|\s|\./) || ['-']
   const df = formatStr.split(splitter[0])
   const ds = dateStr.split(splitter[0])
-  const ymd = [new Date().getFullYear(), '01', '01']
+  const ymd = [new Date().getFullYear().toString(), '01', '01']
+
   for (let i = 0; i < df.length; i += 1) {
     if (/yyyy/i.test(df[i])) {
       ymd[0] = ds[i]
@@ -24,7 +33,24 @@ const getParsedDate = ({ formatStr, dateStr, translation }) => {
       ymd[2] = tmp < 10 ? `0${tmp}` : `${tmp}`
     }
   }
-  return ymd
+
+  return `${ymd.join('-')}${time}`
+}
+
+/**
+ * Parses a date using a function passed in via the `parser` prop
+ * @param  {Function}      parser  The function that should be used to parse the date
+ * @param  {String}        dateStr The string to parse
+ * @return {Date | String}
+ */
+function parseDateWithLibrary(dateStr, parser) {
+  if (!parser || typeof parser !== 'function') {
+    throw new Error(
+      'Parser needs to be a function if you are using a custom formatter',
+    )
+  }
+
+  return parser(dateStr)
 }
 
 const utils = {
@@ -278,38 +304,36 @@ const utils = {
   },
 
   /**
-   * makes date parseable
-   * to use with international dates
-   * @param {String} dateStr
+   * Parses a date from a string, or returns the original string
+   * @param {String}          dateStr
    * @param {String|Function} formatStr
-   * @param {Object} translation
-   * @param {Function} parser
+   * @param {Object}          translation
+   * @param {Function}        parser
    * @return {Date | String}
    */
-  // eslint-disable-next-line max-params,complexity,max-statements
+  // eslint-disable-next-line max-params
   parseDate(dateStr, formatStr, translation = en, parser = null) {
     if (!(dateStr && formatStr)) {
       return dateStr
     }
+
     if (typeof formatStr === 'function') {
-      if (!parser || typeof parser !== 'function') {
-        throw new Error(
-          'Parser needs to be a function if you are using a custom formatter',
-        )
-      }
-      return parser(dateStr)
+      return parseDateWithLibrary(dateStr, parser)
     }
-    const ymd = getParsedDate({
+
+    const parseableDate = getParsableDate({
       formatStr,
       dateStr,
       translation,
+      time: this.getTime(),
     })
+    const parsedDate = Date.parse(parseableDate)
 
-    const dat = `${ymd.join('-')}${this.getTime()}`
-    if (Number.isNaN(Date.parse(dat))) {
+    if (Number.isNaN(parsedDate)) {
       return dateStr
     }
-    return dat
+
+    return new Date(parsedDate)
   },
 
   getTime() {
