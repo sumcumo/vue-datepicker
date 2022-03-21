@@ -678,9 +678,15 @@ export default {
           dateTemp = new Date()
         }
       }
-      dateTemp = this.utils.resetDateTime(new Date(dateTemp))
 
-      this.pageTimestamp = this.utils.setDate(new Date(dateTemp), 1)
+      let pageTimestamp = this.utils.resetDateTime(new Date(dateTemp))
+      pageTimestamp = this.utils.setDate(new Date(pageTimestamp), 1)
+
+      if (this.view === 'year') {
+        pageTimestamp = this.utils.setMonth(new Date(pageTimestamp), 0)
+      }
+
+      this.pageTimestamp = pageTimestamp
     },
     /**
      * Sets the slide duration in milliseconds by looking up the stylesheet
