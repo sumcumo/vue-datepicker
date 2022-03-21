@@ -121,16 +121,12 @@ describe('DateInput', () => {
     )
   })
 
-  it('emits `close` when the calendar is open and enter is pressed', async () => {
-    await wrapper.setProps({
-      isOpen: true,
-    })
-
+  it('emits `select-typed-date` when enter is pressed', async () => {
     const input = wrapper.find('input')
 
     await input.trigger('keydown.enter')
 
-    expect(wrapper.emitted('close')).toBeTruthy()
+    expect(wrapper.emitted('select-typed-date')).toBeTruthy()
   })
 
   it("doesn't emit the date if typeable=false", async () => {
@@ -163,10 +159,10 @@ describe('Datepicker mount', () => {
     wrapper.destroy()
   })
 
-  it('sets the date on typedDate event', () => {
+  it('sets the date on `select-typed-date` event', () => {
     const today = new Date()
 
-    wrapper.vm.handleTypedDate(today)
+    wrapper.vm.selectTypedDate(today)
 
     expect(wrapper.vm.selectedDate).toEqual(today)
   })

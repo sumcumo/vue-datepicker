@@ -264,17 +264,22 @@ export default {
       this.$emit('set-focus', ['prev', 'up', 'next', 'tabbableCell'])
     },
     /**
-     * Formats a typed date and closes the calendar
+     * Selects a typed date and closes the calendar
      */
     handleKeydownEnter() {
       if (!this.typeable) {
         return
       }
 
-      this.formatTypedDate()
+      if (!this.input.value) {
+        this.$emit('select-typed-date', null)
+        return
+      }
 
-      if (this.isOpen) {
-        this.$emit('close')
+      const parsedDate = this.parseInput()
+
+      if (this.utils.isValidDate(parsedDate)) {
+        this.$emit('select-typed-date', new Date(parsedDate))
       }
     },
     /**

@@ -43,6 +43,7 @@
       @close="close"
       @focus="handleInputFocus"
       @open="open"
+      @select-typed-date="selectTypedDate"
       @set-focus="setFocus($event)"
       @typed-date="handleTypedDate"
     >
@@ -632,6 +633,20 @@ export default {
       this.setPageDate(date)
       this.$emit('selected', date)
       this.$emit('input', date)
+    },
+    /**
+     * Select the date from a 'select-typed-date' event
+     * @param {Date=} date
+     */
+    selectTypedDate(date) {
+      this.setValue(date)
+      this.reviewFocus()
+      this.$emit('selected', date)
+      this.$emit('input', date)
+
+      if (this.isOpen) {
+        this.close()
+      }
     },
     /**
      * Sets the initial picker page view: day, month or year
