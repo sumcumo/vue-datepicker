@@ -12,17 +12,13 @@ describe('DateInput unmounted', () => {
 describe('DateInput', () => {
   let wrapper
 
-  const createWrapper = () => {
-    return shallowMount(DateInput, {
+  beforeEach(() => {
+    wrapper = shallowMount(DateInput, {
       propsData: {
         selectedDate: new Date(2018, 2, 24),
         translation: en,
       },
     })
-  }
-
-  beforeEach(() => {
-    wrapper = createWrapper()
   })
 
   afterEach(() => {
@@ -33,18 +29,20 @@ describe('DateInput', () => {
     expect(wrapper.findAll('input')).toHaveLength(1)
   })
 
-  it('nulls date', async () => {
+  it('clears the date', async () => {
     await wrapper.setProps({
       selectedDate: null,
     })
 
-    expect(wrapper.vm.formattedValue).toBeNull()
-    expect(wrapper.find('input').element.value).toEqual('')
+    const input = wrapper.find('input')
+
+    expect(input.element.value).toEqual('')
   })
 
   it('formats date', () => {
-    expect(wrapper.vm.formattedValue).toEqual('24 Mar 2018')
-    expect(wrapper.find('input').element.value).toEqual('24 Mar 2018')
+    const input = wrapper.find('input')
+
+    expect(input.element.value).toEqual('24 Mar 2018')
   })
 
   it('delegates date formatting', async () => {
@@ -53,31 +51,29 @@ describe('DateInput', () => {
       format: () => '2016/1/15',
     })
 
-    expect(wrapper.vm.formattedValue).toEqual('2016/1/15')
-    expect(wrapper.find('input').element.value).toEqual('2016/1/15')
+    const input = wrapper.find('input')
+
+    expect(input.element.value).toEqual('2016/1/15')
   })
 
-  it('opens calendar on focus when `show-calendar-on-focus` is true', async () => {
+  it('emits `open` event on focus when `show-calendar-on-focus` is true', async () => {
     await wrapper.setProps({
       showCalendarOnFocus: true,
     })
 
     const input = wrapper.find('input')
 
-    expect(wrapper.vm.isOpen).toBeFalsy()
-
     await input.trigger('focus')
 
     expect(wrapper.emitted('open')).toBeTruthy()
   })
 
-  it('does not open calendar on focus, if show-calendar-on-focus prop is false', async () => {
-    const input = wrapper.find('input')
+  it('does not emit `open` event on focus when show-calendar-on-focus prop is false', async () => {
     await wrapper.setProps({
       showCalendarOnFocus: false,
     })
 
-    expect(wrapper.vm.isOpen).toBeFalsy()
+    const input = wrapper.find('input')
 
     await input.trigger('focus')
 
@@ -112,9 +108,9 @@ describe('DateInput', () => {
 
     const input = wrapper.find('input')
 
-    expect(wrapper.vm.isOpen).toBeFalsy()
     await input.trigger('focus')
     await input.trigger('click')
+
     expect(wrapper.emitted('open')).toBeTruthy()
   })
 
@@ -123,7 +119,9 @@ describe('DateInput', () => {
       bootstrapStyling: true,
     })
 
-    expect(wrapper.find('input').element.classList).toContain('form-control')
+    const input = wrapper.find('input')
+
+    expect(input.element.classList).toContain('form-control')
   })
 
   it('appends bootstrap classes', async () => {
@@ -132,16 +130,18 @@ describe('DateInput', () => {
       bootstrapStyling: true,
     })
 
-    expect(wrapper.find('input').element.classList).toContain('form-control')
-    expect(wrapper.find('input').element.classList).toContain('someClass')
+    const input = wrapper.find('input')
+
+    expect(input.element.classList).toContain('form-control')
+    expect(input.element.classList).toContain('someClass')
 
     await wrapper.setProps({
       inputClass: { someClass: true },
       bootstrapStyling: true,
     })
 
-    expect(wrapper.find('input').element.classList).toContain('form-control')
-    expect(wrapper.find('input').element.classList).toContain('someClass')
+    expect(input.element.classList).toContain('form-control')
+    expect(input.element.classList).toContain('someClass')
   })
 
   it('can be disabled', async () => {
@@ -149,7 +149,9 @@ describe('DateInput', () => {
       disabled: true,
     })
 
-    expect(wrapper.find('input').attributes().disabled).toBeDefined()
+    const input = wrapper.find('input')
+
+    expect(input.attributes().disabled).toBeDefined()
   })
 
   it('accepts a function as a formatter', async () => {
@@ -157,7 +159,9 @@ describe('DateInput', () => {
       format: () => '!',
     })
 
-    expect(wrapper.find('input').element.value).toEqual('!')
+    const input = wrapper.find('input')
+
+    expect(input.element.value).toEqual('!')
   })
 
   it('emits `close` when escape is pressed and calendar is open', async () => {
@@ -171,22 +175,23 @@ describe('DateInput', () => {
     expect(wrapper.emitted('close')).toBeTruthy()
   })
 
-  it('opens the calendar on click', async () => {
+  it('emits `open` event on click', async () => {
     const input = wrapper.find('input')
     await input.trigger('click')
 
     expect(wrapper.emitted('open')).toBeTruthy()
   })
 
-  it('opens the calendar when the space bar is pressed on the input field', async () => {
+  it('emits `open` event when the space bar is pressed on the input field', async () => {
     const input = wrapper.find('input')
+
     await input.trigger('keydown.space')
     await input.trigger('keyup.space')
 
     expect(wrapper.emitted('open')).toBeTruthy()
   })
 
-  it('opens the calendar on focus', async () => {
+  it('emits `open` event on focus when `showCalendarOnFocus` is true', async () => {
     const input = wrapper.find('input')
     await input.trigger('focus')
 
@@ -201,11 +206,12 @@ describe('DateInput', () => {
   })
 
   it('opens ONLY on button click when the relevant prop is set', async () => {
-    const input = wrapper.find('input')
     await wrapper.setProps({
       calendarButton: true,
       showCalendarOnButtonClick: true,
     })
+
+    const input = wrapper.find('input')
     await input.trigger('click')
 
     expect(wrapper.emitted('open')).toBeFalsy()
@@ -220,6 +226,7 @@ describe('DateInput', () => {
     const input = wrapper.find('input')
 
     await input.trigger('keydown.del')
+
     expect(wrapper.emitted('clear-date')).toBeTruthy()
   })
 
@@ -227,6 +234,7 @@ describe('DateInput', () => {
     const input = wrapper.find('input')
 
     await input.trigger('keydown.backspace')
+
     expect(wrapper.emitted('clear-date')).toBeTruthy()
   })
 })
