@@ -182,11 +182,11 @@ export default {
     formatTypedDate() {
       const parsedDate = this.parseInput()
 
-      if (Number.isNaN(parsedDate)) {
+      if (this.utils.isValidDate(parsedDate)) {
+        this.typedDate = this.formatDate(parsedDate)
+      } else {
         this.input.value = ''
         this.typedDate = ''
-      } else {
-        this.typedDate = this.formatDate(parsedDate)
       }
     },
     /**
