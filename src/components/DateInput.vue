@@ -294,7 +294,7 @@ export default {
       }
     },
     /**
-     * Parses a typed date and submits it, if valid
+     * Parses a typed date and emits `typed-date` event, if valid
      * @param  {object}  event Used to exclude certain keystrokes
      */
     handleKeyup(event) {
@@ -313,15 +313,16 @@ export default {
         return
       }
 
-      if (this.input.value === '') {
+      this.typedDate = this.input.value
+
+      if (!this.input.value) {
         this.$emit('typed-date', null)
         return
       }
 
       const parsedDate = this.parseInput()
 
-      if (!Number.isNaN(parsedDate)) {
-        this.typedDate = this.input.value
+      if (this.utils.isValidDate(parsedDate)) {
         this.$emit('typed-date', parsedDate)
       }
     },
