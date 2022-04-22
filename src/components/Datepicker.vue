@@ -650,8 +650,9 @@ export default {
         } else {
           dateTemp = new Date()
         }
-        dateTemp = this.utils.resetDateTime(dateTemp)
       }
+      dateTemp = this.utils.resetDateTime(new Date(dateTemp))
+
       this.pageTimestamp = this.utils.setDate(new Date(dateTemp), 1)
     },
     /**
