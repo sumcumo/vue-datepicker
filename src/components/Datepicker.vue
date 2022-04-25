@@ -651,14 +651,9 @@ export default {
      * @param {Number} timestamp
      */
     selectDate(timestamp) {
-      if (!timestamp) {
-        this.selectedDate = null
-        return
-      }
-
       const date = new Date(timestamp)
-      this.selectedDate = date
-      this.setPageDate(date)
+
+      this.setValue(date)
       this.$emit('selected', date)
       this.$emit('input', date)
     },
