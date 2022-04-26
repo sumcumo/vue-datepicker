@@ -501,17 +501,17 @@ export default {
      * @param {Date=} date
      */
     handleTypedDate(date) {
-      if (!date) {
-        return
-      }
+      const originalTypedDate = new Date(this.latestValidTypedDate)
+      const originalPageDate = new Date(this.pageDate)
 
-      const originalPageDateValue = new Date(this.pageDate)
-
-      this.setTransitionAndFocusDelay(this.latestValidTypedDate, date)
-      this.latestValidTypedDate = date
+      this.latestValidTypedDate = date || this.computedOpenDate
+      this.setTransitionAndFocusDelay(
+        originalTypedDate,
+        this.latestValidTypedDate,
+      )
       this.setPageDate(date)
 
-      if (this.isPageChange(originalPageDateValue)) {
+      if (this.isPageChange(originalPageDate)) {
         this.handlePageChange({
           focusRefs: [],
           pageDate: this.pageDate,
