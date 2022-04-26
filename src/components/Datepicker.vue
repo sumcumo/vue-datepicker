@@ -353,10 +353,14 @@ export default {
         this.setInitialView()
       }
     },
-    isActive(hasJustBecomeActive) {
+    isActive(hasJustBecomeActive, isNoLongerActive) {
       if (hasJustBecomeActive && this.inline) {
         this.setNavElementsFocusedIndex()
         this.tabToCorrectInlineCell()
+      }
+
+      if (isNoLongerActive && this.typeable) {
+        this.setTypedDateOnLosingFocus()
       }
     },
     latestValidTypedDate(date) {
@@ -721,8 +725,30 @@ export default {
       this.slideDuration = parseFloat(durationInSecs) * 1000
     },
     /**
-     * Set the datepicker value (and, if typeable, update `latestValidTypedDate`)
-     * @param {Date|String|Number|null} date
+     * Selects the typed date when the datepicker loses focus, provided it's valid and differs from the current selected date
+     */
+    setTypedDateOnLosingFocus() {
+      const parsedDate = this.$refs.dateInput.parseInput()
+      const date = this.utils.isValidDate(parsedDate) ? parsedDate : null
+      const hasChanged = () => {
+        if (!this.selectedDate && !date) {
+          return false
+        }
+
+        if (this.selectedDate && date) {
+          return date.valueOf() !== this.selectedDate.valueOf()
+        }
+
+        return true
+      }
+
+      if (hasChanged()) {
+        this.setValue(date)
+        this.$emit('selected', date)
+      }
+    },
+    /**
+     * Set the datepicker value (and, if typeable, update `latestValidTypedDate`)     * @param {Date|String|Number|null} date
      */
     setValue(date) {
       this.selectedDate = date || null

@@ -321,6 +321,8 @@ describe('Datepicker mounted to document body', () => {
   let wrapper
 
   beforeEach(() => {
+    jest.useFakeTimers()
+
     wrapper = mount(Datepicker, {
       attachTo: document.body,
       propsData: {
@@ -330,6 +332,8 @@ describe('Datepicker mounted to document body', () => {
   })
 
   afterEach(() => {
+    jest.clearAllTimers()
+
     wrapper.destroy()
   })
 
@@ -390,5 +394,48 @@ describe('Datepicker mounted to document body', () => {
     await upButton.trigger('keydown.up')
 
     expect(document.activeElement).toBe(input.element)
+  })
+
+  it("selects the typed date when the calendar loses focus, provided it's valid and differs from the current selected date", async () => {
+    const input = wrapper.find('input')
+
+    // Invalid date
+    await input.trigger('click')
+    jest.advanceTimersByTime(250)
+
+    await input.setValue('invalid date')
+    await input.trigger('keyup')
+
+    await document.activeElement.blur()
+    jest.advanceTimersByTime(250)
+
+    expect(input.element.value).toEqual('')
+    expect(wrapper.emitted('selected')).toBeFalsy()
+
+    // Valid date
+    await input.trigger('click')
+    jest.advanceTimersByTime(250)
+
+    await input.setValue('2 jan 22')
+    await input.trigger('keyup')
+
+    await document.activeElement.blur()
+    jest.advanceTimersByTime(250)
+
+    expect(input.element.value).toEqual('02 Jan 2022')
+    expect(wrapper.emitted('selected')).toBeTruthy()
+
+    // Unchanged date
+    await input.trigger('click')
+    jest.advanceTimersByTime(250)
+
+    await input.setValue('2 jan 22')
+    await input.trigger('keyup')
+
+    await document.activeElement.blur()
+    jest.advanceTimersByTime(250)
+
+    expect(input.element.value).toEqual('02 Jan 2022')
+    expect(wrapper.emitted('selected')).toHaveLength(1)
   })
 })
