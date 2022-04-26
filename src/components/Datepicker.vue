@@ -510,6 +510,7 @@ export default {
         this.latestValidTypedDate,
       )
       this.setPageDate(date)
+      this.$emit('input', date)
 
       if (this.isPageChange(originalPageDate)) {
         this.handlePageChange({
@@ -669,7 +670,6 @@ export default {
       this.setValue(date)
       this.reviewFocus()
       this.$emit('selected', date)
-      this.$emit('input', date)
 
       if (this.isOpen) {
         this.close()
