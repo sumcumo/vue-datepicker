@@ -251,6 +251,11 @@ export default {
       calendarSlots,
       isClickOutside: false,
       /*
+       * The latest valid `typedDate` (used for typeable datepicker)
+       * {Date}
+       */
+      latestValidTypedDate: null,
+      /*
        * Vue cannot observe changes to a Date Object so date must be stored as a timestamp
        * This represents the first day of the current viewing month
        * {Number}
@@ -527,6 +532,7 @@ export default {
     /**
      * Initiate the component
      */
+    // eslint-disable-next-line complexity,max-statements
     init() {
       if (this.value) {
         let parsedValue = this.parseValue(this.value)
@@ -537,6 +543,8 @@ export default {
           this.$emit('input', parsedValue)
         }
         this.setValue(parsedValue)
+      } else if (this.typeable) {
+        this.latestValidTypedDate = this.utils.getNewDateObject()
       }
 
       if (this.isInline) {
@@ -669,17 +677,23 @@ export default {
       this.slideDuration = parseFloat(durationInSecs) * 1000
     },
     /**
-     * Set the datepicker value
+     * Set the datepicker value (and, if typeable, update `latestValidTypedDate`)
      * @param {Date|String|Number|null} date
      */
     setValue(date) {
       if (!date) {
         this.selectedDate = null
         this.setPageDate()
+        if (this.typeable) {
+          this.latestValidTypedDate = this.computedOpenDate
+        }
         return
       }
       this.selectedDate = date
       this.setPageDate(date)
+      if (this.typeable) {
+        this.latestValidTypedDate = date
+      }
     },
     /**
      * Set the picker view
