@@ -681,18 +681,11 @@ export default {
      * @param {Date|String|Number|null} date
      */
     setValue(date) {
-      if (!date) {
-        this.selectedDate = null
-        this.setPageDate()
-        if (this.typeable) {
-          this.latestValidTypedDate = this.computedOpenDate
-        }
-        return
-      }
-      this.selectedDate = date
+      this.selectedDate = date || null
       this.setPageDate(date)
+
       if (this.typeable) {
-        this.latestValidTypedDate = date
+        this.latestValidTypedDate = date || this.computedOpenDate
       }
     },
     /**
