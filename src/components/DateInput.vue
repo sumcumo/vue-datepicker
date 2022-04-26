@@ -309,6 +309,7 @@ export default {
         !this.typeable ||
         [
           'Control',
+          'Escape',
           'Shift',
           'Tab',
           'ArrowUp',
