@@ -1,111 +1,56 @@
-<script>
-export default {
-  props: {
-    autofocus: {
-      type: Boolean,
-      default: false,
-    },
-    bootstrapStyling: {
-      type: Boolean,
-      default: false,
-    },
-    clearButton: {
-      type: Boolean,
-      default: false,
-    },
-    clearButtonIcon: {
-      type: String,
-      default: '',
-    },
-    calendarButton: {
-      type: Boolean,
-      default: false,
-    },
-    calendarButtonIcon: {
-      type: String,
-      default: '',
-    },
-    calendarButtonIconContent: {
-      type: String,
-      default: '',
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    format: {
-      type: [String, Function],
-      default: 'dd MMM yyyy',
-    },
-    id: {
-      type: String,
-      default: null,
-    },
-    inline: {
-      type: Boolean,
-      default: false,
-    },
-    inputClass: {
-      type: [String, Object, Array],
-      default: null,
-    },
-    maxlength: {
-      type: [Number, String],
-      default: null,
-    },
-    name: {
-      type: String,
-      default: null,
-    },
-    openDate: {
-      type: [String, Date, Number],
-      default: null,
-      validator: (val) =>
-        val === null ||
-        val instanceof Date ||
-        typeof val === 'string' ||
-        typeof val === 'number',
-    },
-    parser: {
-      type: Function,
-      default: null,
-    },
-    pattern: {
-      type: String,
-      default: null,
-    },
-    placeholder: {
-      type: String,
-      default: null,
-    },
-    refName: {
-      type: String,
-      default: '',
-    },
-    required: {
-      type: Boolean,
-      default: false,
-    },
-    showCalendarOnButtonClick: {
-      type: Boolean,
-      default: false,
-    },
-    showCalendarOnFocus: {
-      type: Boolean,
-      default: false,
-    },
-    tabindex: {
-      type: [Number, String],
-      default: null,
-    },
-    typeable: {
-      type: Boolean,
-      default: false,
-    },
-    useUtc: {
-      type: Boolean,
-      default: false,
-    },
-  },
+<script lang="ts">
+import { Vue, Component, Prop } from 'vue-property-decorator'
+
+@Component
+export default class inputProps extends Vue {
+  @Prop({ default: false }) autofocus: boolean
+
+  @Prop({ default: false }) bootstrapStyling: boolean
+
+  @Prop({ default: false }) clearButton: boolean
+
+  @Prop({ default: '' }) clearButtonIcon: string
+
+  @Prop({ default: false }) calendarButton: boolean
+
+  @Prop({ default: '' }) calendarButtonIcon: string
+
+  @Prop({ default: '' }) calendarButtonIconContent: string
+
+  @Prop({ default: false }) disabled: boolean
+
+  @Prop({ default: 'dd MMM yyyy' }) format: string | Function
+
+  @Prop({ default: null }) id: string
+
+  @Prop({ default: false }) inline: boolean
+
+  @Prop({ default: null }) inputClass: string | Object | Array<string>
+
+  @Prop({ default: null }) maxlength: number | string
+
+  @Prop({ default: null }) name: string
+
+  @Prop({ default: null }) openDate: string | Date | number | null
+
+  @Prop({ default: null }) parser: Function
+
+  @Prop({ default: null }) pattern: string
+
+  @Prop({ default: null }) placeholder: string
+
+  @Prop({ default: '' }) refName: string
+
+  @Prop({ default: false }) required: boolean
+
+  @Prop({ default: false }) showCalendarOnButtonClick: boolean
+
+  @Prop({ default: false }) showCalendarOnFocus: boolean
+
+  @Prop({ default: null }) tabindex: number | string
+
+  @Prop({ default: false }) typeable: boolean
+
+  @Prop({ default: false }) useUtc: boolean
 }
 </script>

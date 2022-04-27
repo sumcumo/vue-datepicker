@@ -52,149 +52,142 @@
   </div>
 </template>
 
-<script>
-import pickerMixin from '~/mixins/pickerMixin.vue'
-import DisabledDate from '~/utils/DisabledDate'
+<script lang="ts">
+import { Component, Prop, Mixins } from 'vue-property-decorator'
+import { YearCell } from '../../typings'
+import pickerMixin from '../mixins/pickerMixin.vue'
+import DisabledDate from '../utils/DisabledDate'
 import PickerCells from './PickerCells.vue'
 import UpButton from './UpButton.vue'
 
-export default {
-  name: 'PickerYear',
+@Component({
   components: { PickerCells, UpButton },
-  mixins: [pickerMixin],
-  props: {
-    yearRange: {
-      type: Number,
-      default: 10,
-    },
-  },
-  computed: {
-    /**
-     * Sets an array with all years to show this decade (or yearRange)
-     * @return {Array}
-     */
-    // eslint-disable-next-line complexity,max-statements
-    cells() {
-      const d = this.pageDate
-      const years = []
-      const year = this.useUtc
-        ? Math.floor(d.getUTCFullYear() / this.yearRange) * this.yearRange
-        : Math.floor(d.getFullYear() / this.yearRange) * this.yearRange
-      // set up a new date object to the beginning of the current 'page'
-      const dObj = this.useUtc
-        ? new Date(Date.UTC(year, d.getUTCMonth(), d.getUTCDate()))
-        : new Date(
-            year,
-            d.getMonth(),
-            d.getDate(),
-            d.getHours(),
-            d.getMinutes(),
-          )
-      const todayYear = this.utils.getFullYear(this.utils.getNewDateObject())
+})
+export default class PickerYear extends Mixins(pickerMixin) {
+  @Prop({ default: 10 }) yearRange: number = 10
 
-      for (let i = 0; i < this.yearRange; i += 1) {
-        years.push({
-          year: this.utils.getFullYear(dObj),
-          timestamp: dObj.valueOf(),
-          isDisabled: this.isDisabledYear(dObj),
-          isOpenDate: this.isOpenYear(dObj),
-          isSelected: this.isSelectedYear(dObj),
-          isToday: dObj.getFullYear() === todayYear,
-        })
-        this.utils.setFullYear(dObj, this.utils.getFullYear(dObj) + 1)
-      }
+  /**
+   * Sets an array with all years to show this decade (or yearRange)
+   */
+  // eslint-disable-next-line complexity,max-statements
+  get cells(): YearCell[] {
+    const d = this.pageDate
+    const years = []
+    const year = this.useUtc
+      ? Math.floor(d.getUTCFullYear() / this.yearRange) * this.yearRange
+      : Math.floor(d.getFullYear() / this.yearRange) * this.yearRange
+    // set up a new date object to the beginning of the current 'page'
+    const dObj = this.useUtc
+      ? new Date(Date.UTC(year, d.getUTCMonth(), d.getUTCDate()))
+      : new Date(year, d.getMonth(), d.getDate(), d.getHours(), d.getMinutes())
+    const todayYear = this.utils.getFullYear(this.utils.getNewDateObject())
 
-      // Fill any remaining cells with blanks to position trailing cells correctly when rtl
-      const cellsInGrid = Math.ceil(this.yearRange / 3) * 3
-      for (let i = years.length; i < cellsInGrid; i += 1) {
-        years.push({
-          id: i,
-          isDisabled: true,
-        })
-      }
+    for (let i = 0; i < this.yearRange; i += 1) {
+      years.push({
+        year: this.utils.getFullYear(dObj).toString(),
+        timestamp: dObj.valueOf(),
+        isDisabled: this.isDisabledYear(dObj),
+        isOpenDate: this.isOpenYear(dObj),
+        isSelected: this.isSelectedYear(dObj),
+        isToday: dObj.getFullYear() === todayYear,
+      })
+      this.utils.setFullYear(dObj, this.utils.getFullYear(dObj) + 1)
+    }
 
-      return years
-    },
-    /**
-     * Is the next decade disabled?
-     * @return {Boolean}
-     */
-    isNextDisabled() {
-      if (!this.disabledConfig.has.from) {
-        return false
-      }
-      return this.disabledConfig.from.year <= this.pageDecadeEnd
-    },
-    /**
-     * Is the previous decade disabled?
-     * @return {Boolean}
-     */
-    isPreviousDisabled() {
-      if (!this.disabledConfig.has.to) {
-        return false
-      }
-      return this.disabledConfig.to.year >= this.pageDecadeStart
-    },
-    /**
-     * The year at which the current yearRange starts
-     * @return {Number}
-     */
-    pageDecadeStart() {
-      return Math.floor(this.pageYear / this.yearRange) * this.yearRange
-    },
-    /**
-     * The year at which the current yearRange ends
-     * @return {Number}
-     */
-    pageDecadeEnd() {
-      return this.pageDecadeStart + this.yearRange - 1
-    },
-    /**
-     * Display the current page's decade (or year range) as the title.
-     * @return {String}
-     */
-    pageTitleYear() {
-      const { yearSuffix } = this.translation
-      return `${this.pageDecadeStart} - ${this.pageDecadeEnd}${yearSuffix}`
-    },
-  },
-  methods: {
-    /**
-     * Whether a year is disabled
-     * @param {Date} date
-     * @return {Boolean}
-     */
-    isDisabledYear(date) {
-      return new DisabledDate(this.utils, this.disabledDates).isYearDisabled(
-        date,
-      )
-    },
-    /**
-     * Should the calendar open on this year?
-     * @return {Boolean}
-     */
-    isOpenYear(date) {
-      if (!this.openDate) {
-        return false
-      }
+    // Fill any remaining cells with blanks to position trailing cells correctly when rtl
+    const cellsInGrid = Math.ceil(this.yearRange / 3) * 3
+    for (let i = years.length; i < cellsInGrid; i += 1) {
+      years.push({
+        year: '',
+        timestamp: 0,
+        isDisabled: true,
+        isOpenDate: false,
+        isSelected: false,
+        isToday: false,
+      })
+    }
 
-      const openDateYear = this.utils.getFullYear(this.openDate)
-      const thisDateYear = this.utils.getFullYear(date)
+    return years
+  }
 
-      return openDateYear === thisDateYear
-    },
-    /**
-     * Whether the selected date is in this year
-     * @param {Date} date
-     * @return {Boolean}
-     */
-    isSelectedYear(date) {
-      const year = this.utils.getFullYear(date)
+  /**
+   * Is the next decade disabled?
+   */
+  get isNextDisabled() {
+    if (!this.disabledConfig.has.from) {
+      return false
+    }
 
-      return (
-        this.selectedDate && year === this.utils.getFullYear(this.selectedDate)
-      )
-    },
-  },
+    return this.disabledConfig.from.year! <= this.pageDecadeEnd
+  }
+
+  /**
+   * Is the previous decade disabled?
+   */
+  get isPreviousDisabled() {
+    if (!this.disabledConfig.has.to) {
+      return false
+    }
+
+    return this.disabledConfig.to.year! >= this.pageDecadeStart
+  }
+
+  /**
+   * The year at which the current yearRange starts
+   */
+  get pageDecadeStart() {
+    return Math.floor(this.pageYear / this.yearRange) * this.yearRange
+  }
+
+  /**
+   * The year at which the current yearRange ends
+   */
+  get pageDecadeEnd() {
+    return this.pageDecadeStart + this.yearRange - 1
+  }
+
+  /**
+   * Display the current page's decade (or year range) as the title.
+   */
+  get pageTitleYear() {
+    const { yearSuffix } = this.translation
+    return `${this.pageDecadeStart} - ${this.pageDecadeEnd}${yearSuffix}`
+  }
+
+  /**
+   * Whether a year is disabled
+   */
+  isDisabledYear(date: Date) {
+    return new DisabledDate(this.useUtc, this.disabledDates).isYearDisabled(
+      date,
+    )
+  }
+
+  /**
+   * Should the calendar open on this year?
+   */
+  isOpenYear(date: Date) {
+    if (!this.openDate) {
+      return false
+    }
+
+    const openDateYear = this.utils.getFullYear(this.openDate)
+    const thisDateYear = this.utils.getFullYear(date)
+
+    return openDateYear === thisDateYear
+  }
+
+  /**
+   * Whether the selected date is in this year
+   */
+  isSelectedYear(date: Date) {
+    const year = this.utils.getFullYear(date)
+
+    if (!this.selectedDate) {
+      return false
+    }
+
+    return year === this.utils.getFullYear(this.selectedDate)
+  }
 }
 </script>

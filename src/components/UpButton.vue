@@ -14,18 +14,13 @@
   </button>
 </template>
 
-<script>
-export default {
-  name: 'UpButton',
-  props: {
-    isDisabled: {
-      type: Boolean,
-      default: false,
-    },
-    isRtl: {
-      type: Boolean,
-      required: true,
-    },
-  },
+<script lang="ts">
+import { Vue, Component, Prop } from 'vue-property-decorator'
+
+@Component
+export default class UpButton extends Vue {
+  @Prop({ default: false }) isDisabled: boolean
+
+  @Prop({ required: true }) isRtl: boolean
 }
 </script>

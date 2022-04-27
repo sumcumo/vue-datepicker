@@ -22,81 +22,75 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'PickerCells',
-  props: {
-    bootstrapStyling: {
-      type: Boolean,
-      default: false,
-    },
-    cells: {
-      type: Array,
-      required: true,
-    },
-    isRtl: {
-      type: Boolean,
-      default: false,
-    },
-    showEdgeDates: {
-      type: Boolean,
-      default: true,
-    },
-    tabbableCellId: {
-      type: Number,
-      default: null,
-    },
-    view: {
-      type: String,
-      validator: (val) => ['day', 'month', 'year'].includes(val),
-      required: true,
-    },
-  },
-  computed: {
-    /**
-     * The number of columns in the picker
-     * @return {Number}
-     */
-    columns() {
-      return this.view === 'day' ? 7 : 3
-    },
-  },
-  methods: {
-    /**
-     * Set the classes for a specific cell
-     * @return {Array}
-     */
-    // eslint-disable-next-line complexity
-    cellClasses(cell) {
-      return [
-        'cell',
-        this.view,
-        {
-          'btn': this.bootstrapStyling,
-          'disabled': cell.isDisabled,
-          'highlight-start': cell.isHighlightStart,
-          'highlight-end': cell.isHighlightEnd,
-          'highlighted': cell.isHighlighted,
-          'muted': cell.isPreviousMonth || cell.isNextMonth,
-          'open': cell.isOpenDate,
-          'sat': cell.isSaturday,
-          'sun': cell.isSunday,
-          'selected': this.showEdgeDates
-            ? cell.isSelected
-            : cell.isSelected && !cell.isPreviousMonth && !cell.isNextMonth,
-          'today': this.showEdgeDates
-            ? cell.isToday
-            : cell.isToday && !cell.isPreviousMonth && !cell.isNextMonth,
-          'weekend': cell.isWeekend,
-        },
-      ]
-    },
-    /**
-     * Emits an `arrow` event
-     */
-    handleArrow(cellId, delta) {
-      this.$emit('arrow', { cellId, delta })
-    },
-  },
+<script lang="ts">
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import { DayCell, MonthCell, View, YearCell } from '../../typings'
+
+@Component
+export default class PickerCells extends Vue {
+  @Prop({ default: false }) bootstrapStyling: boolean
+
+  @Prop({ required: true }) cells: DayCell[] | MonthCell[] | YearCell[]
+
+  @Prop({ default: false }) isRtl: boolean
+
+  @Prop({ default: false }) showEdgeDates: boolean
+
+  @Prop({ default: null }) tabbableCellId: number | null
+
+  @Prop({ required: true }) view: View
+
+  /**
+   * The number of columns in the picker
+   */
+  get columns(): number {
+    return this.view === 'day' ? 7 : 3
+  }
+
+  /**
+   * Set the classes for a specific cell
+   */
+  // eslint-disable-next-line complexity
+  cellClasses(cell: DayCell | MonthCell | YearCell): ['cell', View, object] {
+    let dayClasses = {}
+
+    if (cell.type === 'day') {
+      dayClasses = {
+        'highlight-start': cell.isHighlightStart,
+        'highlight-end': cell.isHighlightEnd,
+        'highlighted': cell.isHighlighted,
+        'muted': cell.isPreviousMonth || cell.isNextMonth,
+        'sat': cell.isSaturday,
+        'sun': cell.isSunday,
+        'selected': this.showEdgeDates
+          ? cell.isSelected
+          : cell.isSelected && !cell.isPreviousMonth && !cell.isNextMonth,
+        'today': this.showEdgeDates
+          ? cell.isToday
+          : cell.isToday && !cell.isPreviousMonth && !cell.isNextMonth,
+        'weekend': cell.isWeekend,
+      }
+    }
+
+    return [
+      'cell',
+      this.view,
+      {
+        btn: this.$props.bootstrapStyling,
+        disabled: cell.isDisabled,
+        open: cell.isOpenDate,
+        selected: cell.isSelected,
+        today: cell.isToday,
+        ...dayClasses,
+      },
+    ]
+  }
+
+  /**
+   * Emits an `arrow` event
+   */
+  handleArrow(cellId: number, delta: number) {
+    this.$emit('arrow', { cellId, delta })
+  }
 }
 </script>

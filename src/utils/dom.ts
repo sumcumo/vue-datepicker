@@ -1,9 +1,10 @@
-/* eslint no-param-reassign: 0 */
+import { PopupConfig, PopupRect } from '../../typings'
+
 /**
- * get the hidden element width, height
- * @param {HTMLElement} element dom
+ * Get the hidden element width, height
+ * @param element dom
  */
-export function getPopupElementSize(element) {
+export function getPopupElementSize(element: HTMLElement): PopupRect {
   const originalDisplay = element.style.display
   const originalVisibility = element.style.visibility
   element.style.display = 'block'
@@ -27,29 +28,23 @@ export function getPopupElementSize(element) {
 }
 
 /**
- * get the popup position
- * @param {Element} el element
- * @param {Element} elRelative relative element
- * @param {Number} targetWidth target element's width
- * @param {Number} targetHeight target element's height
- * @param {Boolean} appendToBody
- * @param {String} fixedPosition
- * @param {Boolean} rtl
+ * Get the popup's position
  */
 // eslint-disable-next-line complexity,max-statements
-export function getRelativePosition({
-  el,
-  elRelative,
-  targetWidth,
-  targetHeight,
-  appendToBody,
-  fixedPosition,
-  rtl,
-}) {
+export function getRelativePosition(popupConfig: PopupConfig) {
   let left = 0
   let top = 0
   let offsetX = 0
   let offsetY = 0
+  const {
+    el,
+    elRelative,
+    targetWidth,
+    targetHeight,
+    appendToBody,
+    fixedPosition,
+    rtl,
+  } = popupConfig
   const relativeRect = elRelative.getBoundingClientRect()
   const documentWidth = document.documentElement.clientWidth
   const documentHeight = document.documentElement.clientHeight

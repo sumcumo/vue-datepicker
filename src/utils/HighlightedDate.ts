@@ -1,18 +1,27 @@
-/* eslint-disable no-underscore-dangle */
-
-import makeCellUtils from './cellUtils'
+import CellUtils from './CellUtils'
 import DisabledDate from './DisabledDate'
+import { DisabledDates, Highlighted } from '../../typings'
 
 export default class HighlightedDate {
-  constructor(utils, disabledDates, highlighted) {
-    this._utils = utils
-    this._disabledDates = disabledDates
-    this._highlighted = highlighted
+  readonly #utils: CellUtils
+
+  readonly #disabledDates: DisabledDates
+
+  readonly #highlighted: Highlighted
+
+  constructor(
+    useUTC: boolean,
+    disabledDates: DisabledDates,
+    highlighted: Highlighted,
+  ) {
+    this.#utils = new CellUtils(useUTC)
+    this.#disabledDates = disabledDates
+    this.#highlighted = highlighted
   }
 
   get config() {
-    const highlightedDates = this._highlighted
-    const utils = makeCellUtils(this._utils)
+    const highlightedDates = this.#highlighted
+    const utils = this.#utils
 
     return {
       exists: utils.configExists(highlightedDates),
@@ -32,14 +41,14 @@ export default class HighlightedDate {
     }
   }
 
-  isDateDisabled(date) {
-    const utils = this._utils
-    const disabledDates = this._disabledDates
+  isDateDisabled(date: Date) {
+    const utils = this.#utils
+    const disabledDates = this.#disabledDates
 
-    return new DisabledDate(utils, disabledDates).isDateDisabled(date)
+    return new DisabledDate(utils.useUtc, disabledDates).isDateDisabled(date)
   }
 
-  isHighlightingNotPossible(date) {
+  isHighlightingNotPossible(date: Date) {
     const { config } = this
 
     if (!config.exists) return false
@@ -47,8 +56,8 @@ export default class HighlightedDate {
     return !config.has.includeDisabled && this.isDateDisabled(date)
   }
 
-  isDateHighlightedVia(date) {
-    const highlightedDates = this._highlighted
+  isDateHighlightedVia(date: Date) {
+    const highlightedDates = this.#highlighted
     const { has } = this.config
 
     return {
@@ -65,26 +74,26 @@ export default class HighlightedDate {
         if (!has.specificDates) return false
 
         return highlightedDates.dates.some((d) => {
-          return this._utils.compareDates(date, d)
+          return this.#utils.compareDates(date, d)
         })
       },
       daysOfWeek: () => {
         if (!has.daysOfWeek) return false
 
-        return highlightedDates.days.indexOf(this._utils.getDay(date)) !== -1
+        return highlightedDates.days.indexOf(this.#utils.getDay(date)) !== -1
       },
       daysOfMonth: () => {
         if (!has.daysOfMonth) return false
 
         return (
-          highlightedDates.daysOfMonth.indexOf(this._utils.getDate(date)) !== -1
+          highlightedDates.daysOfMonth.indexOf(this.#utils.getDate(date)) !== -1
         )
       },
     }
   }
 
   // eslint-disable-next-line complexity,max-statements
-  isDateHighlighted(date) {
+  isDateHighlighted(date: Date) {
     if (this.isHighlightingNotPossible(date)) return false
 
     const isHighlightedVia = this.isDateHighlightedVia(date)

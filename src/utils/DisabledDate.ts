@@ -1,16 +1,19 @@
-/* eslint-disable no-underscore-dangle */
-
-import makeCellUtils from './cellUtils'
+import CellUtils from './CellUtils'
+import { DisabledDates } from '../../typings'
 
 export default class DisabledDate {
-  constructor(utils, disabledDates) {
-    this._utils = utils
-    this._disabledDates = disabledDates
+  readonly #utils: CellUtils
+
+  readonly #disabledDates: DisabledDates
+
+  constructor(useUTC: boolean, disabledDates: DisabledDates) {
+    this.#utils = new CellUtils(useUTC)
+    this.#disabledDates = disabledDates
   }
 
   get config() {
-    const disabledDates = this._disabledDates
-    const utils = makeCellUtils(this._utils)
+    const disabledDates = this.#disabledDates
+    const utils = this.#utils
 
     return {
       exists: utils.configExists(disabledDates),
@@ -28,16 +31,16 @@ export default class DisabledDate {
     }
   }
 
-  daysInMonth(date) {
-    const utils = this._utils
+  daysInMonth(date: Date) {
+    const utils = this.#utils
     const month = utils.getMonth(date)
     const year = utils.getFullYear(date)
 
     return utils.daysInMonth(year, month)
   }
 
-  isDateDisabledVia(date) {
-    const disabledDates = this._disabledDates
+  isDateDisabledVia(date: Date) {
+    const disabledDates = this.#disabledDates
     const { has } = this.config
 
     return {
@@ -51,7 +54,7 @@ export default class DisabledDate {
         if (!has.ranges) return false
 
         const { ranges } = disabledDates
-        const u = makeCellUtils(this._utils)
+        const u = this.#utils
 
         return ranges.some((thisRange) => {
           const hasFrom = u.isDefined(thisRange, 'from')
@@ -69,61 +72,61 @@ export default class DisabledDate {
         if (!has.specificDates) return false
 
         return disabledDates.dates.some((d) => {
-          return this._utils.compareDates(date, d)
+          return this.#utils.compareDates(date, d)
         })
       },
       daysOfWeek: () => {
         if (!has.daysOfWeek) return false
 
-        return disabledDates.days.indexOf(this._utils.getDay(date)) !== -1
+        return disabledDates.days.indexOf(this.#utils.getDay(date)) !== -1
       },
       daysOfMonth: () => {
         if (!has.daysOfMonth) return false
 
         return (
-          disabledDates.daysOfMonth.indexOf(this._utils.getDate(date)) !== -1
+          disabledDates.daysOfMonth.indexOf(this.#utils.getDate(date)) !== -1
         )
       },
     }
   }
 
-  isMonthDisabledVia(date) {
+  isMonthDisabledVia(date: Date) {
     const { from, has, to } = this.config
-    const month = this._utils.getMonth(date)
-    const year = this._utils.getFullYear(date)
+    const month = this.#utils.getMonth(date)
+    const year = this.#utils.getFullYear(date)
 
     return {
       to: () => {
-        const isYearInPast = has.to && year < to.year
+        const isYearInPast = has.to && year < to.year!
 
         if (isYearInPast) {
           return true
         }
 
-        return has.to && month < to.month && year <= to.year
+        return has.to && month < to.month! && year <= to.year!
       },
       from: () => {
-        const isYearInFuture = has.from && year > from.year
+        const isYearInFuture = has.from && year > from.year!
 
         if (isYearInFuture) {
           return true
         }
 
-        return has.from && month > from.month && year >= from.year
+        return has.from && month > from.month! && year >= from.year!
       },
     }
   }
 
-  isYearDisabledVia(date) {
+  isYearDisabledVia(date: Date) {
     const { from, has, to } = this.config
-    const year = this._utils.getFullYear(date)
+    const year = this.#utils.getFullYear(date)
 
     return {
       to: () => {
-        return has.to && year < to.year
+        return has.to && year < to.year!
       },
       from: () => {
-        return has.from && year > from.year
+        return has.from && year > from.year!
       },
     }
   }
@@ -134,7 +137,7 @@ export default class DisabledDate {
    * @return {Boolean}
    */
   // eslint-disable-next-line complexity,max-statements
-  isDateDisabled(date) {
+  isDateDisabled(date: Date) {
     if (!this.config.exists) return false
 
     const isDisabledVia = this.isDateDisabledVia(date)
@@ -156,7 +159,7 @@ export default class DisabledDate {
    * @return {Boolean}
    */
   // eslint-disable-next-line complexity,max-statements
-  isMonthDisabled(date) {
+  isMonthDisabled(date: Date) {
     const { config } = this
     const isDisabledVia = this.isMonthDisabledVia(date)
 
@@ -188,7 +191,7 @@ export default class DisabledDate {
    * @return {Boolean}
    */
   // eslint-disable-next-line complexity,max-statements
-  isYearDisabled(date) {
+  isYearDisabled(date: Date) {
     const { config } = this
     const isDisabledVia = this.isYearDisabledVia(date)
 
@@ -214,11 +217,8 @@ export default class DisabledDate {
     return true
   }
 
-  getEarliestPossibleDate(date) {
-    if (!date) {
-      return null
-    }
-    const utils = this._utils
+  getEarliestPossibleDate(date: Date): Date {
+    const utils = this.#utils
 
     if (this.isDateDisabled(date)) {
       const nextDate = new Date(
@@ -233,11 +233,8 @@ export default class DisabledDate {
     return date
   }
 
-  getLatestPossibleDate(date) {
-    if (!date) {
-      return null
-    }
-    const utils = this._utils
+  getLatestPossibleDate(date: Date): Date {
+    const utils = this.#utils
 
     if (this.isDateDisabled(date)) {
       const nextDate = new Date(
