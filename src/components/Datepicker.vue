@@ -748,7 +748,8 @@ export default {
       }
     },
     /**
-     * Set the datepicker value (and, if typeable, update `latestValidTypedDate`)     * @param {Date|String|Number|null} date
+     * Set the datepicker value (and, if typeable, update `latestValidTypedDate`)
+     * @param {Date|String|Number|null} date
      */
     setValue(date) {
       this.selectedDate = date || null
