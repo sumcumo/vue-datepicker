@@ -91,6 +91,8 @@ export default {
           break
         }
       }
+
+      this.focus.delay = 0
     },
     /**
      * Ensures the most recently focused tabbable cell is focused when tabbing backwards to an inline calendar
