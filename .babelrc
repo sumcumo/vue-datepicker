@@ -22,7 +22,10 @@
           "@babel/preset-typescript"
         ]
       ],
-      "plugins": ["@babel/plugin-transform-runtime"]
+      "plugins": [
+        ["@babel/plugin-proposal-decorators", { "legacy": true }],
+        "@babel/plugin-transform-runtime"
+      ]
     }
   }
 }
