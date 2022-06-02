@@ -3,44 +3,7 @@ import { Given, When, Then, And } from 'cypress-cucumber-preprocessor/steps'
 const { clickThe, createCalendar, focusThe, the } = cy
 
 describe('Close on escape', () => {
-  describe('@id-1: Clear date when a typeable calendar is {string}', () => {
-    Given(
-      'the typeable calendar is {string} and a {string} date is typed',
-      (openOrClosed, validity) => {
-        const date = validity === 'valid' ? '1 March 2021' : 'invalid date'
-        const isNot = openOrClosed === 'closed' ? 'not.' : ''
-
-        createCalendar({
-          typeable: true,
-        })
-
-        if (openOrClosed === 'open') {
-          clickThe('input')
-        }
-
-        focusThe('input').type(date)
-
-        the('picker-cells').should('have.length', 1)
-        the('calendar').should(`${isNot}be.visible`)
-      },
-    )
-
-    When('the user focuses the input field and presses escape', () => {
-      focusThe('input').type('{esc}')
-    })
-
-    Then('the calendar {string}', (opensOrCloses) => {
-      const isNot = opensOrCloses === 'closes' ? 'not.' : ''
-
-      the('calendar').should(`${isNot}be.visible`)
-    })
-
-    And('the input field has focus', () => {
-      the('input').should('be.focused')
-    })
-  })
-
-  describe('@id-2: Close by pressing escape on the {string}', () => {
+  describe('@id-1: Close by pressing escape on the {string}', () => {
     Given('the calendar is open', () => {
       createCalendar({
         openDate: new Date(2020, 2, 15),
@@ -56,27 +19,56 @@ describe('Close on escape', () => {
       focusThe(element).type('{esc}')
     })
 
-    Then('the calendar closes', () => {
-      the('calendar').should('not.be.visible')
+    Then('the calendar {string}', (opensOrCloses) => {
+      const isNot = opensOrCloses === 'closes' ? 'not.' : ''
+
+      the('calendar').should(`${isNot}be.visible`)
     })
 
-    And('the input field has focus')
+    And('the input field has focus', () => {
+      the('input').should('be.focused')
+    })
   })
 
-  describe('@id-3: Revert to open date when the focused cell is on the same page', () => {
-    Given('the calendar is open')
+  describe('@id-2: Revert to open date when the focused cell is on the same page', () => {
+    Given('the calendar is open on a {string} view', (minimumView) => {
+      createCalendar({
+        openDate: new Date(2020, 2, 15),
+        minimumView,
+      })
 
-    When('the user focuses another cell and presses the escape key', () => {
-      the('picker-cells').contains(20).focus().type('{esc}')
+      clickThe('input')
+      the('picker-cells').should('have.length', 1)
+      the('calendar').should('be.visible')
     })
+
+    When(
+      'the user focuses another cell on the same {string} view and presses the escape key',
+      (view) => {
+        let cellText = ''
+
+        switch (view) {
+          case 'day':
+            cellText = '20'
+            break
+          case 'month':
+            cellText = 'December'
+            break
+          default:
+            cellText = '2029'
+        }
+
+        the('picker-cells').contains(cellText).focus().type('{esc}')
+      },
+    )
 
     Then('the open date has focus', () => {
       the('open-date').should('be.focused')
     })
   })
 
-  describe('@id-4: Revert to open date when the focused cell is on a different page', () => {
-    Given('the calendar is open')
+  describe('@id-3: Revert to open date when the focused cell is on a different page', () => {
+    Given('the calendar is open on a {string} view')
 
     And('the user visits another page', () => {
       clickThe('next-button')
@@ -89,15 +81,26 @@ describe('Close on escape', () => {
     Then('the open date has focus')
   })
 
-  describe('@id-5: Revert to open date when the focused cell is on a different view', () => {
-    Given('the calendar is open')
+  describe('@id-4: Revert to open date when the focused cell is on a different view', () => {
+    Given(
+      'the calendar is open with a {string} initial view',
+      (initialView) => {
+        createCalendar({
+          openDate: new Date(2020, 2, 15),
+          initialView,
+        })
 
-    And('the user visits the next view up', () => {
-      clickThe('up-button')
-    })
+        clickThe('input')
+        the('picker-cells').should('have.length', 1)
+        the('calendar').should('be.visible')
+      },
+    )
 
     When('the user focuses a cell and presses the escape key')
 
-    Then('the open date has focus')
+    Then('the open date on the minimum view has focus', () => {
+      the('up-button').contains('Mar 2020')
+      the('open-date').should('be.focused')
+    })
   })
 })

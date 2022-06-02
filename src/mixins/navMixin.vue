@@ -261,6 +261,7 @@ export default {
      */
     handleFocusIn() {
       document.datepickerId = this.datepickerId
+      this.globalDatepickerId = this.datepickerId
 
       this.isActive = true
       this.setInlineTabbableCell()
@@ -268,10 +269,11 @@ export default {
       this.setNavElements()
     },
     /**
-     * Sets the datepicker's `isActive` state to false
+     * Sets the datepicker's `isActive` state to false and resets `globalDatepickerId`
      */
     handleFocusOut() {
       this.isActive = false
+      this.globalDatepickerId = ''
     },
     /**
      * Returns true if the calendar has been passed the given slot

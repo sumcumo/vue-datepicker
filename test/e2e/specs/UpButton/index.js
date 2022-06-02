@@ -3,34 +3,34 @@ import { Given, When, Then, And } from 'cypress-cucumber-preprocessor/steps'
 const { clickThe, createCalendar, focusThe, the } = cy
 
 describe('Up Button', () => {
-  describe('@id-1: Select up button by {string}', () => {
-    Given('the calendar is open on `Jan 2021`', () => {
-      createCalendar({
-        openDate: new Date(2021, 0, 1),
-      })
+  describe('@id-1: Click up button when initialView is <initialView> and maximumView is <maximumView>', () => {
+    Given(
+      'the open date is 1st Jan 2021 and the calendar is on the {string} view with a `maximumView` of {string}',
+      (initialView, maximumView) => {
+        createCalendar({
+          openDate: new Date(2021, 0, 1),
+          initialView,
+          maximumView,
+        })
 
-      clickThe('input')
+        clickThe('input', { force: true })
 
+        the('picker-cells').should('have.length', 1)
+        the('calendar').should('be.visible')
+      },
+    )
+
+    When('the user clicks on the up button', () => {
+      clickThe('up-button')
+    })
+
+    Then('the page is {string}', (page) => {
       the('picker-cells').should('have.length', 1)
-      the('calendar').should('be.visible')
+      the('up-button').should('contain', page)
     })
 
-    When('the user performs a {string} action', (action) => {
-      if (action === 'click') {
-        clickThe('up-button')
-        return
-      }
-
-      the('up-button').type(`{${action}}`)
-    })
-
-    Then('the page is `2021`', () => {
-      the('picker-cells').should('have.length', 1)
-      the('up-button').should('contain', '2021')
-    })
-
-    And('the up button has focus', () => {
-      the('up-button').should('be.focused')
+    And('the {string} button has focus', (element) => {
+      the(element).should('be.focused')
     })
   })
 

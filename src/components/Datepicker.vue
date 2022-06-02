@@ -252,6 +252,7 @@ export default {
       calendarHeight: 0,
       calendarSlots,
       isClickOutside: false,
+      globalDatepickerId: '',
       /*
        * The latest valid `typedDate` (used for typeable datepicker)
        * {Date}
@@ -361,7 +362,12 @@ export default {
       }
 
       if (isNoLongerActive && this.typeable) {
+        this.skipReviewFocus = true
         this.setTypedDateOnLosingFocus()
+
+        this.$nextTick(() => {
+          this.skipReviewFocus = false
+        })
       }
     },
     latestValidTypedDate(date) {
@@ -438,19 +444,34 @@ export default {
 
       this.$emit('closed')
     },
+    closeByClickOutside() {
+      this.isClickOutside = true
+      this.close()
+    },
+    closeIfNotFocused() {
+      const isFocused = this.allElements.includes(document.activeElement)
+
+      if (!isFocused) {
+        this.closeByClickOutside()
+      }
+    },
     /**
      * Closes the calendar when no element within it has focus
      */
     handleClickOutside() {
-      if (document.datepickerId !== this.datepickerId) {
+      if (!this.isOpen) {
         return
       }
 
-      const isFocused = this.allElements.includes(document.activeElement)
+      if (!this.globalDatepickerId) {
+        this.closeByClickOutside()
+        return
+      }
 
-      if (!isFocused && this.isOpen) {
-        this.isClickOutside = true
-        this.close()
+      if (document.datepickerId.toString() === this.datepickerId) {
+        this.$nextTick(() => {
+          this.closeIfNotFocused()
+        })
       }
     },
     /**
