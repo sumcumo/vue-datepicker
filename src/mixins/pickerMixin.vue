@@ -159,6 +159,8 @@ export default {
         return
       }
 
+      this.$emit('set-skip-review-focus', true)
+
       this.changePage({
         incrementBy: Math.sign(delta),
         focusRefs: ['arrow-to-cell'],
@@ -166,6 +168,7 @@ export default {
 
       this.$nextTick(() => {
         this.setFocusOnNewPage(options)
+        this.$emit('set-skip-review-focus', false)
       })
     },
     /**

@@ -107,6 +107,7 @@
                 @page-change="handlePageChange"
                 @select="handleSelect"
                 @set-focus="setFocus($event)"
+                @set-skip-review-focus="skipReviewFocus = $event"
                 @set-transition-name="setTransitionName($event)"
                 @set-view="setView"
               >

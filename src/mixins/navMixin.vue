@@ -13,6 +13,7 @@ export default {
       navElements: [],
       navElementsFocusedIndex: 0,
       resetTabbableCell: false,
+      skipReviewFocus: false,
       tabbableCell: null,
       transitionName: '',
     }
@@ -273,13 +274,6 @@ export default {
       this.isActive = false
     },
     /**
-     * Returns true if the user has arrowed to a new page
-     * @return {Boolean}
-     */
-    hasArrowedToNewPage() {
-      return this.focus.refs && this.focus.refs[0] === 'arrow-to-cell'
-    },
-    /**
      * Returns true if the calendar has been passed the given slot
      * @param  {String} slotName The name of the slot
      * @return {Boolean}
@@ -360,7 +354,7 @@ export default {
      * Sets the correct focus on next tick
      */
     reviewFocus() {
-      if (this.hasArrowedToNewPage()) {
+      if (this.skipReviewFocus) {
         return
       }
 
