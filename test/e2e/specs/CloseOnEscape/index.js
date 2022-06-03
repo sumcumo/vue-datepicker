@@ -19,10 +19,8 @@ describe('Close on escape', () => {
       focusThe(element).type('{esc}')
     })
 
-    Then('the calendar {string}', (opensOrCloses) => {
-      const isNot = opensOrCloses === 'closes' ? 'not.' : ''
-
-      the('calendar').should(`${isNot}be.visible`)
+    Then('the calendar closes', () => {
+      the('calendar').should(`not.be.visible`)
     })
 
     And('the input field has focus', () => {

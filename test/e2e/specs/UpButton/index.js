@@ -35,7 +35,16 @@ describe('Up Button', () => {
   })
 
   describe('@id-2: Arrow down to tabbable cell', () => {
-    Given('the calendar is open on `Jan 2021`')
+    Given('the calendar is open on `Jan 2021`', () => {
+      createCalendar({
+        openDate: new Date(2021, 0, 1),
+      })
+
+      clickThe('input', { force: true })
+
+      the('picker-cells').should('have.length', 1)
+      the('calendar').should('be.visible')
+    })
 
     When('the user presses the `down` arrow', () => {
       focusThe('up-button').type('{downarrow}')
