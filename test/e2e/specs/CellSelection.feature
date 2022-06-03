@@ -10,7 +10,7 @@ Feature: Cell Selection
 # and https://github.com/cypress-io/cypress/issues/8267
 
   @id-1
-  Scenario Outline: Select a cell when on the minimum view: <minimumView>
+  Scenario Outline: Select a cell: minimum view: <minimumView>
     Given the calendar is open on the minimum view: "<minimumView>"
     When the user clicks on the tabbable cell
     Then the date is submitted with a value of "<date>"
@@ -23,8 +23,8 @@ Feature: Cell Selection
       | 3 | year        | 01 Mar 2020 |
 
 
-  @id-2 @focus
-  Scenario Outline: Select a cell when NOT on the minimum view: <initialView>
+  @id-2
+  Scenario Outline: Select a cell: higher than minimum view: <initialView>
     Given the calendar is open on a "<initialView>" view
     When the user clicks on the tabbable cell
     Then the "<view>" view is shown

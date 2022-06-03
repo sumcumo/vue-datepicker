@@ -2,7 +2,7 @@ import { Given, When, Then, And } from 'cypress-cucumber-preprocessor/steps'
 
 const { clickThe, createCalendar, the } = cy
 
-describe('Focusable Cell', () => {
+describe('Cell selection', () => {
   describe('@id-1: Select a cell: minimum view', () => {
     Given(
       'the calendar is open on the minimum view: {string}',
