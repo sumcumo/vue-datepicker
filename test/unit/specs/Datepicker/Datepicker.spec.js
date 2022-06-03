@@ -214,6 +214,21 @@ describe('Datepicker mounted to body', () => {
     wrapper.destroy()
   })
 
+  it("focuses today's date when append-to-body is true", async () => {
+    await wrapper.setProps({
+      appendToBody: true,
+    })
+
+    const input = wrapper.find('input')
+    await input.trigger('focusin')
+    await input.trigger('click')
+    jest.advanceTimersByTime(250)
+    const todayCell = wrapper.find('button.today')
+
+    expect(todayCell.text()).toBe(new Date().getDate().toString())
+    expect(document.activeElement).toStrictEqual(todayCell.element)
+  })
+
   it('does not arrow up from the previous button to the input field', async () => {
     const input = wrapper.find('input')
 

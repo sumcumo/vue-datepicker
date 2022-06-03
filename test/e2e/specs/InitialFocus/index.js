@@ -3,19 +3,15 @@ import { Given, When, Then, And } from 'cypress-cucumber-preprocessor/steps'
 const { clickThe, createCalendar, the } = cy
 
 describe('Set the initial focus', () => {
-  describe('@id-1: initialView is <initialView> and appendToBody is <appendToBody>', () => {
-    Given(
-      'appendToBody is {string} and the initialView is {string}',
-      (initialView, appendToBody) => {
-        const openDate = new Date(2021, 6, 15)
+  describe('@id-1: initialView is <initialView>', () => {
+    Given('the initialView is {string}', (initialView) => {
+      const openDate = new Date(2021, 6, 15)
 
-        createCalendar({
-          openDate,
-          initialView,
-          appendToBody,
-        })
-      },
-    )
+      createCalendar({
+        openDate,
+        initialView,
+      })
+    })
 
     When('the user opens the calendar', () => {
       clickThe('input')

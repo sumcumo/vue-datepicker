@@ -6,7 +6,7 @@
       :ref="cell.isOpenDate ? 'openDate' : null"
       :class="cellClasses(cell)"
       :data-id="id"
-      :data-test-tabbable-cell="id === tabbableCellId"
+      :data-test-tabbable-cell="isTabbableCell(cell, id)"
       :data-test-open-date="cell.isOpenDate"
       :data-test-today-cell="cell.isToday"
       :disabled="cell.isDisabled"
@@ -96,6 +96,13 @@ export default {
      */
     handleArrow(cellId, delta) {
       this.$emit('arrow', { cellId, delta })
+    },
+    isTabbableCell(cell, id) {
+      if (!this.tabbableCellId) {
+        return cell.isOpenDate
+      }
+
+      return id === this.tabbableCellId
     },
   },
 }

@@ -4,22 +4,18 @@ Feature: Set the initial focus
   So that I can easily navigate the calendar
 
 
-  @id-1 @focus
-  Scenario Outline: appendToBody is <appendToBody> and initialView is <initialView>
-    Given appendToBody is "<appendToBody>" and the initialView is "<initialView>"
+  @id-1
+  Scenario Outline: Set the initial focus
+    Given the initialView is "<initialView>"
     When the user opens the calendar
     Then the calendar opens
     And the focusable-cell cell for "<initialView>" has focus
 
     Examples:
-      | # | appendToBody | initialView |
-      | 1 | false        | day         |
-      | 2 | false        | month       |
-      | 3 | false        | year        |
-      | 4 | true         | day         |
-      | 5 | true         | month       |
-      | 6 | true         | year        |
-
+      | # | initialView |
+      | 1 | day         |
+      | 2 | month       |
+      | 2 | year        |
 
   @id-2
   Scenario Outline: Day view when <pastOrFuture> dates are disabled
