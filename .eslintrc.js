@@ -6,7 +6,6 @@ module.exports = {
   },
   extends: [
     'plugin:vue/recommended',
-    'plugin:vue-types/strongly-recommended',
     'prettier/vue',
     'airbnb-base',
     'plugin:compat/recommended',
@@ -15,6 +14,7 @@ module.exports = {
     'plugin:jest/recommended',
     '@vue/typescript',
     'prettier/@typescript-eslint',
+    'plugin:cypress/recommended',
   ],
   plugins: ['import', 'prettier', 'sort-class-members', '@typescript-eslint'],
   parserOptions: {

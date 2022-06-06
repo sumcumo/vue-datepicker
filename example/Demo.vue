@@ -315,7 +315,7 @@
 
     <div class="example">
       <h3>Fixed positions</h3>
-      <Datepicker :fixed-position="fixedPosition" :append-to-body="true" />
+      <Datepicker :fixed-position="fixedPosition" />
       <code>
         &lt;datepicker :fixed-position="fixedPosition"&gt;&lt;/datepicker&gt;
       </code>

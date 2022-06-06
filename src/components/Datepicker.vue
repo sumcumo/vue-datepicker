@@ -1,5 +1,14 @@
 <template>
-  <div class="vdp-datepicker" :class="[wrapperClass, { rtl: isRtl }]">
+  <div
+    :id="datepickerId"
+    ref="datepicker"
+    class="vdp-datepicker"
+    :class="[wrapperClass, { rtl: isRtl }]"
+    @focusin="handleFocusIn($event)"
+    @focusout="handleFocusOut($event)"
+    @keydown.esc="resetOrClose"
+    @keydown.tab="tabThroughNavigation($event)"
+  >
     <DateInput
       :id="id"
       ref="dateInput"
@@ -34,6 +43,7 @@
       @close="close"
       @focus="handleInputFocus"
       @open="open"
+      @set-focus="setFocus($event)"
       @typed-date="handleTypedDate"
     >
       <slot slot="beforeDateInput" name="beforeDateInput" />
@@ -53,28 +63,41 @@
       <Transition name="toggle">
         <div
           v-show="isOpen"
-          ref="datepicker"
           class="vdp-datepicker__calendar"
           :class="pickerClasses"
+          data-test-calendar
           @mousedown.prevent
+          @focusin.stop="handleFocusIn($event)"
+          @focusout.stop="handleFocusOut($event)"
+          @keydown.esc.stop="resetOrClose"
+          @keydown.tab.stop="tabThroughNavigation($event)"
         >
           <Transition name="view">
-            <div :key="view">
-              <slot name="beforeCalendarHeader" />
+            <div ref="view" :key="view">
+              <div v-if="$slots.beforeCalendarHeader">
+                <slot name="beforeCalendarHeader" />
+              </div>
               <Component
                 :is="picker"
+                ref="picker"
+                :bootstrap-styling="bootstrapStyling"
                 class="picker-view"
                 :day-cell-content="dayCellContent"
                 :disabled-dates="disabledDates"
                 :first-day-of-week="firstDayOfWeek"
                 :highlighted="highlighted"
                 :is-rtl="isRtl"
+                :is-typeable="typeable"
                 :is-up-disabled="isUpDisabled"
+                :is-minimum-view="isMinimumView"
+                :open-date="computedOpenDate"
                 :page-date="pageDate"
                 :selected-date="selectedDate"
                 :show-edge-dates="showEdgeDates"
                 :show-full-month-name="fullMonthName"
                 :show-header="showHeader"
+                :slide-duration="slideDuration"
+                :tabbable-cell-id="tabbableCellId"
                 :transition-name="transitionName"
                 :translation="translation"
                 :use-utc="useUtc"
@@ -82,7 +105,7 @@
                 :year-range="yearPickerRange"
                 @page-change="handlePageChange"
                 @select="handleSelect"
-                @select-disabled="handleSelectDisabled"
+                @set-focus="setFocus($event)"
                 @set-transition-name="setTransitionName($event)"
                 @set-view="setView"
               >
@@ -93,7 +116,9 @@
                   <slot v-if="cell" name="dayCellContent" :cell="cell" />
                 </template>
               </Component>
-              <slot name="calendarFooter" />
+              <div v-if="$slots.calendarFooter">
+                <slot name="calendarFooter" />
+              </div>
             </div>
           </Transition>
         </div>
@@ -109,6 +134,7 @@ import DateInput from '~/components/DateInput.vue'
 import DisabledDate from '~/utils/DisabledDate'
 import inputProps from '~/mixins/inputProps.vue'
 import makeDateUtils from '~/utils/DateUtils'
+import navMixin from '~/mixins/navMixin.vue'
 import PickerDay from '~/components/PickerDay.vue'
 import PickerMonth from '~/components/PickerMonth.vue'
 import PickerYear from '~/components/PickerYear.vue'
@@ -123,7 +149,7 @@ export default {
     PickerYear,
     Popup,
   },
-  mixins: [inputProps],
+  mixins: [inputProps, navMixin],
   props: {
     appendToBody: {
       type: Boolean,
@@ -223,6 +249,7 @@ export default {
     return {
       calendarHeight: 0,
       calendarSlots,
+      isClickOutside: false,
       /*
        * Vue cannot observe changes to a Date Object so date must be stored as a timestamp
        * This represents the first day of the current viewing month
@@ -234,7 +261,7 @@ export default {
        * {Date}
        */
       selectedDate: null,
-      transitionName: '',
+      slideDuration: 250,
       utils,
       view: '',
     }
@@ -243,11 +270,28 @@ export default {
     computedInitialView() {
       return this.initialView || this.minimumView
     },
+    computedOpenDate() {
+      const openDateOrToday = this.openDate
+        ? new Date(this.openDate)
+        : this.utils.getNewDateObject()
+      const openDate = this.selectedDate || openDateOrToday
+
+      // If the `minimum-view` is `month` or `year`, convert `openDate` accordingly
+      return this.minimumView === 'day'
+        ? openDate
+        : new Date(this.utils.setDate(openDate, 1))
+    },
+    datepickerId() {
+      return `vdp-${Math.random().toString(36).slice(-10)}`
+    },
     isInline() {
       return !!this.inline
     },
     isOpen() {
       return this.view !== ''
+    },
+    isMinimumView() {
+      return this.view === this.minimumView
     },
     isRtl() {
       return this.translation.rtl
@@ -299,7 +343,15 @@ export default {
   },
   watch: {
     initialView() {
-      this.setInitialView()
+      if (this.isOpen) {
+        this.setInitialView()
+      }
+    },
+    isActive(hasJustBecomeActive) {
+      if (hasJustBecomeActive && this.inline) {
+        this.setNavElementsFocusedIndex()
+        this.tabToCorrectInlineCell()
+      }
     },
     openDate() {
       this.setPageDate()
@@ -308,9 +360,16 @@ export default {
       const parsedValue = this.parseValue(value)
       this.setValue(parsedValue)
     },
+    view(newView, oldView) {
+      this.handleViewChange(newView, oldView)
+    },
   },
   mounted() {
     this.init()
+    document.addEventListener('click', this.handleClickOutside)
+  },
+  beforeDestroy() {
+    document.removeEventListener('click', this.handleClickOutside)
   },
   methods: {
     /**
@@ -330,8 +389,15 @@ export default {
      * Clear the selected date
      */
     clearDate() {
+      if (!this.selectedDate) {
+        return
+      }
+
       this.selectedDate = null
+      this.focus.refs = ['input']
+      this.close()
       this.setPageDate()
+
       this.$emit('selected', null)
       this.$emit('input', null)
       this.$emit('cleared')
@@ -340,9 +406,37 @@ export default {
      * Close the calendar
      */
     close() {
-      if (!this.isInline) {
-        this.view = ''
-        this.$emit('closed')
+      if (this.isInline) {
+        return
+      }
+
+      this.view = ''
+
+      if (this.showCalendarOnFocus) {
+        this.$refs.dateInput.shouldToggleOnClick = true
+      }
+
+      if (this.isClickOutside) {
+        this.isClickOutside = false
+      } else {
+        this.reviewFocus()
+      }
+
+      this.$emit('closed')
+    },
+    /**
+     * Closes the calendar when no element within it has focus
+     */
+    handleClickOutside() {
+      if (document.datepickerId !== this.datepickerId) {
+        return
+      }
+
+      const isFocused = this.allElements.includes(document.activeElement)
+
+      if (!isFocused && this.isOpen) {
+        this.isClickOutside = true
+        this.close()
       }
     },
     /**
@@ -358,15 +452,19 @@ export default {
       this.$emit('focus')
     },
     /**
-     * Set the new pageDate and emit `changed-<view>` event
+     * Set the new pageDate, focus the relevant element and emit a `changed-<view>` event
      */
-    handlePageChange(pageDate) {
+    handlePageChange({ focusRefs, pageDate }) {
       this.setPageDate(pageDate)
+      this.focus.refs = focusRefs
+      this.focus.delay = this.slideDuration
+      this.reviewFocus()
       this.$emit(`changed-${this.nextView.up}`, pageDate)
     },
     /**
      * Set the date, or go to the next view down
      */
+    // eslint-disable-next-line max-statements,complexity
     handleSelect(cell) {
       if (this.allowedToShowView(this.nextView.down)) {
         this.showNextViewDown(cell)
@@ -375,20 +473,56 @@ export default {
 
       this.$refs.dateInput.typedDate = ''
       this.selectDate(cell.timestamp)
+      this.focus.delay = cell.isNextMonth ? this.slideDuration : 0
+      this.focus.refs = this.isInline ? ['tabbableCell'] : ['input']
       this.close()
-    },
-    /**
-     * Emit a 'selected-disabled' event
-     */
-    handleSelectDisabled(cell) {
-      this.$emit('selected-disabled', cell)
+
+      if (this.showCalendarOnFocus && !this.inline) {
+        this.$refs.dateInput.shouldToggleOnClick = true
+      } else {
+        this.reviewFocus()
+      }
     },
     /**
      * Set the date from a 'typed-date' event
      * @param {Date} date
      */
     handleTypedDate(date) {
-      this.selectDate(date.valueOf())
+      if (this.selectedDate) {
+        this.setTransitionAndFocusDelay(this.selectedDate, date)
+      }
+
+      this.selectDate(date ? date.valueOf() : null)
+      this.reviewFocus()
+    },
+    /**
+     * Focus the relevant element when the view changes
+     * @param {String} newView
+     * @param {String} oldView
+     */
+    handleViewChange(newView, oldView) {
+      const isClosing = newView === ''
+      const isOpeningInline = oldView === '' && this.isInline
+
+      if (isClosing || isOpeningInline) {
+        return
+      }
+
+      if (!this.isRevertingToOpenDate) {
+        this.setViewChangeFocusRefs(newView, oldView)
+        this.reviewFocus()
+      }
+
+      this.isRevertingToOpenDate = false
+    },
+    /**
+     * Returns true if element has the given className
+     * @param   {HTMLElement} element
+     * @param   {String}      className
+     * @returns {Boolean}
+     */
+    hasClass(element, className) {
+      return element && element.className.split(' ').includes(className)
     },
     /**
      * Initiate the component
@@ -408,6 +542,8 @@ export default {
       if (this.isInline) {
         this.setInitialView()
       }
+
+      this.setSlideDuration()
     },
     /**
      * Returns true if a date is disabled
@@ -419,6 +555,21 @@ export default {
       )
     },
     /**
+     * Returns true if we should reset the focus to computedOpenDate
+     * @returns {Boolean}
+     */
+    isResetFocus() {
+      if (!this.isOpen) {
+        return false
+      }
+
+      const isOpenCellFocused =
+        this.hasClass(document.activeElement, 'cell') &&
+        !this.hasClass(document.activeElement, 'open')
+
+      return !this.isMinimumView || isOpenCellFocused
+    },
+    /**
      * Opens the calendar with the relevant view: 'day', 'month', or 'year'
      */
     open() {
@@ -427,6 +578,8 @@ export default {
       }
 
       this.setInitialView()
+      this.reviewFocus()
+
       this.$emit('opened')
     },
     /**
@@ -443,10 +596,29 @@ export default {
       return dateTemp
     },
     /**
+     * Focus the open date, or close the calendar if already focused
+     */
+    resetOrClose() {
+      if (this.isResetFocus()) {
+        this.resetFocusToOpenDate()
+        return
+      }
+
+      if (this.isOpen) {
+        this.focus.refs = ['input']
+        this.close()
+      }
+    },
+    /**
      * Select the date
      * @param {Number} timestamp
      */
     selectDate(timestamp) {
+      if (!timestamp) {
+        this.selectedDate = null
+        return
+      }
+
       const date = new Date(timestamp)
       this.selectedDate = date
       this.setPageDate(date)
@@ -473,27 +645,27 @@ export default {
     setPageDate(date) {
       let dateTemp = date
       if (!dateTemp) {
-        if (this.openDate) {
-          dateTemp = new Date(this.openDate)
+        if (this.computedOpenDate) {
+          dateTemp = new Date(this.computedOpenDate)
         } else {
           dateTemp = new Date()
         }
-        dateTemp = this.utils.resetDateTime(dateTemp)
       }
+      dateTemp = this.utils.resetDateTime(new Date(dateTemp))
+
       this.pageTimestamp = this.utils.setDate(new Date(dateTemp), 1)
     },
     /**
-     * Sets the direction of the slide transition
-     * @param {Number} plusOrMinus Positive for the future; negative for the past
+     * Sets the slide duration in milliseconds by looking up the stylesheet
      */
-    setTransitionName(plusOrMinus) {
-      const isInTheFuture = plusOrMinus > 0
-
-      if (this.isRtl) {
-        this.transitionName = isInTheFuture ? 'slide-left' : 'slide-right'
-      } else {
-        this.transitionName = isInTheFuture ? 'slide-right' : 'slide-left'
+    setSlideDuration() {
+      if (!this.$refs.picker || !this.$refs.picker.$refs.cells) {
+        return
       }
+      const cells = this.$refs.picker.$refs.cells.$el
+      const durationInSecs = window.getComputedStyle(cells).transitionDuration
+
+      this.slideDuration = parseFloat(durationInSecs) * 1000
     },
     /**
      * Set the datepicker value
@@ -501,8 +673,8 @@ export default {
      */
     setValue(date) {
       if (!date) {
-        this.setPageDate()
         this.selectedDate = null
+        this.setPageDate()
         return
       }
       this.selectedDate = date
@@ -516,6 +688,28 @@ export default {
       if (this.allowedToShowView(view)) {
         this.view = view
       }
+    },
+    /**
+     * Sets the array of `refs` that might be focused following a view change
+     * @param {String} newView The view being changed to
+     * @param {String} oldView The previous view
+     */
+    setViewChangeFocusRefs(newView, oldView) {
+      if (oldView === '') {
+        this.focus.refs = []
+        return
+      }
+
+      const views = ['day', 'month', 'year']
+      const isNewView = (view) => view === newView
+      const isOldView = (view) => view === oldView
+      const newViewIndex = views.findIndex(isNewView)
+      const oldViewIndex = views.findIndex(isOldView)
+      const isViewChangeUp = newViewIndex - oldViewIndex > 0
+
+      this.focus.refs = isViewChangeUp
+        ? ['up', 'tabbableCell']
+        : ['tabbableCell', 'up']
     },
     /**
      * Set the view to the next view down e.g. from `month` to `day`

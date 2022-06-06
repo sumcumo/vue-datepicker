@@ -1,5 +1,11 @@
 # Migration
 
+## 3.x.x to 4.x.x
+
+- the html changed because of the new keyboard support. If you have any custom css it might break.
+- additional a transition element was wrapped around the picker
+- inline css class change from inline to `vdp-datepicker__calendar--inline` too not get confused with css class libraries
+
 ## 2.x.x to 3.x.x
 
 - removed `monday-first` in favor of `first-day-of-week`. If you had `<Datepicker :monday-first="true"/>` you need to change it to `<Datepicker first-day-of-week="mon"/>`

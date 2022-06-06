@@ -1,22 +1,32 @@
 <template>
   <div>
-    <slot name="beforeCalendarHeaderMonth" />
+    <div v-if="$slots.beforeCalendarHeaderMonth">
+      <slot name="beforeCalendarHeaderMonth" />
+    </div>
 
     <PickerHeader
       v-if="showHeader"
+      ref="pickerHeader"
+      :bootstrap-styling="bootstrapStyling"
       :is-next-disabled="isNextDisabled"
       :is-previous-disabled="isPreviousDisabled"
       :is-rtl="isRtl"
+      @focus-input="focusInput"
       @page-change="changePage($event)"
+      @set-focus="$emit('set-focus', $event)"
     >
       <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
-      <span
-        class="month__year_btn"
-        :class="{ up: !isUpDisabled }"
-        @click="$emit('set-view', 'year')"
+      <UpButton
+        ref="up"
+        :class="{ btn: bootstrapStyling }"
+        :is-disabled="isUpDisabled"
+        :is-rtl="isRtl"
+        @focus-input="focusInput"
+        @select="$emit('set-view', 'year')"
+        @set-focus="$emit('set-focus', $event)"
       >
         {{ pageTitleMonth }}
-      </span>
+      </UpButton>
       <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
     </PickerHeader>
 
@@ -26,8 +36,12 @@
           ref="cells"
           :key="pageTitleMonth"
           v-slot="{ cell }"
+          :bootstrap-styling="bootstrapStyling"
           :cells="cells"
+          :is-rtl="isRtl"
+          :tabbable-cell-id="tabbableCellId"
           view="month"
+          @arrow="handleArrow($event)"
           @select="select($event)"
         >
           {{ cell.month }}
@@ -35,7 +49,9 @@
       </Transition>
     </div>
 
-    <slot name="calendarFooterMonth" />
+    <div v-if="$slots.calendarFooterMonth">
+      <slot name="calendarFooterMonth" />
+    </div>
   </div>
 </template>
 
@@ -43,10 +59,11 @@
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
 import PickerCells from './PickerCells.vue'
+import UpButton from './UpButton.vue'
 
 export default {
   name: 'PickerMonth',
-  components: { PickerCells },
+  components: { PickerCells, UpButton },
   mixins: [pickerMixin],
   computed: {
     /**
@@ -67,12 +84,18 @@ export default {
             d.getMinutes(),
           )
 
+      const todayMonth = new Date(
+        this.utils.setDate(this.utils.getNewDateObject(), 1),
+      )
+
       for (let i = 0; i < 12; i += 1) {
         months.push({
           month: this.utils.getMonthName(i, this.translation.months),
           timestamp: dObj.valueOf(),
           isDisabled: this.isDisabledMonth(dObj),
+          isOpenDate: this.isOpenMonth(dObj),
           isSelected: this.isSelectedMonth(dObj),
+          isToday: this.utils.compareDates(dObj, todayMonth),
         })
         this.utils.setMonth(dObj, this.utils.getMonth(dObj) + 1)
       }
@@ -118,6 +141,22 @@ export default {
       return new DisabledDate(this.utils, this.disabledDates).isMonthDisabled(
         date,
       )
+    },
+    /**
+     * Should the calendar open on this month?
+     * @return {Boolean}
+     */
+    isOpenMonth(date) {
+      if (!this.openDate) {
+        return false
+      }
+
+      const openDateMonth = this.utils.getMonth(this.openDate)
+      const openDateYear = this.utils.getFullYear(this.openDate)
+      const thisDateMonth = this.utils.getMonth(date)
+      const thisDateYear = this.utils.getFullYear(date)
+
+      return openDateMonth === thisDateMonth && openDateYear === thisDateYear
     },
     /**
      * Whether the selected date is in this month
