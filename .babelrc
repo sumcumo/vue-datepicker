@@ -10,10 +10,7 @@
     ]
   ],
   "plugins": [
-
-    ["@babel/proposal-decorators", { "legacy": true }],
-    ["@babel/proposal-class-properties", { "loose": true }]
-
+    ["@babel/proposal-decorators", { "legacy": true }]
   ],
   "env": {
     "test": {

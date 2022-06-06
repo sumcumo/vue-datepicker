@@ -51,67 +51,70 @@ export interface Cell {
 export default class PickerCells extends Vue {
   @Prop() value: string | null
 
-  @Prop({required: true}) cells: Cell[]
+  @Prop({ required: true }) cells: Cell[]
 
   @Prop({
     default: true,
   })
   showEdgeDates: boolean
+
   @Prop({
     default: true,
   })
   isRtl: boolean
+
   @Prop({
     default: true,
   })
   bootstrapStyling: boolean
-  @Prop()
-  tabbableCellId: Number
 
-  @Prop({required: true, validator: showEdgeDatesValidator,}) view: string
+  @Prop() tabbableCellId: Number
 
-/**
- * The number of columns in the picker
- * @return {Number}
- */
-get columns() {
-  return this.view === 'day' ? 7 : 3
-}
+  @Prop({ required: true, validator: showEdgeDatesValidator }) view: string
 
-/**
- * Set the classes for a specific cell
- * @return {Array}
- */
-// eslint-disable-next-line complexity
-cellClasses(cell) {
-  return [
-    'cell',
-    this.view,
-    {
-      'btn': this.bootstrapStyling,
-      'disabled': cell.isDisabled,
-      'highlight-start': cell.isHighlightStart,
-      'highlight-end': cell.isHighlightEnd,
-      'highlighted': cell.isHighlighted,
-      'muted': cell.isPreviousMonth || cell.isNextMonth,
-      'open': cell.isOpenDate,
-      'sat': cell.isSaturday,
-      'sun': cell.isSunday,
-      'selected': this.showEdgeDates
-        ? cell.isSelected
-        : cell.isSelected && !cell.isPreviousMonth && !cell.isNextMonth,
-      'today': this.showEdgeDates
-        ? cell.isToday
-        : cell.isToday && !cell.isPreviousMonth && !cell.isNextMonth,
-      'weekend': cell.isWeekend,
-    },
-  ]
-},
-/**
- * Emits an `arrow` event
- */
-handleArrow(cellId: string, delta: boolean) {
-  this.$emit('arrow', { cellId, delta })
-},
+  /**
+   * The number of columns in the picker
+   * @return {Number}
+   */
+  get columns() {
+    return this.view === 'day' ? 7 : 3
+  }
+
+  /**
+   * Set the classes for a specific cell
+   * @return {Array}
+   */
+  // eslint-disable-next-line complexity
+  cellClasses(cell: Cell) {
+    return [
+      'cell',
+      this.view,
+      {
+        'btn': this.bootstrapStyling,
+        'disabled': cell.isDisabled,
+        'highlight-start': cell.isHighlightStart,
+        'highlight-end': cell.isHighlightEnd,
+        'highlighted': cell.isHighlighted,
+        'muted': cell.isPreviousMonth || cell.isNextMonth,
+        'open': cell.isOpenDate,
+        'sat': cell.isSaturday,
+        'sun': cell.isSunday,
+        'selected': this.showEdgeDates
+          ? cell.isSelected
+          : cell.isSelected && !cell.isPreviousMonth && !cell.isNextMonth,
+        'today': this.showEdgeDates
+          ? cell.isToday
+          : cell.isToday && !cell.isPreviousMonth && !cell.isNextMonth,
+        'weekend': cell.isWeekend,
+      },
+    ]
+  }
+
+  /**
+   * Emits an `arrow` event
+   */
+  handleArrow(cellId: string, delta: number) {
+    this.$emit('arrow', { cellId, delta })
+  }
 }
 </script>
