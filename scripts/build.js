@@ -93,7 +93,7 @@ const generateConfig = ({ type, extraPlugins = [], extraName = '' }) => {
         plugins: [autoprefixer()],
       }),
       babel({
-        extensions: ['.ts'],
+        extensions: ['.ts', '.js'],
         babelHelpers: 'bundled',
         babelrc,
       }),
