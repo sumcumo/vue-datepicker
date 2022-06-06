@@ -134,6 +134,7 @@ describe('dateUtils', () => {
 
   it('fails to parse because of missing parser', () => {
     expect(() => {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       dateUtils.parseDate('16 April 2020', () => {})
     }).toThrowError(
       'Parser needs to be a function if you are using a custom formatter',

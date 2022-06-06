@@ -9,6 +9,9 @@
       }
     ]
   ],
+  "plugins": [
+    ["@babel/proposal-decorators", { "legacy": true }]
+  ],
   "env": {
     "test": {
       "presets": [
@@ -18,9 +21,11 @@
             "targets": {
               "node": "current"
             }
-          }
+          },
+          "@babel/preset-typescript"
         ]
-      ]
+      ],
+      "plugins": ["@babel/plugin-transform-runtime"]
     }
   }
 }

@@ -1,36 +1,83 @@
 const prettierConfig = require('./prettier')
 
 module.exports = {
-  root: true,
-  parserOptions: {
-    parser: 'babel-eslint',
+  env: {
+    browser: true,
   },
   extends: [
+    'plugin:vue/recommended',
+    'prettier/vue',
     'airbnb-base',
     'plugin:compat/recommended',
     'prettier',
-    'plugin:cypress/recommended',
+    'prettier/babel',
     'plugin:jest/recommended',
-    'plugin:vue/recommended',
+    '@vue/typescript',
+    'prettier/@typescript-eslint',
+    'plugin:cypress/recommended',
   ],
-  plugins: ['import', 'prettier', 'html', 'vue', 'jest'],
-  settings: {
-    'import/resolver': {
-      webpack: {
-        config: 'eslint-webpack-resolver.config.js',
-      },
-    },
+  plugins: ['import', 'prettier', 'sort-class-members', '@typescript-eslint'],
+  parserOptions: {
+    parser: '@typescript-eslint/parser',
   },
   rules: {
-    'prettier/prettier': ['error', prettierConfig],
-    'import/prefer-default-export': 'off',
-    'import/extensions': [
+    'vue/valid-v-slot': ['error', { allowModifiers: true }],
+    'vue/component-name-in-template-casing': [
       'error',
-      'always',
+      'PascalCase',
       {
-        js: 'never',
+        registeredComponentsOnly: false,
+        ignores: ['i18n'],
       },
     ],
+    'vue/no-deprecated-scope-attribute': 'error',
+    'no-restricted-imports': [
+      'error',
+      {
+        paths: [
+          {
+            name: 'lodash',
+            message:
+              'Please import functions from files for smaller bundle size.',
+          },
+        ],
+      },
+    ],
+    'prefer-destructuring': [
+      'error',
+      {
+        VariableDeclarator: {
+          array: false,
+          object: true,
+        },
+        AssignmentExpression: {
+          /**
+           * `array: false` avoids false positives like
+           * let someValue
+           * someValue = someArray[1]
+           *
+           * must otherwise be written as
+           * const [_unused, value] = someArray
+           * someValue = value
+           *
+           * https://mattermost.sumcumo.net/sumcumo/pl/ujjzahusn7gfppm3g8ocn7qnwa
+           */
+          array: false,
+          object: true,
+        },
+      },
+      {
+        enforceForRenamedProperties: false,
+      },
+    ],
+    'no-underscore-dangle': [
+      'error',
+      {
+        allow: ['__typename'],
+      },
+    ],
+    'prettier/prettier': ['error', prettierConfig],
+    'import/prefer-default-export': 'off',
     'import/no-extraneous-dependencies': 'off',
     'no-console': ['error', { allow: ['info', 'warn', 'error'] }],
     'no-unused-vars': [
@@ -47,6 +94,7 @@ module.exports = {
         variables: true,
       },
     ],
+    'arrow-body-style': 'off',
     'max-nested-callbacks': ['error', { max: 3 }],
     'max-statements': [
       'error',
@@ -83,17 +131,57 @@ module.exports = {
         skipBlankLines: true,
       },
     ],
-    'vue/component-name-in-template-casing': [
-      'error',
-      'PascalCase',
-      { registeredComponentsOnly: false },
+    'no-param-reassign': 'off',
+    'class-methods-use-this': 'off',
+    'sort-class-members/sort-class-members': [
+      2,
+      {
+        order: [
+          '[static-properties]',
+          '[static-methods]',
+          '[properties]',
+          'constructor',
+          '[getters]',
+          '[everything-else]',
+        ],
+      },
     ],
-    'vue/no-deprecated-scope-attribute': 'error',
-    'arrow-body-style': 'off',
+    'import/extensions': [
+      'error',
+      'always',
+      {
+        js: 'never',
+        ts: 'never',
+      },
+    ],
+    // Disabling eslint rule and enabling typescript specific to support TS features
+    'no-useless-constructor': 'off',
+    '@typescript-eslint/no-useless-constructor': 'error',
+    'no-empty-function': 'off',
+    '@typescript-eslint/no-empty-function': 'error',
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        argsIgnorePattern: '^_',
+      },
+    ],
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': ['error'],
+    // false positives with testing-library
+    'jest/expect-expect': 'off',
+  },
+  settings: {
+    // https://github.com/johvin/eslint-import-resolver-alias#readme
+    'import/resolver': {
+      alias: {
+        map: [['~', './src']],
+        extensions: ['.js', '.ts', '.d.ts'],
+      },
+    },
   },
   overrides: [
     {
-      files: ['*.spec.js', '*.config.js'],
+      files: ['*.spec.ts', '*.spec.js', '*.config.js'],
       rules: {
         'max-lines-per-function': 'off',
         'max-statements': 'off',
@@ -102,7 +190,4 @@ module.exports = {
       },
     },
   ],
-  env: {
-    browser: true,
-  },
 }

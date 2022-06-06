@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2018",
+    "module": "ESNext",
+    "strict": true,
+    "jsx": "preserve",
+    "importHelpers": true,
+    "moduleResolution": "node",
+    "noEmit": false,
+    "declaration": true,
+    "noImplicitAny": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "strictPropertyInitialization": false,
+    "lib": ["es2018", "es2019", "dom"],
+    "types": ["jest"],
+  },
+  "include": ["./src"],
+  "exclude": ["node_modules", "dist", ".nuxt"]
+}
