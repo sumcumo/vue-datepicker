@@ -299,8 +299,9 @@ const utils = {
       yyyy: year,
     }
 
-    const REGEX_FORMAT = /y{4}|y{2}|M{1,4}(?![aäe])|d{1,2}|o|E(?![eéi])/g
-    return formatStr.replace(REGEX_FORMAT, (match) => matches[match] || match)
+    const REGEX_FORMAT = /y{4}|y{2}|M{1,4}|d{1,2}|o|E/g
+
+    return formatStr.replace(REGEX_FORMAT, (match) => matches[match])
   },
 
   /**
