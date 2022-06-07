@@ -1,5 +1,5 @@
 import { mount, shallowMount } from '@vue/test-utils'
-import { format, parse } from 'date-fns'
+import { parse } from 'date-fns'
 import DateInput from '~/components/DateInput.vue'
 import Datepicker from '~/components/Datepicker.vue'
 import { en } from '~/locale'
@@ -88,24 +88,6 @@ describe('DateInput', () => {
     await input.trigger('keydown.enter')
 
     expect(input.element.value).toEqual(dateString)
-  })
-
-  it('allows function format', async () => {
-    const dateString = '2018-08-12'
-
-    await wrapper.setProps({
-      selectedDate: new Date(dateString),
-      format: (date) => {
-        return format(new Date(date), 'dd.MM.yyyy')
-      },
-      parser: (date) => {
-        return parse(date, 'yyyy-MM-dd', new Date())
-      },
-    })
-
-    const input = wrapper.find('input')
-
-    expect(input.element.value).toEqual('12.08.2018')
   })
 
   it('emits the date when typed', async () => {
@@ -295,25 +277,6 @@ describe('Datepicker mount', () => {
     await input.trigger('keyup.space')
 
     expect(wrapper.vm.isOpen).toBeTruthy()
-  })
-
-  it('formats a date using function format', async () => {
-    await wrapper.setProps({
-      format: (date) => {
-        return format(new Date(date), 'dd.MM.yyyy')
-      },
-      parser: (date) => {
-        return parse(date, 'yyyy-MM-dd', new Date())
-      },
-    })
-
-    const input = wrapper.find('input')
-
-    input.setValue('2018-08-12')
-    await input.trigger('keyup')
-    await input.trigger('keydown.enter')
-
-    expect(input.element.value).toEqual('12.08.2018')
   })
 })
 

@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
+import { format } from 'date-fns'
 import DateInput from '~/components/DateInput.vue'
 import { en } from '~/locale'
 
@@ -47,13 +48,15 @@ describe('DateInput', () => {
 
   it('delegates date formatting', async () => {
     await wrapper.setProps({
-      selectedDate: new Date(2016, 1, 15),
-      format: () => '2016/1/15',
+      selectedDate: new Date(2016, 0, 15),
+      format: (date) => {
+        return format(new Date(date), 'dd.MM.yyyy')
+      },
     })
 
     const input = wrapper.find('input')
 
-    expect(input.element.value).toEqual('2016/1/15')
+    expect(input.element.value).toEqual('15.01.2016')
   })
 
   it('emits `open` event on focus when `show-calendar-on-focus` is true', async () => {
