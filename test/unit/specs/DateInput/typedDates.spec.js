@@ -111,6 +111,21 @@ describe('DateInput', () => {
     expect(wrapper.emitted('select-typed-date')).toBeTruthy()
   })
 
+  it('parses a typed date using a function passed in via a prop', async () => {
+    await wrapper.setProps({
+      parser: (date) => {
+        return parse(date, 'yyyy/mm/dd', new Date())
+      },
+    })
+
+    const input = wrapper.find('input')
+
+    input.setValue('2022/01/05')
+    await input.trigger('blur')
+
+    expect(input.element.value).toBe('05 Jan 2022')
+  })
+
   it("doesn't emit the date if typeable=false", async () => {
     await wrapper.setProps({
       typeable: false,
