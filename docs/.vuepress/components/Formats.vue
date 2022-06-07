@@ -23,31 +23,31 @@ export default {
       format: '',
       formats: [
         {
-          text: 'MMMM d, yyyy &nbsp;&nbsp;&nbsp; e.g. February 6, 2022',
+          text: 'MMMM d, yyyy e.g. February 6, 2022',
           value: 'MMMM d, yyyy',
         },
         {
-          text: 'do MMM yyyy &nbsp;&nbsp;&nbsp; e.g. 6th Feb 2022',
+          text: 'do MMM yyyy e.g. 6th Feb 2022',
           value: 'do MMM yyyy',
         },
         {
-          text: 'yyyy-MM-dd &nbsp;&nbsp;&nbsp; e.g. 2022-02-06',
+          text: 'yyyy-MM-dd e.g. 2022-02-06',
           value: 'yyyy-MM-dd',
         },
         {
-          text: 'E do MMM yyyy &nbsp;&nbsp;&nbsp; e.g. Sun 6th Feb 2022',
+          text: 'E do MMM yyyy e.g. Sun 6th Feb 2022',
           value: 'E do MMM yyyy',
         },
         {
-          text: 'dd/MM/yy &nbsp;&nbsp;&nbsp; e.g. 06/02/22',
+          text: 'dd/MM/yy e.g. 06/02/22',
           value: 'dd/MM/yy',
         },
         {
-          text: 'dd.MM.yyyy &nbsp;&nbsp;&nbsp; e.g. 06.02.2022',
+          text: 'dd.MM.yyyy e.g. 06.02.2022',
           value: 'dd.MM.yyyy',
         },
         {
-          text: 'M/d/yyyy &nbsp;&nbsp;&nbsp; e.g. 2/6/2022',
+          text: 'M/d/yyyy e.g. 2/6/2022',
           value: 'M/d/yyyy',
         },
       ],
