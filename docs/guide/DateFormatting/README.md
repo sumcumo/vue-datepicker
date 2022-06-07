@@ -5,7 +5,7 @@
 NB. This is not very robust at all - use at your own risk! Needs a better implementation.
 
 | Token | Desc                   | Example     |
-| ----- | ---------------------- | ----------- |
+|-------|------------------------|-------------|
 | d     | day                    | 1           |
 | dd    | 0 prefixed day         | 01          |
 | E     | abbr day               | Mon         |
@@ -19,12 +19,10 @@ NB. This is not very robust at all - use at your own risk! Needs a better implem
 
 ## Function formatter
 
-Delegates date formatting to provided function.
-Function will be called with date and it has to return the formatted date as a string.
-This allow us to use moment, date-fns, globalize or any other library to format date.
-Be aware of the fact that if you use a typeable datepicker the formatting function will be
-triggered on every input change.
-The function formatter needs a custom parser to parse the formatted date back to date object.
+Delegates date formatting to a function provided by the `format` prop.
+The function will be called with the date - and it has to return the formatted date as a string.
+This allows us to use moment, date-fns, globalize or any other library to format the date.
+The formatter function needs a custom `parser` to parse the formatted date back to a date object.
 
 Here is an example for date-fns:
 
@@ -32,8 +30,10 @@ Here is an example for date-fns:
 <template>
   <DatePicker :format="customFormatter" :parser="customParser"></DatePicker>
 </template>
+
 <script>
 import { format, parse } from 'date-fns'
+
 export default {
   data() {
     return {
