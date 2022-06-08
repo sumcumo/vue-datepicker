@@ -181,8 +181,7 @@ describe('Datepicker mounted with slots', () => {
   it('knows how many navElements there are', async () => {
     expect(wrapper.vm.navElements.length).toEqual(0)
 
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    await wrapper.vm.open()
 
     expect(wrapper.vm.navElements.length).toEqual(8)
 
@@ -215,99 +214,19 @@ describe('Datepicker mounted to body', () => {
     wrapper.destroy()
   })
 
-  it("focuses today's date by default", async () => {
-    const input = wrapper.find('input')
-    await input.trigger('click')
-    jest.advanceTimersByTime(250)
-    const todayCell = wrapper.find('button.today')
-
-    expect(todayCell.text()).toBe(new Date().getDate().toString())
-    expect(document.activeElement).toStrictEqual(todayCell.element)
-  })
-
   it("focuses today's date when append-to-body is true", async () => {
     await wrapper.setProps({
       appendToBody: true,
     })
 
     const input = wrapper.find('input')
+    await input.trigger('focusin')
     await input.trigger('click')
     jest.advanceTimersByTime(250)
     const todayCell = wrapper.find('button.today')
 
     expect(todayCell.text()).toBe(new Date().getDate().toString())
     expect(document.activeElement).toStrictEqual(todayCell.element)
-  })
-
-  it('focuses the up button on increasing the view', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('click')
-
-    jest.advanceTimersByTime(250)
-    let upButton = wrapper.find('button.vdp-datepicker__up')
-
-    await upButton.trigger('click')
-    jest.advanceTimersByTime(250)
-    upButton = wrapper.find('button.vdp-datepicker__up')
-
-    expect(document.activeElement).toBe(upButton.element)
-  })
-
-  it('focuses the tabbable-cell on decreasing the view', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('click')
-    jest.advanceTimersByTime(250)
-
-    const upButton = wrapper.find('button.vdp-datepicker__up')
-
-    await upButton.trigger('click')
-    jest.advanceTimersByTime(250)
-    const firstCell = wrapper.find('button.cell')
-
-    await firstCell.trigger('click')
-    await wrapper.vm.$nextTick()
-    jest.advanceTimersByTime(250)
-
-    const tabbableCell = wrapper.find('button.cell[data-test-tabbable-cell]')
-    expect(document.activeElement).toBe(tabbableCell.element)
-  })
-
-  it('closes when the calendar loses focus', async () => {
-    const input = wrapper.find('input')
-
-    await input.trigger('click')
-    jest.advanceTimersByTime(250)
-
-    const todayCell = wrapper.find('button.today')
-    expect(wrapper.vm.isOpen).toBeTruthy()
-    expect(document.activeElement).toStrictEqual(todayCell.element)
-
-    await document.activeElement.blur()
-    await document.body.click()
-    jest.advanceTimersByTime(250)
-
-    expect(wrapper.vm.isOpen).toBeFalsy()
-  })
-
-  it('focuses the calendar button when closed via the calendar button', async () => {
-    await wrapper.setProps({
-      calendarButton: true,
-    })
-
-    const calendarButton = wrapper.find('button[data-test-calendar-button]')
-    await calendarButton.trigger('click')
-    jest.advanceTimersByTime(250)
-
-    expect(wrapper.vm.isOpen).toBeTruthy()
-
-    const openDateCell = wrapper.find('button.open')
-    expect(document.activeElement).toStrictEqual(openDateCell.element)
-
-    await calendarButton.trigger('click')
-    jest.advanceTimersByTime(250)
-
-    expect(wrapper.vm.isOpen).toBeFalsy()
-    expect(document.activeElement).toBe(calendarButton.element)
   })
 
   it('does not arrow up from the previous button to the input field', async () => {
@@ -379,8 +298,8 @@ describe('Datepicker mounted to body with openDate', () => {
   })
 
   it('arrows right on cell', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    await wrapper.vm.open()
+    jest.advanceTimersByTime(250)
 
     const firstOfMonth = wrapper.findAll('button.cell').at(3)
     const secondOfMonth = wrapper.findAll('button.cell').at(4)
@@ -392,8 +311,8 @@ describe('Datepicker mounted to body with openDate', () => {
   })
 
   it('arrows left on cell', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    await wrapper.vm.open()
+    jest.advanceTimersByTime(250)
 
     const secondOfMonth = wrapper.findAll('button.cell').at(4)
     const firstOfMonth = wrapper.findAll('button.cell').at(3)
@@ -405,8 +324,8 @@ describe('Datepicker mounted to body with openDate', () => {
   })
 
   it('arrows up on cell', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    await wrapper.vm.open()
+    jest.advanceTimersByTime(250)
 
     const lastOfMonth = wrapper.findAll('button.cell').at(33)
     lastOfMonth.element.focus()
@@ -417,8 +336,8 @@ describe('Datepicker mounted to body with openDate', () => {
   })
 
   it('arrows down on cell', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    await wrapper.vm.open()
+    jest.advanceTimersByTime(250)
 
     const firstOfMonth = wrapper.findAll('button.cell').at(3)
     firstOfMonth.element.focus()
@@ -436,8 +355,8 @@ describe('Datepicker mounted to body with openDate', () => {
       },
     })
 
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    await wrapper.vm.open()
+    jest.advanceTimersByTime(250)
 
     const firstOfMonth = wrapper.findAll('button.cell').at(3)
     firstOfMonth.element.focus()
@@ -451,8 +370,8 @@ describe('Datepicker mounted to body with openDate', () => {
   })
 
   it('arrows left on cell to previous page', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    await wrapper.vm.open()
+    jest.advanceTimersByTime(250)
 
     const firstOfMonth = wrapper.findAll('button.cell').at(3)
 
@@ -467,8 +386,8 @@ describe('Datepicker mounted to body with openDate', () => {
   })
 
   it('arrows right on cell to next page', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    await wrapper.vm.open()
+    jest.advanceTimersByTime(250)
 
     const lastOfMonth = wrapper.findAll('button.cell').at(33)
 
@@ -483,8 +402,8 @@ describe('Datepicker mounted to body with openDate', () => {
   })
 
   it('arrows up on cell to previous page', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    await wrapper.vm.open()
+    jest.advanceTimersByTime(250)
 
     const firstOfMonth = wrapper.findAll('button.cell').at(3)
 
@@ -499,8 +418,8 @@ describe('Datepicker mounted to body with openDate', () => {
   })
 
   it('arrows down on cell to next page', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    await wrapper.vm.open()
+    jest.advanceTimersByTime(250)
 
     const lastOfMonth = wrapper.findAll('button.cell').at(33)
 
@@ -513,8 +432,8 @@ describe('Datepicker mounted to body with openDate', () => {
   })
 
   it('arrows up on cell to muted cell on previous page', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    await wrapper.vm.open()
+    jest.advanceTimersByTime(250)
 
     const cellBelowMuted = wrapper.findAll('button.cell').at(9)
 
@@ -527,8 +446,8 @@ describe('Datepicker mounted to body with openDate', () => {
   })
 
   it('arrows down on cell to muted cell on next page', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    await wrapper.vm.open()
+    jest.advanceTimersByTime(250)
 
     const cellAboveMuted = wrapper.findAll('button.cell').at(27)
 
@@ -541,8 +460,8 @@ describe('Datepicker mounted to body with openDate', () => {
   })
 
   it('arrows up on cell, bypassing a muted cell on the previous page', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    await wrapper.vm.open()
+    jest.advanceTimersByTime(250)
 
     const firstOfMonth = wrapper.findAll('button.cell').at(3)
 
@@ -555,8 +474,8 @@ describe('Datepicker mounted to body with openDate', () => {
   })
 
   it('arrows down on cell, bypassing a muted cell on the next page', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    await wrapper.vm.open()
+    jest.advanceTimersByTime(250)
 
     const lastOfMonth = wrapper.findAll('button.cell').at(33)
 
@@ -575,8 +494,8 @@ describe('Datepicker mounted to body with openDate', () => {
       },
     })
 
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    await wrapper.vm.open()
+    jest.advanceTimersByTime(250)
 
     const firstOfMonth = wrapper.findAll('button.cell').at(3)
 
@@ -595,8 +514,8 @@ describe('Datepicker mounted to body with openDate', () => {
       },
     })
 
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    await wrapper.vm.open()
+    jest.advanceTimersByTime(250)
 
     const lastOfMonth = wrapper.findAll('button.cell').at(33)
 
@@ -615,8 +534,8 @@ describe('Datepicker mounted to body with openDate', () => {
       },
     })
 
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    await wrapper.vm.open()
+    jest.advanceTimersByTime(250)
 
     const firstOfMonth = wrapper.findAll('button.cell').at(3)
 
@@ -635,8 +554,8 @@ describe('Datepicker mounted to body with openDate', () => {
       },
     })
 
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    await wrapper.vm.open()
+    jest.advanceTimersByTime(250)
 
     const lastOfMonth = wrapper.findAll('button.cell').at(33)
 
@@ -653,8 +572,8 @@ describe('Datepicker mounted to body with openDate', () => {
       value: new Date(2020, 2, 1),
     })
 
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    await wrapper.vm.open()
+    jest.advanceTimersByTime(250)
 
     const firstOfMonth = wrapper.findAll('button.cell').at(0)
 
@@ -671,8 +590,8 @@ describe('Datepicker mounted to body with openDate', () => {
       value: new Date(2020, 1, 29),
     })
 
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    await wrapper.vm.open()
+    jest.advanceTimersByTime(250)
 
     const lastOfMonth = wrapper.findAll('button.cell').at(34)
 
@@ -689,8 +608,8 @@ describe('Datepicker mounted to body with openDate', () => {
       value: new Date(2020, 2, 1),
     })
 
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    await wrapper.vm.open()
+    jest.advanceTimersByTime(250)
 
     const firstOfMonth = wrapper.findAll('button.cell').at(0)
 
@@ -707,8 +626,8 @@ describe('Datepicker mounted to body with openDate', () => {
       value: new Date(2020, 1, 29),
     })
 
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    await wrapper.vm.open()
+    jest.advanceTimersByTime(250)
 
     const lastOfMonth = wrapper.findAll('button.cell').at(34)
 
@@ -728,8 +647,8 @@ describe('Datepicker mounted to body with openDate', () => {
       },
     })
 
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    await wrapper.vm.open()
+    jest.advanceTimersByTime(250)
 
     const startCell = wrapper.findAll('button.cell').at(13)
 
@@ -749,8 +668,8 @@ describe('Datepicker mounted to body with openDate', () => {
       },
     })
 
-    const input = wrapper.find('input')
-    await input.trigger('click')
+    await wrapper.vm.open()
+    jest.advanceTimersByTime(250)
 
     const startCell = wrapper.findAll('button.cell').at(27)
 
@@ -760,137 +679,6 @@ describe('Datepicker mounted to body with openDate', () => {
     const cellDown = wrapper.findAll('button.cell').at(6)
     jest.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellDown.element)
-  })
-
-  it('reverts focus to the `open-date` when another date on the same page has focus and the `escape` key is pressed', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('click')
-
-    jest.advanceTimersByTime(250)
-
-    const openDateCell = wrapper.find('button.open')
-    expect(document.activeElement).toBe(openDateCell.element)
-
-    await openDateCell.trigger('keydown.down')
-
-    const downCell = wrapper.findAll('button.cell').at(10)
-    await downCell.trigger('keydown.esc')
-
-    jest.advanceTimersByTime(250)
-
-    expect(document.activeElement).toBe(openDateCell.element)
-  })
-
-  it('reverts focus to the `open-date` when a date on a different page has focus and the `escape` key is pressed', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('click')
-
-    jest.advanceTimersByTime(250)
-
-    let openDateCell = wrapper.find('button.open')
-    expect(document.activeElement).toStrictEqual(openDateCell.element)
-
-    await openDateCell.trigger('keydown.up')
-    jest.advanceTimersByTime(250)
-
-    const upCell = wrapper.findAll('button.cell').at(24)
-    expect(document.activeElement).toBe(upCell.element)
-
-    await upCell.trigger('keydown.esc')
-
-    jest.advanceTimersByTime(250)
-    openDateCell = wrapper.find('button.open')
-    expect(document.activeElement).toBe(openDateCell.element)
-  })
-
-  it('reverts focus to the `open-date` when a month has focus and the `escape` key is pressed', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('click')
-    jest.advanceTimersByTime(250)
-    expect(wrapper.vm.view).toBe('day')
-
-    let upButton = wrapper.find('button.vdp-datepicker__up')
-    await upButton.trigger('click')
-    jest.advanceTimersByTime(250)
-    expect(wrapper.vm.view).toBe('month')
-
-    upButton = wrapper.find('button.vdp-datepicker__up')
-    await upButton.trigger('keydown.down')
-
-    const firstCell = wrapper.find('button.cell:not(.muted)')
-    await firstCell.trigger('keydown.esc')
-    jest.advanceTimersByTime(250)
-    expect(wrapper.vm.view).toBe('day')
-
-    const openDateCell = wrapper.find('button.open')
-    expect(document.activeElement).toBe(openDateCell.element)
-  })
-
-  it('reverts focus to the `open-date` when a year has focus and the `escape` key is pressed', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('click')
-    jest.advanceTimersByTime(250)
-    expect(wrapper.vm.view).toBe('day')
-
-    let upButton = wrapper.find('button.vdp-datepicker__up')
-    await upButton.trigger('click')
-    jest.advanceTimersByTime(250)
-    expect(wrapper.vm.view).toBe('month')
-
-    upButton = wrapper.find('button.vdp-datepicker__up')
-    await upButton.trigger('click')
-    jest.advanceTimersByTime(250)
-    expect(wrapper.vm.view).toBe('year')
-
-    const firstCell = wrapper.find('button.cell:not(.muted)')
-    upButton = wrapper.find('button.vdp-datepicker__up')
-    await upButton.trigger('keydown.down')
-
-    await firstCell.element.focus()
-    await firstCell.trigger('keydown.esc')
-    jest.advanceTimersByTime(250)
-    expect(wrapper.vm.view).toBe('day')
-
-    const openDateCell = wrapper.find('button.open')
-    expect(document.activeElement).toBe(openDateCell.element)
-  })
-
-  it('clears the date and closes the calendar on pressing the `escape` key, if the `open-date` is focused', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('click')
-    jest.advanceTimersByTime(250)
-
-    expect(wrapper.vm.isOpen).toBeTruthy()
-    const openDateCell = wrapper.find('button.open')
-    await openDateCell.trigger('focus')
-    expect(document.activeElement).toStrictEqual(openDateCell.element)
-
-    await openDateCell.trigger('keydown.esc')
-    expect(wrapper.vm.isOpen).toBeFalsy()
-    expect(wrapper.vm.selectedDate).toEqual(null)
-  })
-
-  it('clears the date and reverts the calendar to `minimumView` on pressing the `escape` key', async () => {
-    const input = wrapper.find('input')
-
-    await input.trigger('click')
-    expect(wrapper.vm.isOpen).toBeTruthy()
-
-    const upButton = wrapper.find('button.vdp-datepicker__up')
-    await upButton.trigger('click')
-    expect(wrapper.vm.view).toBe('month')
-
-    const firstCell = wrapper.find('button.cell')
-    await firstCell.element.focus()
-    expect(document.activeElement).toBe(firstCell.element)
-
-    await firstCell.trigger('keydown.esc')
-    jest.advanceTimersByTime(250)
-
-    const openDate = wrapper.find('button.open')
-    expect(wrapper.vm.view).toBe('day')
-    expect(wrapper.vm.selectedDate).toEqual(null)
-    expect(document.activeElement).toBe(openDate.element)
   })
 
   it('opens with focus on the first available date when the open date and all previous dates are disabled', async () => {
@@ -904,12 +692,8 @@ describe('Datepicker mounted to body with openDate', () => {
       openDate,
     })
 
-    const input = wrapper.find('input')
-
-    await input.trigger('click')
+    await wrapper.vm.open()
     jest.advanceTimersByTime(250)
-
-    expect(wrapper.vm.isOpen).toBeTruthy()
 
     const firstAvailableDate = wrapper.find('button.cell:not(.muted):enabled')
 
@@ -927,12 +711,8 @@ describe('Datepicker mounted to body with openDate', () => {
       openDate,
     })
 
-    const input = wrapper.find('input')
-
-    await input.trigger('click')
+    await wrapper.vm.open()
     jest.advanceTimersByTime(250)
-
-    expect(wrapper.vm.isOpen).toBeTruthy()
 
     const firstAvailableDate = wrapper.find('button.cell:not(.muted):enabled')
 
@@ -950,12 +730,8 @@ describe('Datepicker mounted to body with openDate', () => {
       openDate,
     })
 
-    const input = wrapper.find('input')
-
-    await input.trigger('click')
+    await wrapper.vm.open()
     jest.advanceTimersByTime(250)
-
-    expect(wrapper.vm.isOpen).toBeTruthy()
 
     const nextButton = wrapper.find('button.next')
     expect(document.activeElement).toBe(nextButton.element)
@@ -972,12 +748,8 @@ describe('Datepicker mounted to body with openDate', () => {
       openDate,
     })
 
-    const input = wrapper.find('input')
-
-    await input.trigger('click')
+    await wrapper.vm.open()
     jest.advanceTimersByTime(250)
-
-    expect(wrapper.vm.isOpen).toBeTruthy()
 
     const prevButton = wrapper.find('button.prev')
     expect(document.activeElement).toBe(prevButton.element)

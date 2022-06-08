@@ -1,30 +1,30 @@
 import { Given, When, Then, And } from 'cypress-cucumber-preprocessor/steps'
 
-const { clickThe, createCalendar, focusThe, the } = cy
+const { clickThe, createCalendar, the } = cy
 
-describe('Focusable Cell', () => {
-  describe('@id-1: Select by {string}: minimum view', () => {
-    Given('the calendar is open on the minimum view', () => {
-      createCalendar({
-        openDate: new Date(2020, 2, 15),
-      })
+describe('Cell selection', () => {
+  describe('@id-1: Select a cell: minimum view', () => {
+    Given(
+      'the calendar is open on the minimum view: {string}',
+      (minimumView) => {
+        createCalendar({
+          openDate: new Date(2020, 2, 15),
+          minimumView,
+          initialView: minimumView,
+        })
 
-      clickThe('input')
-      the('picker-cells').should('have.length', 1)
-      the('calendar').should('be.visible')
+        clickThe('input')
+        the('picker-cells').should('have.length', 1)
+        the('calendar').should('be.visible')
+      },
+    )
+
+    When('the user clicks on the tabbable cell', () => {
+      clickThe('tabbable-cell')
     })
 
-    When('the user performs a {string} action', (action) => {
-      if (action === 'click') {
-        clickThe('tabbable-cell')
-        return
-      }
-
-      focusThe('tabbable-cell').type(`{${action}}`)
-    })
-
-    Then('the date is submitted', () => {
-      the('input').should('have.value', '15 Mar 2020')
+    Then('the date is submitted with a value of {string}', (date) => {
+      the('input').should('have.value', date)
     })
 
     And('the input field has focus', () => {
@@ -32,11 +32,11 @@ describe('Focusable Cell', () => {
     })
   })
 
-  describe('@id-2: Select by {string}: NOT minimum view', () => {
-    Given('the calendar is open on a higher than minimum view', () => {
+  describe('@id-2: Select a cell: higher than minimum view', () => {
+    Given('the calendar is open on a {string} view', (initialView) => {
       createCalendar({
         openDate: new Date(2020, 2, 15),
-        initialView: 'month',
+        initialView,
       })
 
       clickThe('input')
@@ -44,11 +44,13 @@ describe('Focusable Cell', () => {
       the('calendar').should('be.visible')
     })
 
-    When('the user performs a {string} action')
+    When('the user clicks on the tabbable cell')
 
-    Then('the `day` view is shown', () => {
+    Then('the {string} view is shown', (view) => {
+      const pageHeading = view === 'day' ? 'Mar 2020' : '2020'
+
       the('picker-cells').should('have.length', 1)
-      the('up-button').should('contain', 'Mar 2020')
+      the('up-button').should('contain', pageHeading)
     })
 
     And('the tabbable cell has focus', () => {

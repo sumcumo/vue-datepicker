@@ -5,7 +5,7 @@ Feature: Set the initial focus
 
 
   @id-1
-  Scenario Outline: initialView is <initialView>
+  Scenario Outline: Set the initial focus
     Given the initialView is "<initialView>"
     When the user opens the calendar
     Then the calendar opens
@@ -16,7 +16,6 @@ Feature: Set the initial focus
       | 1 | day         |
       | 2 | month       |
       | 2 | year        |
-
 
   @id-2
   Scenario Outline: Day view when <pastOrFuture> dates are disabled

@@ -13,6 +13,7 @@ export default {
       navElements: [],
       navElementsFocusedIndex: 0,
       resetTabbableCell: false,
+      skipReviewFocus: false,
       tabbableCell: null,
       transitionName: '',
     }
@@ -260,6 +261,7 @@ export default {
      */
     handleFocusIn() {
       document.datepickerId = this.datepickerId
+      this.globalDatepickerId = this.datepickerId
 
       this.isActive = true
       this.setInlineTabbableCell()
@@ -267,17 +269,11 @@ export default {
       this.setNavElements()
     },
     /**
-     * Sets the datepicker's `isActive` state to false
+     * Sets the datepicker's `isActive` state to false and resets `globalDatepickerId`
      */
     handleFocusOut() {
       this.isActive = false
-    },
-    /**
-     * Returns true if the user has arrowed to a new page
-     * @return {Boolean}
-     */
-    hasArrowedToNewPage() {
-      return this.focus.refs && this.focus.refs[0] === 'arrow-to-cell'
+      this.globalDatepickerId = ''
     },
     /**
      * Returns true if the calendar has been passed the given slot
@@ -360,7 +356,7 @@ export default {
      * Sets the correct focus on next tick
      */
     reviewFocus() {
-      if (this.hasArrowedToNewPage()) {
+      if (this.skipReviewFocus) {
         return
       }
 
