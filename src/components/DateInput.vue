@@ -104,7 +104,6 @@ export default {
       isInputFocused: false,
       shouldToggleOnFocus: false,
       shouldToggleOnClick: true,
-      parsedDate: null,
       typedDate: '',
       utils: makeDateUtils(this.useUtc),
     }
@@ -119,27 +118,12 @@ export default {
       }
       return this.inputClass
     },
-    formattedDate() {
-      if (!this.selectedDate) {
-        return null
-      }
-
-      return typeof this.format === 'function'
-        ? this.format(new Date(this.selectedDate))
-        : this.utils.formatDate(
-            new Date(this.selectedDate),
-            this.format,
-            this.translation,
-          )
-    },
     formattedValue() {
-      if (!this.selectedDate) {
-        return null
-      }
-      if (this.typedDate.length) {
+      if (this.typeable) {
         return this.typedDate
       }
-      return this.formattedDate
+
+      return this.formatDate(this.selectedDate)
     },
   },
   watch: {
@@ -163,6 +147,11 @@ export default {
         }
       })
     },
+    selectedDate(selectedDate) {
+      if (this.typeable) {
+        this.typedDate = this.formatDate(selectedDate)
+      }
+    },
   },
   mounted() {
     this.input = this.$el.querySelector('input')
@@ -176,14 +165,30 @@ export default {
       this.$emit('clear-date')
     },
     /**
+     * Formats a date
+     * @param {Date} date The date to be formatted
+     * @returns {String}
+     */
+    formatDate(date) {
+      if (!date) {
+        return ''
+      }
+
+      return typeof this.format === 'function'
+        ? this.format(new Date(date))
+        : this.utils.formatDate(new Date(date), this.format, this.translation)
+    },
+    /**
      * Formats a typed date, or clears it if invalid
      */
     formatTypedDate() {
-      if (Number.isNaN(this.parsedDate)) {
+      const parsedDate = this.parseInput()
+
+      if (this.utils.isValidDate(parsedDate)) {
+        this.typedDate = this.formatDate(parsedDate)
+      } else {
         this.input.value = ''
         this.typedDate = ''
-      } else {
-        this.typedDate = this.formattedDate
       }
     },
     /**
@@ -261,17 +266,22 @@ export default {
       this.$emit('set-focus', ['prev', 'up', 'next', 'tabbableCell'])
     },
     /**
-     * Formats a typed date and closes the calendar
+     * Selects a typed date and closes the calendar
      */
     handleKeydownEnter() {
       if (!this.typeable) {
         return
       }
 
-      this.formatTypedDate()
+      if (!this.input.value) {
+        this.$emit('select-typed-date', null)
+        return
+      }
 
-      if (this.isOpen) {
-        this.$emit('close')
+      const parsedDate = this.parseInput()
+
+      if (this.utils.isValidDate(parsedDate)) {
+        this.$emit('select-typed-date', new Date(parsedDate))
       }
     },
     /**
@@ -291,13 +301,15 @@ export default {
       }
     },
     /**
-     * Parses a typed date and submits it, if valid
+     * Parses a typed date and emits `typed-date` event, if valid
      * @param  {object}  event Used to exclude certain keystrokes
      */
     handleKeyup(event) {
       if (
         !this.typeable ||
         [
+          'Control',
+          'Escape',
           'Shift',
           'Tab',
           'ArrowUp',
@@ -309,23 +321,17 @@ export default {
         return
       }
 
-      if (this.input.value === '') {
+      this.typedDate = this.input.value
+
+      if (!this.input.value) {
         this.$emit('typed-date', null)
         return
       }
 
-      this.parsedDate = Date.parse(
-        this.utils.parseDate(
-          this.input.value,
-          this.format,
-          this.translation,
-          this.parser,
-        ),
-      )
+      const parsedDate = this.parseInput()
 
-      if (!Number.isNaN(this.parsedDate)) {
-        this.typedDate = this.input.value
-        this.$emit('typed-date', new Date(this.parsedDate))
+      if (this.utils.isValidDate(parsedDate)) {
+        this.$emit('typed-date', parsedDate)
       }
     },
     /**
@@ -343,6 +349,19 @@ export default {
       if (!this.showCalendarOnButtonClick) {
         this.toggle()
       }
+    },
+    /**
+     * Parses the value of the input field
+     */
+    parseInput() {
+      return new Date(
+        this.utils.parseDate(
+          this.input.value.trim(),
+          this.format,
+          this.translation,
+          this.parser,
+        ),
+      )
     },
     /**
      * Opens or closes the calendar

@@ -49,6 +49,23 @@ export default {
   },
   methods: {
     /**
+     * Converts a date to first in month for `month` view or first in year for `year` view
+     * @param   {Date} date The date to convert
+     * @returns {Date}
+     */
+    getCellDate(date) {
+      switch (this.view) {
+        case 'month':
+          return new Date(this.utils.setDate(date, 1))
+        case 'year':
+          return new Date(
+            this.utils.setMonth(new Date(this.utils.setDate(date, 1)), 0),
+          )
+        default:
+          return date
+      }
+    },
+    /**
      * Returns true, unless tabbing should be focus-trapped
      * @return {Boolean}
      */
@@ -100,6 +117,27 @@ export default {
 
       if (isActiveElementACell && isOnSameView && !this.resetTabbableCell) {
         return document.activeElement
+      }
+
+      return null
+    },
+    /**
+     * Returns the `cellId` for a given a date
+     * @param {Date} date The date for which we need the cellId
+     * @returns {Number|null}
+     */
+    getCellId(date) {
+      if (!date || !this.$refs.picker.$refs.cells) {
+        return null
+      }
+
+      const cellDate = this.getCellDate(date)
+      const { cells } = this.$refs.picker.$refs.cells
+
+      for (let i = 0; i < cells.length; i += 1) {
+        if (cells[i].timestamp === cellDate.valueOf()) {
+          return i
+        }
       }
 
       return null
@@ -204,6 +242,18 @@ export default {
       }
 
       return this.$refs.dateInput.$refs[this.refName]
+    },
+    /**
+     * Used for a typeable datepicker: returns the cell element that corresponds to latestValidTypedDate...
+     */
+    getTypedCell() {
+      if (!this.typeable) {
+        return null
+      }
+
+      const cellId = this.getCellId(this.latestValidTypedDate)
+
+      return cellId ? this.$refs.picker.$refs.cells.$el.children[cellId] : null
     },
     /**
      * Sets `datepickerId` (as a global) and keeps track of focusable elements
@@ -426,6 +476,7 @@ export default {
 
       this.tabbableCell =
         this.getActiveCell() ||
+        this.getTypedCell() ||
         pickerCells.querySelector('button.selected:not(.muted):enabled') ||
         pickerCells.querySelector('button.open:not(.muted):enabled') ||
         pickerCells.querySelector('button.today:not(.muted):enabled') ||

@@ -1,11 +1,20 @@
 import en from '~/locale/translations/en'
 
+/**
+ * Attempts to return a parseable date in the format 'yyyy-MM-dd'
+ * @param {String} dateStr
+ * @param {String} formatStr
+ * @param {Object} translation
+ * @param {String} time
+ * @return String
+ */
 // eslint-disable-next-line complexity,max-statements
-const getParsedDate = ({ formatStr, dateStr, translation }) => {
+const getParsableDate = ({ dateStr, formatStr, translation, time }) => {
   const splitter = formatStr.match(/-|\/|\s|\./) || ['-']
   const df = formatStr.split(splitter[0])
   const ds = dateStr.split(splitter[0])
-  const ymd = [new Date().getFullYear(), '01', '01']
+  const ymd = [new Date().getFullYear().toString(), '01', '01']
+
   for (let i = 0; i < df.length; i += 1) {
     if (/yyyy/i.test(df[i])) {
       ymd[0] = ds[i]
@@ -24,7 +33,27 @@ const getParsedDate = ({ formatStr, dateStr, translation }) => {
       ymd[2] = tmp < 10 ? `0${tmp}` : `${tmp}`
     }
   }
-  return ymd
+
+  return `${ymd.join('-')}${time}`
+}
+
+/**
+ * Parses a date using a function passed in via the `parser` prop
+ * @param  {String}   dateStr The string to parse
+ * @param  {Function} format  The function that should be used to format the date
+ * @param  {Function} parser  The function that should be used to parse the date
+ * @return {Date | String}
+ */
+function parseDateWithLibrary(dateStr, format, parser) {
+  if (typeof parser !== 'function') {
+    throw new Error('Parser needs to be a function')
+  }
+
+  if (typeof format !== 'function') {
+    throw new Error('Format needs to be a function when using a custom parser')
+  }
+
+  return parser(dateStr)
 }
 
 const utils = {
@@ -261,63 +290,60 @@ const utils = {
     const day = this.getDate(date)
 
     const matches = {
-      dd: `0${day}`.slice(-2),
       d: day,
-      yyyy: year,
-      yy: String(year).slice(2),
-      MMMM: this.getMonthName(this.getMonth(date), translation.months),
-      MMM: this.getMonthNameAbbr(this.getMonth(date), translation.monthsAbbr),
-      MM: `0${month}`.slice(-2),
-      M: month,
-      o: this.getNthSuffix(this.getDate(date)),
+      dd: `0${day}`.slice(-2),
       E: this.getDayNameAbbr(date, translation.days),
+      o: this.getNthSuffix(this.getDate(date)),
+      M: month,
+      MM: `0${month}`.slice(-2),
+      MMM: this.getMonthNameAbbr(this.getMonth(date), translation.monthsAbbr),
+      MMMM: this.getMonthName(this.getMonth(date), translation.months),
+      yy: String(year).slice(2),
+      yyyy: year,
     }
 
-    const REGEX_FORMAT = /y{4}|y{2}|M{1,4}(?![aäe])|d{1,2}|o|E(?![eéi])/g
-    return formatStr.replace(REGEX_FORMAT, (match) => matches[match] || match)
+    const REGEX_FORMAT = /y{4}|y{2}|M{1,4}|d{1,2}|o|E/g
+
+    return formatStr.replace(REGEX_FORMAT, (match) => matches[match])
   },
 
   /**
-   * makes date parseable
-   * to use with international dates
-   * @param {String} dateStr
-   * @param {String|Function} formatStr
-   * @param {Object} translation
-   * @param {Function} parser
+   * Parses a date from a string, or returns the original string
+   * @param {String}          dateStr
+   * @param {String|Function} format
+   * @param {Object}          translation
+   * @param {Function}        parser
    * @return {Date | String}
    */
-  // eslint-disable-next-line max-params,complexity,max-statements
-  parseDate(dateStr, formatStr, translation = en, parser = null) {
-    if (!(dateStr && formatStr)) {
+  // eslint-disable-next-line max-params
+  parseDate(dateStr, format, translation = en, parser = null) {
+    if (!(dateStr && format)) {
       return dateStr
     }
-    if (typeof formatStr === 'function') {
-      if (!parser || typeof parser !== 'function') {
-        throw new Error(
-          'Parser needs to be a function if you are using a custom formatter',
-        )
-      }
-      return parser(dateStr)
-    }
-    const ymd = getParsedDate({
-      formatStr,
-      dateStr,
-      translation,
-    })
 
-    const dat = `${ymd.join('-')}${this.getTime()}`
-    if (Number.isNaN(Date.parse(dat))) {
+    if (parser) {
+      return parseDateWithLibrary(dateStr, format, parser)
+    }
+
+    const parseableDate = getParsableDate({
+      dateStr,
+      formatStr: format,
+      translation,
+      time: this.getTime(),
+    })
+    const parsedDate = Date.parse(parseableDate)
+
+    if (Number.isNaN(parsedDate)) {
       return dateStr
     }
-    return dat
+
+    return new Date(parsedDate)
   },
 
   getTime() {
     const time = 'T00:00:00'
-    if (this.useUtc) {
-      return `${time}Z`
-    }
-    return time
+
+    return this.useUtc ? `${time}Z` : time
   },
 
   /**

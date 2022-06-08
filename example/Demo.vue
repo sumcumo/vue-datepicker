@@ -11,10 +11,10 @@
 
     <div class="example">
       <h3>Custom first-day-of-week datepicker</h3>
-      <Datepicker placeholder="Type or select date" first-day-of-week="mon" />
+      <Datepicker placeholder="Select date" first-day-of-week="mon" />
       <code>
-        &lt;datepicker placeholder="Type or select date" first-day-of-week="mon"
-        &gt;&lt;/datepicker&gt;
+        &lt;datepicker placeholder="Select date"
+        first-day-of-week="mon"&gt;&lt;/datepicker&gt;
       </code>
     </div>
 
@@ -29,9 +29,9 @@
 
     <div class="example">
       <h3>Only show dates from current month datepicker</h3>
-      <Datepicker placeholder="Type or select date" :show-edge-dates="false" />
+      <Datepicker placeholder="Select date" :show-edge-dates="false" />
       <code>
-        &lt;datepicker placeholder="Type or select date"
+        &lt;datepicker placeholder="Select date"
         :show-edge-dates="false"&gt;&lt;/datepicker&gt;
       </code>
     </div>
@@ -53,7 +53,6 @@
       <Datepicker
         v-model="vModelExample"
         placeholder="Select Date"
-        :append-to-body="true"
       />
       <code>
         &lt;datepicker placeholder="Select Date"
@@ -73,24 +72,48 @@
 
     <div class="example">
       <h3>Format datepicker</h3>
-      <Datepicker :format="format" />
-      <code>&lt;datepicker :format="format"&gt;&lt;/datepicker&gt;</code>
+      <Datepicker :format="format"/>
+      <code>&lt;datepicker format="format"&gt;&lt;/datepicker&gt;</code>
       <div class="settings">
         <h5>Settings</h5>
         <div class="form-group">
           <label>Format</label>
           <select v-model="format">
-            <option value="d MMM yyyy" selected>
-              d MMM yyyy - e.g 12 Feb 2016
-            </option>
-            <option value="d MMMM yyyy">
-              d MMMM yyyy - e.g 12 February 2016
-            </option>
-            <option value="yyyy-MM-dd">yyyy-MM-dd - e.g 2016-02-12</option>
-            <option value="do MMM yyyy">do MMM yyyy - e.g 12th Feb 2016</option>
-            <option value="E do MMM yyyy">
-              E do MMM yyyy - e.g Sat 12th Feb 2016
-            </option>
+            <option value="MMMM d, yyyy">MMMM d, yyyy e.g. February 6, 2022</option>
+            <option value="do MMM yyyy">do MMM yyyy e.g. 6th Feb 2022</option>
+            <option value="yyyy-MM-dd">yyyy-MM-dd e.g. 2022-02-06</option>
+            <option value="E do MMM yyyy">E do MMM yyyy e.g. Sun 6th Feb 2022</option>
+            <option value="dd/MM/yy">dd/MM/yy e.g. 06/02/22</option>
+            <option value="dd.MM.yyyy">dd.MM.yyyy e.g. 06.02.2022</option>
+            <option value="M/d/yyyy">M/d/yyyy e.g. 2/6/2022</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="example">
+      <h3>Format a date with the date-fns library</h3>
+      <Datepicker
+        :format="customFormatter"
+        v-model="state"
+      />
+      <code>
+        &lt;datepicker :format="customFormatter"&gt;&lt;/datepicker&gt;
+      </code>
+      <div class="settings">
+        <h5>Settings</h5>
+        <div class="form-group">
+          <label>Format</label>
+          <select v-model="formatDateFns">
+            <option value="qqq yyyy">qqq yyyy e.g. Q1 2022</option>
+            <option value="EEEE do MMMM yyyy">EEEE do MMMM yyyy e.g. Sunday 6th February 2022</option>
+            <option value="MMMM d, yyyy">MMMM d, yyyy e.g. February 6, 2022</option>
+            <option value="do MMM yyyy">do MMM yyyy e.g. 6th Feb 2022</option>
+            <option value="yyyy-MM-dd">yyyy-MM-dd e.g. 2022-02-06</option>
+            <option value="E do MMM yyyy">E do MMM yyyy e.g. Sun 6th Feb 2022</option>
+            <option value="dd/MM/yy">dd/MM/yy e.g. 06/02/22</option>
+            <option value="dd.MM.yyyy">dd.MM.yyyy e.g. 06.02.2022</option>
+            <option value="M/d/yyyy">M/d/yyyy e.g. 2/6/2022</option>
           </select>
         </div>
       </div>
@@ -337,11 +360,8 @@
 
 <script>
 import Datepicker from '~/components/Datepicker.vue'
+import { format, parse } from 'date-fns'
 import * as lang from '~/locale/index'
-
-const state = {
-  date1: new Date(),
-}
 
 export default {
   name: 'Demo',
@@ -350,10 +370,7 @@ export default {
   },
   data() {
     return {
-      styleInput: null,
-      format: 'd MMMM yyyy',
       disabledDates: {},
-      openDate: null,
       disabledFn: {
         customPredictor(date) {
           const year = date.getFullYear()
@@ -394,21 +411,8 @@ export default {
           return false
         }
       }`,
-      highlightedFn: {
-        customPredictor(date) {
-          if (date.getDate() % 4 === 0) {
-            return true
-          }
-          return false
-        },
-      },
-      highlighted: {},
       eventMsg: null,
-      state,
-      vModelExample: null,
-      languages: lang,
-      language: 'en',
-      yearPickerRange: 10,
+      fixedPosition: 'bottom',
       fixedPositions: [
         'bottom',
         'bottom-left',
@@ -417,7 +421,24 @@ export default {
         'top-left',
         'top-right',
       ],
-      fixedPosition: 'bottom',
+      format: 'MMMM d, yyyy',
+      formatDateFns: 'MMMM d, yyyy',
+      highlighted: {},
+      highlightedFn: {
+        customPredictor(date) {
+          if (date.getDate() % 4 === 0) {
+            return true
+          }
+          return false
+        },
+      },
+      language: 'en',
+      languages: lang,
+      openDate: null,
+      state: new Date(),
+      styleInput: null,
+      vModelExample: null,
+      yearPickerRange: 10,
     }
   },
   computed: {
@@ -426,51 +447,11 @@ export default {
     },
   },
   methods: {
-    highlightTo(val) {
-      if (typeof this.highlighted.to === 'undefined') {
-        this.highlighted = {
-          to: null,
-          daysOfMonth: this.highlighted.daysOfMonth,
-          from: this.highlighted.from,
-        }
-      }
-      this.highlighted.to = val
+    customFormatter(date) {
+      return format(date, this.formatDateFns)
     },
-    highlightFrom(val) {
-      if (typeof this.highlighted.from === 'undefined') {
-        this.highlighted = {
-          to: this.highlighted.to,
-          daysOfMonth: this.highlighted.daysOfMonth,
-          from: null,
-        }
-      }
-      this.highlighted.from = val
-    },
-    setHighlightedDays(elem) {
-      if (elem.target.value === 'undefined') {
-        return
-      }
-      const highlightedDays = elem.target.value
-        .split(',')
-        .map((day) => parseInt(day, 10))
-      this.highlighted = {
-        from: this.highlighted.from,
-        to: this.highlighted.to,
-        daysOfMonth: highlightedDays,
-      }
-    },
-    setDisabledDays(elem) {
-      if (elem.target.value === 'undefined') {
-        return
-      }
-      const disabledDays = elem.target.value
-        .split(',')
-        .map((day) => parseInt(day, 10))
-      this.disabledDates = {
-        from: this.disabledDates.from,
-        to: this.disabledDates.to,
-        daysOfMonth: disabledDays,
-      }
+    customParser(date) {
+      return parse(date, this.formatDateFns, new Date())
     },
     disableTo(val) {
       if (typeof this.disabledDates.to === 'undefined') {
@@ -491,6 +472,52 @@ export default {
         }
       }
       this.disabledDates.from = val
+    },
+    highlightTo(val) {
+      if (typeof this.highlighted.to === 'undefined') {
+        this.highlighted = {
+          to: null,
+          daysOfMonth: this.highlighted.daysOfMonth,
+          from: this.highlighted.from,
+        }
+      }
+      this.highlighted.to = val
+    },
+    highlightFrom(val) {
+      if (typeof this.highlighted.from === 'undefined') {
+        this.highlighted = {
+          to: this.highlighted.to,
+          daysOfMonth: this.highlighted.daysOfMonth,
+          from: null,
+        }
+      }
+      this.highlighted.from = val
+    },
+    setDisabledDays(elem) {
+      if (elem.target.value === 'undefined') {
+        return
+      }
+      const disabledDays = elem.target.value
+        .split(',')
+        .map((day) => parseInt(day, 10))
+      this.disabledDates = {
+        from: this.disabledDates.from,
+        to: this.disabledDates.to,
+        daysOfMonth: disabledDays,
+      }
+    },
+    setHighlightedDays(elem) {
+      if (elem.target.value === 'undefined') {
+        return
+      }
+      const highlightedDays = elem.target.value
+        .split(',')
+        .map((day) => parseInt(day, 10))
+      this.highlighted = {
+        from: this.highlighted.from,
+        to: this.highlighted.to,
+        daysOfMonth: highlightedDays,
+      }
     },
   },
 }
