@@ -79,13 +79,13 @@
         <div class="form-group">
           <label>Format</label>
           <select v-model="format">
-            <option value="MMMM d, yyyy">MMMM d, yyyy &nbsp;&nbsp;&nbsp;e.g. February 6, 2022</option>
-            <option value="do MMM yyyy">do MMM yyyy &nbsp;&nbsp;&nbsp;e.g. 6th Feb 2022</option>
-            <option value="yyyy-MM-dd">yyyy-MM-dd &nbsp;&nbsp;&nbsp;e.g. 2022-02-06</option>
-            <option value="E do MMM yyyy">E do MMM yyyy &nbsp;&nbsp;&nbsp;e.g. Sun 6th Feb 2022</option>
-            <option value="dd/MM/yy">dd/MM/yy &nbsp;&nbsp;&nbsp;e.g. 06/02/22</option>
-            <option value="dd.MM.yyyy">dd.MM.yyyy &nbsp;&nbsp;&nbsp;e.g. 06.02.2022</option>
-            <option value="M/d/yyyy">M/d/yyyy &nbsp;&nbsp;&nbsp;e.g. 2/6/2022</option>
+            <option value="MMMM d, yyyy">MMMM d, yyyy e.g. February 6, 2022</option>
+            <option value="do MMM yyyy">do MMM yyyy e.g. 6th Feb 2022</option>
+            <option value="yyyy-MM-dd">yyyy-MM-dd e.g. 2022-02-06</option>
+            <option value="E do MMM yyyy">E do MMM yyyy e.g. Sun 6th Feb 2022</option>
+            <option value="dd/MM/yy">dd/MM/yy e.g. 06/02/22</option>
+            <option value="dd.MM.yyyy">dd.MM.yyyy e.g. 06.02.2022</option>
+            <option value="M/d/yyyy">M/d/yyyy e.g. 2/6/2022</option>
           </select>
         </div>
       </div>
@@ -105,15 +105,15 @@
         <div class="form-group">
           <label>Format</label>
           <select v-model="formatDateFns">
-            <option value="qqq yyyy">qqq yyyy &nbsp;&nbsp;&nbsp;e.g. Q1 2022</option>
-            <option value="EEEE do MMMM yyyy">EEEE do MMMM yyyy &nbsp;&nbsp;&nbsp;e.g. Sunday 6th February 2022</option>
-            <option value="MMMM d, yyyy">MMMM d, yyyy &nbsp;&nbsp;&nbsp;e.g. February 6, 2022</option>
-            <option value="do MMM yyyy">do MMM yyyy &nbsp;&nbsp;&nbsp;e.g. 6th Feb 2022</option>
-            <option value="yyyy-MM-dd">yyyy-MM-dd &nbsp;&nbsp;&nbsp;e.g. 2022-02-06</option>
-            <option value="E do MMM yyyy">E do MMM yyyy &nbsp;&nbsp;&nbsp;e.g. Sun 6th Feb 2022</option>
-            <option value="dd/MM/yy">dd/MM/yy &nbsp;&nbsp;&nbsp;e.g. 06/02/22</option>
-            <option value="dd.MM.yyyy">dd.MM.yyyy &nbsp;&nbsp;&nbsp;e.g. 06.02.2022</option>
-            <option value="M/d/yyyy">M/d/yyyy &nbsp;&nbsp;&nbsp;e.g. 2/6/2022</option>
+            <option value="qqq yyyy">qqq yyyy e.g. Q1 2022</option>
+            <option value="EEEE do MMMM yyyy">EEEE do MMMM yyyy e.g. Sunday 6th February 2022</option>
+            <option value="MMMM d, yyyy">MMMM d, yyyy e.g. February 6, 2022</option>
+            <option value="do MMM yyyy">do MMM yyyy e.g. 6th Feb 2022</option>
+            <option value="yyyy-MM-dd">yyyy-MM-dd e.g. 2022-02-06</option>
+            <option value="E do MMM yyyy">E do MMM yyyy e.g. Sun 6th Feb 2022</option>
+            <option value="dd/MM/yy">dd/MM/yy e.g. 06/02/22</option>
+            <option value="dd.MM.yyyy">dd.MM.yyyy e.g. 06.02.2022</option>
+            <option value="M/d/yyyy">M/d/yyyy e.g. 2/6/2022</option>
           </select>
         </div>
       </div>
