@@ -2,7 +2,8 @@
 
 ## String formatter
 
-NB. This is not very robust at all - use at your own risk! Needs a better implementation.
+The default format is 'dd MMM yyyy' e.g. 05 Jan 2022. However, you can use the following tokens to build up your own
+`format` string:
 
 | Token | Desc                   | Example     |
 |-------|------------------------|-------------|
@@ -17,22 +18,29 @@ NB. This is not very robust at all - use at your own risk! Needs a better implem
 | yy    | two digit year         | 16          |
 | yyyy  | four digit year        | 2016        |
 
+For example, the following string would format the date as 'January 5th, 2022':
+
+```vue
+<template>
+  <DatePicker format="MMMM do, yyyy"></DatePicker>
+</template>
+```
+
 ## Function formatter
 
 Delegates date formatting to a function provided by the `format` prop.
 The function will be called with the date - and it has to return the formatted date as a string.
 This allows us to use moment, date-fns, globalize or any other library to format the date.
-The formatter function needs a custom `parser` to parse the formatted date back to a date object.
 
-Here is an example for date-fns:
+Here is an example using [date-fns](https://date-fns.org/):
 
 ```vue
 <template>
-  <DatePicker :format="customFormatter" :parser="customParser"></DatePicker>
+  <DatePicker :format="customFormatter"></DatePicker>
 </template>
 
 <script>
-import { format, parse } from 'date-fns'
+import { format } from 'date-fns'
 
 export default {
   data() {
@@ -43,9 +51,6 @@ export default {
   methods: {
     customFormatter(date) {
       return format(date, this.format)
-    },
-    customParser(date) {
-      return parse(date, this.format, new Date())
     },
   },
 }
