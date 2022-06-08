@@ -72,7 +72,7 @@
 
     <div class="example">
       <h3>Format datepicker</h3>
-      <Datepicker :format="format" v-model="state"/>
+      <Datepicker :format="format"/>
       <code>&lt;datepicker format="format"&gt;&lt;/datepicker&gt;</code>
       <div class="settings">
         <h5>Settings</h5>
