@@ -132,12 +132,10 @@ describe('dateUtils', () => {
     )
   })
 
-  it('fails to parse because of missing parser', () => {
+  it('fails to parse because parser is not a function', () => {
     expect(() => {
-      dateUtils.parseDate('16 April 2020', () => {})
-    }).toThrowError(
-      'Parser needs to be a function if you are using a custom formatter',
-    )
+      dateUtils.parseDate('16 April 2020', () => {}, en, 'dd/MM/yyyy')
+    }).toThrowError('Parser needs to be a function')
   })
 
   it('parses formats without day', () => {

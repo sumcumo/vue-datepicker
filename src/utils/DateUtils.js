@@ -44,10 +44,8 @@ const getParsableDate = ({ formatStr, dateStr, translation, time }) => {
  * @return {Date | String}
  */
 function parseDateWithLibrary(dateStr, parser) {
-  if (!parser || typeof parser !== 'function') {
-    throw new Error(
-      'Parser needs to be a function if you are using a custom formatter',
-    )
+  if (typeof parser !== 'function') {
+    throw new Error('Parser needs to be a function')
   }
 
   return parser(dateStr)
@@ -318,7 +316,7 @@ const utils = {
       return dateStr
     }
 
-    if (typeof formatStr === 'function') {
+    if (parser) {
       return parseDateWithLibrary(dateStr, parser)
     }
 
