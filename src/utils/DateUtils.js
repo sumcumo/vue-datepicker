@@ -2,14 +2,14 @@ import en from '~/locale/translations/en'
 
 /**
  * Attempts to return a parseable date in the format 'yyyy-MM-dd'
- * @param {String} formatStr
  * @param {String} dateStr
+ * @param {String} formatStr
  * @param {Object} translation
  * @param {String} time
  * @return String
  */
 // eslint-disable-next-line complexity,max-statements
-const getParsableDate = ({ formatStr, dateStr, translation, time }) => {
+const getParsableDate = ({ dateStr, formatStr, translation, time }) => {
   const splitter = formatStr.match(/-|\/|\s|\./) || ['-']
   const df = formatStr.split(splitter[0])
   const ds = dateStr.split(splitter[0])
@@ -39,13 +39,18 @@ const getParsableDate = ({ formatStr, dateStr, translation, time }) => {
 
 /**
  * Parses a date using a function passed in via the `parser` prop
- * @param  {Function}      parser  The function that should be used to parse the date
- * @param  {String}        dateStr The string to parse
+ * @param  {String}   dateStr The string to parse
+ * @param  {Function} format  The function that should be used to format the date
+ * @param  {Function} parser  The function that should be used to parse the date
  * @return {Date | String}
  */
-function parseDateWithLibrary(dateStr, parser) {
+function parseDateWithLibrary(dateStr, format, parser) {
   if (typeof parser !== 'function') {
     throw new Error('Parser needs to be a function')
+  }
+
+  if (typeof format !== 'function') {
+    throw new Error('Format needs to be a function when using a custom parser')
   }
 
   return parser(dateStr)
@@ -305,24 +310,24 @@ const utils = {
   /**
    * Parses a date from a string, or returns the original string
    * @param {String}          dateStr
-   * @param {String|Function} formatStr
+   * @param {String|Function} format
    * @param {Object}          translation
    * @param {Function}        parser
    * @return {Date | String}
    */
   // eslint-disable-next-line max-params
-  parseDate(dateStr, formatStr, translation = en, parser = null) {
-    if (!(dateStr && formatStr)) {
+  parseDate(dateStr, format, translation = en, parser = null) {
+    if (!(dateStr && format)) {
       return dateStr
     }
 
     if (parser) {
-      return parseDateWithLibrary(dateStr, parser)
+      return parseDateWithLibrary(dateStr, format, parser)
     }
 
     const parseableDate = getParsableDate({
-      formatStr,
       dateStr,
+      formatStr: format,
       translation,
       time: this.getTime(),
     })

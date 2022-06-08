@@ -138,6 +138,12 @@ describe('dateUtils', () => {
     }).toThrowError('Parser needs to be a function')
   })
 
+  it('fails to parse because format is not a function when using a custom parser', () => {
+    expect(() => {
+      dateUtils.parseDate('16 April 2020', 'dd/MM/yyyy', en, () => {})
+    }).toThrowError('Format needs to be a function when using a custom parser')
+  })
+
   it('parses formats without day', () => {
     expect(dateUtils.parseDate('April 2020', 'MMMM yyyy')).toEqual(
       new Date('2020-04-01T00:00:00'),

@@ -1,5 +1,5 @@
 import { mount, shallowMount } from '@vue/test-utils'
-import { parse } from 'date-fns'
+import { format, parse } from 'date-fns'
 import DateInput from '~/components/DateInput.vue'
 import Datepicker from '~/components/Datepicker.vue'
 import { en } from '~/locale'
@@ -113,6 +113,9 @@ describe('DateInput', () => {
 
   it('parses a typed date using a function passed in via a prop', async () => {
     await wrapper.setProps({
+      format: (date) => {
+        return format(date, 'dd/mm/yyyy')
+      },
       parser: (date) => {
         return parse(date, 'yyyy/mm/dd', new Date())
       },
@@ -123,7 +126,7 @@ describe('DateInput', () => {
     input.setValue('2022/01/05')
     await input.trigger('blur')
 
-    expect(input.element.value).toBe('05 Jan 2022')
+    expect(input.element.value).toBe('05/01/2022')
   })
 
   it("doesn't emit the date if typeable=false", async () => {
