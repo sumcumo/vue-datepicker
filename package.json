@@ -76,7 +76,7 @@
     "chalk": "4.1.1",
     "cleave.js": "1.6.0",
     "core-js": "3.12.1",
-    "cypress": "10.0.2",
+    "cypress": "10.0.3",
     "cypress-cucumber-preprocessor": "4.1.4",
     "cypress-plugin-tab": "1.0.5",
     "date-fns": "2.21.3",
