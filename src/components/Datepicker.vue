@@ -429,7 +429,6 @@ export default {
       this.close()
 
       this.$emit('selected', null)
-      this.$emit('input', null)
       this.$emit('cleared')
     },
     /**
@@ -542,7 +541,6 @@ export default {
         this.latestValidTypedDate,
       )
       this.setPageDate(date)
-      this.$emit('input', date)
 
       if (this.isPageChange(originalPageDate)) {
         this.handlePageChange({
@@ -606,7 +604,6 @@ export default {
 
         if (isDateDisabled) {
           parsedValue = null
-          this.$emit('input', parsedValue)
         }
         this.setValue(parsedValue)
       } else if (this.typeable) {
@@ -692,7 +689,6 @@ export default {
 
       this.setValue(date)
       this.$emit('selected', date)
-      this.$emit('input', date)
     },
     /**
      * Select the date from a 'select-typed-date' event
@@ -784,8 +780,9 @@ export default {
      * @param {Date|String|Number|null} date
      */
     setValue(date) {
-      this.selectedDate = date || null
+      this.selectedDate = date
       this.setPageDate(date)
+      this.$emit('input', date)
 
       if (this.typeable) {
         this.latestValidTypedDate = date || this.computedOpenDate
