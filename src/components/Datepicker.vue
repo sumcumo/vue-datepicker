@@ -427,8 +427,6 @@ export default {
       this.setValue(null)
       this.focus.refs = ['input']
       this.close()
-
-      this.$emit('selected', null)
       this.$emit('cleared')
     },
     /**
@@ -688,7 +686,6 @@ export default {
       const date = new Date(timestamp)
 
       this.setValue(date)
-      this.$emit('selected', date)
     },
     /**
      * Select the date from a 'select-typed-date' event
@@ -697,7 +694,6 @@ export default {
     selectTypedDate(date) {
       this.setValue(date)
       this.reviewFocus()
-      this.$emit('selected', date)
 
       if (this.isOpen) {
         this.close()
@@ -772,17 +768,17 @@ export default {
 
       if (hasChanged()) {
         this.setValue(date)
-        this.$emit('selected', date)
       }
     },
     /**
      * Set the datepicker value (and, if typeable, update `latestValidTypedDate`)
-     * @param {Date|String|Number|null} date
+     * @param {Date|null} date
      */
     setValue(date) {
       this.selectedDate = date
       this.setPageDate(date)
       this.$emit('input', date)
+      this.$emit('selected', date)
 
       if (this.typeable) {
         this.latestValidTypedDate = date || this.computedOpenDate
