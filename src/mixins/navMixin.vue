@@ -227,6 +227,10 @@ export default {
      * @returns {Array}
      */
     getFocusableElements(fragment) {
+      if (!fragment) {
+        return []
+      }
+
       const navNodeList = fragment.querySelectorAll(
         'button:enabled, [href], input:not([type=hidden]), select:enabled, textarea:enabled, [tabindex]:not([tabindex="-1"])',
       )
