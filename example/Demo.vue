@@ -37,6 +37,55 @@
     </div>
 
     <div class="example">
+      <h3>Datepicker with slots</h3>
+      <Datepicker placeholder="Select Date">
+        <template #beforeCalendarHeader>
+          <div class="slot">
+            Read all about:
+            <a
+              href="https://sumcumo.github.io/vue-datepicker/guide/Slots/"
+              tabindex="0"
+              target="_blank"
+            >
+              available slots
+            </a>
+          </div>
+        </template>
+
+        <template #calendarFooter>
+          <div class="slot">
+            They're very flexible. Here's that link again:
+            <a
+              href="https://sumcumo.github.io/vue-datepicker/guide/Slots/"
+              tabindex="0"
+              target="_blank"
+            >
+              available slots
+            </a>
+          </div>
+        </template>
+      </Datepicker>
+      <pre>
+&lt;datepicker placeholder="Select Date"&gt;
+  &lt;template #beforeCalendarHeader&gt;
+    &lt;div&gt;
+      Read all about: &lt;a href="https://sumcumo.github.io/vue-datepicker/guide/Slots/"
+      tabindex="0"&gt;available slots&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/template&gt;
+
+  &lt;template #calendarFooter&gt;
+    &lt;div&gt;
+      They're very flexible. Here's that link again:
+      &lt;a href="https://sumcumo.github.io/vue-datepicker/guide/Slots/"
+      tabindex="0"&gt;available slots&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/template&gt;
+&lt;/datepicker&gt;</pre
+      >
+    </div>
+
+    <div class="example">
       <h3>Bootstrap styled datepicker</h3>
       <Datepicker
         :bootstrap-styling="true"
@@ -50,10 +99,7 @@
 
     <div class="example">
       <h3>v-model datepicker</h3>
-      <Datepicker
-        v-model="vModelExample"
-        placeholder="Select Date"
-      />
+      <Datepicker v-model="vModelExample" placeholder="Select Date" />
       <code>
         &lt;datepicker placeholder="Select Date"
         v-model="vmodelexample"&gt;&lt;/datepicker&gt;
@@ -72,17 +118,21 @@
 
     <div class="example">
       <h3>Format datepicker</h3>
-      <Datepicker :format="format"/>
+      <Datepicker :format="format" />
       <code>&lt;datepicker format="format"&gt;&lt;/datepicker&gt;</code>
       <div class="settings">
         <h5>Settings</h5>
         <div class="form-group">
           <label>Format</label>
           <select v-model="format">
-            <option value="MMMM d, yyyy">MMMM d, yyyy e.g. February 6, 2022</option>
+            <option value="MMMM d, yyyy">
+              MMMM d, yyyy e.g. February 6, 2022
+            </option>
             <option value="do MMM yyyy">do MMM yyyy e.g. 6th Feb 2022</option>
             <option value="yyyy-MM-dd">yyyy-MM-dd e.g. 2022-02-06</option>
-            <option value="E do MMM yyyy">E do MMM yyyy e.g. Sun 6th Feb 2022</option>
+            <option value="E do MMM yyyy">
+              E do MMM yyyy e.g. Sun 6th Feb 2022
+            </option>
             <option value="dd/MM/yy">dd/MM/yy e.g. 06/02/22</option>
             <option value="dd.MM.yyyy">dd.MM.yyyy e.g. 06.02.2022</option>
             <option value="M/d/yyyy">M/d/yyyy e.g. 2/6/2022</option>
@@ -93,10 +143,7 @@
 
     <div class="example">
       <h3>Format a date with the date-fns library</h3>
-      <Datepicker
-        :format="customFormatter"
-        v-model="state"
-      />
+      <Datepicker :format="customFormatter" v-model="state" />
       <code>
         &lt;datepicker :format="customFormatter"&gt;&lt;/datepicker&gt;
       </code>
@@ -106,11 +153,17 @@
           <label>Format</label>
           <select v-model="formatDateFns">
             <option value="qqq yyyy">qqq yyyy e.g. Q1 2022</option>
-            <option value="EEEE do MMMM yyyy">EEEE do MMMM yyyy e.g. Sunday 6th February 2022</option>
-            <option value="MMMM d, yyyy">MMMM d, yyyy e.g. February 6, 2022</option>
+            <option value="EEEE do MMMM yyyy">
+              EEEE do MMMM yyyy e.g. Sunday 6th February 2022
+            </option>
+            <option value="MMMM d, yyyy">
+              MMMM d, yyyy e.g. February 6, 2022
+            </option>
             <option value="do MMM yyyy">do MMM yyyy e.g. 6th Feb 2022</option>
             <option value="yyyy-MM-dd">yyyy-MM-dd e.g. 2022-02-06</option>
-            <option value="E do MMM yyyy">E do MMM yyyy e.g. Sun 6th Feb 2022</option>
+            <option value="E do MMM yyyy">
+              E do MMM yyyy e.g. Sun 6th Feb 2022
+            </option>
             <option value="dd/MM/yy">dd/MM/yy e.g. 06/02/22</option>
             <option value="dd.MM.yyyy">dd.MM.yyyy e.g. 06.02.2022</option>
             <option value="M/d/yyyy">M/d/yyyy e.g. 2/6/2022</option>
@@ -546,8 +599,20 @@ select {
   margin-bottom: 2em;
 }
 
+.slot {
+  background-color: #cae5ed;
+  padding: 0.5em;
+}
+
+.slot > a {
+  color: #176982;
+  padding: 0.1em;
+  border-radius: 0.1em;
+}
+
 code,
 pre {
+  color: #e83e8c;
   margin: 1em 0;
   padding: 1em;
   border: 1px solid #bbb;
