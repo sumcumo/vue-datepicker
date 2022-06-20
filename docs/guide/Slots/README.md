@@ -1,6 +1,18 @@
 # Slots
 
-Slots will help you customize content.
+Slots will help you customize content.<br>
+
+N.B. If your slot content contains any links, you'll need to add `tabindex="0"` to your `a` tags in order for the links to be tabbable:
+```html
+<DatePicker>
+  <template #beforeCalendarHeaderDay>
+    <div>
+      You must add tabindex="0" to <a href="#" tabindex="0">this link</a>
+      so that users can tab to it.
+    </div>
+  </template>
+</DatePicker>
+```
 
 ## beforeCalendarHeader
 
