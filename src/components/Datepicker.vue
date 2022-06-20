@@ -424,10 +424,9 @@ export default {
         return
       }
 
-      this.selectedDate = null
+      this.setValue(null)
       this.focus.refs = ['input']
       this.close()
-      this.setPageDate()
 
       this.$emit('selected', null)
       this.$emit('input', null)
