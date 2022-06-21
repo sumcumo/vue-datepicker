@@ -442,7 +442,7 @@ describe('Datepicker mounted with slots', () => {
   })
 })
 
-describe('Datepicker mounted to body', () => {
+describe('Datepicker mounted and attached to body', () => {
   let wrapper
 
   beforeEach(() => {
@@ -512,7 +512,7 @@ describe('Datepicker mounted to body', () => {
   })
 })
 
-describe('Datepicker mounted to body with openDate', () => {
+describe('Datepicker mounted and attached to body with openDate', () => {
   let wrapper
 
   beforeEach(() => {
@@ -1001,7 +1001,7 @@ describe('Datepicker mounted to body with openDate', () => {
   })
 })
 
-describe('Datepicker.vue set by string', () => {
+describe('Datepicker set by string', () => {
   let wrapper
 
   it('can parse a string date', () => {
@@ -1027,7 +1027,7 @@ describe('Datepicker.vue set by string', () => {
   })
 })
 
-describe('Datepicker.vue set by timestamp', () => {
+describe('Datepicker set by timestamp', () => {
   let wrapper
 
   it('can parse unix timestamp', () => {
@@ -1043,7 +1043,7 @@ describe('Datepicker.vue set by timestamp', () => {
   })
 })
 
-describe('Datepicker.vue using UTC', () => {
+describe('Datepicker mounted using UTC', () => {
   let wrapper
   it('correctly sets the value using UTC', async () => {
     const timezoneOffset = new Date().getTimezoneOffset() / 60
@@ -1073,7 +1073,7 @@ describe('Datepicker.vue using UTC', () => {
   })
 })
 
-describe('Datepicker.vue inline', () => {
+describe('Datepicker mounted inline', () => {
   let wrapper
 
   beforeEach(() => {
@@ -1102,7 +1102,7 @@ describe('Datepicker.vue inline', () => {
   })
 })
 
-describe('Datepicker.vue inline mounted to body', () => {
+describe('Datepicker mounted inline and attached to body', () => {
   let wrapper
   beforeEach(() => {
     jest.useFakeTimers()
@@ -1136,7 +1136,7 @@ describe('Datepicker.vue inline mounted to body', () => {
   })
 })
 
-describe('Datepicker with initial-view', () => {
+describe('Datepicker mounted with initial-view', () => {
   let wrapper
 
   beforeEach(() => {
@@ -1181,7 +1181,7 @@ describe('Datepicker with initial-view', () => {
   })
 })
 
-describe('Datepicker on body', () => {
+describe('Datepicker mounted and appended to body', () => {
   let wrapper
 
   it('appends popup to body', async () => {

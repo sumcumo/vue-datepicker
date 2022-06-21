@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils'
 import PickerDay from '~/components/PickerDay.vue'
 import { en, mn } from '~/locale'
 
-describe('PickerDay', () => {
+describe('PickerDay mounted', () => {
   let wrapper
 
   beforeEach(() => {
@@ -10,7 +10,6 @@ describe('PickerDay', () => {
       propsData: {
         translation: en,
         pageDate: new Date(2018, 1, 1),
-        view: 'day',
       },
     })
   })
@@ -160,7 +159,7 @@ describe('PickerDay', () => {
   })
 })
 
-describe('PickerDay with scoped slot', () => {
+describe('PickerDay mounted with scoped slot', () => {
   it('displays the dayCellContent scoped slot correctly', () => {
     const wrapper = mount(PickerDay, {
       propsData: {

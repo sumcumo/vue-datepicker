@@ -1,16 +1,13 @@
 import { mount } from '@vue/test-utils'
 import Datepicker from '~/components/Datepicker.vue'
 
-describe('Datepicker mounted', () => {
+describe('Datepicker mounted with date', () => {
   let wrapper
-  let date
 
   beforeEach(() => {
-    date = new Date(2016, 1, 15)
     wrapper = mount(Datepicker, {
       propsData: {
-        format: 'yyyy-MM-dd',
-        value: date,
+        value: new Date(2016, 1, 15),
       },
     })
   })

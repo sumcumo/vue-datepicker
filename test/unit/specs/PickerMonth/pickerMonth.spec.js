@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils'
 import PickerMonth from '~/components/PickerMonth.vue'
 import { en } from '~/locale'
 
-describe('PickerMonth', () => {
+describe('PickerMonth mounted', () => {
   let wrapper
 
   beforeEach(() => {

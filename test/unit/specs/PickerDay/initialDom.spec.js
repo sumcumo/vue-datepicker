@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils'
 import PickerDay from '~/components/PickerDay.vue'
 import { en } from '~/locale'
 
-describe('PickerDay: DOM', () => {
+describe('PickerDay mounted', () => {
   let wrapper
 
   beforeEach(() => {
@@ -10,7 +10,6 @@ describe('PickerDay: DOM', () => {
       propsData: {
         translation: en,
         pageDate: new Date(2018, 1, 1),
-        selectedDate: new Date(2018, 2, 24),
       },
     })
   })

@@ -2,19 +2,18 @@ import { mount } from '@vue/test-utils'
 import PickerYear from '~/components/PickerYear.vue'
 import { en } from '~/locale'
 
-describe('PickerYear', () => {
+describe('PickerYear mounted with disabled dates', () => {
   let wrapper
 
   beforeEach(() => {
     wrapper = mount(PickerYear, {
       propsData: {
         translation: en,
-        pageDate: new Date(2018, 3, 1),
-        selectedDate: new Date(2018, 3, 19),
         disabledDates: {
           to: new Date(2018, 2, 14),
           from: new Date(2018, 4, 15),
         },
+        pageDate: new Date(2018, 3, 1),
         view: 'year',
       },
     })
