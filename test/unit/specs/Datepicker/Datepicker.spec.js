@@ -1170,13 +1170,15 @@ describe('Datepicker mounted with initial-view', () => {
 describe('Datepicker mounted and appended to body', () => {
   let wrapper
 
-  it('appends popup to body', async () => {
+  beforeEach(() => {
     wrapper = mount(Datepicker, {
       propsData: {
         appendToBody: true,
       },
     })
+  })
 
+  it('appends popup to body', async () => {
     await wrapper.vm.open()
 
     expect(wrapper.vm.$el.querySelector('.vdp-datepicker__calendar')).toBeNull()
@@ -1187,12 +1189,6 @@ describe('Datepicker mounted and appended to body', () => {
   })
 
   it('removes popup appended to body on component removal', async () => {
-    wrapper = mount(Datepicker, {
-      propsData: {
-        appendToBody: true,
-      },
-    })
-
     await wrapper.vm.open()
     await wrapper.vm.close()
 
