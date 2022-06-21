@@ -36,16 +36,12 @@ describe('Datepicker shallowMounted', () => {
 
   it('sets the date from method', () => {
     const date = new Date(2016, 9, 15)
-    expect(typeof wrapper.vm.setValue).toEqual('function')
+
     wrapper.vm.setValue(date)
     expect(wrapper.vm.selectedDate).toEqual(date)
-    const now = new Date()
+
     wrapper.vm.setValue()
     expect(wrapper.vm.selectedDate).toEqual(null)
-    const pageDate = new Date(wrapper.vm.pageDate)
-    expect(pageDate.getFullYear()).toEqual(now.getFullYear())
-    expect(pageDate.getMonth()).toEqual(now.getMonth())
-    expect(pageDate.getDate()).toEqual(1)
   })
 
   it('sets the date from a date value', async () => {
@@ -134,7 +130,6 @@ describe('Datepicker shallowMounted', () => {
     wrapper.vm.setView('day')
     wrapper.vm.handleSelect({ timestamp: date.valueOf() })
 
-    expect(wrapper.vm.pageTimestamp).toEqual(date.valueOf())
     expect(wrapper.vm.selectedDate.getMonth()).toEqual(9)
     expect(wrapper.emitted('selected')).toBeTruthy()
   })
@@ -145,14 +140,12 @@ describe('Datepicker shallowMounted', () => {
     wrapper.vm.setView('month')
     wrapper.vm.handleSelect({ timestamp: date.valueOf() })
 
-    expect(wrapper.emitted('changed-month')).toBeTruthy()
     expect(wrapper.emitted('changed-month')[0][0].timestamp).toEqual(
       date.valueOf(),
     )
     expect(new Date(wrapper.vm.pageTimestamp).getMonth()).toEqual(
       date.getMonth(),
     )
-    expect(wrapper.vm.picker).toEqual('PickerDay')
   })
 
   it('can select a year', () => {
@@ -161,14 +154,12 @@ describe('Datepicker shallowMounted', () => {
     wrapper.vm.setView('year')
     wrapper.vm.handleSelect({ timestamp: date.valueOf() })
 
-    expect(wrapper.emitted('changed-year')).toBeTruthy()
     expect(wrapper.emitted('changed-year')[0][0].timestamp).toEqual(
       date.valueOf(),
     )
     expect(new Date(wrapper.vm.pageTimestamp).getFullYear()).toEqual(
       date.getFullYear(),
     )
-    expect(wrapper.vm.picker).toEqual('PickerMonth')
   })
 
   it('watches value', async () => {
