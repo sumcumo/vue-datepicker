@@ -189,7 +189,7 @@ describe('Datepicker shallowMounted', () => {
     expect(spy).toHaveBeenCalled()
   })
 
-  it('derives `picker` from the current `view`', async () => {
+  it('derives `picker` from the current `view`', () => {
     wrapper.vm.setView('day')
     expect(wrapper.vm.picker).toBe('PickerDay')
 
@@ -221,7 +221,7 @@ describe('Datepicker shallowMounted', () => {
     expect(datepicker.element.className).toContain('rtl')
   })
 
-  it('knows the next view up / down', async () => {
+  it('knows the next view up / down', () => {
     wrapper.vm.setView('day')
 
     expect(wrapper.vm.nextView.down).toBeUndefined()
@@ -238,20 +238,20 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapper.vm.nextView.up).toBe('decade')
   })
 
-  it('emits changed-month/year/decade', async () => {
+  it('emits changed-month/year/decade', () => {
     const pageDate = new Date(2016, 2, 1)
 
-    await wrapper.vm.setView('day')
-    await wrapper.vm.handlePageChange({ pageDate })
+    wrapper.vm.setView('day')
+    wrapper.vm.handlePageChange({ pageDate })
 
     expect(wrapper.emitted('changed-month')).toBeTruthy()
 
-    await wrapper.vm.setView('month')
-    await wrapper.vm.handlePageChange({ pageDate })
+    wrapper.vm.setView('month')
+    wrapper.vm.handlePageChange({ pageDate })
     expect(wrapper.emitted('changed-year')).toBeTruthy()
 
-    await wrapper.vm.setView('year')
-    await wrapper.vm.handlePageChange({ pageDate })
+    wrapper.vm.setView('year')
+    wrapper.vm.handlePageChange({ pageDate })
     expect(wrapper.emitted('changed-decade')).toBeTruthy()
   })
 
