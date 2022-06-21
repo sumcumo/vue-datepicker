@@ -25,16 +25,9 @@ describe('Datepicker unmounted', () => {
 
 describe('Datepicker shallowMounted', () => {
   let wrapper
-  let date
 
   beforeEach(() => {
-    date = new Date(2016, 1, 15)
-    wrapper = shallowMount(Datepicker, {
-      propsData: {
-        format: 'yyyy-MM-dd',
-        value: date,
-      },
-    })
+    wrapper = shallowMount(Datepicker)
   })
 
   afterEach(() => {
@@ -55,11 +48,21 @@ describe('Datepicker shallowMounted', () => {
     expect(pageDate.getDate()).toEqual(1)
   })
 
-  it('sets the date', () => {
-    expect(wrapper.vm.selectedDate.valueOf()).toEqual(date.valueOf())
+  it('sets the date from a date value', async () => {
+    const date = new Date(2016, 1, 15)
+
+    await wrapper.setProps({
+      value: date,
+    })
+
+    expect(wrapper.vm.selectedDate).toEqual(date)
   })
 
-  it('clears the date', () => {
+  it('clears the date', async () => {
+    await wrapper.setProps({
+      value: new Date(2016, 1, 15),
+    })
+
     wrapper.vm.clearDate()
     expect(wrapper.vm.selectedDate).toEqual(null)
   })
