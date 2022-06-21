@@ -23,6 +23,251 @@ describe('Datepicker unmounted', () => {
   })
 })
 
+describe('Datepicker shallowMounted', () => {
+  let wrapper
+  let date
+
+  beforeEach(() => {
+    date = new Date(2016, 1, 15)
+    wrapper = shallowMount(Datepicker, {
+      propsData: {
+        format: 'yyyy-MM-dd',
+        value: date,
+      },
+    })
+  })
+
+  afterEach(() => {
+    wrapper.destroy()
+  })
+
+  it('correctly sets the value from method', () => {
+    const newDate = new Date(2016, 9, 15)
+    expect(typeof wrapper.vm.setValue).toEqual('function')
+    wrapper.vm.setValue(newDate)
+    expect(wrapper.vm.selectedDate).toEqual(newDate)
+    const now = new Date()
+    wrapper.vm.setValue()
+    expect(wrapper.vm.selectedDate).toEqual(null)
+    const pageDate = new Date(wrapper.vm.pageDate)
+    expect(pageDate.getFullYear()).toEqual(now.getFullYear())
+    expect(pageDate.getMonth()).toEqual(now.getMonth())
+    expect(pageDate.getDate()).toEqual(1)
+  })
+
+  it('sets the date', () => {
+    expect(wrapper.vm.selectedDate.valueOf()).toEqual(date.valueOf())
+  })
+
+  it('clears the date', () => {
+    wrapper.vm.clearDate()
+    expect(wrapper.vm.selectedDate).toEqual(null)
+  })
+
+  it('sets pageTimestamp to be now', () => {
+    const data = Datepicker.data()
+    const d = new Date(data.pageTimestamp)
+    expect(d.getFullYear()).toEqual(new Date().getFullYear())
+    expect(d.getMonth()).toEqual(new Date().getMonth())
+    expect(d.getDate()).toEqual(1)
+  })
+
+  it('toggles the calendar', async () => {
+    expect(wrapper.vm.isOpen).toEqual(false)
+
+    wrapper.vm.setView('month')
+    expect(wrapper.vm.isOpen).toEqual(true)
+
+    await wrapper.vm.close()
+    expect(wrapper.vm.isOpen).toEqual(false)
+
+    wrapper.vm.setView('year')
+    expect(wrapper.vm.isOpen).toEqual(true)
+
+    await wrapper.vm.close()
+    expect(wrapper.vm.isOpen).toEqual(false)
+
+    wrapper.vm.setView('day')
+    expect(wrapper.vm.isOpen).toEqual(true)
+
+    await wrapper.vm.close()
+    expect(wrapper.vm.isOpen).toEqual(false)
+
+    wrapper.vm.setView('invalid date')
+    expect(wrapper.vm.isOpen).toEqual(false)
+  })
+
+  it('can select a day', () => {
+    const dateTemp = new Date(2016, 9, 1)
+    wrapper.vm.setView('day')
+    wrapper.vm.handleSelect({ timestamp: dateTemp.valueOf() })
+    expect(wrapper.vm.pageTimestamp).toEqual(dateTemp.valueOf())
+    expect(wrapper.vm.selectedDate.getMonth()).toEqual(9)
+    expect(wrapper.emitted('selected')).toBeTruthy()
+  })
+
+  it('can select a month', () => {
+    const dateTemp = new Date(2016, 9, 9)
+    wrapper.vm.setView('month')
+    wrapper.vm.handleSelect({ timestamp: dateTemp.valueOf() })
+    expect(wrapper.emitted('changed-month')).toBeTruthy()
+    expect(wrapper.emitted('changed-month')[0][0].timestamp).toEqual(
+      dateTemp.valueOf(),
+    )
+    expect(new Date(wrapper.vm.pageTimestamp).getMonth()).toEqual(
+      dateTemp.getMonth(),
+    )
+    expect(wrapper.vm.picker).toEqual('PickerDay')
+  })
+
+  it('can select a year', () => {
+    const dateTemp = new Date(2018, 9, 9)
+    wrapper.vm.setView('year')
+    wrapper.vm.handleSelect({ timestamp: dateTemp.valueOf() })
+    expect(wrapper.emitted('changed-year')).toBeTruthy()
+    expect(wrapper.emitted('changed-year')[0][0].timestamp).toEqual(
+      dateTemp.valueOf(),
+    )
+    expect(new Date(wrapper.vm.pageTimestamp).getFullYear()).toEqual(
+      dateTemp.getFullYear(),
+    )
+    expect(wrapper.vm.picker).toEqual('PickerMonth')
+  })
+
+  it('watches value', async () => {
+    const spy = jest.spyOn(wrapper.vm, 'setValue')
+    await wrapper.setProps({ value: '2018-04-26' })
+
+    expect(spy).toHaveBeenCalled()
+  })
+
+  it('watches openDate', async () => {
+    await wrapper.setProps({
+      openDate: new Date(2018, 0, 1),
+    })
+    const spy = jest.spyOn(wrapper.vm, 'setPageDate')
+    await wrapper.setProps({ openDate: new Date(2018, 3, 26) })
+
+    expect(spy).toHaveBeenCalled()
+  })
+
+  it('watches initialView when open', async () => {
+    const spy = jest.spyOn(wrapper.vm, 'setInitialView')
+    await wrapper.vm.open()
+
+    await wrapper.setProps({ initialView: 'month' })
+
+    expect(spy).toHaveBeenCalled()
+  })
+
+  it('derives `picker` from the current `view`', async () => {
+    await wrapper.setProps({
+      initialView: 'day',
+    })
+
+    expect(wrapper.vm.picker).toBe('PickerDay')
+    await wrapper.setProps({ initialView: 'month' })
+
+    expect(wrapper.vm.picker).toBe('PickerMonth')
+  })
+
+  it('sets picker classes correctly', async () => {
+    await wrapper.setProps({
+      calendarClass: 'my-calendar-class',
+      inline: true,
+    })
+
+    const datepicker = wrapper.find('.vdp-datepicker__calendar')
+
+    expect(datepicker.element.className).toContain('vdp-datepicker__calendar')
+    expect(datepicker.element.className).toContain('my-calendar-class')
+    expect(datepicker.element.className).toContain('inline')
+    expect(datepicker.element.className).not.toContain('rtl')
+
+    await wrapper.setProps({
+      appendToBody: true,
+      language: he,
+    })
+
+    expect(datepicker.element.className).toContain('rtl')
+  })
+
+  it('knows the next view up / down', async () => {
+    wrapper.vm.setView('day')
+
+    expect(wrapper.vm.nextView.down).toBeUndefined()
+    expect(wrapper.vm.nextView.up).toBe('month')
+
+    wrapper.vm.setView('month')
+
+    expect(wrapper.vm.nextView.down).toBe('day')
+    expect(wrapper.vm.nextView.up).toBe('year')
+
+    wrapper.vm.setView('year')
+
+    expect(wrapper.vm.nextView.down).toBe('month')
+    expect(wrapper.vm.nextView.up).toBe('decade')
+  })
+
+  it('emits changed-month/year/decade', async () => {
+    const pageDate = new Date(2016, 2, 1)
+    await wrapper.vm.setView('day')
+    await wrapper.vm.handlePageChange({ pageDate })
+
+    expect(wrapper.emitted('changed-month')).toBeTruthy()
+
+    await wrapper.vm.setView('month')
+    await wrapper.vm.handlePageChange({ pageDate })
+    expect(wrapper.emitted('changed-year')).toBeTruthy()
+
+    await wrapper.vm.setView('year')
+    await wrapper.vm.handlePageChange({ pageDate })
+    expect(wrapper.emitted('changed-decade')).toBeTruthy()
+  })
+
+  it('clears date on default date disabled', async () => {
+    const someDate = new Date('2021-01-15')
+    const wrapperTemp = shallowMount(Datepicker, {
+      propsData: {
+        value: someDate,
+        disabledDates: {
+          customPredictor(customPredictorDate) {
+            if (customPredictorDate < addDays(someDate, 4)) {
+              return true
+            }
+            return false
+          },
+        },
+      },
+    })
+
+    expect(wrapperTemp.vm.selectedDate).toEqual(null)
+    expect(wrapperTemp.emitted('input')).toBeTruthy()
+  })
+
+  it('sets the transition correctly', async () => {
+    wrapper.vm.setTransitionName(1)
+    expect(wrapper.vm.transitionName).toBe('slide-right')
+
+    wrapper.vm.setTransitionName(-1)
+    expect(wrapper.vm.transitionName).toBe('slide-left')
+
+    await wrapper.setData({
+      translation: { rtl: true },
+    })
+
+    wrapper.vm.setTransitionName(1)
+    expect(wrapper.vm.transitionName).toBe('slide-left')
+
+    wrapper.vm.setTransitionName(-1)
+    expect(wrapper.vm.transitionName).toBe('slide-right')
+
+    await wrapper.setData({
+      translation: { rtl: false },
+    })
+  })
+})
+
 describe('Datepicker mounted', () => {
   let wrapper
 
@@ -753,247 +998,6 @@ describe('Datepicker mounted to body with openDate', () => {
 
     const prevButton = wrapper.find('button.prev')
     expect(document.activeElement).toBe(prevButton.element)
-  })
-})
-
-describe('Datepicker shallowMounted', () => {
-  let wrapper
-  let date
-
-  beforeEach(() => {
-    date = new Date(2016, 1, 15)
-    wrapper = shallowMount(Datepicker, {
-      propsData: {
-        format: 'yyyy-MM-dd',
-        value: date,
-      },
-    })
-  })
-
-  afterEach(() => {
-    wrapper.destroy()
-  })
-
-  it('correctly sets the value from method', () => {
-    const newDate = new Date(2016, 9, 15)
-    expect(typeof wrapper.vm.setValue).toEqual('function')
-    wrapper.vm.setValue(newDate)
-    expect(wrapper.vm.selectedDate).toEqual(newDate)
-    const now = new Date()
-    wrapper.vm.setValue()
-    expect(wrapper.vm.selectedDate).toEqual(null)
-    const pageDate = new Date(wrapper.vm.pageDate)
-    expect(pageDate.getFullYear()).toEqual(now.getFullYear())
-    expect(pageDate.getMonth()).toEqual(now.getMonth())
-    expect(pageDate.getDate()).toEqual(1)
-  })
-
-  it('sets the date', () => {
-    expect(wrapper.vm.selectedDate.valueOf()).toEqual(date.valueOf())
-  })
-
-  it('clears the date', () => {
-    wrapper.vm.clearDate()
-    expect(wrapper.vm.selectedDate).toEqual(null)
-  })
-
-  it('sets pageTimestamp to be now', () => {
-    const data = Datepicker.data()
-    const d = new Date(data.pageTimestamp)
-    expect(d.getFullYear()).toEqual(new Date().getFullYear())
-    expect(d.getMonth()).toEqual(new Date().getMonth())
-    expect(d.getDate()).toEqual(1)
-  })
-
-  it('toggles the calendar', async () => {
-    expect(wrapper.vm.isOpen).toEqual(false)
-
-    wrapper.vm.setView('month')
-    expect(wrapper.vm.isOpen).toEqual(true)
-
-    await wrapper.vm.close()
-    expect(wrapper.vm.isOpen).toEqual(false)
-
-    wrapper.vm.setView('year')
-    expect(wrapper.vm.isOpen).toEqual(true)
-
-    await wrapper.vm.close()
-    expect(wrapper.vm.isOpen).toEqual(false)
-
-    wrapper.vm.setView('day')
-    expect(wrapper.vm.isOpen).toEqual(true)
-
-    await wrapper.vm.close()
-    expect(wrapper.vm.isOpen).toEqual(false)
-
-    wrapper.vm.setView('invalid date')
-    expect(wrapper.vm.isOpen).toEqual(false)
-  })
-
-  it('can select a day', () => {
-    const dateTemp = new Date(2016, 9, 1)
-    wrapper.vm.setView('day')
-    wrapper.vm.handleSelect({ timestamp: dateTemp.valueOf() })
-    expect(wrapper.vm.pageTimestamp).toEqual(dateTemp.valueOf())
-    expect(wrapper.vm.selectedDate.getMonth()).toEqual(9)
-    expect(wrapper.emitted('selected')).toBeTruthy()
-  })
-
-  it('can select a month', () => {
-    const dateTemp = new Date(2016, 9, 9)
-    wrapper.vm.setView('month')
-    wrapper.vm.handleSelect({ timestamp: dateTemp.valueOf() })
-    expect(wrapper.emitted('changed-month')).toBeTruthy()
-    expect(wrapper.emitted('changed-month')[0][0].timestamp).toEqual(
-      dateTemp.valueOf(),
-    )
-    expect(new Date(wrapper.vm.pageTimestamp).getMonth()).toEqual(
-      dateTemp.getMonth(),
-    )
-    expect(wrapper.vm.picker).toEqual('PickerDay')
-  })
-
-  it('can select a year', () => {
-    const dateTemp = new Date(2018, 9, 9)
-    wrapper.vm.setView('year')
-    wrapper.vm.handleSelect({ timestamp: dateTemp.valueOf() })
-    expect(wrapper.emitted('changed-year')).toBeTruthy()
-    expect(wrapper.emitted('changed-year')[0][0].timestamp).toEqual(
-      dateTemp.valueOf(),
-    )
-    expect(new Date(wrapper.vm.pageTimestamp).getFullYear()).toEqual(
-      dateTemp.getFullYear(),
-    )
-    expect(wrapper.vm.picker).toEqual('PickerMonth')
-  })
-
-  it('watches value', async () => {
-    const spy = jest.spyOn(wrapper.vm, 'setValue')
-    await wrapper.setProps({ value: '2018-04-26' })
-
-    expect(spy).toHaveBeenCalled()
-  })
-
-  it('watches openDate', async () => {
-    await wrapper.setProps({
-      openDate: new Date(2018, 0, 1),
-    })
-    const spy = jest.spyOn(wrapper.vm, 'setPageDate')
-    await wrapper.setProps({ openDate: new Date(2018, 3, 26) })
-
-    expect(spy).toHaveBeenCalled()
-  })
-
-  it('watches initialView when open', async () => {
-    const spy = jest.spyOn(wrapper.vm, 'setInitialView')
-    await wrapper.vm.open()
-
-    await wrapper.setProps({ initialView: 'month' })
-
-    expect(spy).toHaveBeenCalled()
-  })
-
-  it('derives `picker` from the current `view`', async () => {
-    await wrapper.setProps({
-      initialView: 'day',
-    })
-
-    expect(wrapper.vm.picker).toBe('PickerDay')
-    await wrapper.setProps({ initialView: 'month' })
-
-    expect(wrapper.vm.picker).toBe('PickerMonth')
-  })
-
-  it('sets picker classes correctly', async () => {
-    await wrapper.setProps({
-      calendarClass: 'my-calendar-class',
-      inline: true,
-    })
-
-    const datepicker = wrapper.find('.vdp-datepicker__calendar')
-
-    expect(datepicker.element.className).toContain('vdp-datepicker__calendar')
-    expect(datepicker.element.className).toContain('my-calendar-class')
-    expect(datepicker.element.className).toContain('inline')
-    expect(datepicker.element.className).not.toContain('rtl')
-
-    await wrapper.setProps({
-      appendToBody: true,
-      language: he,
-    })
-
-    expect(datepicker.element.className).toContain('rtl')
-  })
-
-  it('knows the next view up / down', async () => {
-    wrapper.vm.setView('day')
-
-    expect(wrapper.vm.nextView.down).toBeUndefined()
-    expect(wrapper.vm.nextView.up).toBe('month')
-
-    wrapper.vm.setView('month')
-
-    expect(wrapper.vm.nextView.down).toBe('day')
-    expect(wrapper.vm.nextView.up).toBe('year')
-
-    wrapper.vm.setView('year')
-
-    expect(wrapper.vm.nextView.down).toBe('month')
-    expect(wrapper.vm.nextView.up).toBe('decade')
-  })
-
-  it('emits changed-month/year/decade', async () => {
-    const pageDate = new Date(2016, 2, 1)
-    await wrapper.vm.setView('day')
-    await wrapper.vm.handlePageChange({ pageDate })
-
-    expect(wrapper.emitted('changed-month')).toBeTruthy()
-
-    await wrapper.vm.setView('month')
-    await wrapper.vm.handlePageChange({ pageDate })
-    expect(wrapper.emitted('changed-year')).toBeTruthy()
-
-    await wrapper.vm.setView('year')
-    await wrapper.vm.handlePageChange({ pageDate })
-    expect(wrapper.emitted('changed-decade')).toBeTruthy()
-  })
-
-  it('clears date on default date disabled', async () => {
-    const someDate = new Date('2021-01-15')
-    const wrapperTemp = shallowMount(Datepicker, {
-      propsData: {
-        value: someDate,
-        disabledDates: {
-          customPredictor(customPredictorDate) {
-            if (customPredictorDate < addDays(someDate, 4)) {
-              return true
-            }
-            return false
-          },
-        },
-      },
-    })
-
-    expect(wrapperTemp.vm.selectedDate).toEqual(null)
-    expect(wrapperTemp.emitted('input')).toBeTruthy()
-  })
-
-  it('sets the transition correctly', async () => {
-    wrapper.vm.setTransitionName(1)
-    expect(wrapper.vm.transitionName).toBe('slide-right')
-
-    wrapper.vm.setTransitionName(-1)
-    expect(wrapper.vm.transitionName).toBe('slide-left')
-
-    await wrapper.setData({
-      translation: { rtl: true },
-    })
-
-    wrapper.vm.setTransitionName(1)
-    expect(wrapper.vm.transitionName).toBe('slide-left')
-
-    wrapper.vm.setTransitionName(-1)
-    expect(wrapper.vm.transitionName).toBe('slide-right')
   })
 })
 
