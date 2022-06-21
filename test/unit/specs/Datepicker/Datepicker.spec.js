@@ -34,11 +34,11 @@ describe('Datepicker shallowMounted', () => {
     wrapper.destroy()
   })
 
-  it('correctly sets the value from method', () => {
-    const newDate = new Date(2016, 9, 15)
+  it('sets the date from method', () => {
+    const date = new Date(2016, 9, 15)
     expect(typeof wrapper.vm.setValue).toEqual('function')
-    wrapper.vm.setValue(newDate)
-    expect(wrapper.vm.selectedDate).toEqual(newDate)
+    wrapper.vm.setValue(date)
+    expect(wrapper.vm.selectedDate).toEqual(date)
     const now = new Date()
     wrapper.vm.setValue()
     expect(wrapper.vm.selectedDate).toEqual(null)
@@ -95,17 +95,23 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapper.vm.selectedDate).toEqual(null)
   })
 
-  it('sets pageTimestamp to be now', () => {
-    const data = Datepicker.data()
-    const d = new Date(data.pageTimestamp)
-    expect(d.getFullYear()).toEqual(new Date().getFullYear())
-    expect(d.getMonth()).toEqual(new Date().getMonth())
-    expect(d.getDate()).toEqual(1)
+  it('sets pageTimestamp to be midnight on first day of current month', () => {
+    const { pageTimestamp } = wrapper.vm
+    const firstDayOfMonth = new Date(new Date().setDate(1))
+    const firstDayOfMonthAtMidnight = firstDayOfMonth.setHours(0, 0, 0, 0)
+
+    expect(pageTimestamp).toEqual(firstDayOfMonthAtMidnight)
   })
 
   it('toggles the calendar', async () => {
     expect(wrapper.vm.isOpen).toEqual(false)
 
+    wrapper.vm.setView('day')
+    expect(wrapper.vm.isOpen).toEqual(true)
+
+    await wrapper.vm.close()
+    expect(wrapper.vm.isOpen).toEqual(false)
+
     wrapper.vm.setView('month')
     expect(wrapper.vm.isOpen).toEqual(true)
 
@@ -118,88 +124,93 @@ describe('Datepicker shallowMounted', () => {
     await wrapper.vm.close()
     expect(wrapper.vm.isOpen).toEqual(false)
 
-    wrapper.vm.setView('day')
-    expect(wrapper.vm.isOpen).toEqual(true)
-
-    await wrapper.vm.close()
-    expect(wrapper.vm.isOpen).toEqual(false)
-
-    wrapper.vm.setView('invalid date')
+    wrapper.vm.setView('invalid view')
     expect(wrapper.vm.isOpen).toEqual(false)
   })
 
   it('can select a day', () => {
-    const dateTemp = new Date(2016, 9, 1)
+    const date = new Date(2016, 9, 1)
+
     wrapper.vm.setView('day')
-    wrapper.vm.handleSelect({ timestamp: dateTemp.valueOf() })
-    expect(wrapper.vm.pageTimestamp).toEqual(dateTemp.valueOf())
+    wrapper.vm.handleSelect({ timestamp: date.valueOf() })
+
+    expect(wrapper.vm.pageTimestamp).toEqual(date.valueOf())
     expect(wrapper.vm.selectedDate.getMonth()).toEqual(9)
     expect(wrapper.emitted('selected')).toBeTruthy()
   })
 
   it('can select a month', () => {
-    const dateTemp = new Date(2016, 9, 9)
+    const date = new Date(2016, 9, 9)
+
     wrapper.vm.setView('month')
-    wrapper.vm.handleSelect({ timestamp: dateTemp.valueOf() })
+    wrapper.vm.handleSelect({ timestamp: date.valueOf() })
+
     expect(wrapper.emitted('changed-month')).toBeTruthy()
     expect(wrapper.emitted('changed-month')[0][0].timestamp).toEqual(
-      dateTemp.valueOf(),
+      date.valueOf(),
     )
     expect(new Date(wrapper.vm.pageTimestamp).getMonth()).toEqual(
-      dateTemp.getMonth(),
+      date.getMonth(),
     )
     expect(wrapper.vm.picker).toEqual('PickerDay')
   })
 
   it('can select a year', () => {
-    const dateTemp = new Date(2018, 9, 9)
+    const date = new Date(2018, 9, 9)
+
     wrapper.vm.setView('year')
-    wrapper.vm.handleSelect({ timestamp: dateTemp.valueOf() })
+    wrapper.vm.handleSelect({ timestamp: date.valueOf() })
+
     expect(wrapper.emitted('changed-year')).toBeTruthy()
     expect(wrapper.emitted('changed-year')[0][0].timestamp).toEqual(
-      dateTemp.valueOf(),
+      date.valueOf(),
     )
     expect(new Date(wrapper.vm.pageTimestamp).getFullYear()).toEqual(
-      dateTemp.getFullYear(),
+      date.getFullYear(),
     )
     expect(wrapper.vm.picker).toEqual('PickerMonth')
   })
 
   it('watches value', async () => {
     const spy = jest.spyOn(wrapper.vm, 'setValue')
-    await wrapper.setProps({ value: '2018-04-26' })
+
+    await wrapper.setProps({
+      value: '2018-04-26',
+    })
 
     expect(spy).toHaveBeenCalled()
   })
 
   it('watches openDate', async () => {
-    await wrapper.setProps({
-      openDate: new Date(2018, 0, 1),
-    })
     const spy = jest.spyOn(wrapper.vm, 'setPageDate')
-    await wrapper.setProps({ openDate: new Date(2018, 3, 26) })
+
+    await wrapper.setProps({
+      openDate: new Date(2018, 3, 26),
+    })
 
     expect(spy).toHaveBeenCalled()
   })
 
   it('watches initialView when open', async () => {
     const spy = jest.spyOn(wrapper.vm, 'setInitialView')
-    await wrapper.vm.open()
 
-    await wrapper.setProps({ initialView: 'month' })
+    await wrapper.vm.open()
+    await wrapper.setProps({
+      initialView: 'month',
+    })
 
     expect(spy).toHaveBeenCalled()
   })
 
   it('derives `picker` from the current `view`', async () => {
-    await wrapper.setProps({
-      initialView: 'day',
-    })
-
+    wrapper.vm.setView('day')
     expect(wrapper.vm.picker).toBe('PickerDay')
-    await wrapper.setProps({ initialView: 'month' })
 
+    wrapper.vm.setView('month')
     expect(wrapper.vm.picker).toBe('PickerMonth')
+
+    wrapper.vm.setView('year')
+    expect(wrapper.vm.picker).toBe('PickerYear')
   })
 
   it('sets picker classes correctly', async () => {
@@ -242,6 +253,7 @@ describe('Datepicker shallowMounted', () => {
 
   it('emits changed-month/year/decade', async () => {
     const pageDate = new Date(2016, 2, 1)
+
     await wrapper.vm.setView('day')
     await wrapper.vm.handlePageChange({ pageDate })
 
@@ -262,18 +274,15 @@ describe('Datepicker shallowMounted', () => {
       propsData: {
         value: someDate,
         disabledDates: {
-          customPredictor(customPredictorDate) {
-            if (customPredictorDate < addDays(someDate, 4)) {
-              return true
-            }
-            return false
-          },
+          to: addDays(someDate, 1),
         },
       },
     })
 
     expect(wrapperTemp.vm.selectedDate).toEqual(null)
     expect(wrapperTemp.emitted('input')).toBeTruthy()
+
+    wrapperTemp.destroy()
   })
 
   it('sets the transition correctly', async () => {
@@ -362,6 +371,7 @@ describe('Datepicker mounted', () => {
     })
 
     const calendarButton = wrapper.find('button[data-test-calendar-button]')
+
     await calendarButton.trigger('click')
     expect(wrapper.vm.isOpen).toBeTruthy()
 
@@ -1189,7 +1199,7 @@ describe('Datepicker mounted and appended to body', () => {
     wrapper.destroy()
   })
 
-  it('removes popup on body on component removal', async () => {
+  it('removes popup appended to body on component removal', async () => {
     wrapper = mount(Datepicker, {
       propsData: {
         appendToBody: true,
