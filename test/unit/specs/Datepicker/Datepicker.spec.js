@@ -130,7 +130,7 @@ describe('Datepicker shallowMounted', () => {
     wrapper.vm.setView('day')
     wrapper.vm.handleSelect({ timestamp: date.valueOf() })
 
-    expect(wrapper.vm.selectedDate.getMonth()).toEqual(9)
+    expect(wrapper.vm.selectedDate).toEqual(date)
     expect(wrapper.emitted('selected')).toBeTruthy()
   })
 
@@ -143,9 +143,7 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapper.emitted('changed-month')[0][0].timestamp).toEqual(
       date.valueOf(),
     )
-    expect(new Date(wrapper.vm.pageTimestamp).getMonth()).toEqual(
-      date.getMonth(),
-    )
+    expect(wrapper.vm.pageDate.getMonth()).toEqual(date.getMonth())
   })
 
   it('can select a year', () => {
@@ -157,9 +155,7 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapper.emitted('changed-year')[0][0].timestamp).toEqual(
       date.valueOf(),
     )
-    expect(new Date(wrapper.vm.pageTimestamp).getFullYear()).toEqual(
-      date.getFullYear(),
-    )
+    expect(wrapper.vm.pageDate.getFullYear()).toEqual(date.getFullYear())
   })
 
   it('watches value', async () => {
