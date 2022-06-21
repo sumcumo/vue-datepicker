@@ -58,6 +58,34 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapper.vm.selectedDate).toEqual(date)
   })
 
+  it('sets the date from a string value', async () => {
+    const date = new Date('2016-02-20')
+
+    await wrapper.setProps({
+      value: '2016-02-20',
+    })
+
+    expect(wrapper.vm.selectedDate).toEqual(date)
+  })
+
+  it('nullifies a malformed string value', async () => {
+    await wrapper.setProps({
+      value: 'today',
+    })
+
+    expect(wrapper.vm.selectedDate).toBeNull()
+  })
+
+  it('sets the date from a unix timestamp', async () => {
+    const date = new Date(2018, 0, 29)
+
+    await wrapper.setProps({
+      value: date.valueOf(),
+    })
+
+    expect(wrapper.vm.selectedDate).toEqual(date)
+  })
+
   it('clears the date', async () => {
     await wrapper.setProps({
       value: new Date(2016, 1, 15),
@@ -1001,48 +1029,6 @@ describe('Datepicker mounted and attached to body with openDate', () => {
 
     const prevButton = wrapper.find('button.prev')
     expect(document.activeElement).toBe(prevButton.element)
-  })
-})
-
-describe('Datepicker set by string', () => {
-  let wrapper
-
-  it('can parse a string date', () => {
-    wrapper = shallowMount(Datepicker, {
-      propsData: {
-        format: 'yyyy MM dd',
-        value: '2016-02-20',
-      },
-    })
-    const date = new Date('2016-02-20')
-    expect(wrapper.vm.selectedDate.getFullYear()).toEqual(date.getFullYear())
-    expect(wrapper.vm.selectedDate.getMonth()).toEqual(date.getMonth())
-    expect(wrapper.vm.selectedDate.getDate()).toEqual(date.getDate())
-  })
-
-  it('nullifies malformed value', () => {
-    wrapper = shallowMount(Datepicker, {
-      propsData: {
-        value: 'today',
-      },
-    })
-    expect(wrapper.vm.selectedDate).toBeNull()
-  })
-})
-
-describe('Datepicker set by timestamp', () => {
-  let wrapper
-
-  it('can parse unix timestamp', () => {
-    wrapper = shallowMount(Datepicker, {
-      propsData: {
-        format: 'yyyy MM dd',
-        value: new Date(Date.UTC(2018, 0, 29)).valueOf(),
-      },
-    })
-    expect(wrapper.vm.selectedDate.getUTCFullYear()).toEqual(2018)
-    expect(wrapper.vm.selectedDate.getUTCMonth()).toEqual(0)
-    expect(wrapper.vm.selectedDate.getUTCDate()).toEqual(29)
   })
 })
 
