@@ -5,7 +5,7 @@ import makeDateUtils from '~/utils/DateUtils'
 
 const dateUtils = makeDateUtils(false)
 
-describe('PickerDay: Set first day of week', () => {
+describe('PickerDay mounted with Monday as first day of week', () => {
   let wrapper
 
   beforeEach(() => {
@@ -57,7 +57,7 @@ describe('PickerDay: Set first day of week', () => {
   })
 })
 
-describe('PickerDay: Datepicker with Saturday as first day of week', () => {
+describe('PickerDay mounted with Saturday as first day of week', () => {
   let wrapper
 
   beforeEach(() => {

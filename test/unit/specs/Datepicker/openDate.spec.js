@@ -1,7 +1,7 @@
 import { shallowMount } from '@vue/test-utils'
 import Datepicker from '~/components/Datepicker.vue'
 
-describe('Datepicker with open date', () => {
+describe('Datepicker shallowMounted with open date', () => {
   let wrapper
   const openDate = new Date(2016, 9, 12)
 

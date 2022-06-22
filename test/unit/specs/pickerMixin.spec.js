@@ -22,7 +22,7 @@ describe('pickerMixin unmounted', () => {
   })
 })
 
-describe('pickerMixin', () => {
+describe('pickerMixin shallowMounted', () => {
   let wrapper
 
   beforeEach(() => {

@@ -1,7 +1,7 @@
 import { shallowMount } from '@vue/test-utils'
 import PickerHeader from '~/components/PickerHeader.vue'
 
-describe('PickerHeader', () => {
+describe('PickerHeader shallowMounted', () => {
   let wrapper
 
   beforeEach(() => {

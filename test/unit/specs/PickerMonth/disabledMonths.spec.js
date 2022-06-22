@@ -2,19 +2,18 @@ import { mount } from '@vue/test-utils'
 import PickerMonth from '~/components/PickerMonth.vue'
 import { en } from '~/locale'
 
-describe('PickerMonth', () => {
+describe('PickerMonth mounted with disabled dates', () => {
   let wrapper
 
   beforeEach(() => {
     wrapper = mount(PickerMonth, {
       propsData: {
         translation: en,
-        pageDate: new Date(2018, 3, 1),
-        selectedDate: new Date(2018, 3, 19),
         disabledDates: {
           to: new Date(2018, 2, 14),
           from: new Date(2018, 4, 15),
         },
+        pageDate: new Date(2018, 3, 1),
         view: 'month',
       },
     })

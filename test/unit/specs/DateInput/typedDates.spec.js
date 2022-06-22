@@ -4,7 +4,7 @@ import DateInput from '~/components/DateInput.vue'
 import Datepicker from '~/components/Datepicker.vue'
 import { en } from '~/locale'
 
-describe('DateInput', () => {
+describe('DateInput shallowMounted', () => {
   let wrapper
 
   beforeEach(() => {
@@ -144,7 +144,7 @@ describe('DateInput', () => {
   })
 })
 
-describe('Datepicker mount', () => {
+describe('Datepicker mounted', () => {
   let wrapper
 
   beforeEach(() => {

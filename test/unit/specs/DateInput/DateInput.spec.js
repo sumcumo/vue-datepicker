@@ -10,7 +10,7 @@ describe('DateInput unmounted', () => {
   })
 })
 
-describe('DateInput', () => {
+describe('DateInput shallowMounted', () => {
   let wrapper
 
   beforeEach(() => {

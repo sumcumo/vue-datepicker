@@ -1,10 +1,10 @@
-import { mount } from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import PickerCells from '~/components/PickerCells.vue'
 
 describe('PickerCells', () => {
   let wrapper
   beforeEach(() => {
-    wrapper = mount(PickerCells, {
+    wrapper = shallowMount(PickerCells, {
       propsData: {
         cells: [],
         view: 'day',

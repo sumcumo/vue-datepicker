@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils'
 import PickerDay from '~/components/PickerDay.vue'
 import { en } from '~/locale'
 
-describe('PickerDay: disabled', () => {
+describe('PickerDay mounted with disabled dates', () => {
   let wrapper
 
   beforeEach(() => {
