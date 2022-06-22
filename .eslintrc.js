@@ -88,6 +88,8 @@ module.exports = {
       'PascalCase',
       { registeredComponentsOnly: false },
     ],
+    'vue/html-self-closing': 'off',
+    'vue/max-attributes-per-line': 'off',
     'vue/no-deprecated-scope-attribute': 'error',
     'arrow-body-style': 'off',
   },
