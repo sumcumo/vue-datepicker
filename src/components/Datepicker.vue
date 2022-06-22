@@ -47,10 +47,21 @@
       @set-focus="setFocus($event)"
       @typed-date="handleTypedDate"
     >
-      <slot slot="beforeDateInput" name="beforeDateInput" />
-      <slot slot="afterDateInput" name="afterDateInput" />
-      <slot slot="clearBtn" name="clearBtn" />
-      <slot slot="calendarBtn" name="calendarBtn" />
+      <template #beforeDateInput>
+        <slot name="beforeDateInput" />
+      </template>
+
+      <template #afterDateInput>
+        <slot name="afterDateInput" />
+      </template>
+
+      <template #clearBtn>
+        <slot name="clearBtn" />
+      </template>
+
+      <template #calendarBtn>
+        <slot name="calendarBtn" />
+      </template>
     </DateInput>
 
     <Popup
@@ -111,8 +122,8 @@
                 @set-transition-name="setTransitionName($event)"
                 @set-view="setView"
               >
-                <template v-for="slotKey of calendarSlots">
-                  <slot :slot="slotKey" :name="slotKey" />
+                <template v-for="slotKey of calendarSlots" #[slotKey]>
+                  <slot :name="slotKey" />
                 </template>
                 <template #dayCellContent="{ cell }">
                   <slot v-if="cell" name="dayCellContent" :cell="cell" />

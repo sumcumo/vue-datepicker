@@ -15,7 +15,9 @@
       @page-change="changePage($event)"
       @set-focus="$emit('set-focus', $event)"
     >
-      <slot slot="prevIntervalBtn" name="prevIntervalBtn" />
+      <template #prevIntervalBtn>
+        <slot name="prevIntervalBtn" />
+      </template>
       <UpButton
         ref="up"
         :class="{ btn: bootstrapStyling }"
@@ -27,7 +29,9 @@
       >
         {{ pageTitleDay }}
       </UpButton>
-      <slot slot="nextIntervalBtn" name="nextIntervalBtn" />
+      <template #nextIntervalBtn>
+        <slot name="nextIntervalBtn" />
+      </template>
     </PickerHeader>
 
     <div>
