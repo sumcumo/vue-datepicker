@@ -65,18 +65,11 @@ describe('Focusable Cell', () => {
       'the calendar is open on {string} with view {string} and disabled dates {string} {string}',
       // eslint-disable-next-line max-params
       (openDate, view, toOrFrom, disabled) => {
-        const disabledDates =
-          toOrFrom === 'to'
-            ? {
-                to: new Date(disabled),
-              }
-            : {
-                from: new Date(disabled),
-              }
-
         createCalendar({
           openDate,
-          disabledDates,
+          disabledDates: {
+            [toOrFrom]: new Date(disabled),
+          },
           initialView: view,
         })
 
