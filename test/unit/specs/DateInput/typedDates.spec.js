@@ -39,7 +39,6 @@ describe('DateInput shallowMounted', () => {
     const dateString = '04.06.2018'
 
     input.setValue(dateString)
-    await input.trigger('keyup')
     await input.trigger('keydown.enter')
 
     expect(input.element.value).toEqual(dateString)
@@ -54,7 +53,6 @@ describe('DateInput shallowMounted', () => {
     const dateString = '4.6.2018'
 
     input.setValue(dateString)
-    await input.trigger('keyup')
     await input.trigger('keydown.enter')
 
     expect(input.element.value).toEqual(dateString)
@@ -69,7 +67,6 @@ describe('DateInput shallowMounted', () => {
     const dateString = '24/06/2018'
 
     input.setValue(dateString)
-    await input.trigger('keyup')
     await input.trigger('keydown.enter')
 
     expect(input.element.value).toEqual(dateString)
@@ -84,7 +81,6 @@ describe('DateInput shallowMounted', () => {
     const dateString = '24 06 2018'
 
     input.setValue(dateString)
-    await input.trigger('keyup')
     await input.trigger('keydown.enter')
 
     expect(input.element.value).toEqual(dateString)
@@ -137,7 +133,6 @@ describe('DateInput shallowMounted', () => {
     const input = wrapper.find('input')
 
     input.setValue('2018-04-24')
-    await input.trigger('keyup')
     await input.trigger('keydown.enter')
 
     expect(wrapper.emitted('typed-date')).not.toBeDefined()
@@ -159,12 +154,14 @@ describe('Datepicker mounted', () => {
     wrapper.destroy()
   })
 
-  it('sets the date on `select-typed-date` event', () => {
+  it('sets the date and closes the calendar', () => {
     const today = new Date()
 
+    wrapper.vm.open()
     wrapper.vm.selectTypedDate(today)
 
     expect(wrapper.vm.selectedDate).toEqual(today)
+    expect(wrapper.vm.isOpen).toBeFalsy()
   })
 
   it('emits `selected` when a valid date is typed and the `enter` key is pressed', async () => {
@@ -185,7 +182,6 @@ describe('Datepicker mounted', () => {
     const input = wrapper.find('input')
 
     input.setValue('invalid date')
-    await input.trigger('keyup')
     await input.trigger('keydown.enter')
 
     expect(wrapper.emitted('selected')).toBeUndefined()
@@ -194,7 +190,8 @@ describe('Datepicker mounted', () => {
   it('shows the correct month as you type', async () => {
     const input = wrapper.find('input')
 
-    await input.trigger('click')
+    await wrapper.vm.open()
+
     input.setValue('Jan')
     await input.trigger('keyup')
 
@@ -211,7 +208,6 @@ describe('Datepicker mounted', () => {
     const input = wrapper.find('input')
 
     input.setValue('2018-04-24')
-    await input.trigger('keyup')
     await input.trigger('blur')
 
     expect(input.element.value).toEqual('24 Apr 2018')
@@ -220,11 +216,7 @@ describe('Datepicker mounted', () => {
   it('clears an invalid date when the input field is blurred', async () => {
     const input = wrapper.find('input')
 
-    await input.trigger('click')
-    expect(wrapper.vm.isOpen).toBeTruthy()
-
     input.setValue('invalid date')
-    await input.trigger('keyup')
     await input.trigger('blur')
 
     expect(input.element.value).toBe('')
@@ -264,9 +256,7 @@ describe('Datepicker mounted', () => {
   it('resets the date correctly', async () => {
     const input = wrapper.find('input')
 
-    await input.trigger('click')
     input.setValue('1 Jan 2000')
-    await input.trigger('keyup')
     await input.trigger('keydown.enter')
 
     expect(wrapper.vm.selectedDate).toEqual(new Date(2000, 0, 1))
