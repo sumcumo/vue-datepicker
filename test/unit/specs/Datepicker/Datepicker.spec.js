@@ -306,6 +306,42 @@ describe('Datepicker mounted', () => {
     wrapper.destroy()
   })
 
+  it('opens in `day` view', async () => {
+    await wrapper.vm.open()
+
+    expect(wrapper.vm.computedInitialView).toEqual('day')
+    expect(wrapper.vm.picker).toEqual('PickerDay')
+  })
+
+  it('opens in `month` view', async () => {
+    await wrapper.setProps({
+      initialView: 'month',
+    })
+    await wrapper.vm.open()
+
+    expect(wrapper.vm.computedInitialView).toEqual('month')
+    expect(wrapper.vm.picker).toEqual('PickerMonth')
+  })
+
+  it('opens in `year` view', async () => {
+    await wrapper.setProps({
+      initialView: 'year',
+    })
+    await wrapper.vm.open()
+
+    expect(wrapper.vm.computedInitialView).toEqual('year')
+    expect(wrapper.vm.picker).toEqual('PickerYear')
+  })
+
+  it('does not open if the calendar is disabled', async () => {
+    await wrapper.setProps({
+      disabled: true,
+    })
+    await wrapper.vm.open()
+
+    expect(wrapper.vm.isOpen).toBeFalsy()
+  })
+
   it('emits blur', async () => {
     const input = wrapper.find('input')
     await input.trigger('blur')
@@ -320,8 +356,8 @@ describe('Datepicker mounted', () => {
 
   it('toggles when the input field is clicked', async () => {
     const input = wrapper.find('input')
-    await input.trigger('click')
 
+    await input.trigger('click')
     expect(wrapper.vm.isOpen).toBeTruthy()
 
     await input.trigger('click')
@@ -1135,51 +1171,6 @@ describe('Datepicker mounted inline and attached to body', () => {
     await anotherDate.trigger('click')
 
     expect(document.activeElement).toBe(anotherDate.element)
-  })
-})
-
-describe('Datepicker mounted with initial-view', () => {
-  let wrapper
-
-  beforeEach(() => {
-    wrapper = mount(Datepicker)
-  })
-
-  afterEach(() => {
-    wrapper.destroy()
-  })
-
-  it('opens in `day` view', async () => {
-    await wrapper.vm.open()
-
-    expect(wrapper.vm.computedInitialView).toEqual('day')
-    expect(wrapper.vm.picker).toEqual('PickerDay')
-  })
-
-  it('opens in `month` view', async () => {
-    await wrapper.setProps({
-      initialView: 'month',
-    })
-    await wrapper.vm.open()
-    expect(wrapper.vm.computedInitialView).toEqual('month')
-    expect(wrapper.vm.picker).toEqual('PickerMonth')
-  })
-
-  it('opens in `year` view', async () => {
-    await wrapper.setProps({
-      initialView: 'year',
-    })
-    await wrapper.vm.open()
-    expect(wrapper.vm.computedInitialView).toEqual('year')
-    expect(wrapper.vm.picker).toEqual('PickerYear')
-  })
-
-  it('does not open if the calendar is disabled', async () => {
-    await wrapper.setProps({
-      disabled: true,
-    })
-    await wrapper.vm.open()
-    expect(wrapper.vm.isOpen).toBeFalsy()
   })
 })
 
