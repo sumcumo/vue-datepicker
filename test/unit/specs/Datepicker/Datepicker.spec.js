@@ -461,22 +461,6 @@ describe('Datepicker mounted with calendar button', () => {
     await calendarButton.trigger('click')
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
-
-  it('closes via the calendar button when typeable and showCalendarOnFocus = true, despite input being focused', async () => {
-    await wrapper.setProps({
-      showCalendarOnFocus: true,
-      typeable: true,
-    })
-
-    const input = wrapper.find('input')
-    const calendarButton = wrapper.find('button[data-test-calendar-button]')
-
-    await input.trigger('focus')
-    expect(wrapper.vm.isOpen).toBeTruthy()
-
-    await calendarButton.trigger('click')
-    expect(wrapper.vm.isOpen).toBeFalsy()
-  })
 })
 
 describe('Datepicker mounted with slots', () => {
