@@ -223,36 +223,6 @@ describe('Datepicker mounted', () => {
     expect(wrapper.vm.selectedDate).toBeNull()
   })
 
-  it('closes via the calendar button when showCalendarOnFocus = true, despite input being focused', async () => {
-    await wrapper.setProps({
-      calendarButton: true,
-      showCalendarOnFocus: true,
-    })
-
-    const input = wrapper.find('input')
-    const calendarButton = wrapper.find('button[data-test-calendar-button]')
-
-    await input.trigger('focus')
-    expect(wrapper.vm.isOpen).toBeTruthy()
-
-    await calendarButton.trigger('click')
-    expect(wrapper.vm.isOpen).toBeFalsy()
-  })
-
-  it('toggles on clicking the input when showCalendarOnFocus = true', async () => {
-    await wrapper.setProps({
-      showCalendarOnFocus: true,
-    })
-
-    const input = wrapper.find('input')
-
-    await input.trigger('click')
-    expect(wrapper.vm.isOpen).toBeTruthy()
-
-    await input.trigger('click')
-    expect(wrapper.vm.isOpen).toBeFalsy()
-  })
-
   it('resets the date correctly', async () => {
     const input = wrapper.find('input')
 
@@ -285,5 +255,47 @@ describe('Datepicker mounted', () => {
     await input.trigger('keyup.space')
 
     expect(wrapper.vm.isOpen).toBeTruthy()
+  })
+})
+
+describe('Datepicker mounted with showCalendarOnFocus', () => {
+  let wrapper
+
+  beforeEach(() => {
+    wrapper = mount(Datepicker, {
+      propsData: {
+        typeable: true,
+        showCalendarOnFocus: true,
+      },
+    })
+  })
+
+  afterEach(() => {
+    wrapper.destroy()
+  })
+
+  it('toggles on clicking the input', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    await input.trigger('click')
+    expect(wrapper.vm.isOpen).toBeFalsy()
+  })
+
+  it('closes via the calendar button, despite input being focused', async () => {
+    await wrapper.setProps({
+      calendarButton: true,
+    })
+
+    const input = wrapper.find('input')
+    const calendarButton = wrapper.find('button[data-test-calendar-button]')
+
+    await input.trigger('focus')
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    await calendarButton.trigger('click')
+    expect(wrapper.vm.isOpen).toBeFalsy()
   })
 })
