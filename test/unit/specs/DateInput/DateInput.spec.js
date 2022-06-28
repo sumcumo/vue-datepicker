@@ -14,12 +14,7 @@ describe('DateInput shallowMounted', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = shallowMount(DateInput, {
-      propsData: {
-        selectedDate: new Date(2018, 2, 24),
-        translation: en,
-      },
-    })
+    wrapper = shallowMount(DateInput)
   })
 
   afterEach(() => {
@@ -31,13 +26,42 @@ describe('DateInput shallowMounted', () => {
   })
 
   it('clears the date', async () => {
-    await wrapper.setProps({
-      selectedDate: null,
-    })
-
     const input = wrapper.find('input')
 
     expect(input.element.value).toEqual('')
+  })
+
+  it('emits `open` event on click', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    expect(wrapper.emitted('open')).toBeTruthy()
+  })
+
+  it('emits `open` event when the space bar is pressed on the input field', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('keydown.space')
+    await input.trigger('keyup.space')
+
+    expect(wrapper.emitted('open')).toBeTruthy()
+  })
+})
+
+describe('DateInput shallowMounted with selectedDate', () => {
+  let wrapper
+
+  beforeEach(() => {
+    wrapper = shallowMount(DateInput, {
+      propsData: {
+        selectedDate: new Date(2018, 2, 24),
+        translation: en,
+      },
+    })
+  })
+
+  afterEach(() => {
+    wrapper.destroy()
   })
 
   it('formats date', () => {
@@ -176,22 +200,6 @@ describe('DateInput shallowMounted', () => {
     await input.trigger('keydown.esc')
 
     expect(wrapper.emitted('close')).toBeTruthy()
-  })
-
-  it('emits `open` event on click', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('click')
-
-    expect(wrapper.emitted('open')).toBeTruthy()
-  })
-
-  it('emits `open` event when the space bar is pressed on the input field', async () => {
-    const input = wrapper.find('input')
-
-    await input.trigger('keydown.space')
-    await input.trigger('keyup.space')
-
-    expect(wrapper.emitted('open')).toBeTruthy()
   })
 
   it('emits `open` event on focus when `showCalendarOnFocus` is true', async () => {
