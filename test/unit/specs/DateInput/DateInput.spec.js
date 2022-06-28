@@ -46,6 +46,14 @@ describe('DateInput shallowMounted', () => {
 
     expect(wrapper.emitted('open')).toBeTruthy()
   })
+
+  it('does not emit `open` event on focus', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('focus')
+
+    expect(wrapper.emitted('open')).toBeFalsy()
+  })
 })
 
 describe('DateInput shallowMounted with selectedDate', () => {
@@ -81,64 +89,6 @@ describe('DateInput shallowMounted with selectedDate', () => {
     const input = wrapper.find('input')
 
     expect(input.element.value).toEqual('15.01.2016')
-  })
-
-  it('emits `open` event on focus when `show-calendar-on-focus` is true', async () => {
-    await wrapper.setProps({
-      showCalendarOnFocus: true,
-    })
-
-    const input = wrapper.find('input')
-
-    await input.trigger('focus')
-
-    expect(wrapper.emitted('open')).toBeTruthy()
-  })
-
-  it('does not emit `open` event on focus when show-calendar-on-focus prop is false', async () => {
-    await wrapper.setProps({
-      showCalendarOnFocus: false,
-    })
-
-    const input = wrapper.find('input')
-
-    await input.trigger('focus')
-
-    expect(wrapper.emitted('open')).toBeFalsy()
-  })
-
-  it('closes calendar via button and reopens via focus when `show-calendar-on-focus` is true', async () => {
-    await wrapper.setProps({
-      calendarButton: true,
-      showCalendarOnFocus: true,
-    })
-
-    const input = wrapper.find('input')
-    const calendarButton = wrapper.find('button[data-test-calendar-button]')
-
-    await input.trigger('focus')
-    expect(wrapper.emitted('open')).toBeTruthy()
-
-    await input.trigger('blur')
-    await calendarButton.trigger('focus')
-    await calendarButton.trigger('click')
-    expect(wrapper.emitted('close')).toBeFalsy()
-
-    await input.trigger('focus')
-    expect(wrapper.emitted('open')).toBeTruthy()
-  })
-
-  it('opens calendar on click when `show-calendar-on-focus` is true', async () => {
-    await wrapper.setProps({
-      showCalendarOnFocus: true,
-    })
-
-    const input = wrapper.find('input')
-
-    await input.trigger('focus')
-    await input.trigger('click')
-
-    expect(wrapper.emitted('open')).toBeTruthy()
   })
 
   it('adds bootstrap classes', async () => {
@@ -202,20 +152,6 @@ describe('DateInput shallowMounted with selectedDate', () => {
     expect(wrapper.emitted('close')).toBeTruthy()
   })
 
-  it('emits `open` event on focus when `showCalendarOnFocus` is true', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('focus')
-
-    expect(wrapper.emitted('open')).toBeFalsy()
-
-    await wrapper.setProps({
-      showCalendarOnFocus: true,
-    })
-    await input.trigger('focus')
-
-    expect(wrapper.emitted('open')).toBeTruthy()
-  })
-
   it('opens ONLY on button click when the relevant prop is set', async () => {
     await wrapper.setProps({
       calendarButton: true,
@@ -247,5 +183,58 @@ describe('DateInput shallowMounted with selectedDate', () => {
     await input.trigger('keydown.backspace')
 
     expect(wrapper.emitted('clear-date')).toBeTruthy()
+  })
+})
+
+describe('DateInput shallowMounted with showCalendarOnFocus', () => {
+  let wrapper
+
+  beforeEach(() => {
+    wrapper = shallowMount(DateInput, {
+      propsData: {
+        showCalendarOnFocus: true,
+      },
+    })
+  })
+
+  afterEach(() => {
+    wrapper.destroy()
+  })
+
+  it('emits `open` event on focus', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('focus')
+
+    expect(wrapper.emitted('open')).toBeTruthy()
+  })
+
+  it('opens calendar on click when `show-calendar-on-focus` is true', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('focus')
+    await input.trigger('click')
+
+    expect(wrapper.emitted('open')).toBeTruthy()
+  })
+
+  it('closes calendar via button and reopens via focus', async () => {
+    await wrapper.setProps({
+      calendarButton: true,
+    })
+
+    const input = wrapper.find('input')
+    const calendarButton = wrapper.find('button[data-test-calendar-button]')
+
+    await input.trigger('focus')
+    expect(wrapper.emitted('open')).toBeTruthy()
+
+    await input.trigger('blur')
+    await calendarButton.trigger('focus')
+    await calendarButton.trigger('click')
+    expect(wrapper.emitted('close')).toBeFalsy()
+
+    await input.trigger('focus')
+    expect(wrapper.emitted('open')).toBeTruthy()
   })
 })
