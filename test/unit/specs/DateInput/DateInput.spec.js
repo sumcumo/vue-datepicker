@@ -54,6 +54,44 @@ describe('DateInput shallowMounted', () => {
 
     expect(wrapper.emitted('open')).toBeFalsy()
   })
+
+  it('can be disabled', async () => {
+    await wrapper.setProps({
+      disabled: true,
+    })
+
+    const input = wrapper.find('input')
+
+    expect(input.attributes().disabled).toBeDefined()
+  })
+
+  it('emits `close` when escape is pressed and calendar is open', async () => {
+    await wrapper.setProps({
+      isOpen: true,
+    })
+
+    const input = wrapper.find('input')
+    await input.trigger('keydown.esc')
+
+    expect(wrapper.emitted('close')).toBeTruthy()
+  })
+
+  it('opens ONLY on button click when showCalendarOnButtonClick prop is set', async () => {
+    await wrapper.setProps({
+      calendarButton: true,
+      showCalendarOnButtonClick: true,
+    })
+
+    const input = wrapper.find('input')
+    await input.trigger('click')
+
+    expect(wrapper.emitted('open')).toBeFalsy()
+
+    const calendarButton = wrapper.find('button[data-test-calendar-button]')
+    await calendarButton.trigger('click')
+
+    expect(wrapper.emitted('open')).toBeTruthy()
+  })
 })
 
 describe('DateInput shallowMounted with selectedDate', () => {
@@ -80,7 +118,6 @@ describe('DateInput shallowMounted with selectedDate', () => {
 
   it('delegates date formatting', async () => {
     await wrapper.setProps({
-      selectedDate: new Date(2016, 0, 15),
       format: (date) => {
         return format(new Date(date), 'dd.MM.yyyy')
       },
@@ -88,17 +125,7 @@ describe('DateInput shallowMounted with selectedDate', () => {
 
     const input = wrapper.find('input')
 
-    expect(input.element.value).toEqual('15.01.2016')
-  })
-
-  it('can be disabled', async () => {
-    await wrapper.setProps({
-      disabled: true,
-    })
-
-    const input = wrapper.find('input')
-
-    expect(input.attributes().disabled).toBeDefined()
+    expect(input.element.value).toEqual('24.03.2018')
   })
 
   it('accepts a function as a formatter', async () => {
@@ -109,34 +136,6 @@ describe('DateInput shallowMounted with selectedDate', () => {
     const input = wrapper.find('input')
 
     expect(input.element.value).toEqual('!')
-  })
-
-  it('emits `close` when escape is pressed and calendar is open', async () => {
-    await wrapper.setProps({
-      isOpen: true,
-    })
-
-    const input = wrapper.find('input')
-    await input.trigger('keydown.esc')
-
-    expect(wrapper.emitted('close')).toBeTruthy()
-  })
-
-  it('opens ONLY on button click when the relevant prop is set', async () => {
-    await wrapper.setProps({
-      calendarButton: true,
-      showCalendarOnButtonClick: true,
-    })
-
-    const input = wrapper.find('input')
-    await input.trigger('click')
-
-    expect(wrapper.emitted('open')).toBeFalsy()
-
-    const calendarButton = wrapper.find('button[data-test-calendar-button]')
-    await calendarButton.trigger('click')
-
-    expect(wrapper.emitted('open')).toBeTruthy()
   })
 
   it('emits `clear-date` when delete is pressed', async () => {
