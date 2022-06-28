@@ -91,36 +91,6 @@ describe('DateInput shallowMounted with selectedDate', () => {
     expect(input.element.value).toEqual('15.01.2016')
   })
 
-  it('adds bootstrap classes', async () => {
-    await wrapper.setProps({
-      bootstrapStyling: true,
-    })
-
-    const input = wrapper.find('input')
-
-    expect(input.element.classList).toContain('form-control')
-  })
-
-  it('appends bootstrap classes', async () => {
-    await wrapper.setProps({
-      inputClass: 'someClass',
-      bootstrapStyling: true,
-    })
-
-    const input = wrapper.find('input')
-
-    expect(input.element.classList).toContain('form-control')
-    expect(input.element.classList).toContain('someClass')
-
-    await wrapper.setProps({
-      inputClass: { someClass: true },
-      bootstrapStyling: true,
-    })
-
-    expect(input.element.classList).toContain('form-control')
-    expect(input.element.classList).toContain('someClass')
-  })
-
   it('can be disabled', async () => {
     await wrapper.setProps({
       disabled: true,
@@ -236,5 +206,45 @@ describe('DateInput shallowMounted with showCalendarOnFocus', () => {
 
     await input.trigger('focus')
     expect(wrapper.emitted('open')).toBeTruthy()
+  })
+})
+
+describe('DateInput shallowMounted with bootstrap styling', () => {
+  let wrapper
+
+  beforeEach(() => {
+    wrapper = shallowMount(DateInput, {
+      propsData: {
+        bootstrapStyling: true,
+      },
+    })
+  })
+
+  afterEach(() => {
+    wrapper.destroy()
+  })
+
+  it('adds bootstrap classes', async () => {
+    const input = wrapper.find('input')
+
+    expect(input.element.classList).toContain('form-control')
+  })
+
+  it('appends bootstrap classes', async () => {
+    await wrapper.setProps({
+      inputClass: 'someClass',
+    })
+
+    const input = wrapper.find('input')
+
+    expect(input.element.classList).toContain('form-control')
+    expect(input.element.classList).toContain('someClass')
+
+    await wrapper.setProps({
+      inputClass: { someClass: true },
+    })
+
+    expect(input.element.classList).toContain('form-control')
+    expect(input.element.classList).toContain('someClass')
   })
 })
