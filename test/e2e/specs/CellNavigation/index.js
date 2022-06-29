@@ -2,7 +2,13 @@ import { Given, When, Then, And } from 'cypress-cucumber-preprocessor/steps'
 
 const { createCalendar, clickThe, the, theFirst } = cy
 
-describe('Focusable Cell', () => {
+function localTimeZone(dateStr) {
+  const parts = dateStr.split('-')
+
+  return new Date(parts[0], parts[1] - 1, parts[2])
+}
+
+describe('Cell Navigation', () => {
   describe('@id-1: Arrow {string} (isRtl: {string})', () => {
     Given(
       'the calendar is open on {string} and isRtl is {string}',
@@ -66,9 +72,9 @@ describe('Focusable Cell', () => {
       // eslint-disable-next-line max-params
       (openDate, view, toOrFrom, disabled) => {
         createCalendar({
-          openDate,
+          openDate: localTimeZone(openDate),
           disabledDates: {
-            [toOrFrom]: new Date(disabled),
+            [toOrFrom]: localTimeZone(disabled),
           },
           initialView: view,
         })
