@@ -1,4 +1,5 @@
 <script>
+import { h } from 'vue'
 import { getPopupElementSize, getRelativePosition } from '~/utils/dom'
 
 export default {
@@ -94,7 +95,7 @@ export default {
     },
   },
   render() {
-    return this.$slots.default
+    return h('div', this.$slots.default())
   },
 }
 </script>
