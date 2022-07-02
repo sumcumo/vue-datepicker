@@ -49,7 +49,7 @@ export default {
       document.body.appendChild(this.$el)
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.inline) {
       return
     }
