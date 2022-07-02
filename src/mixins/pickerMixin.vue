@@ -5,7 +5,6 @@ import DisabledDate from '~/utils/DisabledDate'
 
 export default {
   components: { PickerHeader },
-  inheritAttrs: false,
   props: {
     bootstrapStyling: {
       type: Boolean,
