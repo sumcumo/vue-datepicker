@@ -198,7 +198,7 @@ export default {
     },
     fullMonthName: {
       type: Boolean,
-      default: false,
+      default: null,
     },
     highlighted: {
       type: Object,
