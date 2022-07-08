@@ -611,7 +611,7 @@ export default {
         }
         this.setValue(parsedValue)
       } else if (this.typeable) {
-        this.latestValidTypedDate = this.utils.getNewDateObject()
+        this.latestValidTypedDate = this.computedOpenDate
       }
 
       if (this.isInline) {
