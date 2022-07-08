@@ -306,6 +306,42 @@ describe('Datepicker mounted', () => {
     wrapper.destroy()
   })
 
+  it('opens in `day` view', async () => {
+    await wrapper.vm.open()
+
+    expect(wrapper.vm.computedInitialView).toEqual('day')
+    expect(wrapper.vm.picker).toEqual('PickerDay')
+  })
+
+  it('opens in `month` view', async () => {
+    await wrapper.setProps({
+      initialView: 'month',
+    })
+    await wrapper.vm.open()
+
+    expect(wrapper.vm.computedInitialView).toEqual('month')
+    expect(wrapper.vm.picker).toEqual('PickerMonth')
+  })
+
+  it('opens in `year` view', async () => {
+    await wrapper.setProps({
+      initialView: 'year',
+    })
+    await wrapper.vm.open()
+
+    expect(wrapper.vm.computedInitialView).toEqual('year')
+    expect(wrapper.vm.picker).toEqual('PickerYear')
+  })
+
+  it('does not open if the calendar is disabled', async () => {
+    await wrapper.setProps({
+      disabled: true,
+    })
+    await wrapper.vm.open()
+
+    expect(wrapper.vm.isOpen).toBeFalsy()
+  })
+
   it('emits blur', async () => {
     const input = wrapper.find('input')
     await input.trigger('blur')
@@ -320,81 +356,11 @@ describe('Datepicker mounted', () => {
 
   it('toggles when the input field is clicked', async () => {
     const input = wrapper.find('input')
-    await input.trigger('click')
-
-    expect(wrapper.vm.isOpen).toBeTruthy()
-
-    await input.trigger('click')
-    expect(wrapper.vm.isOpen).toBeFalsy()
-  })
-
-  it('opens on focusing the input when showCalendarOnFocus = true', async () => {
-    await wrapper.setProps({
-      showCalendarOnFocus: true,
-    })
-    const input = wrapper.find('input')
-
-    await input.trigger('focus')
-
-    expect(wrapper.vm.isOpen).toBeTruthy()
-  })
-
-  it('toggles on clicking the input when showCalendarOnFocus = true', async () => {
-    await wrapper.setProps({
-      showCalendarOnFocus: true,
-    })
-    const input = wrapper.find('input')
 
     await input.trigger('click')
     expect(wrapper.vm.isOpen).toBeTruthy()
 
     await input.trigger('click')
-    expect(wrapper.vm.isOpen).toBeFalsy()
-  })
-
-  it('toggles via the calendar button', async () => {
-    await wrapper.setProps({
-      calendarButton: true,
-    })
-
-    const calendarButton = wrapper.find('button[data-test-calendar-button]')
-
-    await calendarButton.trigger('click')
-    expect(wrapper.vm.isOpen).toBeTruthy()
-
-    await calendarButton.trigger('click')
-    expect(wrapper.vm.isOpen).toBeFalsy()
-  })
-
-  it('toggles via the calendar button when showCalendarOnFocus = true', async () => {
-    await wrapper.setProps({
-      calendarButton: true,
-      showCalendarOnFocus: true,
-    })
-
-    const calendarButton = wrapper.find('button[data-test-calendar-button]')
-
-    await calendarButton.trigger('click')
-    expect(wrapper.vm.isOpen).toBeTruthy()
-
-    await calendarButton.trigger('click')
-    expect(wrapper.vm.isOpen).toBeFalsy()
-  })
-
-  it('closes via the calendar button when typeable and showCalendarOnFocus = true, despite input being focused', async () => {
-    await wrapper.setProps({
-      calendarButton: true,
-      showCalendarOnFocus: true,
-      typeable: true,
-    })
-
-    const input = wrapper.find('input')
-    const calendarButton = wrapper.find('button[data-test-calendar-button]')
-
-    await input.trigger('focus')
-    expect(wrapper.vm.isOpen).toBeTruthy()
-
-    await calendarButton.trigger('click')
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
 
@@ -409,6 +375,91 @@ describe('Datepicker mounted', () => {
     await lastCell.trigger('click')
 
     expect(wrapper.vm.selectedDate).toStrictEqual(new Date(2020, 1, 1))
+  })
+})
+
+describe('Datepicker mounted with showCalendarOnFocus', () => {
+  let wrapper
+
+  beforeEach(() => {
+    wrapper = mount(Datepicker, {
+      propsData: {
+        showCalendarOnFocus: true,
+      },
+    })
+  })
+
+  afterEach(() => {
+    wrapper.destroy()
+  })
+
+  it('opens on focusing the input', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('focus')
+
+    expect(wrapper.vm.isOpen).toBeTruthy()
+  })
+
+  it('toggles on clicking the input', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    await input.trigger('click')
+    expect(wrapper.vm.isOpen).toBeFalsy()
+  })
+
+  it('does not focus the input on selecting a date', async () => {
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
+
+    const openDate = wrapper.find('button.open')
+    await openDate.trigger('click')
+
+    expect(document.activeElement).toBe(document.body)
+  })
+})
+
+describe('Datepicker mounted with calendar button', () => {
+  let wrapper
+
+  beforeEach(() => {
+    wrapper = mount(Datepicker, {
+      propsData: {
+        calendarButton: true,
+      },
+    })
+  })
+
+  afterEach(() => {
+    wrapper.destroy()
+  })
+
+  it('toggles via the calendar button', async () => {
+    const calendarButton = wrapper.find('button[data-test-calendar-button]')
+
+    await calendarButton.trigger('click')
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    await calendarButton.trigger('click')
+    expect(wrapper.vm.isOpen).toBeFalsy()
+  })
+
+  it('toggles via the calendar button when showCalendarOnFocus = true', async () => {
+    await wrapper.setProps({
+      showCalendarOnFocus: true,
+    })
+
+    const calendarButton = wrapper.find('button[data-test-calendar-button]')
+
+    await calendarButton.trigger('click')
+    expect(wrapper.vm.isOpen).toBeTruthy()
+
+    await calendarButton.trigger('click')
+    expect(wrapper.vm.isOpen).toBeFalsy()
   })
 })
 
@@ -514,21 +565,6 @@ describe('Datepicker mounted and attached to body', () => {
     await prevButton.trigger('keydown.up')
 
     expect(document.activeElement).not.toBe(input.element)
-  })
-
-  it('does not focus the input on selecting a date when show-calendar-on-focus = true', async () => {
-    await wrapper.setProps({
-      showCalendarOnFocus: true,
-    })
-
-    const input = wrapper.find('input')
-
-    await input.trigger('click')
-
-    const openDate = wrapper.find('button.open')
-    await openDate.trigger('click')
-
-    expect(document.activeElement).toBe(document.body)
   })
 
   it('tabs away from a closed calendar', async () => {
@@ -1119,51 +1155,6 @@ describe('Datepicker mounted inline and attached to body', () => {
     await anotherDate.trigger('click')
 
     expect(document.activeElement).toBe(anotherDate.element)
-  })
-})
-
-describe('Datepicker mounted with initial-view', () => {
-  let wrapper
-
-  beforeEach(() => {
-    wrapper = mount(Datepicker)
-  })
-
-  afterEach(() => {
-    wrapper.destroy()
-  })
-
-  it('opens in `day` view', async () => {
-    await wrapper.vm.open()
-
-    expect(wrapper.vm.computedInitialView).toEqual('day')
-    expect(wrapper.vm.picker).toEqual('PickerDay')
-  })
-
-  it('opens in `month` view', async () => {
-    await wrapper.setProps({
-      initialView: 'month',
-    })
-    await wrapper.vm.open()
-    expect(wrapper.vm.computedInitialView).toEqual('month')
-    expect(wrapper.vm.picker).toEqual('PickerMonth')
-  })
-
-  it('opens in `year` view', async () => {
-    await wrapper.setProps({
-      initialView: 'year',
-    })
-    await wrapper.vm.open()
-    expect(wrapper.vm.computedInitialView).toEqual('year')
-    expect(wrapper.vm.picker).toEqual('PickerYear')
-  })
-
-  it('does not open if the calendar is disabled', async () => {
-    await wrapper.setProps({
-      disabled: true,
-    })
-    await wrapper.vm.open()
-    expect(wrapper.vm.isOpen).toBeFalsy()
   })
 })
 
