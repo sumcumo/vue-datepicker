@@ -98,7 +98,7 @@
     "jest": "28.1.3",
     "jest-environment-jsdom": "28.1.3",
     "jest-serializer-vue": "2.0.2",
-    "node-sass": "5.0.0",
+    "node-sass": "7.0.0",
     "pre-commit": "1.2.2",
     "prettier": "2.3.0",
     "rollup": "2.47.0",
