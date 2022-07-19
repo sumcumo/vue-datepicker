@@ -3,7 +3,7 @@ const prettierConfig = require('./prettier')
 module.exports = {
   root: true,
   parserOptions: {
-    parser: 'babel-eslint',
+    parser: '@babel/eslint-parser',
   },
   extends: [
     'airbnb-base',
@@ -22,6 +22,8 @@ module.exports = {
     },
   },
   rules: {
+    'vue/max-attributes-per-line': 'off',
+    'vue/html-self-closing': 'off',
     'prettier/prettier': ['error', prettierConfig],
     'import/prefer-default-export': 'off',
     'import/extensions': [
@@ -88,8 +90,6 @@ module.exports = {
       'PascalCase',
       { registeredComponentsOnly: false },
     ],
-    'vue/html-self-closing': 'off',
-    'vue/max-attributes-per-line': 'off',
     'vue/no-deprecated-scope-attribute': 'error',
     'arrow-body-style': 'off',
   },

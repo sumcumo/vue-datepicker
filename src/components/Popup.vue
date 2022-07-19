@@ -2,6 +2,7 @@
 import { getPopupElementSize, getRelativePosition } from '~/utils/dom'
 
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Popup',
   props: {
     appendToBody: {
