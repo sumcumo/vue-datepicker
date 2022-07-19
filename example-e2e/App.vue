@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <h1>Datepicker Integration Tests</h1>
     <div class="example">
       <h3>Default datepicker...</h3>
@@ -54,7 +54,7 @@ import Datepicker from '~/components/Datepicker.vue'
 import * as lang from '~/locale/index'
 
 export default {
-  name: 'Demo',
+  name: 'App',
   components: {
     Datepicker,
   },
@@ -180,6 +180,8 @@ export default {
 </script>
 
 <style>
+@import url('https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css');
+
 body {
   font-family: 'Helvetica Neue Light', Helvetica, sans-serif;
   padding: 1em 2em 2em;
