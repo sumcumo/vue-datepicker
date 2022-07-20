@@ -462,6 +462,17 @@ export default {
         this.closeByClickOutside()
       }
     },
+    dateChanged(date) {
+      if (!this.selectedDate && !date) {
+        return false
+      }
+
+      if (this.selectedDate && date) {
+        return date.valueOf() !== this.selectedDate.valueOf()
+      }
+
+      return true
+    },
     /**
      * Closes the calendar when no element within it has focus
      */
@@ -686,6 +697,10 @@ export default {
      * @param {Date|null} date
      */
     selectDate(date) {
+      if (this.dateChanged(date)) {
+        this.$emit('changed', date)
+      }
+
       this.setValue(date)
       this.$emit('input', date)
       this.$emit('selected', date)
@@ -708,19 +723,8 @@ export default {
     selectTypedDateOnLosingFocus() {
       const parsedDate = this.$refs.dateInput.parseInput()
       const date = this.utils.isValidDate(parsedDate) ? parsedDate : null
-      const hasChanged = () => {
-        if (!this.selectedDate && !date) {
-          return false
-        }
 
-        if (this.selectedDate && date) {
-          return date.valueOf() !== this.selectedDate.valueOf()
-        }
-
-        return true
-      }
-
-      if (hasChanged()) {
+      if (this.dateChanged(date)) {
         this.selectDate(date)
       }
     },

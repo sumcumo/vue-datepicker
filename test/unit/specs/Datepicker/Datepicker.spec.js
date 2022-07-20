@@ -354,6 +354,25 @@ describe('Datepicker mounted', () => {
     expect(wrapper.emitted('focus')).toBeTruthy()
   })
 
+  it('emits changed', async () => {
+    await wrapper.vm.open()
+
+    const dayCell = wrapper.findAll('button').at(10)
+
+    await dayCell.trigger('click')
+    expect(wrapper.emitted('changed')).toHaveLength(1)
+
+    await wrapper.vm.open()
+    await dayCell.trigger('click')
+    expect(wrapper.emitted('changed')).toHaveLength(1)
+
+    await wrapper.vm.open()
+
+    const differentDayCell = wrapper.findAll('button').at(11)
+    await differentDayCell.trigger('click')
+    expect(wrapper.emitted('changed')).toHaveLength(2)
+  })
+
   it('toggles when the input field is clicked', async () => {
     const input = wrapper.find('input')
 
