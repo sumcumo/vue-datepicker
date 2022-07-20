@@ -697,6 +697,7 @@ export default {
     selectTypedDate(date) {
       this.setValue(date)
       this.reviewFocus()
+      this.$emit('input', date)
       this.$emit('selected', date)
 
       if (this.isOpen) {
@@ -772,6 +773,7 @@ export default {
 
       if (hasChanged()) {
         this.setValue(date)
+        this.$emit('input', date)
         this.$emit('selected', date)
       }
     },
