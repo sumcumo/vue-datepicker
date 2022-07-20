@@ -609,8 +609,10 @@ export default {
           this.$emit('input', parsedValue)
         }
         this.setValue(parsedValue)
-      } else if (this.typeable) {
-        this.latestValidTypedDate = this.computedOpenDate
+      }
+
+      if (this.typeable) {
+        this.latestValidTypedDate = this.selectedDate || this.computedOpenDate
       }
 
       if (this.isInline) {
