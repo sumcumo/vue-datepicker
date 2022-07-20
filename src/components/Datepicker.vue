@@ -518,7 +518,7 @@ export default {
       }
 
       this.$refs.dateInput.typedDate = ''
-      this.selectDate(cell.timestamp)
+      this.selectDate(new Date(cell.timestamp))
       this.focus.delay = cell.isNextMonth ? this.slideDuration : 0
       this.focus.refs = this.isInline ? ['tabbableCell'] : ['input']
       this.close()
@@ -687,14 +687,12 @@ export default {
     },
     /**
      * Select the date
-     * @param {Number} timestamp
+     * @param {Date|null} date
      */
-    selectDate(timestamp) {
-      const date = new Date(timestamp)
-
+    selectDate(date) {
       this.setValue(date)
-      this.$emit('selected', date)
       this.$emit('input', date)
+      this.$emit('selected', date)
     },
     /**
      * Select the date from a 'select-typed-date' event
