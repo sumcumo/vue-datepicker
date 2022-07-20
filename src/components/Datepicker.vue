@@ -539,7 +539,6 @@ export default {
         this.latestValidTypedDate,
       )
       this.setPageDate(date)
-      this.$emit('input', date)
 
       if (this.isPageChange(originalPageDate)) {
         this.handlePageChange({
