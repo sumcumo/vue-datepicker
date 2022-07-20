@@ -374,7 +374,7 @@ export default {
 
       if (isNoLongerActive && this.typeable) {
         this.skipReviewFocus = true
-        this.setTypedDateOnLosingFocus()
+        this.selectTypedDateOnLosingFocus()
 
         this.$nextTick(() => {
           this.skipReviewFocus = false
@@ -711,6 +711,30 @@ export default {
       }
     },
     /**
+     * Selects the typed date when the datepicker loses focus, provided it's valid and differs from the current selected date
+     */
+    selectTypedDateOnLosingFocus() {
+      const parsedDate = this.$refs.dateInput.parseInput()
+      const date = this.utils.isValidDate(parsedDate) ? parsedDate : null
+      const hasChanged = () => {
+        if (!this.selectedDate && !date) {
+          return false
+        }
+
+        if (this.selectedDate && date) {
+          return date.valueOf() !== this.selectedDate.valueOf()
+        }
+
+        return true
+      }
+
+      if (hasChanged()) {
+        this.setValue(date)
+        this.$emit('input', date)
+        this.$emit('selected', date)
+      }
+    },
+    /**
      * Sets the initial picker page view: day, month or year
      */
     setInitialView() {
@@ -758,30 +782,6 @@ export default {
       const durationInSecs = window.getComputedStyle(cells).transitionDuration
 
       this.slideDuration = parseFloat(durationInSecs) * 1000
-    },
-    /**
-     * Selects the typed date when the datepicker loses focus, provided it's valid and differs from the current selected date
-     */
-    setTypedDateOnLosingFocus() {
-      const parsedDate = this.$refs.dateInput.parseInput()
-      const date = this.utils.isValidDate(parsedDate) ? parsedDate : null
-      const hasChanged = () => {
-        if (!this.selectedDate && !date) {
-          return false
-        }
-
-        if (this.selectedDate && date) {
-          return date.valueOf() !== this.selectedDate.valueOf()
-        }
-
-        return true
-      }
-
-      if (hasChanged()) {
-        this.setValue(date)
-        this.$emit('input', date)
-        this.$emit('selected', date)
-      }
     },
     /**
      * Set the datepicker value (and, if typeable, update `latestValidTypedDate`)
