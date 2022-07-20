@@ -424,13 +424,9 @@ export default {
         return
       }
 
-      this.selectedDate = null
+      this.selectDate(null)
       this.focus.refs = ['input']
       this.close()
-      this.setPageDate()
-
-      this.$emit('selected', null)
-      this.$emit('input', null)
       this.$emit('cleared')
     },
     /**
@@ -699,10 +695,8 @@ export default {
      * @param {Date=} date
      */
     selectTypedDate(date) {
-      this.setValue(date)
+      this.selectDate(date)
       this.reviewFocus()
-      this.$emit('input', date)
-      this.$emit('selected', date)
 
       if (this.isOpen) {
         this.close()
@@ -727,9 +721,7 @@ export default {
       }
 
       if (hasChanged()) {
-        this.setValue(date)
-        this.$emit('input', date)
-        this.$emit('selected', date)
+        this.selectDate(date)
       }
     },
     /**
