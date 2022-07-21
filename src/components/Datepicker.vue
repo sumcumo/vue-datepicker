@@ -379,9 +379,21 @@ export default {
     openDate() {
       this.setPageDate()
     },
-    value(value) {
-      const parsedValue = this.parseValue(value)
-      this.setValue(parsedValue)
+    value: {
+      handler(newValue, oldValue) {
+        let parsedValue = this.parseValue(newValue)
+        const oldParsedValue = this.parseValue(oldValue)
+
+        if (!this.utils.compareDates(parsedValue, oldParsedValue)) {
+          const isDateDisabled = parsedValue && this.isDateDisabled(parsedValue)
+
+          if (isDateDisabled) {
+            parsedValue = null
+          }
+          this.setValue(parsedValue)
+        }
+      },
+      immediate: true,
     },
     view(newView, oldView) {
       this.handleViewChange(newView, oldView)
@@ -605,18 +617,7 @@ export default {
     /**
      * Initiate the component
      */
-    // eslint-disable-next-line complexity,max-statements
     init() {
-      if (this.value) {
-        let parsedValue = this.parseValue(this.value)
-        const isDateDisabled = parsedValue && this.isDateDisabled(parsedValue)
-
-        if (isDateDisabled) {
-          parsedValue = null
-        }
-        this.setValue(parsedValue)
-      }
-
       if (this.typeable) {
         this.latestValidTypedDate = this.selectedDate || this.computedOpenDate
       }
