@@ -688,7 +688,7 @@ export default {
     },
     /**
      * Select the date from a 'select-typed-date' event
-     * @param {Date=} date
+     * @param {Date|null} date
      */
     selectTypedDate(date) {
       this.selectDate(date)
