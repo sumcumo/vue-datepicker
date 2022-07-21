@@ -342,16 +342,19 @@ describe('Datepicker mounted', () => {
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
 
-  it('emits blur', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('blur')
-    expect(wrapper.emitted('blur')).toBeTruthy()
-  })
-
   it('emits focus', async () => {
     const input = wrapper.find('input')
-    await input.trigger('focus')
+    await input.trigger('focusin')
+
     expect(wrapper.emitted('focus')).toBeTruthy()
+  })
+
+  it('emits blur', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('focusin')
+    await input.trigger('focusout')
+
+    expect(wrapper.emitted('blur')).toBeTruthy()
   })
 
   it('emits changed', async () => {

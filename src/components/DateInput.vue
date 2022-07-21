@@ -192,7 +192,7 @@ export default {
       }
     },
     /**
-     * Validate typedDate and emit a `blur` event
+     * Validates typedDate
      */
     handleInputBlur() {
       if (this.showCalendarOnFocus && !this.isOpen) {
@@ -203,7 +203,6 @@ export default {
         this.formatTypedDate()
       }
       this.isInputFocused = false
-      this.$emit('blur')
     },
     /**
      * Resets `shouldToggleOnFocus` to true
@@ -232,7 +231,7 @@ export default {
       }
     },
     /**
-     * Emits a `focus` event and opens the calendar when `show-calendar-on-focus` is true
+     * Opens the calendar when `show-calendar-on-focus` is true
      */
     handleInputFocus() {
       this.isInputFocused = true
@@ -248,8 +247,6 @@ export default {
           this.shouldToggleOnClick = true
         }, 300)
       }
-
-      this.$emit('focus')
     },
     /**
      * Opens the calendar, or sets the focus to the next focusable element down

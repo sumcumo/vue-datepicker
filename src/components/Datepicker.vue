@@ -38,10 +38,8 @@
       :translation="translation"
       :typeable="typeable"
       :use-utc="useUtc"
-      @blur="handleInputBlur"
       @clear-date="clearDate"
       @close="close"
-      @focus="handleInputFocus"
       @open="open"
       @select-typed-date="selectTypedDate"
       @set-focus="setFocus($event)"
@@ -367,18 +365,12 @@ export default {
       }
     },
     isActive(hasJustBecomeActive, isNoLongerActive) {
-      if (hasJustBecomeActive && this.inline) {
-        this.setNavElementsFocusedIndex()
-        this.tabToCorrectInlineCell()
+      if (hasJustBecomeActive) {
+        this.datepickerIsActive()
       }
 
-      if (isNoLongerActive && this.typeable) {
-        this.skipReviewFocus = true
-        this.selectTypedDateOnLosingFocus()
-
-        this.$nextTick(() => {
-          this.skipReviewFocus = false
-        })
+      if (isNoLongerActive) {
+        this.datepickerIsInactive()
       }
     },
     latestValidTypedDate(date) {
@@ -473,6 +465,26 @@ export default {
 
       return true
     },
+    datepickerIsActive() {
+      this.$emit('focus')
+
+      if (this.inline) {
+        this.setNavElementsFocusedIndex()
+        this.tabToCorrectInlineCell()
+      }
+    },
+    datepickerIsInactive() {
+      this.$emit('blur')
+
+      if (this.typeable) {
+        this.skipReviewFocus = true
+        this.selectTypedDateOnLosingFocus()
+
+        this.$nextTick(() => {
+          this.skipReviewFocus = false
+        })
+      }
+    },
     /**
      * Closes the calendar when no element within it has focus
      */
@@ -491,18 +503,6 @@ export default {
           this.closeIfNotFocused()
         })
       }
-    },
-    /**
-     * Emits a 'blur' event
-     */
-    handleInputBlur() {
-      this.$emit('blur')
-    },
-    /**
-     * Emits a 'focus' event
-     */
-    handleInputFocus() {
-      this.$emit('focus')
     },
     /**
      * Set the new pageDate, focus the relevant element and emit a `changed-<view>` event
