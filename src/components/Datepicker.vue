@@ -667,16 +667,15 @@ export default {
     },
     /**
      * Parse a datepicker value from string/number to date
-     * @param   {Date|String|Number|null} date
-     * @returns {Date}
+     * @param   {Date|String|Number|undefined} date
+     * @returns {Date|null}
      */
     parseValue(date) {
-      let dateTemp = date
-      if (typeof dateTemp === 'string' || typeof dateTemp === 'number') {
-        const parsed = new Date(dateTemp)
-        dateTemp = Number.isNaN(parsed.valueOf()) ? null : parsed
+      if (typeof date === 'string' || typeof date === 'number') {
+        const parsed = new Date(date)
+        return this.utils.isValidDate(parsed) ? parsed : null
       }
-      return dateTemp
+      return this.utils.isValidDate(date) ? date : null
     },
     /**
      * Focus the open date, or close the calendar if already focused
