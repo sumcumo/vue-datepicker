@@ -359,6 +359,26 @@ export default {
     },
   },
   watch: {
+    disabledDates: {
+      // eslint-disable-next-line complexity
+      handler() {
+        const selectedDate = this.selectedDate || this.parseValue(this.value)
+        if (!selectedDate) {
+          return
+        }
+
+        const isDateDisabled = this.isDateDisabled(selectedDate)
+
+        if (isDateDisabled) {
+          if (this.selectedDate) {
+            this.selectDate(null)
+          }
+        } else if (this.dateChanged(selectedDate)) {
+          this.selectDate(selectedDate)
+        }
+      },
+      deep: true,
+    },
     initialView() {
       if (this.isOpen) {
         this.setInitialView()

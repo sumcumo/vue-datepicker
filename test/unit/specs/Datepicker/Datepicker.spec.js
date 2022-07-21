@@ -255,20 +255,17 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapper.emitted('changed-decade')).toBeTruthy()
   })
 
-  it('clears date on default date disabled', async () => {
+  it('clears the date when it is disabled', async () => {
     const someDate = new Date('2021-01-15')
-    const wrapperTemp = shallowMount(Datepicker, {
-      propsData: {
-        value: someDate,
-        disabledDates: {
-          to: addDays(someDate, 1),
-        },
+
+    await wrapper.setProps({
+      value: someDate,
+      disabledDates: {
+        to: addDays(someDate, 1),
       },
     })
 
-    expect(wrapperTemp.vm.selectedDate).toEqual(null)
-
-    wrapperTemp.destroy()
+    expect(wrapper.vm.selectedDate).toBeNull()
   })
 
   it('sets the transition correctly', async () => {
