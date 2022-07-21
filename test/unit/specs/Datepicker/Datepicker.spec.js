@@ -267,7 +267,6 @@ describe('Datepicker shallowMounted', () => {
     })
 
     expect(wrapperTemp.vm.selectedDate).toEqual(null)
-    expect(wrapperTemp.emitted('input')).toBeTruthy()
 
     wrapperTemp.destroy()
   })

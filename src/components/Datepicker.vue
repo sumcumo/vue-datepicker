@@ -613,7 +613,6 @@ export default {
 
         if (isDateDisabled) {
           parsedValue = null
-          this.$emit('input', parsedValue)
         }
         this.setValue(parsedValue)
       }
