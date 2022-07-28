@@ -141,7 +141,7 @@ describe('DateInput shallowMounted with selectedDate', () => {
   it('emits `clear-date` when delete is pressed', async () => {
     const input = wrapper.find('input')
 
-    await input.trigger('keydown.del')
+    await input.trigger('keydown.delete')
 
     expect(wrapper.emitted('clearDate')).toBeTruthy()
   })

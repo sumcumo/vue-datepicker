@@ -39,7 +39,6 @@
       @blur="handleInputBlur"
       @click="handleInputClick"
       @focus="handleInputFocus"
-      @keydown.backspace="handleDelete"
       @keydown.delete="handleDelete"
       @keydown.down.prevent="handleKeydownDown"
       @keydown.enter.prevent="handleKeydownEnter"
