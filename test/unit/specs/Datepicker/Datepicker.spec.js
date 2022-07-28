@@ -548,7 +548,7 @@ describe('Datepicker mounted with slots', () => {
     expect(wrapper.vm.navElements.length).toEqual(0)
 
     await wrapper.vm.open()
-
+    await wrapper.vm.$nextTick()
     expect(wrapper.vm.navElements.length).toEqual(8)
 
     let upButton = wrapper.find('button.vdp-datepicker__up')
