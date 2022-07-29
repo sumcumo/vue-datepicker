@@ -166,7 +166,7 @@ describe('PickerDay mounted with scoped slot', () => {
         translation: en,
         pageDate: new Date(2018, 1, 1),
       },
-      scopedSlots: {
+      slots: {
         dayCellContent: `<template #dayCellContent="{ cell }">
                           <span>test{{ cell.date }}</span>
                         </template>`,
