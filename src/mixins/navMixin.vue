@@ -209,17 +209,17 @@ export default {
       return this.getFocusableElements(picker.children[index])
     },
     /**
-     * Returns an array of all HTML elements which should be focus-trapped in the header
-     * @returns {Array}   An array of HTML elements
+     * Returns an array of all HTMLButtonElements which should be focus-trapped in the header
+     * @returns {Array}   An array of HTMLButtonElements
      */
     getElementsFromHeader() {
-      const view = this.ucFirst(this.view)
-      const beforeCalendarSlotName = `beforeCalendarHeader${view}`
-      const picker = this.$refs.picker.$el
-      const index = this.hasSlot(beforeCalendarSlotName) ? 1 : 0
-      const fragment = picker.children[index]
+      if (!this.$refs.picker.$refs.pickerHeader) {
+        return []
+      }
+      const header = this.$refs.picker.$refs.pickerHeader.$el
+      const navNodeList = header.querySelectorAll('button:enabled')
 
-      return this.showHeader ? this.getFocusableElements(fragment) : []
+      return [...Array.prototype.slice.call(navNodeList)]
     },
     /**
      * Returns an array of focusable elements in a given HTML fragment
