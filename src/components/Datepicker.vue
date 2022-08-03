@@ -525,14 +525,21 @@ export default {
         return
       }
 
+      const closeByClickOutside = () => {
+        this.isClickOutside = true
+        this.close()
+      }
+
       if (!this.globalDatepickerId) {
-        this.closeByClickOutside()
+        closeByClickOutside()
         return
       }
 
       if (document.datepickerId.toString() === this.datepickerId) {
         this.$nextTick(() => {
-          this.closeIfNotFocused()
+          if (!this.isActive) {
+            closeByClickOutside()
+          }
         })
       }
     },
