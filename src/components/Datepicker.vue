@@ -220,6 +220,10 @@ export default {
       type: String,
       default: 'day',
     },
+    modelValue: {
+      type: [String, Date, Number],
+      default: null,
+    },
     showEdgeDates: {
       type: Boolean,
       default: true,
@@ -227,10 +231,6 @@ export default {
     showHeader: {
       type: Boolean,
       default: true,
-    },
-    value: {
-      type: [String, Date, Number],
-      default: null,
     },
     wrapperClass: {
       type: [String, Object, Array],
@@ -241,6 +241,7 @@ export default {
       default: 10,
     },
   },
+  emits: ['update:modelValue'],
   data() {
     const utils = makeDateUtils(this.useUtc)
     const startDate = utils.getNewDateObject(this.openDate || null)
@@ -385,10 +386,7 @@ export default {
     latestValidTypedDate(date) {
       this.setPageDate(date)
     },
-    openDate() {
-      this.setPageDate()
-    },
-    value: {
+    modelValue: {
       handler(newValue, oldValue) {
         let parsedValue = this.parseValue(newValue)
         const oldParsedValue = this.parseValue(oldValue)
@@ -403,6 +401,9 @@ export default {
         }
       },
       immediate: true,
+    },
+    openDate() {
+      this.setPageDate()
     },
     view(newView, oldView) {
       this.handleViewChange(newView, oldView)
@@ -679,7 +680,7 @@ export default {
       this.$emit('opened')
     },
     /**
-     * Parse a datepicker value from string/number to date
+     * Parse a datepicker modelValue from string/number to date
      * @param   {Date|String|Number|undefined} date
      * @returns {Date|null}
      */
@@ -714,8 +715,8 @@ export default {
       }
 
       this.setValue(date)
-      this.$emit('input', date)
       this.$emit('selected', date)
+      this.$emit('update:modelValue', date)
     },
     /**
      * Select the date from a 'select-typed-date' event
