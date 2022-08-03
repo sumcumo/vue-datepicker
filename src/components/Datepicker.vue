@@ -7,7 +7,6 @@
     @focusin="handleFocusIn($event)"
     @focusout="handleFocusOut($event)"
     @keydown.esc="resetOrClose"
-    @keydown.tab="tabThroughNavigation($event)"
   >
     <DateInput
       :id="id"
@@ -42,6 +41,7 @@
       @clear-date="clearDate"
       @close="close"
       @focus="handleInputFocus"
+      @tab="tabThroughNavigation"
       @open="open"
       @select-typed-date="selectTypedDate"
       @set-focus="setFocus($event)"
