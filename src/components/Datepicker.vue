@@ -38,10 +38,8 @@
       :translation="translation"
       :typeable="typeable"
       :use-utc="useUtc"
-      @blur="handleInputBlur"
       @clear-date="clearDate"
       @close="close"
-      @focus="handleInputFocus"
       @open="open"
       @select-typed-date="selectTypedDate"
       @set-focus="setFocus($event)"
@@ -367,18 +365,12 @@ export default {
       }
     },
     isActive(hasJustBecomeActive, isNoLongerActive) {
-      if (hasJustBecomeActive && this.inline) {
-        this.setNavElementsFocusedIndex()
-        this.tabToCorrectInlineCell()
+      if (hasJustBecomeActive) {
+        this.datepickerIsActive()
       }
 
-      if (isNoLongerActive && this.typeable) {
-        this.skipReviewFocus = true
-        this.setTypedDateOnLosingFocus()
-
-        this.$nextTick(() => {
-          this.skipReviewFocus = false
-        })
+      if (isNoLongerActive) {
+        this.datepickerIsInactive()
       }
     },
     latestValidTypedDate(date) {
@@ -424,13 +416,9 @@ export default {
         return
       }
 
-      this.selectedDate = null
+      this.selectDate(null)
       this.focus.refs = ['input']
       this.close()
-      this.setPageDate()
-
-      this.$emit('selected', null)
-      this.$emit('input', null)
       this.$emit('cleared')
     },
     /**
@@ -466,6 +454,37 @@ export default {
         this.closeByClickOutside()
       }
     },
+    dateChanged(date) {
+      if (!this.selectedDate && !date) {
+        return false
+      }
+
+      if (this.selectedDate && date) {
+        return date.valueOf() !== this.selectedDate.valueOf()
+      }
+
+      return true
+    },
+    datepickerIsActive() {
+      this.$emit('focus')
+
+      if (this.inline) {
+        this.setNavElementsFocusedIndex()
+        this.tabToCorrectInlineCell()
+      }
+    },
+    datepickerIsInactive() {
+      this.$emit('blur')
+
+      if (this.typeable) {
+        this.skipReviewFocus = true
+        this.selectTypedDateOnLosingFocus()
+
+        this.$nextTick(() => {
+          this.skipReviewFocus = false
+        })
+      }
+    },
     /**
      * Closes the calendar when no element within it has focus
      */
@@ -484,18 +503,6 @@ export default {
           this.closeIfNotFocused()
         })
       }
-    },
-    /**
-     * Emits a 'blur' event
-     */
-    handleInputBlur() {
-      this.$emit('blur')
-    },
-    /**
-     * Emits a 'focus' event
-     */
-    handleInputFocus() {
-      this.$emit('focus')
     },
     /**
      * Set the new pageDate, focus the relevant element and emit a `changed-<view>` event
@@ -518,7 +525,7 @@ export default {
       }
 
       this.$refs.dateInput.typedDate = ''
-      this.selectDate(cell.timestamp)
+      this.selectDate(new Date(cell.timestamp))
       this.focus.delay = cell.isNextMonth ? this.slideDuration : 0
       this.focus.refs = this.isInline ? ['tabbableCell'] : ['input']
       this.close()
@@ -543,7 +550,6 @@ export default {
         this.latestValidTypedDate,
       )
       this.setPageDate(date)
-      this.$emit('input', date)
 
       if (this.isPageChange(originalPageDate)) {
         this.handlePageChange({
@@ -610,8 +616,10 @@ export default {
           this.$emit('input', parsedValue)
         }
         this.setValue(parsedValue)
-      } else if (this.typeable) {
-        this.latestValidTypedDate = this.computedOpenDate
+      }
+
+      if (this.typeable) {
+        this.latestValidTypedDate = this.selectedDate || this.computedOpenDate
       }
 
       if (this.isInline) {
@@ -686,26 +694,38 @@ export default {
     },
     /**
      * Select the date
-     * @param {Number} timestamp
+     * @param {Date|null} date
      */
-    selectDate(timestamp) {
-      const date = new Date(timestamp)
+    selectDate(date) {
+      if (this.dateChanged(date)) {
+        this.$emit('changed', date)
+      }
 
       this.setValue(date)
-      this.$emit('selected', date)
       this.$emit('input', date)
+      this.$emit('selected', date)
     },
     /**
      * Select the date from a 'select-typed-date' event
-     * @param {Date=} date
+     * @param {Date|null} date
      */
     selectTypedDate(date) {
-      this.setValue(date)
+      this.selectDate(date)
       this.reviewFocus()
-      this.$emit('selected', date)
 
       if (this.isOpen) {
         this.close()
+      }
+    },
+    /**
+     * Selects the typed date when the datepicker loses focus, provided it's valid and differs from the current selected date
+     */
+    selectTypedDateOnLosingFocus() {
+      const parsedDate = this.$refs.dateInput.parseInput()
+      const date = this.utils.isValidDate(parsedDate) ? parsedDate : null
+
+      if (this.dateChanged(date)) {
+        this.selectDate(date)
       }
     },
     /**
@@ -756,29 +776,6 @@ export default {
       const durationInSecs = window.getComputedStyle(cells).transitionDuration
 
       this.slideDuration = parseFloat(durationInSecs) * 1000
-    },
-    /**
-     * Selects the typed date when the datepicker loses focus, provided it's valid and differs from the current selected date
-     */
-    setTypedDateOnLosingFocus() {
-      const parsedDate = this.$refs.dateInput.parseInput()
-      const date = this.utils.isValidDate(parsedDate) ? parsedDate : null
-      const hasChanged = () => {
-        if (!this.selectedDate && !date) {
-          return false
-        }
-
-        if (this.selectedDate && date) {
-          return date.valueOf() !== this.selectedDate.valueOf()
-        }
-
-        return true
-      }
-
-      if (hasChanged()) {
-        this.setValue(date)
-        this.$emit('selected', date)
-      }
     },
     /**
      * Set the datepicker value (and, if typeable, update `latestValidTypedDate`)

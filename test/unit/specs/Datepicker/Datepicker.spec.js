@@ -342,16 +342,38 @@ describe('Datepicker mounted', () => {
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
 
+  it('emits focus', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('focusin')
+
+    expect(wrapper.emitted('focus')).toBeTruthy()
+  })
+
   it('emits blur', async () => {
     const input = wrapper.find('input')
-    await input.trigger('blur')
+    await input.trigger('focusin')
+    await input.trigger('focusout')
+
     expect(wrapper.emitted('blur')).toBeTruthy()
   })
 
-  it('emits focus', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('focus')
-    expect(wrapper.emitted('focus')).toBeTruthy()
+  it('emits changed', async () => {
+    await wrapper.vm.open()
+
+    const dayCell = wrapper.findAll('button').at(10)
+
+    await dayCell.trigger('click')
+    expect(wrapper.emitted('changed')).toHaveLength(1)
+
+    await wrapper.vm.open()
+    await dayCell.trigger('click')
+    expect(wrapper.emitted('changed')).toHaveLength(1)
+
+    await wrapper.vm.open()
+
+    const differentDayCell = wrapper.findAll('button').at(11)
+    await differentDayCell.trigger('click')
+    expect(wrapper.emitted('changed')).toHaveLength(2)
   })
 
   it('toggles when the input field is clicked', async () => {
