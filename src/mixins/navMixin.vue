@@ -437,9 +437,7 @@ export default {
       const view = this.ucFirst(this.view)
 
       this.navElements = [
-        this.getElementsFromSlot('beforeDateInput'),
         this.getInputField(),
-        this.getElementsFromSlot('afterDateInput'),
         this.getElementsFromSlot('beforeCalendarHeader'),
         this.getElementsFromSlot(`beforeCalendarHeader${view}`),
         this.getElementsFromHeader(),
