@@ -2,7 +2,6 @@
 export default {
   data() {
     return {
-      allElements: [],
       focus: {
         delay: 0,
         refs: [],
@@ -238,6 +237,24 @@ export default {
       return [...Array.prototype.slice.call(navNodeList)]
     },
     /**
+     * Returns the first focusable element of an inline datepicker
+     * @returns {HTMLElement}
+     */
+    getFirstInlineFocusableElement() {
+      const popupElements = this.getFocusableElements(this.$refs.popup.$el)
+
+      return popupElements[0]
+    },
+    /**
+     * Returns the last focusable element of an inline datepicker
+     * @returns {HTMLElement}
+     */
+    getLastInlineFocusableElement() {
+      const popupElements = this.getFocusableElements(this.$refs.popup.$el)
+
+      return popupElements[popupElements.length - 1]
+    },
+    /**
      * Returns the input element (when typeable)
      * @returns {Element}
      */
@@ -269,7 +286,6 @@ export default {
 
       this.isActive = true
       this.setInlineTabbableCell()
-      this.setAllElements()
       this.setNavElements()
     },
     /**
@@ -407,18 +423,6 @@ export default {
       this.setTransitionName(endDate - startDate)
     },
     /**
-     * Records all focusable elements (so that we know whether any element in the datepicker is focused)
-     */
-    setAllElements() {
-      this.allElements = this.getFocusableElements(this.$refs.datepicker)
-
-      if (this.appendToBody) {
-        this.allElements = this.allElements.concat(
-          this.getFocusableElements(this.$refs.popup.$el),
-        )
-      }
-    },
-    /**
      * Set the focus
      * @param {Array} refs An array of `refs` to focus (in order of preference)
      */
@@ -494,23 +498,37 @@ export default {
       }
     },
     /**
-     * Focuses the first focusable element in the datepicker, so that the previous element on the page will be tabbed to
+     * Focuses the first focusable element of an inline datepicker, so that the previous element on the page will be tabbed to
      */
     tabAwayFromFirstElement() {
-      const firstElement = this.allElements[0]
+      const firstElement = this.getFirstInlineFocusableElement()
+
+      // Keep a record of `tabbableCell` in case `showHeader=false` and this is the first date
+      // in the month (with no edge dates from the previous month) to which we may want to
+      // tab back down to later.
+      this.setInlineTabbableCell()
 
       firstElement.focus()
 
+      // Reset the tabbableCell as we don't want it to be the `firstElement` if the latter is
+      // an edge date from the previous month
       this.tabbableCell = this.inlineTabbableCell
     },
     /**
-     * Focuses the last focusable element in the datepicker, so that the next element on the page will be tabbed to
+     * Focuses the last focusable element of an inline datepicker, so that the next element on the page will be tabbed to
      */
     tabAwayFromLastElement() {
-      const lastElement = this.allElements[this.allElements.length - 1]
+      const lastElement = this.getLastInlineFocusableElement()
+
+      // Keep a record of `tabbableCell` in case this is the last date in the month
+      // (with no edge dates from the next month) to which we may want to shift+tab
+      // back up to later.
+      this.setInlineTabbableCell()
 
       lastElement.focus()
 
+      // Reset the tabbableCell as we don't want it to be the `lastElement` if the latter is
+      // an edge date from the next month
       this.tabbableCell = this.inlineTabbableCell
     },
     /**
@@ -558,7 +576,7 @@ export default {
      * Special cases for when tabbing to an inline datepicker
      */
     tabToCorrectInlineCell() {
-      const lastElement = this.allElements[this.allElements.length - 1]
+      const lastElement = this.getLastInlineFocusableElement()
       const isACell = this.hasClass(lastElement, 'cell')
       const isLastElementFocused = document.activeElement === lastElement
 
