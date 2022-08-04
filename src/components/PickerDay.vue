@@ -326,9 +326,7 @@ export default {
      * @return {Boolean}
      */
     isSelectedDate(dObj) {
-      return (
-        this.selectedDate && this.utils.compareDates(this.selectedDate, dObj)
-      )
+      return this.utils.compareDates(this.selectedDate, dObj)
     },
     /**
      * Defines the objects within the days array
@@ -352,8 +350,7 @@ export default {
         isHighlighted: this.isHighlightedDate(dObj),
         isHighlightStart: this.isHighlightStart(dObj),
         isHighlightEnd: this.isHighlightEnd(dObj),
-        isOpenDate:
-          this.openDate && this.utils.compareDates(dObj, this.openDate),
+        isOpenDate: this.utils.compareDates(dObj, this.openDate),
         isToday: this.utils.compareDates(dObj, new Date()),
         isWeekend: isSaturday || isSunday,
         isSaturday,

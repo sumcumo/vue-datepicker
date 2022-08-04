@@ -359,6 +359,26 @@ export default {
     },
   },
   watch: {
+    disabledDates: {
+      // eslint-disable-next-line complexity
+      handler() {
+        const selectedDate = this.selectedDate || this.parseValue(this.value)
+        if (!selectedDate) {
+          return
+        }
+
+        const isDateDisabled = this.isDateDisabled(selectedDate)
+
+        if (isDateDisabled) {
+          if (this.selectedDate) {
+            this.selectDate(null)
+          }
+        } else if (this.dateChanged(selectedDate)) {
+          this.selectDate(selectedDate)
+        }
+      },
+      deep: true,
+    },
     initialView() {
       if (this.isOpen) {
         this.setInitialView()
@@ -379,9 +399,21 @@ export default {
     openDate() {
       this.setPageDate()
     },
-    value(value) {
-      const parsedValue = this.parseValue(value)
-      this.setValue(parsedValue)
+    value: {
+      handler(newValue, oldValue) {
+        let parsedValue = this.parseValue(newValue)
+        const oldParsedValue = this.parseValue(oldValue)
+
+        if (!this.utils.compareDates(parsedValue, oldParsedValue)) {
+          const isDateDisabled = parsedValue && this.isDateDisabled(parsedValue)
+
+          if (isDateDisabled) {
+            parsedValue = null
+          }
+          this.setValue(parsedValue)
+        }
+      },
+      immediate: true,
     },
     view(newView, oldView) {
       this.handleViewChange(newView, oldView)
@@ -605,19 +637,7 @@ export default {
     /**
      * Initiate the component
      */
-    // eslint-disable-next-line complexity,max-statements
     init() {
-      if (this.value) {
-        let parsedValue = this.parseValue(this.value)
-        const isDateDisabled = parsedValue && this.isDateDisabled(parsedValue)
-
-        if (isDateDisabled) {
-          parsedValue = null
-          this.$emit('input', parsedValue)
-        }
-        this.setValue(parsedValue)
-      }
-
       if (this.typeable) {
         this.latestValidTypedDate = this.selectedDate || this.computedOpenDate
       }
@@ -667,16 +687,15 @@ export default {
     },
     /**
      * Parse a datepicker value from string/number to date
-     * @param   {Date|String|Number|null} date
-     * @returns {Date}
+     * @param   {Date|String|Number|undefined} date
+     * @returns {Date|null}
      */
     parseValue(date) {
-      let dateTemp = date
-      if (typeof dateTemp === 'string' || typeof dateTemp === 'number') {
-        const parsed = new Date(dateTemp)
-        dateTemp = Number.isNaN(parsed.valueOf()) ? null : parsed
+      if (typeof date === 'string' || typeof date === 'number') {
+        const parsed = new Date(date)
+        return this.utils.isValidDate(parsed) ? parsed : null
       }
-      return dateTemp
+      return this.utils.isValidDate(date) ? date : null
     },
     /**
      * Focus the open date, or close the calendar if already focused
