@@ -7,7 +7,6 @@
     @focusin="handleFocusIn($event)"
     @focusout="handleFocusOut($event)"
     @keydown.esc="resetOrClose"
-    @keydown.tab="tabThroughNavigation($event)"
   >
     <DateInput
       :id="id"
@@ -43,6 +42,7 @@
       @open="open"
       @select-typed-date="selectTypedDate"
       @set-focus="setFocus($event)"
+      @tab="tabThroughNavigation"
       @typed-date="handleTypedDate"
     >
       <template #beforeDateInput>
@@ -525,14 +525,21 @@ export default {
         return
       }
 
+      const closeByClickOutside = () => {
+        this.isClickOutside = true
+        this.close()
+      }
+
       if (!this.globalDatepickerId) {
-        this.closeByClickOutside()
+        closeByClickOutside()
         return
       }
 
       if (document.datepickerId.toString() === this.datepickerId) {
         this.$nextTick(() => {
-          this.closeIfNotFocused()
+          if (!this.isActive) {
+            closeByClickOutside()
+          }
         })
       }
     },

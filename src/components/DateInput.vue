@@ -50,6 +50,7 @@
       @keydown.enter.prevent="handleKeydownEnter"
       @keydown.esc.prevent="handleKeydownEscape"
       @keydown.space="handleKeydownSpace($event)"
+      @keydown.tab="$emit('tab', $event)"
       @keyup="handleKeyup($event)"
       @keyup.space="handleKeyupSpace($event)"
     />
