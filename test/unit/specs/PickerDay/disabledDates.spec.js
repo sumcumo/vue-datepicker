@@ -37,7 +37,21 @@ describe('PickerDay mounted with disabled dates', () => {
     expect(wrapper.vm.isNextDisabled).toBeTruthy()
   })
 
-  it('detects disabled dates', async () => {
+  it('accepts an array of disabled dates', async () => {
+    await wrapper.setProps({
+      disabledDates: {
+        dates: [
+          new Date(2016, 9, 2),
+          new Date(2016, 9, 9),
+          new Date(2016, 9, 16),
+        ],
+      },
+    })
+    expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 2))).toEqual(true)
+    expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 3))).toEqual(false)
+  })
+
+  it('accepts an array of disabled dates in a range', async () => {
     await wrapper.setProps({
       disabledDates: {
         ranges: [
@@ -54,20 +68,6 @@ describe('PickerDay mounted with disabled dates', () => {
     })
     expect(wrapper.vm.isDisabledDate(new Date(2006, 9, 2))).toEqual(true)
     expect(wrapper.vm.isDisabledDate(new Date(2026, 9, 2))).toEqual(true)
-  })
-
-  it('accepts an array of disabled dates', async () => {
-    await wrapper.setProps({
-      disabledDates: {
-        dates: [
-          new Date(2016, 9, 2),
-          new Date(2016, 9, 9),
-          new Date(2016, 9, 16),
-        ],
-      },
-    })
-    expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 2))).toEqual(true)
-    expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 3))).toEqual(false)
   })
 
   it('accepts an array of disabled days of the week', async () => {
