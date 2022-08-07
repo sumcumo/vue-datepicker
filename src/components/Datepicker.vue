@@ -234,7 +234,7 @@ export default {
     },
     value: {
       type: [String, Date, Number],
-      default: '',
+      default: null,
       validator: (val) =>
         val === null ||
         val instanceof Date ||
