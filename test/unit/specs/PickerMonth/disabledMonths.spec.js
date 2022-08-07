@@ -43,13 +43,6 @@ describe('PickerMonth mounted with disabled dates', () => {
     expect(wrapper.vm.isDisabledMonth(new Date(2020, 0, 1))).toEqual(true)
   })
 
-  it('closes without warning when it is undefined', async () => {
-    await wrapper.setProps({
-      disabledDates: undefined,
-    })
-    expect(wrapper.vm.isDisabledMonth(new Date(2016, 8, 29))).toEqual(false)
-  })
-
   it('disables the `previous` button', () => {
     expect(wrapper.vm.isPreviousDisabled).toEqual(true)
   })

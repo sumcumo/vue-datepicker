@@ -33,10 +33,6 @@ describe('PickerDay mounted with disabled dates', () => {
     expect(wrapper.vm.isPreviousDisabled).toBeTruthy()
   })
 
-  it('can change month despite having a disabled month', () => {
-    expect(wrapper.vm.isNextDisabled).toBeTruthy()
-  })
-
   it('accepts an array of disabled dates', async () => {
     await wrapper.setProps({
       disabledDates: {
@@ -104,13 +100,6 @@ describe('PickerDay mounted with disabled dates', () => {
     expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 28))).toEqual(true)
     expect(wrapper.vm.isDisabledDate(new Date(2016, 10, 24))).toEqual(true)
     expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 11))).toEqual(false)
-  })
-
-  it('closes without warning when disabledDates is undefined', async () => {
-    await wrapper.setProps({
-      disabledDates: undefined,
-    })
-    expect(wrapper.vm.isDisabledDate(new Date(2016, 8, 29))).toEqual(false)
   })
 
   it('knows the earliest possible date', async () => {

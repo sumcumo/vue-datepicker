@@ -70,13 +70,6 @@ describe('PickerYear mounted with disabled dates', () => {
     expect(wrapper.vm.isDisabledYear(new Date(2022, 2, 11))).toEqual(true)
   })
 
-  it('closes without warning when it is undefined', async () => {
-    await wrapper.setProps({
-      disabledDates: undefined,
-    })
-    expect(wrapper.vm.isDisabledYear(new Date(2016, 8, 29))).toEqual(false)
-  })
-
   it('does not disable everything for from', async () => {
     await wrapper.setProps({
       disabledDates: {

@@ -124,11 +124,4 @@ describe('PickerDay mounted with highlighted and disabled dates', () => {
     expect(wrapper.vm.isHighlightEnd(new Date(2016, 11, 6))).toEqual(false)
     expect(wrapper.vm.isHighlightEnd(new Date(2016, 11, 7))).toEqual(false)
   })
-
-  it('closes without warning when it is undefined', async () => {
-    await wrapper.setProps({
-      highlighted: undefined,
-    })
-    expect(wrapper.vm.isHighlightedDate(new Date(2016, 8, 29))).toEqual(false)
-  })
 })
