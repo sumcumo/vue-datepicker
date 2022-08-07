@@ -13,21 +13,9 @@ export default {
       type: Boolean,
       default: false,
     },
-    clearButtonIcon: {
-      type: String,
-      default: '',
-    },
     calendarButton: {
       type: Boolean,
       default: false,
-    },
-    calendarButtonIcon: {
-      type: String,
-      default: '',
-    },
-    calendarButtonIconContent: {
-      type: String,
-      default: '',
     },
     disabled: {
       type: Boolean,
