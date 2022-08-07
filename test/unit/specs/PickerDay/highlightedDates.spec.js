@@ -8,15 +8,15 @@ describe('PickerDay mounted with highlighted and disabled dates', () => {
   beforeEach(() => {
     wrapper = mount(PickerDay, {
       propsData: {
-        translation: en,
-        pageDate: new Date(2016, 9, 1),
-        highlighted: {
-          to: new Date(2016, 11, 8),
-          from: new Date(2016, 11, 4),
-        },
         disabledDates: {
           dates: [new Date(2016, 11, 5)],
         },
+        highlighted: {
+          from: new Date(2016, 11, 4),
+          to: new Date(2016, 11, 8),
+        },
+        pageDate: new Date(2016, 9, 1),
+        translation: en,
       },
     })
   })

@@ -8,12 +8,12 @@ describe('PickerMonth mounted with disabled dates', () => {
   beforeEach(() => {
     wrapper = mount(PickerMonth, {
       propsData: {
-        translation: en,
         disabledDates: {
-          to: new Date(2018, 2, 14),
           from: new Date(2018, 4, 15),
+          to: new Date(2018, 2, 14),
         },
         pageDate: new Date(2018, 3, 1),
+        translation: en,
         view: 'month',
       },
     })
