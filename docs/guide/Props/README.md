@@ -38,7 +38,7 @@
 | show-calendar-on-button-click | Boolean                       | false       | Only open the calendar on calendar-button click                                                                                  |
 | tabindex                      | String&#124;Number            |             | Tabindex for the input field                                                                                                     |
 | typeable                      | Boolean                       | false       | If `true`, allow the user to type the date                                                                                       |
-| use-utc                       | Boolean                       | false       | Use UTC for time calculations                                                                                                    |
+| use-utc                       | Boolean                       | false       | Use UTC for time calculations. See [Local Dates vs UTC Dates](../UtcDates/README.md)                                             |
 | value                         | Date&#124;String              |             | Date value of the datepicker                                                                                                     |
 | wrapper-class                 | String&#124;Object            |             | CSS class applied to the outer div                                                                                               |
 | year-picker-range             | Number                        | 10          | How many years to display in the _year picker_                                                                                   |
