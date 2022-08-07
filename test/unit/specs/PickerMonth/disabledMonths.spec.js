@@ -2,16 +2,12 @@ import { mount } from '@vue/test-utils'
 import PickerMonth from '~/components/PickerMonth.vue'
 import { en } from '~/locale'
 
-describe('PickerMonth mounted with disabled dates', () => {
+describe('PickerMonth mounted', () => {
   let wrapper
 
   beforeEach(() => {
     wrapper = mount(PickerMonth, {
       propsData: {
-        disabledDates: {
-          from: new Date(2018, 4, 15),
-          to: new Date(2018, 2, 14),
-        },
         pageDate: new Date(2018, 3, 1),
         translation: en,
         view: 'month',
@@ -43,7 +39,14 @@ describe('PickerMonth mounted with disabled dates', () => {
     expect(wrapper.vm.isDisabledMonth(new Date(2020, 0, 1))).toEqual(true)
   })
 
-  it('disables the `previous` button', () => {
+  it('disables the `previous` button', async () => {
+    await wrapper.setProps({
+      disabledDates: {
+        from: new Date(2018, 4, 15),
+        to: new Date(2018, 2, 14),
+      },
+    })
+
     expect(wrapper.vm.isPreviousDisabled).toEqual(true)
   })
 
@@ -54,7 +57,14 @@ describe('PickerMonth mounted with disabled dates', () => {
     expect(wrapper.vm.isPreviousDisabled).toEqual(false)
   })
 
-  it('disables the `next` button', () => {
+  it('disables the `next` button', async () => {
+    await wrapper.setProps({
+      disabledDates: {
+        from: new Date(2018, 4, 15),
+        to: new Date(2018, 2, 14),
+      },
+    })
+
     expect(wrapper.vm.isNextDisabled).toEqual(true)
   })
 

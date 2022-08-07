@@ -2,16 +2,12 @@ import { mount } from '@vue/test-utils'
 import PickerDay from '~/components/PickerDay.vue'
 import { en } from '~/locale'
 
-describe('PickerDay mounted with disabled dates', () => {
+describe('PickerDay mounted', () => {
   let wrapper
 
   beforeEach(() => {
     wrapper = mount(PickerDay, {
       propsData: {
-        disabledDates: {
-          from: new Date(2016, 9, 26),
-          to: new Date(2016, 9, 4),
-        },
         pageDate: new Date(2016, 9, 1),
         translation: en,
         view: 'day',
@@ -23,14 +19,26 @@ describe('PickerDay mounted with disabled dates', () => {
     wrapper.destroy()
   })
 
-  it('detects a disabled date', () => {
-    expect(wrapper.vm.isDisabledDate(new Date(2006, 9, 2))).toEqual(true)
-    expect(wrapper.vm.isDisabledDate(new Date(2026, 9, 2))).toEqual(true)
+  it('disables dates from a given date', async () => {
+    await wrapper.setProps({
+      disabledDates: {
+        from: new Date(2016, 9, 26),
+      },
+    })
+
+    expect(wrapper.vm.isDisabledDate(new Date(2006, 9, 25))).toEqual(false)
+    expect(wrapper.vm.isDisabledDate(new Date(2026, 9, 26))).toEqual(true)
   })
 
-  it('sets `isNextDisabled` and `isPreviousDisabled` correctly', () => {
-    expect(wrapper.vm.isNextDisabled).toBeTruthy()
-    expect(wrapper.vm.isPreviousDisabled).toBeTruthy()
+  it('disables dates to a given date', async () => {
+    await wrapper.setProps({
+      disabledDates: {
+        to: new Date(2016, 9, 4),
+      },
+    })
+
+    expect(wrapper.vm.isDisabledDate(new Date(2006, 9, 3))).toEqual(true)
+    expect(wrapper.vm.isDisabledDate(new Date(2026, 9, 4))).toEqual(false)
   })
 
   it('accepts an array of disabled dates', async () => {
@@ -43,6 +51,7 @@ describe('PickerDay mounted with disabled dates', () => {
         ],
       },
     })
+
     expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 2))).toEqual(true)
     expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 3))).toEqual(false)
   })
@@ -62,6 +71,7 @@ describe('PickerDay mounted with disabled dates', () => {
         ],
       },
     })
+
     expect(wrapper.vm.isDisabledDate(new Date(2006, 9, 2))).toEqual(true)
     expect(wrapper.vm.isDisabledDate(new Date(2026, 9, 2))).toEqual(true)
   })
@@ -72,6 +82,7 @@ describe('PickerDay mounted with disabled dates', () => {
         days: [6, 0],
       },
     })
+
     expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 2))).toEqual(true)
     expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 3))).toEqual(false)
   })
@@ -82,6 +93,7 @@ describe('PickerDay mounted with disabled dates', () => {
         daysOfMonth: [29, 30, 31],
       },
     })
+
     expect(wrapper.vm.isDisabledDate(new Date(2016, 8, 29))).toEqual(true)
     expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 31))).toEqual(true)
     expect(wrapper.vm.isDisabledDate(new Date(2016, 10, 30))).toEqual(true)
@@ -96,14 +108,27 @@ describe('PickerDay mounted with disabled dates', () => {
         },
       },
     })
+
     expect(wrapper.vm.isDisabledDate(new Date(2016, 8, 29))).toEqual(false)
     expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 28))).toEqual(true)
     expect(wrapper.vm.isDisabledDate(new Date(2016, 10, 24))).toEqual(true)
     expect(wrapper.vm.isDisabledDate(new Date(2016, 9, 11))).toEqual(false)
   })
 
+  it('sets `isNextDisabled` and `isPreviousDisabled` correctly', async () => {
+    await wrapper.setProps({
+      disabledDates: {
+        from: new Date(2016, 9, 26),
+        to: new Date(2016, 9, 4),
+      },
+    })
+
+    expect(wrapper.vm.isNextDisabled).toBeTruthy()
+    expect(wrapper.vm.isPreviousDisabled).toBeTruthy()
+  })
+
   it('knows the earliest possible date', async () => {
-    expect(wrapper.vm.earliestPossibleDate).toEqual(new Date(2016, 9, 4))
+    expect(wrapper.vm.earliestPossibleDate).toBeNull()
 
     await wrapper.setProps({
       disabledDates: {
@@ -131,7 +156,7 @@ describe('PickerDay mounted with disabled dates', () => {
   })
 
   it('knows the latest possible date', async () => {
-    expect(wrapper.vm.latestPossibleDate).toEqual(new Date(2016, 9, 26))
+    expect(wrapper.vm.latestPossibleDate).toBeNull()
 
     await wrapper.setProps({
       disabledDates: {

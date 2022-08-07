@@ -2,16 +2,12 @@ import { mount } from '@vue/test-utils'
 import PickerYear from '~/components/PickerYear.vue'
 import { en } from '~/locale'
 
-describe('PickerYear mounted with disabled dates', () => {
+describe('PickerYear mounted', () => {
   let wrapper
 
   beforeEach(() => {
     wrapper = mount(PickerYear, {
       propsData: {
-        disabledDates: {
-          from: new Date(2018, 4, 15),
-          to: new Date(2018, 2, 14),
-        },
         pageDate: new Date(2018, 3, 1),
         translation: en,
         view: 'year',
@@ -23,7 +19,14 @@ describe('PickerYear mounted with disabled dates', () => {
     wrapper.destroy()
   })
 
-  it("can't navigate to a disabled year", () => {
+  it("can't navigate to a disabled year", async () => {
+    await wrapper.setProps({
+      disabledDates: {
+        from: new Date(2018, 4, 15),
+        to: new Date(2018, 2, 14),
+      },
+    })
+
     wrapper.vm.changePage({ incrementBy: -1, focusRefs: ['prev'] })
     expect(wrapper.emitted('changed-decade')).toBeFalsy()
 
