@@ -39,7 +39,7 @@ var state = {
 
 All dates after 2016-01-26 are disabled.
 
-## Disable specific days in each week
+## Disable specific days of the week
 
 ```js
 var state = {
@@ -51,7 +51,7 @@ var state = {
 
 Every Saturday and Sunday is disabled.
 
-## Disable specific days of each month
+## Disable specific days of the month
 
 ```js
 var state = {
@@ -63,7 +63,7 @@ var state = {
 
 29th, 30th and 31st of each month are disabled.
 
-## Disable specific days from an array
+## Disable specific dates from an array
 
 ```js
 var state = {
