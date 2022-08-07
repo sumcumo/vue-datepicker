@@ -103,10 +103,7 @@ describe('PickerDay mounted with highlighted and disabled dates', () => {
     await wrapper.setProps({
       highlighted: {
         customPredictor(date) {
-          if (date.getDate() % 5 === 0) {
-            return true
-          }
-          return false
+          return date.getDate() % 5 === 0
         },
       },
     })

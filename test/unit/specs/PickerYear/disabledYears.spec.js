@@ -59,10 +59,7 @@ describe('PickerYear mounted with disabled dates', () => {
     await wrapper.setProps({
       disabledDates: {
         customPredictor(date) {
-          if (date.getFullYear() % 3 === 0) {
-            return true
-          }
-          return false
+          return date.getFullYear() % 3 === 0
         },
       },
     })

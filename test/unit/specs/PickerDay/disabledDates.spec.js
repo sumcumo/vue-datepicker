@@ -96,10 +96,7 @@ describe('PickerDay mounted with disabled dates', () => {
     await wrapper.setProps({
       disabledDates: {
         customPredictor(date) {
-          if (date.getDate() % 4 === 0) {
-            return true
-          }
-          return false
+          return date.getDate() % 4 === 0
         },
       },
     })
