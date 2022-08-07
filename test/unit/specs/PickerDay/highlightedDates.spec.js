@@ -114,7 +114,7 @@ describe('PickerDay mounted', () => {
     expect(wrapper.vm.isHighlightedDate(new Date(2016, 9, 11))).toEqual(false)
   })
 
-  it('does not highlight a disabled date', async () => {
+  it('does not highlight a disabled date unless configured to do so', async () => {
     await wrapper.setProps({
       disabledDates: {
         dates: [new Date(2016, 11, 5)],
@@ -126,9 +126,7 @@ describe('PickerDay mounted', () => {
     })
 
     expect(wrapper.vm.isHighlightedDate(new Date(2016, 11, 5))).toEqual(false)
-  })
 
-  it('highlights a disabled date when explicitly configured to do so', async () => {
     await wrapper.setProps({
       highlighted: {
         to: new Date(2016, 11, 8),
