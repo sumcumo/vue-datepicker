@@ -55,6 +55,26 @@ describe('PickerDay mounted', () => {
     expect(wrapper.vm.isHighlightedDate(new Date(2016, 9, 3))).toEqual(false)
   })
 
+  it('accepts an array of highlighted dates in a range', async () => {
+    await wrapper.setProps({
+      highlighted: {
+        ranges: [
+          {
+            from: new Date(2005, 6, 5),
+            to: new Date(2016, 9, 4),
+          },
+          {
+            from: new Date(2016, 9, 26),
+            to: new Date(2030, 12, 25),
+          },
+        ],
+      },
+    })
+
+    expect(wrapper.vm.isHighlightedDate(new Date(2006, 9, 2))).toEqual(true)
+    expect(wrapper.vm.isHighlightedDate(new Date(2026, 9, 2))).toEqual(true)
+  })
+
   it('accepts an array of highlighted days of the week', async () => {
     await wrapper.setProps({
       highlighted: {

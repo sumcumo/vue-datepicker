@@ -23,6 +23,7 @@ export default class HighlightedDate {
         daysOfMonth: utils.hasArray(highlightedDates, 'daysOfMonth'),
         daysOfWeek: utils.hasArray(highlightedDates, 'days'),
         from: utils.hasDate(highlightedDates, 'from'),
+        ranges: utils.hasArray(highlightedDates, 'ranges'),
         specificDates: utils.hasArray(highlightedDates, 'dates'),
         to: utils.hasDate(highlightedDates, 'to'),
         includeDisabled:
@@ -53,10 +54,25 @@ export default class HighlightedDate {
 
     return {
       to: () => {
-        return has.to && date <= highlightedDates.to
+        return has.to && date < highlightedDates.to
       },
       from: () => {
-        return has.from && date >= highlightedDates.from
+        return has.from && date > highlightedDates.from
+      },
+      range: () => {
+        if (!has.ranges) return false
+
+        const { ranges } = highlightedDates
+        const u = makeCellUtils(this._utils)
+
+        return ranges.some((thisRange) => {
+          const hasFrom = u.isDefined(thisRange, 'from')
+          const hasTo = u.isDefined(thisRange, 'to')
+
+          return (
+            hasFrom && hasTo && date <= thisRange.to && date >= thisRange.from
+          )
+        })
       },
       customPredictor: () => {
         return has.customPredictor && highlightedDates.customPredictor(date)
