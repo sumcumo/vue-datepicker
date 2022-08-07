@@ -289,36 +289,28 @@ export default {
       ).isDateHighlighted(dateWithoutTime)
     },
     /**
-     * Whether a day is highlighted and it is the last date
-     * in the highlighted range of dates
-     * @param {Date} date end highlight
+     * Whether a date is the last in a range of highlighted dates
+     * @param {Date} date
      * @return {Boolean}
      */
     isHighlightEnd(date) {
-      const config = this.highlightedConfig
-
-      return (
-        this.isHighlightedDate(date) &&
-        config.to.year === this.utils.getFullYear(date) &&
-        config.to.month === this.utils.getMonth(date) &&
-        config.to.day === this.utils.getDate(date)
-      )
+      return new HighlightedDate(
+        this.utils,
+        this.disabledDates,
+        this.highlighted,
+      ).isHighlightEnd(date)
     },
     /**
-     * Whether a day is highlighted and it is the first date
-     * in the highlighted range of dates
-     * @param {Date} date start highlight
+     * Whether a date is the first in a range of highlighted dates
+     * @param {Date} date
      * @return {Boolean}
      */
     isHighlightStart(date) {
-      const config = this.highlightedConfig
-
-      return (
-        this.isHighlightedDate(date) &&
-        config.from.year === this.utils.getFullYear(date) &&
-        config.from.month === this.utils.getMonth(date) &&
-        config.from.day === this.utils.getDate(date)
-      )
+      return new HighlightedDate(
+        this.utils,
+        this.disabledDates,
+        this.highlighted,
+      ).isHighlightStart(date)
     },
     /**
      * Whether a day is selected

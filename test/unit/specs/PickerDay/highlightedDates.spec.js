@@ -138,11 +138,15 @@ describe('PickerDay mounted', () => {
     expect(wrapper.vm.isHighlightedDate(new Date(2016, 11, 5))).toEqual(true)
   })
 
-  it('detects the first date of the highlighted dates', async () => {
+  it('detects the first date of a highlighted range', async () => {
     await wrapper.setProps({
       highlighted: {
-        from: new Date(2016, 11, 4),
-        to: new Date(2016, 11, 8),
+        ranges: [
+          {
+            from: new Date(2016, 11, 4),
+            to: new Date(2016, 11, 8),
+          },
+        ],
       },
     })
 
@@ -151,16 +155,20 @@ describe('PickerDay mounted', () => {
     expect(wrapper.vm.isHighlightStart(new Date(2016, 11, 5))).toEqual(false)
   })
 
-  it('detects the last date of the highlighted dates', async () => {
+  it('detects the last date of a highlighted range', async () => {
     await wrapper.setProps({
       highlighted: {
-        from: new Date(2016, 11, 4),
-        to: new Date(2016, 11, 8),
+        ranges: [
+          {
+            from: new Date(2016, 11, 4),
+            to: new Date(2016, 11, 8),
+          },
+        ],
       },
     })
 
     expect(wrapper.vm.isHighlightEnd(new Date(2016, 11, 8))).toEqual(true)
-    expect(wrapper.vm.isHighlightEnd(new Date(2016, 11, 6))).toEqual(false)
     expect(wrapper.vm.isHighlightEnd(new Date(2016, 11, 7))).toEqual(false)
+    expect(wrapper.vm.isHighlightEnd(new Date(2016, 11, 9))).toEqual(false)
   })
 })

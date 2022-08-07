@@ -115,4 +115,36 @@ export default class HighlightedDate {
       isHighlightedVia.customPredictor()
     )
   }
+
+  isHighlightStart(date) {
+    if (!this.config.has.ranges || !this.isDateHighlighted(date)) {
+      return false
+    }
+
+    for (let i = 0; i < this._highlighted.ranges.length; i += 1) {
+      const range = this._highlighted.ranges[i]
+
+      if (range.from.valueOf() === date.valueOf()) {
+        return true
+      }
+    }
+
+    return false
+  }
+
+  isHighlightEnd(date) {
+    if (!this.config.has.ranges || !this.isDateHighlighted(date)) {
+      return false
+    }
+
+    for (let i = 0; i < this._highlighted.ranges.length; i += 1) {
+      const range = this._highlighted.ranges[i]
+
+      if (range.to.valueOf() === date.valueOf()) {
+        return true
+      }
+    }
+
+    return false
+  }
 }
