@@ -90,7 +90,9 @@ export default class HighlightedDate {
     const isHighlightedVia = this.isDateHighlightedVia(date)
 
     return (
-      (isHighlightedVia.to() && isHighlightedVia.from()) ||
+      isHighlightedVia.to() ||
+      isHighlightedVia.from() ||
+      isHighlightedVia.range() ||
       isHighlightedVia.specificDate() ||
       isHighlightedVia.daysOfWeek() ||
       isHighlightedVia.daysOfMonth() ||

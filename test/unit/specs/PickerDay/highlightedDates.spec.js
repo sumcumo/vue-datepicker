@@ -18,85 +18,26 @@ describe('PickerDay mounted', () => {
     wrapper.destroy()
   })
 
-  it('detects a highlighted date', async () => {
+  it('highlights dates from a given date', async () => {
     await wrapper.setProps({
       highlighted: {
-        from: new Date(2016, 11, 4),
-        to: new Date(2016, 11, 8),
+        from: new Date(2016, 9, 26),
       },
     })
 
-    expect(wrapper.vm.isHighlightedDate(new Date(2006, 9, 2))).toEqual(false)
-    expect(wrapper.vm.isHighlightedDate(new Date(2026, 9, 2))).toEqual(false)
+    expect(wrapper.vm.isHighlightedDate(new Date(2006, 9, 25))).toEqual(false)
+    expect(wrapper.vm.isHighlightedDate(new Date(2026, 9, 26))).toEqual(true)
   })
 
-  it('does not highlight a disabled date', async () => {
+  it('highlights dates to a given date', async () => {
     await wrapper.setProps({
-      disabledDates: {
-        dates: [new Date(2016, 11, 5)],
-      },
       highlighted: {
-        from: new Date(2016, 11, 4),
-        to: new Date(2016, 11, 8),
+        to: new Date(2016, 9, 4),
       },
     })
 
-    expect(wrapper.vm.isHighlightedDate(new Date(2016, 11, 5))).toEqual(false)
-  })
-
-  it('highlights a disabled date when explicitly configured to do so', async () => {
-    await wrapper.setProps({
-      highlighted: {
-        to: new Date(2016, 11, 8),
-        from: new Date(2016, 11, 4),
-        includeDisabled: true,
-      },
-    })
-
-    expect(wrapper.vm.isHighlightedDate(new Date(2016, 11, 5))).toEqual(true)
-  })
-
-  it('highlights a date before the `to` property', async () => {
-    await wrapper.setProps({
-      highlighted: {
-        from: new Date(2016, 11, 4),
-        to: new Date(2016, 11, 8),
-      },
-    })
-
-    expect(wrapper.vm.isHighlightedDate(new Date(2016, 11, 7))).toEqual(true)
-  })
-
-  it('does not highlight a date after the `to` property', async () => {
-    await wrapper.setProps({
-      highlighted: {
-        to: new Date(2016, 11, 8),
-      },
-    })
-
-    expect(wrapper.vm.isHighlightedDate(new Date(2016, 11, 9))).toEqual(false)
-  })
-
-  it('highlights a date after the `from` property', async () => {
-    await wrapper.setProps({
-      highlighted: {
-        from: new Date(2016, 11, 4),
-        to: new Date(2016, 11, 8),
-      },
-    })
-
-    expect(wrapper.vm.isHighlightedDate(new Date(2016, 11, 6))).toEqual(true)
-  })
-
-  it('does not highlight a date before the `from` property', async () => {
-    await wrapper.setProps({
-      highlighted: {
-        from: new Date(2016, 11, 4),
-        to: new Date(2016, 11, 8),
-      },
-    })
-
-    expect(wrapper.vm.isHighlightedDate(new Date(2016, 11, 3))).toEqual(false)
+    expect(wrapper.vm.isHighlightedDate(new Date(2006, 9, 3))).toEqual(true)
+    expect(wrapper.vm.isHighlightedDate(new Date(2026, 9, 4))).toEqual(false)
   })
 
   it('accepts an array of highlighted dates', async () => {
@@ -153,6 +94,32 @@ describe('PickerDay mounted', () => {
     expect(wrapper.vm.isHighlightedDate(new Date(2016, 9, 28))).toEqual(false)
     expect(wrapper.vm.isHighlightedDate(new Date(2016, 10, 20))).toEqual(true)
     expect(wrapper.vm.isHighlightedDate(new Date(2016, 9, 11))).toEqual(false)
+  })
+
+  it('does not highlight a disabled date', async () => {
+    await wrapper.setProps({
+      disabledDates: {
+        dates: [new Date(2016, 11, 5)],
+      },
+      highlighted: {
+        from: new Date(2016, 11, 4),
+        to: new Date(2016, 11, 8),
+      },
+    })
+
+    expect(wrapper.vm.isHighlightedDate(new Date(2016, 11, 5))).toEqual(false)
+  })
+
+  it('highlights a disabled date when explicitly configured to do so', async () => {
+    await wrapper.setProps({
+      highlighted: {
+        to: new Date(2016, 11, 8),
+        from: new Date(2016, 11, 4),
+        includeDisabled: true,
+      },
+    })
+
+    expect(wrapper.vm.isHighlightedDate(new Date(2016, 11, 5))).toEqual(true)
   })
 
   it('detects the first date of the highlighted dates', async () => {
