@@ -89,30 +89,28 @@ describe('PickerDay mounted', () => {
   it('accepts an array of highlighted days of the month', async () => {
     await wrapper.setProps({
       highlighted: {
-        daysOfMonth: [1, 10, 31],
+        daysOfMonth: [29, 30, 31],
       },
     })
 
-    expect(wrapper.vm.isHighlightedDate(new Date(2016, 9, 1))).toEqual(true)
-    expect(wrapper.vm.isHighlightedDate(new Date(2016, 10, 10))).toEqual(true)
-    expect(wrapper.vm.isHighlightedDate(new Date(2016, 11, 31))).toEqual(true)
-    expect(wrapper.vm.isHighlightedDate(new Date(2017, 8, 10))).toEqual(true)
-    expect(wrapper.vm.isHighlightedDate(new Date(2016, 8, 7))).toEqual(false)
-    expect(wrapper.vm.isHighlightedDate(new Date(2016, 7, 20))).toEqual(false)
+    expect(wrapper.vm.isHighlightedDate(new Date(2016, 8, 29))).toEqual(true)
+    expect(wrapper.vm.isHighlightedDate(new Date(2016, 9, 31))).toEqual(true)
+    expect(wrapper.vm.isHighlightedDate(new Date(2016, 10, 30))).toEqual(true)
+    expect(wrapper.vm.isHighlightedDate(new Date(2016, 9, 11))).toEqual(false)
   })
 
   it('accepts a customPredictor to check if the date is highlighted', async () => {
     await wrapper.setProps({
       highlighted: {
         customPredictor(date) {
-          return date.getDate() % 5 === 0
+          return date.getDate() % 4 === 0
         },
       },
     })
 
-    expect(wrapper.vm.isHighlightedDate(new Date(2016, 8, 30))).toEqual(true)
-    expect(wrapper.vm.isHighlightedDate(new Date(2016, 9, 28))).toEqual(false)
-    expect(wrapper.vm.isHighlightedDate(new Date(2016, 10, 20))).toEqual(true)
+    expect(wrapper.vm.isHighlightedDate(new Date(2016, 8, 29))).toEqual(false)
+    expect(wrapper.vm.isHighlightedDate(new Date(2016, 9, 28))).toEqual(true)
+    expect(wrapper.vm.isHighlightedDate(new Date(2016, 10, 24))).toEqual(true)
     expect(wrapper.vm.isHighlightedDate(new Date(2016, 9, 11))).toEqual(false)
   })
 
