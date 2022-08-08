@@ -206,10 +206,12 @@ export default {
       if (!this.disabledConfig.has.from) {
         return false
       }
-      return (
-        this.disabledConfig.from.month <= this.pageMonth &&
-        this.disabledConfig.from.year <= this.pageYear
-      )
+
+      const { from } = this.disabledConfig
+      const disabledFromMonth = this.utils.createDateTime(from.year, from.month)
+      const pageMonth = this.utils.createDateTime(this.pageYear, this.pageMonth)
+
+      return disabledFromMonth <= pageMonth
     },
     /**
      * Is the previous month disabled?
@@ -219,10 +221,12 @@ export default {
       if (!this.disabledConfig.has.to) {
         return false
       }
-      return (
-        this.disabledConfig.to.month >= this.pageMonth &&
-        this.disabledConfig.to.year >= this.pageYear
-      )
+
+      const { to } = this.disabledConfig
+      const disabledToMonth = this.utils.createDateTime(to.year, to.month)
+      const pageMonth = this.utils.createDateTime(this.pageYear, this.pageMonth)
+
+      return disabledToMonth >= pageMonth
     },
     /**
      * Returns the current page's month as an integer.
