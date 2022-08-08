@@ -771,17 +771,8 @@ export default {
      * @param {Date=} date The date to set for the page
      */
     setPageDate(date) {
-      let dateTemp = date
-      if (!dateTemp) {
-        if (this.computedOpenDate) {
-          dateTemp = new Date(this.computedOpenDate)
-        } else {
-          dateTemp = new Date()
-        }
-      }
-
-      let pageTimestamp = this.utils.resetDateTime(new Date(dateTemp))
-      pageTimestamp = this.utils.setDate(new Date(pageTimestamp), 1)
+      const dateTemp = new Date(date || this.computedOpenDate)
+      let pageTimestamp = this.utils.setDate(dateTemp, 1)
 
       if (this.view === 'year') {
         pageTimestamp = this.utils.setMonth(new Date(pageTimestamp), 0)
