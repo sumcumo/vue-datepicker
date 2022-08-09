@@ -270,7 +270,7 @@ export default {
       const parsedDate = this.parseInput()
 
       if (this.utils.isValidDate(parsedDate)) {
-        this.$emit('select-typed-date', new Date(parsedDate))
+        this.$emit('select-typed-date', parsedDate)
       }
     },
     /**
