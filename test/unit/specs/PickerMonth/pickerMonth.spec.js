@@ -53,10 +53,10 @@ describe('PickerMonth mounted', () => {
   })
 
   it('emits date on selection', () => {
-    const time = new Date().valueOf()
-    wrapper.vm.select({ timestamp: time })
+    const timestamp = new Date().setHours(0, 0, 0, 0).valueOf()
+    wrapper.vm.select({ timestamp })
     expect(wrapper.emitted('select')).toBeTruthy()
-    expect(wrapper.emitted('select')[0][0].timestamp).toEqual(time)
+    expect(wrapper.emitted('select')[0][0].timestamp).toEqual(timestamp)
   })
 
   it('emits set-view event with `year` when the up button is clicked', async () => {

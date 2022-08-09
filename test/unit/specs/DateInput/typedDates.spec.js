@@ -155,7 +155,7 @@ describe('Datepicker mounted', () => {
   })
 
   it('sets the date and closes the calendar', () => {
-    const today = new Date()
+    const today = new Date(new Date().setHours(0, 0, 0, 0))
 
     wrapper.vm.open()
     wrapper.vm.selectTypedDate(today)

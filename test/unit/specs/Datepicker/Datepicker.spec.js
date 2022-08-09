@@ -1137,8 +1137,8 @@ describe('Datepicker mounted inline', () => {
   })
 
   it('does not close the calendar when date is selected', () => {
-    const date = new Date()
-    wrapper.vm.handleSelect({ timestamp: date.valueOf() })
+    const timestamp = new Date().setHours(0, 0, 0, 0)
+    wrapper.vm.handleSelect({ timestamp })
     expect(wrapper.vm.isOpen).toEqual(true)
     document.body.click()
     expect(wrapper.vm.isOpen).toEqual(true)
