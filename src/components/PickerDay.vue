@@ -266,19 +266,17 @@ export default {
       )
     },
     /**
-     * Whether a day is highlighted
-     * (only if it is not disabled already except when highlighted.includeDisabled is true)
+     * Whether a day is highlighted (N.B. Disabled dates are not highlighted unless
+     * `highlighted.includeDisabled` is true)
      * @param {Date} date to check if highlighted
      * @return {Boolean}
      */
     isHighlightedDate(date) {
-      const dateWithoutTime = this.utils.resetDateTime(date)
-
       return new HighlightedDate(
         this.utils,
         this.disabledDates,
         this.highlighted,
-      ).isDateHighlighted(dateWithoutTime)
+      ).isDateHighlighted(date)
     },
     /**
      * Whether a date is the last in a range of highlighted dates
