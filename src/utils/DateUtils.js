@@ -5,15 +5,22 @@ import en from '~/locale/translations/en'
  * @param {String} dateStr
  * @param {String} formatStr
  * @param {Object} translation
+ * @param {Number} currentYear
  * @param {String} time
  * @return String
  */
 // eslint-disable-next-line complexity,max-statements
-const getParsableDate = ({ dateStr, formatStr, translation, time }) => {
+const getParsableDate = ({
+  dateStr,
+  formatStr,
+  translation,
+  currentYear,
+  time,
+}) => {
   const splitter = formatStr.match(/-|\/|\s|\./) || ['-']
   const df = formatStr.split(splitter[0])
   const ds = dateStr.split(splitter[0])
-  const ymd = [new Date().getFullYear().toString(), '01', '01']
+  const ymd = [currentYear.toString(), '01', '01']
 
   for (let i = 0; i < df.length; i += 1) {
     if (/yyyy/i.test(df[i])) {
@@ -341,6 +348,7 @@ const utils = {
       dateStr,
       formatStr: format,
       translation,
+      currentYear: this.getFullYear(new Date()),
       time: this.getTime(),
     })
     const parsedDate = Date.parse(parseableDate)
