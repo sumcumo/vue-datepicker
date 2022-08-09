@@ -180,7 +180,7 @@ export default {
      */
     isTodayMonth(date) {
       const { utils } = this
-      const todayMonth = new Date(utils.setDate(utils.getNewDateObject(), 1))
+      const todayMonth = new Date(utils.setDate(this.todayDate, 1))
 
       return utils.compareDates(date, todayMonth)
     },

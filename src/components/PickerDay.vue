@@ -336,7 +336,7 @@ export default {
         isHighlightStart: this.isHighlightStart(dObj),
         isHighlightEnd: this.isHighlightEnd(dObj),
         isOpenDate: utils.compareDates(dObj, this.openDate),
-        isToday: utils.compareDates(dObj, new Date()),
+        isToday: utils.compareDates(dObj, this.todayDate),
         isWeekend: isSaturday || isSunday,
         isSaturday,
         isSunday,
