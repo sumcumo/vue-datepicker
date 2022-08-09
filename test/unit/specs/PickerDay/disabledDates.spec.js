@@ -66,14 +66,16 @@ describe('PickerDay mounted', () => {
           },
           {
             from: new Date(2016, 9, 26),
-            to: new Date(2030, 12, 25),
+            to: new Date(2030, 11, 25),
           },
         ],
       },
     })
 
-    expect(wrapper.vm.isDisabledDate(new Date(2006, 9, 2))).toEqual(true)
-    expect(wrapper.vm.isDisabledDate(new Date(2026, 9, 2))).toEqual(true)
+    expect(wrapper.vm.isDisabledDate(new Date(2005, 6, 5))).toEqual(false)
+    expect(wrapper.vm.isDisabledDate(new Date(2005, 6, 6))).toEqual(true)
+    expect(wrapper.vm.isDisabledDate(new Date(2030, 11, 24))).toEqual(true)
+    expect(wrapper.vm.isDisabledDate(new Date(2030, 11, 25))).toEqual(false)
   })
 
   it('accepts an array of disabled days of the week', async () => {

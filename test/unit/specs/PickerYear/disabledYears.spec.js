@@ -8,7 +8,7 @@ describe('PickerYear mounted', () => {
   beforeEach(() => {
     wrapper = mount(PickerYear, {
       propsData: {
-        pageDate: new Date(2018, 3, 1),
+        pageDate: new Date(2016, 9, 1),
         translation: en,
         view: 'year',
       },
@@ -19,71 +19,127 @@ describe('PickerYear mounted', () => {
     wrapper.destroy()
   })
 
-  it("can't navigate to a disabled year", async () => {
+  it('disables years from a given date', async () => {
     await wrapper.setProps({
       disabledDates: {
-        from: new Date(2018, 4, 15),
-        to: new Date(2018, 2, 14),
+        from: new Date(2016, 0, 1),
       },
     })
 
-    wrapper.vm.changePage({ incrementBy: -1, focusRefs: ['prev'] })
-    expect(wrapper.emitted('changed-decade')).toBeFalsy()
-
-    wrapper.vm.changePage({ incrementBy: 1, focusRefs: ['next'] })
-    expect(wrapper.emitted('changed-decade')).toBeFalsy()
+    expect(wrapper.vm.isDisabledYear(new Date(2016, 0, 1))).toEqual(false)
+    expect(wrapper.vm.isDisabledYear(new Date(2017, 0, 1))).toEqual(true)
   })
 
-  it("can't change decade when previous or next decades are disabled", async () => {
+  it('disables months to a given date', async () => {
     await wrapper.setProps({
-      pageDate: new Date(2010, 9, 1),
       disabledDates: {
-        to: new Date(2010, 8, 6),
-        from: new Date(2017, 10, 24),
+        to: new Date(2017, 0, 1),
       },
     })
-    expect(wrapper.vm.isPreviousDisabled).toEqual(true)
-    expect(wrapper.vm.isNextDisabled).toEqual(true)
+
+    expect(wrapper.vm.isDisabledYear(new Date(2016, 0, 1))).toEqual(true)
+    expect(wrapper.vm.isDisabledYear(new Date(2017, 0, 1))).toEqual(false)
   })
 
-  it('can change decade despite having a disabled decade', async () => {
+  it('accepts an array of disabled dates in a range', async () => {
     await wrapper.setProps({
-      pageDate: new Date(2010, 9, 1),
       disabledDates: {
-        to: new Date(2000, 11, 19),
-        from: new Date(2021, 11, 19),
+        ranges: [
+          {
+            from: new Date(2005, 0, 1),
+            to: new Date(2016, 0, 1),
+          },
+          {
+            from: new Date(2016, 0, 1),
+            to: new Date(2030, 0, 1),
+          },
+        ],
       },
     })
-    expect(wrapper.vm.isPreviousDisabled).toEqual(false)
-    expect(wrapper.vm.isNextDisabled).toEqual(false)
+
+    expect(wrapper.vm.isDisabledYear(new Date(2005, 0, 1))).toEqual(false)
+    expect(wrapper.vm.isDisabledYear(new Date(2006, 0, 1))).toEqual(true)
+    expect(wrapper.vm.isDisabledYear(new Date(2029, 0, 1))).toEqual(true)
+    expect(wrapper.vm.isDisabledYear(new Date(2030, 0, 1))).toEqual(false)
   })
 
   it('accepts a customPredictor to check if the year is disabled', async () => {
     await wrapper.setProps({
       disabledDates: {
         customPredictor(date) {
-          return date.getFullYear() % 3 === 0
+          return date.getYear() % 4 === 0
         },
       },
     })
-    expect(wrapper.vm.isDisabledYear(new Date(2018, 4, 29))).toEqual(false)
-    expect(wrapper.vm.isDisabledYear(new Date(2019, 9, 28))).toEqual(true)
-    expect(wrapper.vm.isDisabledYear(new Date(2020, 8, 24))).toEqual(false)
-    expect(wrapper.vm.isDisabledYear(new Date(2021, 2, 11))).toEqual(false)
-    expect(wrapper.vm.isDisabledYear(new Date(2022, 2, 11))).toEqual(true)
+
+    expect(wrapper.vm.isDisabledYear(new Date(2016, 0, 1))).toEqual(true)
+    expect(wrapper.vm.isDisabledYear(new Date(2017, 0, 1))).toEqual(false)
+    expect(wrapper.vm.isDisabledYear(new Date(2018, 0, 1))).toEqual(false)
+    expect(wrapper.vm.isDisabledYear(new Date(2019, 0, 1))).toEqual(false)
+    expect(wrapper.vm.isDisabledYear(new Date(2020, 0, 1))).toEqual(true)
   })
 
-  it('does not disable everything for from', async () => {
+  it('sets `isNextDisabled` and `isPreviousDisabled` correctly', async () => {
     await wrapper.setProps({
       disabledDates: {
-        to: undefined,
-        from: new Date(2018, 4, 15),
+        from: new Date(2019, 0, 1),
+        to: new Date(2010, 0, 1),
       },
     })
-    expect(wrapper.vm.isDisabledYear(new Date(2020, 4, 29))).toEqual(true)
-    expect(wrapper.vm.isDisabledYear(new Date(2019, 4, 29))).toEqual(true)
-    expect(wrapper.vm.isDisabledYear(new Date(2018, 4, 29))).toEqual(false)
-    expect(wrapper.vm.isDisabledYear(new Date(2017, 4, 29))).toEqual(false)
-    expect(wrapper.vm.isDisabledYear(new Date(2016, 4, 29))).toEqual(false)
+
+    expect(wrapper.vm.isNextDisabled).toBeTruthy()
+    expect(wrapper.vm.isPreviousDisabled).toBeTruthy()
+  })
+
+  it('knows the earliest possible year', async () => {
+    expect(wrapper.vm.earliestPossibleDate).toBeNull()
+
+    await wrapper.setProps({
+      disabledDates: {
+        to: new Date(2016, 0, 1),
+      },
+    })
+
+    expect(wrapper.vm.earliestPossibleDate.getFullYear()).toEqual(2016)
+
+    await wrapper.setProps({
+      disabledDates: {
+        ranges: [
+          {
+            from: new Date(2015, 0, 1),
+            to: new Date(2019, 0, 1),
+          },
+        ],
+        to: new Date(2016, 0, 1),
+      },
+    })
+
+    expect(wrapper.vm.earliestPossibleDate.getFullYear()).toEqual(2019)
+  })
+
+  it('knows the latest possible year', async () => {
+    expect(wrapper.vm.latestPossibleDate).toBeNull()
+
+    await wrapper.setProps({
+      disabledDates: {
+        from: new Date(2015, 11, 31),
+      },
+    })
+
+    expect(wrapper.vm.latestPossibleDate.getFullYear()).toEqual(2015)
+
+    await wrapper.setProps({
+      disabledDates: {
+        ranges: [
+          {
+            from: new Date(2013, 11, 31),
+            to: new Date(2016, 0, 1),
+          },
+        ],
+        from: new Date(2015, 11, 31),
+      },
+    })
+
+    expect(wrapper.vm.latestPossibleDate.getFullYear()).toEqual(2013)
   })
 })
