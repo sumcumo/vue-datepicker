@@ -75,33 +75,20 @@ export default {
      * @return {Array}
      */
     cells() {
-      const d = this.pageDate
+      const { utils } = this
       const months = []
-      // set up a new date object to the beginning of the current 'page'
-      const dObj = this.useUtc
-        ? new Date(Date.UTC(d.getUTCFullYear(), 0, d.getUTCDate()))
-        : new Date(
-            d.getFullYear(),
-            0,
-            d.getDate(),
-            d.getHours(),
-            d.getMinutes(),
-          )
-
-      const todayMonth = new Date(
-        this.utils.setDate(this.utils.getNewDateObject(), 1),
-      )
+      const dObj = this.firstMonthCellDate()
 
       for (let i = 0; i < 12; i += 1) {
         months.push({
-          month: this.utils.getMonthName(i, this.translation.months),
+          month: utils.getMonthName(i, this.translation.months),
           timestamp: dObj.valueOf(),
           isDisabled: this.isDisabledMonth(dObj),
           isOpenDate: this.isOpenMonth(dObj),
           isSelected: this.isSelectedMonth(dObj),
-          isToday: this.utils.compareDates(dObj, todayMonth),
+          isToday: this.isTodayMonth(dObj),
         })
-        this.utils.setMonth(dObj, this.utils.getMonth(dObj) + 1)
+        utils.setMonth(dObj, utils.getMonth(dObj) + 1)
       }
 
       return months
@@ -136,6 +123,15 @@ export default {
     },
   },
   methods: {
+    /**
+     * Set up a new date object to the first month of the current 'page'
+     * @return {Date}
+     */
+    firstMonthCellDate() {
+      const pageDate = new Date(this.pageDate)
+
+      return new Date(this.utils.setMonth(pageDate, 0))
+    },
     /**
      * Whether a month is disabled
      * @param {Date} date
@@ -176,6 +172,17 @@ export default {
         year === this.utils.getFullYear(this.selectedDate) &&
         month === this.utils.getMonth(this.selectedDate)
       )
+    },
+    /**
+     * Whether the date has the same month and year as today's date
+     * @param {Date} date
+     * @return {Boolean}
+     */
+    isTodayMonth(date) {
+      const { utils } = this
+      const todayMonth = new Date(utils.setDate(utils.getNewDateObject(), 1))
+
+      return utils.compareDates(date, todayMonth)
     },
   },
 }

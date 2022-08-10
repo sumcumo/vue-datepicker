@@ -77,35 +77,21 @@ export default {
      * Sets an array with all years to show this decade (or yearRange)
      * @return {Array}
      */
-    // eslint-disable-next-line complexity,max-statements
     cells() {
-      const d = this.pageDate
+      const { utils } = this
       const years = []
-      const year = this.useUtc
-        ? Math.floor(d.getUTCFullYear() / this.yearRange) * this.yearRange
-        : Math.floor(d.getFullYear() / this.yearRange) * this.yearRange
-      // set up a new date object to the beginning of the current 'page'
-      const dObj = this.useUtc
-        ? new Date(Date.UTC(year, d.getUTCMonth(), d.getUTCDate()))
-        : new Date(
-            year,
-            d.getMonth(),
-            d.getDate(),
-            d.getHours(),
-            d.getMinutes(),
-          )
-      const todayYear = this.utils.getFullYear(this.utils.getNewDateObject())
+      const dObj = this.firstYearCellDate()
 
       for (let i = 0; i < this.yearRange; i += 1) {
         years.push({
-          year: this.utils.getFullYear(dObj),
+          year: utils.getFullYear(dObj),
           timestamp: dObj.valueOf(),
           isDisabled: this.isDisabledYear(dObj),
           isOpenDate: this.isOpenYear(dObj),
           isSelected: this.isSelectedYear(dObj),
-          isToday: dObj.getFullYear() === todayYear,
+          isToday: this.isTodayYear(dObj),
         })
-        this.utils.setFullYear(dObj, this.utils.getFullYear(dObj) + 1)
+        utils.setFullYear(dObj, utils.getFullYear(dObj) + 1)
       }
 
       // Fill any remaining cells with blanks to position trailing cells correctly when rtl
@@ -164,6 +150,19 @@ export default {
   },
   methods: {
     /**
+     * Set up a new date object to the first year of the current 'page'
+     * @return {Date}
+     */
+    firstYearCellDate() {
+      const { utils } = this
+      const pageDate = new Date(this.pageDate)
+      const firstYear =
+        Math.floor(utils.getFullYear(pageDate) / this.yearRange) *
+        this.yearRange
+
+      return new Date(utils.setFullYear(pageDate, firstYear))
+    },
+    /**
      * Whether a year is disabled
      * @param {Date} date
      * @return {Boolean}
@@ -198,6 +197,17 @@ export default {
       return (
         this.selectedDate && year === this.utils.getFullYear(this.selectedDate)
       )
+    },
+    /**
+     * Whether the date has the same year as today's date
+     * @param {Date} date
+     * @return {Boolean}
+     */
+    isTodayYear(date) {
+      const { utils } = this
+      const todayYear = utils.getFullYear(utils.getNewDateObject())
+
+      return date.getFullYear() === todayYear
     },
   },
 }

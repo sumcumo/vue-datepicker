@@ -114,10 +114,10 @@ export default {
       const days = []
       const daysInCalendar =
         this.daysFromPrevMonth + this.daysInMonth + this.daysFromNextMonth
-      const dObj = this.firstCellDate()
+      const dObj = this.firstDayCellDate()
 
       for (let i = 0; i < daysInCalendar; i += 1) {
-        days.push(this.makeDay(i, dObj))
+        days.push(this.makeDay(dObj))
         this.utils.setDate(dObj, this.utils.getDate(dObj) + 1)
       }
 
@@ -248,24 +248,12 @@ export default {
   methods: {
     /**
      * Set up a new date object to the first day of the current 'page'
-     * @return Date
+     * @return {Date}
      */
-    firstCellDate() {
-      const d = this.pageDate
+    firstDayCellDate() {
+      const pageDate = new Date(this.pageDate)
 
-      const firstOfMonth = this.useUtc
-        ? new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1))
-        : new Date(
-            d.getFullYear(),
-            d.getMonth(),
-            1,
-            d.getHours(),
-            d.getMinutes(),
-          )
-
-      return new Date(
-        firstOfMonth.setDate(firstOfMonth.getDate() - this.daysFromPrevMonth),
-      )
+      return new Date(this.utils.setDate(pageDate, 1 - this.daysFromPrevMonth))
     },
     /**
      * Whether a day is disabled
@@ -326,28 +314,29 @@ export default {
     },
     /**
      * Defines the objects within the days array
-     * @param  {id}  id
-     * @param  {Date}  dObj
+     * @param  {Date} dObj
      * @return {Object}
      */
     // eslint-disable-next-line complexity
-    makeDay(id, dObj) {
+    makeDay(dObj) {
+      const { utils } = this
+      const dayOfWeek = utils.getDay(dObj)
       const isNextMonth = dObj >= this.firstOfNextMonth
       const isPreviousMonth = dObj < this.pageDate
-      const isSaturday = this.utils.getDay(dObj) === 6
-      const isSunday = this.utils.getDay(dObj) === 0
+      const isSaturday = dayOfWeek === 6
+      const isSunday = dayOfWeek === 0
       const showDate = this.showEdgeDates || !(isPreviousMonth || isNextMonth)
 
       return {
-        date: showDate ? this.utils.getDate(dObj) : '',
+        date: showDate ? utils.getDate(dObj) : '',
         timestamp: dObj.valueOf(),
         isSelected: this.isSelectedDate(dObj),
         isDisabled: showDate ? this.isDisabledDate(dObj) : true,
         isHighlighted: this.isHighlightedDate(dObj),
         isHighlightStart: this.isHighlightStart(dObj),
         isHighlightEnd: this.isHighlightEnd(dObj),
-        isOpenDate: this.utils.compareDates(dObj, this.openDate),
-        isToday: this.utils.compareDates(dObj, new Date()),
+        isOpenDate: utils.compareDates(dObj, this.openDate),
+        isToday: utils.compareDates(dObj, new Date()),
         isWeekend: isSaturday || isSunday,
         isSaturday,
         isSunday,
