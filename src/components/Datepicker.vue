@@ -117,7 +117,7 @@
                 @set-transition-name="setTransitionName($event)"
                 @set-view="setView"
               >
-                <template v-for="slotKey of calendarSlots" #[slotKey]>
+                <template v-for="slotKey of usedCalendarSlots" #[slotKey]>
                   <slot :name="slotKey" />
                 </template>
                 <template #dayCellContent="{ cell }">
@@ -257,7 +257,6 @@ export default {
 
     return {
       calendarHeight: 0,
-      calendarSlots,
       isClickOutside: false,
       globalDatepickerId: '',
       /*
@@ -352,6 +351,9 @@ export default {
     },
     translation() {
       return this.language
+    },
+    usedCalendarSlots() {
+      return calendarSlots.filter((slot) => this.hasSlot(slot))
     },
   },
   watch: {
