@@ -91,6 +91,10 @@ describe('Datepicker shallowMounted', () => {
 
     wrapper.vm.clearDate()
     expect(wrapper.vm.selectedDate).toEqual(null)
+    expect(wrapper.emitted('cleared')).toHaveLength(1)
+
+    wrapper.vm.clearDate()
+    expect(wrapper.emitted('cleared')).toHaveLength(1)
   })
 
   it('sets pageTimestamp to be midnight on first day of current month', () => {
