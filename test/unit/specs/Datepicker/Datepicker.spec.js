@@ -270,6 +270,22 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapper.vm.selectedDate).toBeNull()
   })
 
+  it('clears the date when it becomes disabled', async () => {
+    const someDate = new Date(2021, 0, 15)
+
+    await wrapper.setProps({
+      value: someDate,
+    })
+
+    expect(wrapper.vm.selectedDate).toBe(someDate)
+
+    await wrapper.setProps({
+      disabledDates: {
+        to: addDays(someDate, 1),
+      },
+    })
+  })
+
   it('sets the transition correctly', async () => {
     wrapper.vm.setTransitionName(1)
     expect(wrapper.vm.transitionName).toBe('slide-right')
