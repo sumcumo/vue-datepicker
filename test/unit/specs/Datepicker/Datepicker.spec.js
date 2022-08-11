@@ -59,6 +59,7 @@ describe('Datepicker shallowMounted', () => {
     const date = new Date('2016-02-20')
 
     await wrapper.setProps({
+      useUtc: true,
       value: '2016-02-20',
     })
 
@@ -163,7 +164,7 @@ describe('Datepicker shallowMounted', () => {
     const spy = vi.spyOn(wrapper.vm, 'setValue')
 
     await wrapper.setProps({
-      value: '2018-04-26',
+      value: new Date(2018, 3, 26),
     })
 
     expect(spy).toHaveBeenCalled()
@@ -257,7 +258,7 @@ describe('Datepicker shallowMounted', () => {
   })
 
   it('clears the date when it is disabled', async () => {
-    const someDate = new Date('2021-01-15')
+    const someDate = new Date(2021, 0, 15)
 
     await wrapper.setProps({
       value: someDate,
