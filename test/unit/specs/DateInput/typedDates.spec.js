@@ -301,3 +301,42 @@ describe('Datepicker mounted with showCalendarOnFocus', () => {
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
 })
+
+describe('DatePicker mounted and attached to body', () => {
+  let wrapper
+
+  beforeEach(() => {
+    wrapper = mount(Datepicker, {
+      attachTo: document.body,
+      propsData: {
+        typeable: true,
+      },
+    })
+  })
+
+  afterEach(() => {
+    wrapper.destroy()
+  })
+
+  it('arrows down from the input field to the header', async () => {
+    const input = wrapper.find('input')
+
+    await wrapper.vm.open()
+    await input.trigger('keydown.down')
+
+    const prevButton = wrapper.find('button.prev')
+
+    expect(document.activeElement).toBe(prevButton.element)
+  })
+
+  it('arrows up from the header to the input field', async () => {
+    await wrapper.vm.open()
+
+    const input = wrapper.find('input')
+    const prevButton = wrapper.find('button.prev')
+
+    await prevButton.trigger('keydown.up')
+
+    expect(document.activeElement).toBe(input.element)
+  })
+})
