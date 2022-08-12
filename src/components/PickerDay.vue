@@ -188,17 +188,6 @@ export default {
       return new Date(this.utils.setMonth(d, this.utils.getMonth(d) + 1))
     },
     /**
-     * A look-up object created from 'highlighted' prop
-     * @return {Object}
-     */
-    highlightedConfig() {
-      return new HighlightedDate(
-        this.utils,
-        this.disabledDates,
-        this.highlighted,
-      ).config
-    },
-    /**
      * Is the next month disabled?
      * @return {Boolean}
      */
