@@ -174,9 +174,7 @@ export default {
     },
     disabledDates: {
       type: Object,
-      default() {
-        return {}
-      },
+      default: null,
     },
     firstDayOfWeek: {
       type: String,
@@ -204,9 +202,7 @@ export default {
     },
     highlighted: {
       type: Object,
-      default() {
-        return {}
-      },
+      default: null,
     },
     initialView: {
       type: String,
@@ -648,8 +644,11 @@ export default {
     /**
      * Returns true if a date is disabled
      * @param {Date} date
+     * @returns {Boolean}
      */
     isDateDisabled(date) {
+      if (!this.disabledDates) return false
+
       return new DisabledDate(this.utils, this.disabledDates).isDateDisabled(
         date,
       )

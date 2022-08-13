@@ -242,6 +242,8 @@ export default {
      * @return {Boolean}
      */
     isDisabledDate(date) {
+      if (!this.disabledDates) return false
+
       return new DisabledDate(this.utils, this.disabledDates).isDateDisabled(
         date,
       )
@@ -253,6 +255,8 @@ export default {
      * @return {Boolean}
      */
     isHighlightedDate(date) {
+      if (!this.highlighted) return false
+
       return new HighlightedDate(
         this.utils,
         this.disabledDates,
@@ -265,6 +269,8 @@ export default {
      * @return {Boolean}
      */
     isHighlightEnd(date) {
+      if (!this.highlighted) return false
+
       return new HighlightedDate(
         this.utils,
         this.disabledDates,
@@ -277,6 +283,8 @@ export default {
      * @return {Boolean}
      */
     isHighlightStart(date) {
+      if (!this.highlighted) return false
+
       return new HighlightedDate(
         this.utils,
         this.disabledDates,

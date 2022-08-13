@@ -13,9 +13,7 @@ export default {
     },
     disabledDates: {
       type: Object,
-      default() {
-        return {}
-      },
+      default: null,
     },
     isRtl: {
       type: Boolean,
@@ -92,15 +90,28 @@ export default {
      * @return {Object}
      */
     disabledConfig() {
+      if (!this.disabledDates) {
+        return {
+          has: {
+            from: false,
+            to: false,
+          },
+        }
+      }
+
       return new DisabledDate(this.utils, this.disabledDates).config
     },
     earliestPossibleDate() {
+      if (!this.disabledDates) return null
+
       return new DisabledDate(
         this.utils,
         this.disabledDates,
       ).getEarliestPossibleDate(this.disabledDates.to)
     },
     latestPossibleDate() {
+      if (!this.disabledDates) return null
+
       return new DisabledDate(
         this.utils,
         this.disabledDates,

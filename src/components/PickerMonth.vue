@@ -130,6 +130,8 @@ export default {
      * @return {Boolean}
      */
     isDisabledMonth(date) {
+      if (!this.disabledDates) return false
+
       return new DisabledDate(this.utils, this.disabledDates).isMonthDisabled(
         date,
       )

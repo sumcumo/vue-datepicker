@@ -161,6 +161,8 @@ export default {
      * @return {Boolean}
      */
     isDisabledYear(date) {
+      if (!this.disabledDates) return false
+
       return new DisabledDate(this.utils, this.disabledDates).isYearDisabled(
         date,
       )

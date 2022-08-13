@@ -11,20 +11,20 @@ export default class DisabledDate {
   get config() {
     const disabledDates = this._disabledDates
     const utils = makeCellUtils(this._utils)
+    const has = {
+      customPredictor: utils.isDefined(disabledDates, 'customPredictor'),
+      daysOfMonth: utils.hasArray(disabledDates, 'daysOfMonth'),
+      daysOfWeek: utils.hasArray(disabledDates, 'days'),
+      from: utils.hasDate(disabledDates, 'from'),
+      ranges: utils.hasArray(disabledDates, 'ranges'),
+      specificDates: utils.hasArray(disabledDates, 'dates'),
+      to: utils.hasDate(disabledDates, 'to'),
+    }
 
     return {
-      exists: utils.configExists(disabledDates),
       to: utils.dayMonthYear(disabledDates, 'to'),
       from: utils.dayMonthYear(disabledDates, 'from'),
-      has: {
-        customPredictor: utils.isDefined(disabledDates, 'customPredictor'),
-        daysOfMonth: utils.hasArray(disabledDates, 'daysOfMonth'),
-        daysOfWeek: utils.hasArray(disabledDates, 'days'),
-        from: utils.hasDate(disabledDates, 'from'),
-        ranges: utils.hasArray(disabledDates, 'ranges'),
-        specificDates: utils.hasArray(disabledDates, 'dates'),
-        to: utils.hasDate(disabledDates, 'to'),
-      },
+      has,
     }
   }
 
@@ -135,8 +135,6 @@ export default class DisabledDate {
    */
   // eslint-disable-next-line complexity,max-statements
   isDateDisabled(date) {
-    if (!this.config.exists) return false
-
     const isDisabledVia = this.isDateDisabledVia(date)
 
     return (
@@ -157,12 +155,7 @@ export default class DisabledDate {
    */
   // eslint-disable-next-line complexity,max-statements
   isMonthDisabled(date) {
-    const { config } = this
     const isDisabledVia = this.isMonthDisabledVia(date)
-
-    if (!config.exists) {
-      return false
-    }
 
     if (isDisabledVia.to() || isDisabledVia.from()) {
       return true
@@ -189,12 +182,7 @@ export default class DisabledDate {
    */
   // eslint-disable-next-line complexity,max-statements
   isYearDisabled(date) {
-    const { config } = this
     const isDisabledVia = this.isYearDisabledVia(date)
-
-    if (!config.exists) {
-      return false
-    }
 
     if (isDisabledVia.to() || isDisabledVia.from()) {
       return true
