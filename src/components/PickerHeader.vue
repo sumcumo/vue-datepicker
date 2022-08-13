@@ -7,9 +7,9 @@
       data-test-previous-button
       :disabled="isPreviousDisabled"
       type="button"
-      @click.stop="$emit('page-change', previousPage)"
+      @click.stop="goToPreviousPage"
       @keydown.down.prevent="focusTabbableCell"
-      @keydown.up.prevent="$emit('focus-input')"
+      @keydown.up.prevent="focusInput"
       @keydown.left.prevent="arrowLeftPrev"
       @keydown.right.prevent="arrowRightPrev"
     >
@@ -25,9 +25,9 @@
       data-test-next-button
       :disabled="isNextDisabled"
       type="button"
-      @click.stop="$emit('page-change', nextPage)"
+      @click.stop="goToNextPage"
       @keydown.down.prevent="focusTabbableCell"
-      @keydown.up.prevent="$emit('focus-input')"
+      @keydown.up.prevent="focusInput"
       @keydown.left.prevent="arrowLeftNext"
       @keydown.right.prevent="arrowRightNext"
     >
@@ -59,12 +59,6 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      previousPage: { incrementBy: -1, focusRefs: ['prev'] },
-      nextPage: { incrementBy: 1, focusRefs: ['next'] },
-    }
-  },
   methods: {
     /**
      * Changes the page, or sets focus to the adjacent button
@@ -74,14 +68,14 @@ export default {
         this.$emit('set-focus', ['up', 'next', 'tabbableCell'])
         return
       }
-      this.$emit('page-change', this.previousPage)
+      this.goToPreviousPage()
     },
     /**
      * Changes the page, or sets focus to the adjacent button
      */
     arrowRightPrev() {
       if (this.isRtl) {
-        this.$emit('page-change', this.previousPage)
+        this.goToPreviousPage()
         return
       }
       this.$emit('set-focus', ['up', 'next', 'tabbableCell'])
@@ -91,7 +85,7 @@ export default {
      */
     arrowLeftNext() {
       if (this.isRtl) {
-        this.$emit('page-change', this.nextPage)
+        this.goToNextPage()
         return
       }
       this.$emit('set-focus', ['up', 'prev', 'tabbableCell'])
@@ -104,10 +98,19 @@ export default {
         this.$emit('set-focus', ['up', 'prev', 'tabbableCell'])
         return
       }
-      this.$emit('page-change', this.nextPage)
+      this.goToNextPage()
+    },
+    focusInput() {
+      this.$emit('focus-input')
     },
     focusTabbableCell() {
       this.$emit('set-focus', ['tabbableCell'])
+    },
+    goToNextPage() {
+      this.$emit('page-change', { incrementBy: 1, focusRefs: ['next'] })
+    },
+    goToPreviousPage() {
+      this.$emit('page-change', { incrementBy: -1, focusRefs: ['prev'] })
     },
   },
 }

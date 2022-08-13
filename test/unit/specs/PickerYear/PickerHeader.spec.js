@@ -39,6 +39,58 @@ describe('PickerHeader shallowMounted', () => {
     expect(wrapper.emitted('focus-input')).toBeTruthy()
   })
 
+  it('arrows right to the `up` button from the `previous` button', async () => {
+    const prevButton = wrapper.find('button.prev')
+    await prevButton.trigger('keydown.right')
+
+    expect(wrapper.emitted('set-focus')[0][0]).toEqual([
+      'up',
+      'next',
+      'tabbableCell',
+    ])
+  })
+
+  it('arrows left to the `up` button from the `previous` button when RTL', async () => {
+    await wrapper.setProps({
+      isRtl: true,
+    })
+
+    const prevButton = wrapper.find('button.prev')
+    await prevButton.trigger('keydown.left')
+
+    expect(wrapper.emitted('set-focus')[0][0]).toEqual([
+      'up',
+      'next',
+      'tabbableCell',
+    ])
+  })
+
+  it('arrows left to the `up` button from the `next` button', async () => {
+    const nextButton = wrapper.find('button.next')
+    await nextButton.trigger('keydown.left')
+
+    expect(wrapper.emitted('set-focus')[0][0]).toEqual([
+      'up',
+      'prev',
+      'tabbableCell',
+    ])
+  })
+
+  it('arrows right to the `up` button from the `next` button when RTL', async () => {
+    await wrapper.setProps({
+      isRtl: true,
+    })
+
+    const nextButton = wrapper.find('button.next')
+    await nextButton.trigger('keydown.right')
+
+    expect(wrapper.emitted('set-focus')[0][0]).toEqual([
+      'up',
+      'prev',
+      'tabbableCell',
+    ])
+  })
+
   it('decrements the page on clicking the `previous` button', async () => {
     const prevButton = wrapper.find('button.prev')
     await prevButton.trigger('click')
@@ -105,57 +157,5 @@ describe('PickerHeader shallowMounted', () => {
       incrementBy: 1,
       focusRefs: ['next'],
     })
-  })
-
-  it('focuses the `up` button on pressing the `right` arrow key on the `previous` button', async () => {
-    const prevButton = wrapper.find('button.prev')
-    await prevButton.trigger('keydown.right')
-
-    expect(wrapper.emitted('set-focus')[0][0]).toEqual([
-      'up',
-      'next',
-      'tabbableCell',
-    ])
-  })
-
-  it('focuses the `up` button on pressing the `left` arrow key on the `previous` button when RTL', async () => {
-    await wrapper.setProps({
-      isRtl: true,
-    })
-
-    const prevButton = wrapper.find('button.prev')
-    await prevButton.trigger('keydown.left')
-
-    expect(wrapper.emitted('set-focus')[0][0]).toEqual([
-      'up',
-      'next',
-      'tabbableCell',
-    ])
-  })
-
-  it('focuses the `up` button on pressing the `left` arrow key on the `next` button', async () => {
-    const nextButton = wrapper.find('button.next')
-    await nextButton.trigger('keydown.left')
-
-    expect(wrapper.emitted('set-focus')[0][0]).toEqual([
-      'up',
-      'prev',
-      'tabbableCell',
-    ])
-  })
-
-  it('focuses the `up` button on pressing the `right` arrow key on the `next` button when RTL', async () => {
-    await wrapper.setProps({
-      isRtl: true,
-    })
-
-    const nextButton = wrapper.find('button.next')
-    await nextButton.trigger('keydown.right')
-
-    expect(wrapper.emitted('set-focus')[0][0]).toEqual([
-      'up',
-      'prev',
-      'tabbableCell',
-    ])
   })
 })
