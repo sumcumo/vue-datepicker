@@ -484,6 +484,10 @@ export default {
 
       return true
     },
+    /**
+     * Emits `focus` when the datepicker receives focus (and for an `inline`
+     * datepicker, ensures the correct cell is tabbed to)
+     */
     datepickerIsActive() {
       this.$emit('focus')
 
@@ -492,6 +496,9 @@ export default {
         this.tabToCorrectInlineCell()
       }
     },
+    /**
+     * Emits `blur` when the datepicker loses focus (and selects a typed date)
+     */
     datepickerIsInactive() {
       this.$emit('blur')
 

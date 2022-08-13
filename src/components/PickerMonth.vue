@@ -144,12 +144,11 @@ export default {
     },
     /**
      * Should the calendar open on this month?
+     * @param {Date} date
      * @return {Boolean}
      */
     isOpenMonth(date) {
-      if (!this.openDate) {
-        return false
-      }
+      if (!this.openDate) return false
 
       const openDateMonth = this.utils.getMonth(this.openDate)
       const openDateYear = this.utils.getFullYear(this.openDate)
