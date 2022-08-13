@@ -186,6 +186,8 @@ export default {
      * @return {Boolean}
      */
     isSelectedYear(date) {
+      if (!this.selectedDate) return false
+
       const year = this.utils.getFullYear(date)
 
       return (

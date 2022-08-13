@@ -157,6 +157,8 @@ export default {
      * @return {Boolean}
      */
     isSelectedMonth(date) {
+      if (!this.selectedDate) return false
+
       const month = this.utils.getMonth(date)
       const year = this.utils.getFullYear(date)
 

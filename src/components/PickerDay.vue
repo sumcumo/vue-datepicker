@@ -297,6 +297,8 @@ export default {
      * @return {Boolean}
      */
     isSelectedDate(dObj) {
+      if (!this.selectedDate) return false
+
       return this.utils.compareDates(this.selectedDate, dObj)
     },
     /**
