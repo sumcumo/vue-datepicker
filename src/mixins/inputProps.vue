@@ -48,11 +48,6 @@ export default {
     openDate: {
       type: [String, Date, Number],
       default: null,
-      validator: (val) =>
-        val === null ||
-        val instanceof Date ||
-        typeof val === 'string' ||
-        typeof val === 'number',
     },
     parser: {
       type: Function,

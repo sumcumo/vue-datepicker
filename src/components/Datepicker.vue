@@ -231,11 +231,6 @@ export default {
     value: {
       type: [String, Date, Number],
       default: null,
-      validator: (val) =>
-        val === null ||
-        val instanceof Date ||
-        typeof val === 'string' ||
-        typeof val === 'number',
     },
     wrapperClass: {
       type: [String, Object, Array],
