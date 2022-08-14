@@ -473,17 +473,6 @@ export default {
 
       this.$emit('closed')
     },
-    closeByClickOutside() {
-      this.isClickOutside = true
-      this.close()
-    },
-    closeIfNotFocused() {
-      const isFocused = this.allElements.includes(document.activeElement)
-
-      if (!isFocused) {
-        this.closeByClickOutside()
-      }
-    },
     dateChanged(date) {
       if (!this.selectedDate && !date) {
         return false
