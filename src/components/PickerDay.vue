@@ -11,24 +11,17 @@
       :is-next-disabled="isNextDisabled"
       :is-previous-disabled="isPreviousDisabled"
       :is-rtl="isRtl"
+      :is-up-disabled="isUpDisabled"
+      next-view-up="month"
       @focus-input="focusInput"
       @page-change="changePage($event)"
       @set-focus="$emit('set-focus', $event)"
+      @set-view="$emit('set-view', $event)"
     >
       <template #prevIntervalBtn>
         <slot name="prevIntervalBtn" />
       </template>
-      <UpButton
-        ref="up"
-        :class="{ btn: bootstrapStyling }"
-        :is-disabled="isUpDisabled"
-        :is-rtl="isRtl"
-        @focus-input="focusInput"
-        @select="$emit('set-view', 'month')"
-        @set-focus="$emit('set-focus', $event)"
-      >
-        {{ pageTitleDay }}
-      </UpButton>
+      {{ pageTitleDay }}
       <template #nextIntervalBtn>
         <slot name="nextIntervalBtn" />
       </template>
@@ -75,11 +68,10 @@ import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
 import HighlightedDate from '~/utils/HighlightedDate'
 import PickerCells from './PickerCells.vue'
-import UpButton from './UpButton.vue'
 
 export default {
   name: 'PickerDay',
-  components: { PickerCells, UpButton },
+  components: { PickerCells },
   mixins: [pickerMixin],
   props: {
     dayCellContent: {

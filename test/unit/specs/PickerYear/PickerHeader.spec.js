@@ -91,6 +91,42 @@ describe('PickerHeader shallowMounted', () => {
     ])
   })
 
+  it('arrows left to the `previous` button from the `up` button', async () => {
+    const upButton = wrapper.find('button.vdp-datepicker__up')
+    await upButton.trigger('keydown.left')
+
+    expect(wrapper.emitted('set-focus')[0][0]).toEqual(['prev'])
+  })
+
+  it('arrows right to the `previous` button from the `up` button when RTL', async () => {
+    await wrapper.setProps({
+      isRtl: true,
+    })
+
+    const upButton = wrapper.find('button.vdp-datepicker__up')
+    await upButton.trigger('keydown.right')
+
+    expect(wrapper.emitted('set-focus')[0][0]).toEqual(['prev'])
+  })
+
+  it('arrows right to the `next` button from the `up` button', async () => {
+    const upButton = wrapper.find('button.vdp-datepicker__up')
+    await upButton.trigger('keydown.right')
+
+    expect(wrapper.emitted('set-focus')[0][0]).toEqual(['next'])
+  })
+
+  it('arrows left to the `next` button from the `up` button when RTL', async () => {
+    await wrapper.setProps({
+      isRtl: true,
+    })
+
+    const upButton = wrapper.find('button.vdp-datepicker__up')
+    await upButton.trigger('keydown.left')
+
+    expect(wrapper.emitted('set-focus')[0][0]).toEqual(['next'])
+  })
+
   it('decrements the page on clicking the `previous` button', async () => {
     const prevButton = wrapper.find('button.prev')
     await prevButton.trigger('click')

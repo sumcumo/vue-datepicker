@@ -17,7 +17,21 @@
         <span class="default">&lt;</span>
       </slot>
     </button>
-    <slot />
+    <button
+      ref="up"
+      class="vdp-datepicker__up"
+      :class="{ btn: bootstrapStyling }"
+      data-test-up-button
+      :disabled="isUpDisabled"
+      type="button"
+      @click="selectUpButton"
+      @keydown.down.prevent="focusTabbableCell"
+      @keydown.up.prevent="focusInput"
+      @keydown.left.prevent="focusLeftButton"
+      @keydown.right.prevent="focusRightButton"
+    >
+      <slot />
+    </button>
     <button
       ref="next"
       class="next"
@@ -57,6 +71,22 @@ export default {
     isRtl: {
       type: Boolean,
       required: true,
+    },
+    isUpDisabled: {
+      type: Boolean,
+      default: false,
+    },
+    nextViewUp: {
+      type: String,
+      default: null,
+    },
+  },
+  computed: {
+    leftButton() {
+      return [this.isRtl ? 'next' : 'prev']
+    },
+    rightButton() {
+      return [this.isRtl ? 'prev' : 'next']
     },
   },
   methods: {
@@ -106,11 +136,22 @@ export default {
     focusTabbableCell() {
       this.$emit('set-focus', ['tabbableCell'])
     },
+    focusLeftButton() {
+      this.$emit('set-focus', this.leftButton)
+    },
+    focusRightButton() {
+      this.$emit('set-focus', this.rightButton)
+    },
     goToNextPage() {
       this.$emit('page-change', { incrementBy: 1, focusRefs: ['next'] })
     },
     goToPreviousPage() {
       this.$emit('page-change', { incrementBy: -1, focusRefs: ['prev'] })
+    },
+    selectUpButton() {
+      if (!this.isUpDisabled) {
+        this.$emit('set-view', this.nextViewUp)
+      }
     },
   },
 }

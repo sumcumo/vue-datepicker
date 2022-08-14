@@ -162,9 +162,6 @@ export default {
         return this.$refs.picker.$refs.cells.$refs.openDate[0]
       }
       if (this.showHeader) {
-        if (ref === 'up') {
-          return this.$refs.picker && this.$refs.picker.$refs.up.$el
-        }
         return (
           this.$refs.picker &&
           this.$refs.picker.$refs.pickerHeader &&

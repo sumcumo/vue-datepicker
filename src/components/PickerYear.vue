@@ -11,6 +11,7 @@
       :is-next-disabled="isNextDisabled"
       :is-previous-disabled="isPreviousDisabled"
       :is-rtl="isRtl"
+      :is-up-disabled="true"
       @focus-input="focusInput"
       @page-change="changePage($event)"
       @set-focus="$emit('set-focus', $event)"
@@ -18,14 +19,7 @@
       <template #prevIntervalBtn>
         <slot name="prevIntervalBtn" />
       </template>
-      <UpButton
-        ref="up"
-        :class="{ btn: bootstrapStyling }"
-        :is-disabled="true"
-        :is-rtl="isRtl"
-      >
-        {{ pageTitleYear }}
-      </UpButton>
+      {{ pageTitleYear }}
       <template #nextIntervalBtn>
         <slot name="nextIntervalBtn" />
       </template>
@@ -60,11 +54,10 @@
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
 import PickerCells from './PickerCells.vue'
-import UpButton from './UpButton.vue'
 
 export default {
   name: 'PickerYear',
-  components: { PickerCells, UpButton },
+  components: { PickerCells },
   mixins: [pickerMixin],
   props: {
     yearRange: {
