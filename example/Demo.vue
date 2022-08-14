@@ -102,7 +102,7 @@
       <Datepicker v-model="vModelExample" placeholder="Select Date" />
       <code>
         &lt;datepicker placeholder="Select Date"
-        v-model="vmodelexample"&gt;&lt;/datepicker&gt;
+        v-model="vModelExample"&gt;&lt;/datepicker&gt;
       </code>
       <hr />
       <p>{{ vModelExample }}</p>
@@ -229,9 +229,7 @@
           highlighted: {
             customPredictor: function (date) {
               // highlights every day of a month which is a multiple of 4
-              if (date.getDate() % 4 === 0) {
-                return true
-              }
+              return date.getDate() % 4 === 0
             }
           }
         </pre>
@@ -438,10 +436,7 @@ export default {
             return true
           }
           // disable first half of the month when it is a multiple of 2
-          if (month % 2 !== 0 && day < 15) {
-            return true
-          }
-          return false
+          return month % 2 !== 0 && day < 15
         },
       },
       disabledFnContent: `disabledDates: {
@@ -458,10 +453,7 @@ export default {
             return true
           }
           // disable first half of the month when it is a multiple of 2
-          if (month % 2 !== 0 && day < 15) {
-            return true
-          }
-          return false
+          return month % 2 !== 0 && day < 15
         }
       }`,
       eventMsg: null,
@@ -479,10 +471,7 @@ export default {
       highlighted: {},
       highlightedFn: {
         customPredictor(date) {
-          if (date.getDate() % 4 === 0) {
-            return true
-          }
-          return false
+          return date.getDate() % 4 === 0
         },
       },
       language: 'en',
