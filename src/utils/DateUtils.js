@@ -378,16 +378,15 @@ const utils = {
   },
 
   /**
-   * Create a date object, using UTC or not
-   * @param {Number}  year
-   * @param {Number=} monthIndex
-   * @param {Number=} day
+   * Create a date object from a month and year, using UTC or not
+   * @param {Number} year
+   * @param {Number} monthIndex
    * @return {Date}
    */
-  createDateTime(year, monthIndex = 0, day = 1) {
+  monthYearDate(year, monthIndex) {
     return this.useUtc
-      ? new Date(Date.UTC(year, monthIndex, day))
-      : new Date(year, monthIndex, day)
+      ? new Date(Date.UTC(year, monthIndex, 1))
+      : new Date(year, monthIndex, 1)
   },
 
   /**

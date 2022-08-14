@@ -189,8 +189,8 @@ export default {
       }
 
       const { from } = this.disabledConfig
-      const disabledFromMonth = this.utils.createDateTime(from.year, from.month)
-      const pageMonth = this.utils.createDateTime(this.pageYear, this.pageMonth)
+      const disabledFromMonth = this.utils.monthYearDate(from.year, from.month)
+      const pageMonth = this.utils.monthYearDate(this.pageYear, this.pageMonth)
 
       return disabledFromMonth <= pageMonth
     },
@@ -204,8 +204,8 @@ export default {
       }
 
       const { to } = this.disabledConfig
-      const disabledToMonth = this.utils.createDateTime(to.year, to.month)
-      const pageMonth = this.utils.createDateTime(this.pageYear, this.pageMonth)
+      const disabledToMonth = this.utils.monthYearDate(to.year, to.month)
+      const pageMonth = this.utils.monthYearDate(this.pageYear, this.pageMonth)
 
       return disabledToMonth >= pageMonth
     },

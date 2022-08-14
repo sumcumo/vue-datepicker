@@ -309,4 +309,11 @@ describe('UTC functions', () => {
     expect(dateUtils.getTime()).toEqual('T00:00:00')
     expect(utcUtils.getTime()).toEqual('T00:00:00Z')
   })
+
+  it('monthYearDate', () => {
+    expect(dateUtils.monthYearDate(2000, 0)).toEqual(new Date(2000, 0, 1))
+    expect(utcUtils.monthYearDate(2000, 0)).toEqual(
+      new Date(Date.UTC(2000, 0, 1)),
+    )
+  })
 })
