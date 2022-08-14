@@ -365,13 +365,12 @@ export default {
           return
         }
 
-        const isDateDisabled = this.isDateDisabled(selectedDate)
+        if (this.isDateDisabled(selectedDate) && this.selectedDate) {
+          this.selectDate(null)
+          return
+        }
 
-        if (isDateDisabled) {
-          if (this.selectedDate) {
-            this.selectDate(null)
-          }
-        } else if (this.dateChanged(selectedDate)) {
+        if (this.dateHasChanged(selectedDate)) {
           this.selectDate(selectedDate)
         }
       },
@@ -473,16 +472,13 @@ export default {
 
       this.$emit('closed')
     },
-    dateChanged(date) {
-      if (!this.selectedDate && !date) {
-        return false
-      }
-
-      if (this.selectedDate && date) {
-        return date.valueOf() !== this.selectedDate.valueOf()
-      }
-
-      return true
+    /**
+     * Returns true if the given date differs from the `selectedDate`
+     * @param   {Date} date The date to check
+     * @returns {Boolean}
+     */
+    dateHasChanged(date) {
+      return !this.utils.compareDates(date, this.selectedDate)
     },
     /**
      * Emits `focus` when the datepicker receives focus (and for an `inline`
@@ -717,7 +713,7 @@ export default {
      * @param {Date|null} date
      */
     selectDate(date) {
-      if (this.dateChanged(date)) {
+      if (this.dateHasChanged(date)) {
         this.$emit('changed', date)
       }
 
@@ -744,7 +740,7 @@ export default {
       const parsedDate = this.$refs.dateInput.parseInput()
       const date = this.utils.isValidDate(parsedDate) ? parsedDate : null
 
-      if (this.dateChanged(date)) {
+      if (this.dateHasChanged(date)) {
         this.selectDate(date)
       }
     },
