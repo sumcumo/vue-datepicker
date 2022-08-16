@@ -6,11 +6,8 @@
 | autofocus                     | Boolean                       | false       | Sets html `autofocus` attribute on input                                                                                         |
 | bootstrap-styling             | Boolean                       | false       | Use bootstrap v4 styling classes.                                                                                                |
 | calendar-button               | Boolean                       | false       | Show an button that opens/closes the datepicker. Customisable via [slots](../Slots/README.md)                                    |
-| calendar-button-icon          | String                        |             | (Deprecated for slot) Use icon for button (ex: fa fa-calendar)                                                                   |
-| calendar-button-icon-content  | String                        |             | (Deprecated for slot) Use for material-icons (ex: event)                                                                         |
 | calendar-class                | String&#124;Object            |             | CSS class applied to the calendar el                                                                                             |
 | clear-button                  | Boolean                       | false       | Show a button for clearing the date. Customisable via [slots](../Slots/README.md)                                                |
-| clear-button-icon             | String                        |             | (Deprecated for slot) Use icon for button (ex: fa fa-times)                                                                      |
 | day-cell-content              | Function                      |             | Use to render custom content in day cell                                                                                         |
 | disabled                      | Boolean                       | false       | If `true`, disable datepicker on screen                                                                                          |
 | disabled-dates                | Object                        |             | See [Disabled Dates](../DisabledDates/README.md) for configuration                                                               |

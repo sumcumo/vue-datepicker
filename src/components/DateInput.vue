@@ -14,12 +14,7 @@
       @focus="handleButtonFocus"
     >
       <span :class="{ 'input-group-text': bootstrapStyling }">
-        <slot name="calendarBtn">
-          <i :class="calendarButtonIcon">
-            {{ calendarButtonIconContent }}
-            <span v-if="!calendarButtonIcon">&hellip;</span>
-          </i>
-        </slot>
+        <slot name="calendarBtn">&hellip;</slot>
       </span>
     </button>
     <!-- Input -->
@@ -65,11 +60,7 @@
       @click="clearDate"
     >
       <span :class="{ 'input-group-text': bootstrapStyling }">
-        <slot name="clearBtn">
-          <i :class="clearButtonIcon">
-            <span v-if="!clearButtonIcon">&times;</span>
-          </i>
-        </slot>
+        <slot name="clearBtn">&times;</slot>
       </span>
     </button>
     <slot name="afterDateInput" />

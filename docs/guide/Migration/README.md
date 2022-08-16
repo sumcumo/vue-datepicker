@@ -7,6 +7,7 @@
 - a new `changed` event is emitted whenever the selected date deviates from its previous value.
 - the `focus` and `blur` events now refer to the whole datepicker, not just the input field.
 - the `disabled-dates` prop is now watched for changes with the value of any selected date being nullified if that date is disabled.
+- the previously deprecated `calendar-button-icon`, `calendar-button-icon-content` and `clear-button-icon` props have been removed. Use [slots](../Slots/README.md) instead.
 
 ## 3.x.x to 4.x.x
 
