@@ -85,7 +85,7 @@ export default {
       for (let i = 0; i < focusRefs.length; i += 1) {
         const element = this.getElementByRef(focusRefs[i])
 
-        if (element && !element.getAttribute('disabled')) {
+        if (element && element.getAttribute('disabled') === null) {
           element.focus()
           this.setNavElementsFocusedIndex()
           break
