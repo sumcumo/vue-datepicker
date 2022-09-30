@@ -52,6 +52,14 @@ export default {
       required: true,
     },
   },
+  emits: {
+    arrow(config) {
+      return typeof config === 'object'
+    },
+    select(cell) {
+      return typeof cell === 'object'
+    },
+  },
   computed: {
     /**
      * The number of columns in the picker

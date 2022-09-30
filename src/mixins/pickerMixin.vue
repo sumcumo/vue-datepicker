@@ -73,6 +73,23 @@ export default {
       default: 'day',
     },
   },
+  emits: {
+    'page-change': (config) => {
+      return typeof config === 'object'
+    },
+    'select': (cell) => {
+      return typeof cell === 'object'
+    },
+    'set-focus': (refArray) => {
+      return refArray === ['input']
+    },
+    'set-skip-review-focus': (value) => {
+      return typeof value === 'boolean'
+    },
+    'set-transition-name': (incrementBy) => {
+      return incrementBy === -1 || incrementBy === 1
+    },
+  },
   data() {
     return {
       utils: makeDateUtils(this.useUtc),

@@ -90,6 +90,32 @@ export default {
       },
     },
   },
+  emits: {
+    'blur': null,
+    'clear-date': null,
+    'close': null,
+    'focus': null,
+    'open': null,
+    'select-typed-date': (date) =>{
+      return date === null || date instanceof Date
+    },
+    'set-focus': (refArray) => {
+      return refArray.every((ref) => {
+        return [
+          'calendarButton',
+          'input',
+          'prev',
+          'up',
+          'next',
+          'tabbableCell',
+        ].includes(ref)
+      })
+    },
+    'tab': null,
+    'typed-date': (date) => {
+      return date === null || date instanceof Date
+    },
+  },
   data() {
     return {
       input: null,

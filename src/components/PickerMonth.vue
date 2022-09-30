@@ -61,6 +61,16 @@ export default {
   name: 'PickerMonth',
   components: { PickerCells },
   mixins: [pickerMixin],
+  emits: {
+    'set-focus': (refArray) => {
+      return refArray.every((ref) => {
+        return ['input', 'prev', 'up', 'next', 'tabbableCell'].includes(ref)
+      })
+    },
+    'set-view': (view) => {
+      return view === 'year'
+    },
+  },
   computed: {
     /**
      * Sets an array with all months to show this year

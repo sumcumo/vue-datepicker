@@ -241,7 +241,29 @@ export default {
       default: 10,
     },
   },
-  emits: ['update:modelValue'],
+  emits: {
+    'blur': null,
+    'changed': null,
+    'cleared': null,
+    'closed': null,
+    'focus': null,
+    'opened': null,
+    'changed-month': (date) => {
+      return typeof date === 'object'
+    },
+    'changed-year': (date) => {
+      return typeof date === 'object'
+    },
+    'changed-decade': (date) => {
+      return typeof date === 'object'
+    },
+    'selected': (date) => {
+      return date instanceof Date || date === null
+    },
+    'update:modelValue': (date) => {
+      return date instanceof Date || date === null
+    },
+  },
   data() {
     const utils = makeDateUtils(this.useUtc)
     const startDate = utils.getNewDateObject(this.openDate || null)

@@ -81,6 +81,26 @@ export default {
       default: null,
     },
   },
+  emits: {
+    'focus-input': null,
+    'page-change': (page) => {
+      return typeof page === 'object'
+    },
+    'set-focus': (refArray) => {
+      return refArray.every((ref) => {
+        return ['input', 'prev', 'up', 'next', 'tabbableCell'].includes(ref)
+      })
+    },
+    setView: (view) => {
+      return ['day', 'month', 'year'].includes(view)
+    },
+  },
+  data() {
+    return {
+      previousPage: { incrementBy: -1, focusRefs: ['prev'] },
+      nextPage: { incrementBy: 1, focusRefs: ['next'] },
+    }
+  },
   computed: {
     leftButton() {
       return [this.isRtl ? 'next' : 'prev']

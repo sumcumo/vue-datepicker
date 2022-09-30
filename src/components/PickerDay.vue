@@ -97,6 +97,16 @@ export default {
       default: true,
     },
   },
+  emits: {
+    'set-focus': (refArray) => {
+      return refArray.every((ref) => {
+        return ['input', 'prev', 'up', 'next', 'tabbableCell'].includes(ref)
+      })
+    },
+    'set-view': (view) => {
+      return view === 'month'
+    },
+  },
   computed: {
     /**
      * Sets an array with all days to show this month

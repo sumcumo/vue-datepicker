@@ -65,6 +65,13 @@ export default {
       default: 10,
     },
   },
+  emits: {
+    'set-focus': (refArray) => {
+      return refArray.every((ref) => {
+        return ['input', 'prev', 'up', 'next', 'tabbableCell'].includes(ref)
+      })
+    },
+  },
   computed: {
     /**
      * Sets an array with all years to show this decade (or yearRange)
