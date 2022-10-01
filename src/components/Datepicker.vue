@@ -276,7 +276,8 @@ export default {
       return this.initialView || this.minimumView
     },
     computedOpenDate() {
-      const openDateOrToday = this.utils.getNewDateObject(this.openDate || null)
+      const parsedOpenDate = this.parseValue(this.openDate)
+      const openDateOrToday = this.utils.getNewDateObject(parsedOpenDate)
       const openDate = this.selectedDate || openDateOrToday
 
       // If the `minimum-view` is `month` or `year`, convert `openDate` accordingly
