@@ -206,23 +206,6 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapper.vm.picker).toBe('PickerYear')
   })
 
-  it('knows the next view up / down', () => {
-    wrapper.vm.setView('day')
-
-    expect(wrapper.vm.nextView.down).toBeUndefined()
-    expect(wrapper.vm.nextView.up).toBe('month')
-
-    wrapper.vm.setView('month')
-
-    expect(wrapper.vm.nextView.down).toBe('day')
-    expect(wrapper.vm.nextView.up).toBe('year')
-
-    wrapper.vm.setView('year')
-
-    expect(wrapper.vm.nextView.down).toBe('month')
-    expect(wrapper.vm.nextView.up).toBe('decade')
-  })
-
   it('emits changedMonth/Year/Decade', () => {
     const pageDate = new Date(2016, 2, 1)
 
@@ -412,6 +395,23 @@ describe('Datepicker mounted', () => {
 
     wrapper.vm.setTransitionName(-1)
     expect(wrapper.vm.transitionName).toBe('slide-right')
+  })
+
+  it('knows the next view up / down', () => {
+    wrapper.vm.setView('day')
+
+    expect(wrapper.vm.nextView.down).toBeUndefined()
+    expect(wrapper.vm.nextView.up).toBe('month')
+
+    wrapper.vm.setView('month')
+
+    expect(wrapper.vm.nextView.down).toBe('day')
+    expect(wrapper.vm.nextView.up).toBe('year')
+
+    wrapper.vm.setView('year')
+
+    expect(wrapper.vm.nextView.down).toBe('month')
+    expect(wrapper.vm.nextView.up).toBe('decade')
   })
 })
 
