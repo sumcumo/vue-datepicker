@@ -268,28 +268,6 @@ describe('Datepicker shallowMounted', () => {
       },
     })
   })
-
-  it('sets the transition correctly', async () => {
-    wrapper.vm.setTransitionName(1)
-    expect(wrapper.vm.transitionName).toBe('slide-right')
-
-    wrapper.vm.setTransitionName(-1)
-    expect(wrapper.vm.transitionName).toBe('slide-left')
-
-    await wrapper.setData({
-      translation: { rtl: true },
-    })
-
-    wrapper.vm.setTransitionName(1)
-    expect(wrapper.vm.transitionName).toBe('slide-left')
-
-    wrapper.vm.setTransitionName(-1)
-    expect(wrapper.vm.transitionName).toBe('slide-right')
-
-    await wrapper.setData({
-      translation: { rtl: false },
-    })
-  })
 })
 
 describe('Datepicker mounted', () => {
@@ -416,6 +394,24 @@ describe('Datepicker mounted', () => {
 
     datepicker = wrapper.find('.vdp-datepicker__calendar')
     expect(datepicker.element.className).toContain('rtl')
+  })
+
+  it('sets the transition correctly', async () => {
+    wrapper.vm.setTransitionName(1)
+    expect(wrapper.vm.transitionName).toBe('slide-right')
+
+    wrapper.vm.setTransitionName(-1)
+    expect(wrapper.vm.transitionName).toBe('slide-left')
+
+    await wrapper.setProps({
+      language: he,
+    })
+
+    wrapper.vm.setTransitionName(1)
+    expect(wrapper.vm.transitionName).toBe('slide-left')
+
+    wrapper.vm.setTransitionName(-1)
+    expect(wrapper.vm.transitionName).toBe('slide-right')
   })
 })
 
