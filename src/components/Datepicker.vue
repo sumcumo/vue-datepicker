@@ -382,7 +382,7 @@ export default {
           return
         }
 
-        if (this.isDateDisabled(selectedDate) && this.selectedDate) {
+        if (this.isDateDisabled(selectedDate) && selectedDate) {
           this.selectDate(null)
           return
         }
