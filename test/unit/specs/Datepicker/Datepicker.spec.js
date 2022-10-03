@@ -206,27 +206,6 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapper.vm.picker).toBe('PickerYear')
   })
 
-  it('sets picker classes correctly', async () => {
-    await wrapper.setProps({
-      calendarClass: 'my-calendar-class',
-      inline: true,
-    })
-
-    const datepicker = wrapper.find('.vdp-datepicker__calendar')
-
-    expect(datepicker.element.className).toContain('vdp-datepicker__calendar')
-    expect(datepicker.element.className).toContain('my-calendar-class')
-    expect(datepicker.element.className).toContain('inline')
-    expect(datepicker.element.className).not.toContain('rtl')
-
-    await wrapper.setProps({
-      appendToBody: true,
-      language: he,
-    })
-
-    expect(datepicker.element.className).toContain('rtl')
-  })
-
   it('knows the next view up / down', () => {
     wrapper.vm.setView('day')
 
@@ -415,6 +394,28 @@ describe('Datepicker mounted', () => {
     await lastCell.trigger('click')
 
     expect(wrapper.vm.selectedDate).toStrictEqual(new Date(2020, 1, 1))
+  })
+
+  it('sets picker classes correctly', async () => {
+    await wrapper.setProps({
+      calendarClass: 'my-calendar-class',
+      inline: true,
+    })
+
+    let datepicker = wrapper.find('.vdp-datepicker__calendar')
+
+    expect(datepicker.element.className).toContain('vdp-datepicker__calendar')
+    expect(datepicker.element.className).toContain('my-calendar-class')
+    expect(datepicker.element.className).toContain('inline')
+    expect(datepicker.element.className).not.toContain('rtl')
+
+    await wrapper.setProps({
+      appendToBody: true,
+      language: he,
+    })
+
+    datepicker = wrapper.find('.vdp-datepicker__calendar')
+    expect(datepicker.element.className).toContain('rtl')
   })
 })
 
