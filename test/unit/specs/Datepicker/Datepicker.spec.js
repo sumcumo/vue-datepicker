@@ -206,23 +206,6 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapper.vm.picker).toBe('PickerYear')
   })
 
-  it('emits changedMonth/Year/Decade', () => {
-    const pageDate = new Date(2016, 2, 1)
-
-    wrapper.vm.setView('day')
-    wrapper.vm.handlePageChange({ pageDate })
-
-    expect(wrapper.emitted('changedMonth')).toBeTruthy()
-
-    wrapper.vm.setView('month')
-    wrapper.vm.handlePageChange({ pageDate })
-    expect(wrapper.emitted('changedYear')).toBeTruthy()
-
-    wrapper.vm.setView('year')
-    wrapper.vm.handlePageChange({ pageDate })
-    expect(wrapper.emitted('changedDecade')).toBeTruthy()
-  })
-
   it('clears the date when it is disabled', async () => {
     const someDate = new Date(2021, 0, 15)
 
@@ -412,6 +395,23 @@ describe('Datepicker mounted', () => {
 
     expect(wrapper.vm.nextView.down).toBe('month')
     expect(wrapper.vm.nextView.up).toBe('decade')
+  })
+
+  it('emits changedMonth/Year/Decade', () => {
+    const pageDate = new Date(2016, 2, 1)
+
+    wrapper.vm.setView('day')
+    wrapper.vm.handlePageChange({ pageDate })
+
+    expect(wrapper.emitted('changedMonth')).toBeTruthy()
+
+    wrapper.vm.setView('month')
+    wrapper.vm.handlePageChange({ pageDate })
+    expect(wrapper.emitted('changedYear')).toBeTruthy()
+
+    wrapper.vm.setView('year')
+    wrapper.vm.handlePageChange({ pageDate })
+    expect(wrapper.emitted('changedDecade')).toBeTruthy()
   })
 })
 
