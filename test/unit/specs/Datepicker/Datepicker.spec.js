@@ -195,17 +195,6 @@ describe('Datepicker shallowMounted', () => {
     expect(spy).toHaveBeenCalled()
   })
 
-  it('derives `picker` from the current `view`', () => {
-    wrapper.vm.setView('day')
-    expect(wrapper.vm.picker).toBe('PickerDay')
-
-    wrapper.vm.setView('month')
-    expect(wrapper.vm.picker).toBe('PickerMonth')
-
-    wrapper.vm.setView('year')
-    expect(wrapper.vm.picker).toBe('PickerYear')
-  })
-
   it('clears the date when it is disabled', async () => {
     const someDate = new Date(2021, 0, 15)
 
@@ -338,6 +327,17 @@ describe('Datepicker mounted', () => {
     await lastCell.trigger('click')
 
     expect(wrapper.vm.selectedDate).toStrictEqual(new Date(2020, 1, 1))
+  })
+
+  it('derives `picker` from the current `view`', () => {
+    wrapper.vm.setView('day')
+    expect(wrapper.vm.picker).toBe('PickerDay')
+
+    wrapper.vm.setView('month')
+    expect(wrapper.vm.picker).toBe('PickerMonth')
+
+    wrapper.vm.setView('year')
+    expect(wrapper.vm.picker).toBe('PickerYear')
   })
 
   it('sets picker classes correctly', async () => {
