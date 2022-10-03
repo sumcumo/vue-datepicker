@@ -130,40 +130,6 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapper.vm.isOpen).toEqual(false)
   })
 
-  it('can select a day', () => {
-    const date = new Date(2016, 9, 1)
-
-    wrapper.vm.setView('day')
-    wrapper.vm.handleSelect({ timestamp: date.valueOf() })
-
-    expect(wrapper.vm.selectedDate).toEqual(date)
-    expect(wrapper.emitted('selected')).toBeTruthy()
-  })
-
-  it('can select a month', () => {
-    const date = new Date(2016, 9, 9)
-
-    wrapper.vm.setView('month')
-    wrapper.vm.handleSelect({ timestamp: date.valueOf() })
-
-    expect(wrapper.emitted('changedMonth')[0][0].timestamp).toEqual(
-      date.valueOf(),
-    )
-    expect(wrapper.vm.pageDate.getMonth()).toEqual(date.getMonth())
-  })
-
-  it('can select a year', () => {
-    const date = new Date(2018, 9, 9)
-
-    wrapper.vm.setView('year')
-    wrapper.vm.handleSelect({ timestamp: date.valueOf() })
-
-    expect(wrapper.emitted('changedYear')[0][0].timestamp).toEqual(
-      date.valueOf(),
-    )
-    expect(wrapper.vm.pageDate.getFullYear()).toEqual(date.getFullYear())
-  })
-
   it('watches modelValue', async () => {
     const spy = vi.spyOn(wrapper.vm, 'setValue')
 
@@ -223,6 +189,40 @@ describe('Datepicker mounted', () => {
 
   afterEach(() => {
     wrapper.unmount()
+  })
+
+  it('can select a day', () => {
+    const date = new Date(2016, 9, 1)
+
+    wrapper.vm.setView('day')
+    wrapper.vm.handleSelect({ timestamp: date.valueOf() })
+
+    expect(wrapper.vm.selectedDate).toEqual(date)
+    expect(wrapper.emitted('selected')).toBeTruthy()
+  })
+
+  it('can select a month', () => {
+    const date = new Date(2016, 9, 9)
+
+    wrapper.vm.setView('month')
+    wrapper.vm.handleSelect({ timestamp: date.valueOf() })
+
+    expect(wrapper.emitted('changedMonth')[0][0].timestamp).toEqual(
+      date.valueOf(),
+    )
+    expect(wrapper.vm.pageDate.getMonth()).toEqual(date.getMonth())
+  })
+
+  it('can select a year', () => {
+    const date = new Date(2018, 9, 9)
+
+    wrapper.vm.setView('year')
+    wrapper.vm.handleSelect({ timestamp: date.valueOf() })
+
+    expect(wrapper.emitted('changedYear')[0][0].timestamp).toEqual(
+      date.valueOf(),
+    )
+    expect(wrapper.vm.pageDate.getFullYear()).toEqual(date.getFullYear())
   })
 
   it('opens in `day` view', async () => {
