@@ -12,7 +12,6 @@
 </template>
 
 <script>
-// export component
 export default {
   name: 'Cleave',
   data() {

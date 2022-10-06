@@ -1,7 +1,6 @@
 ---
 home: true
-actionText: Get Started →
-actionLink: /guide/
+actions: [{ text: 'Get Started →', link: '/guide/', type: 'primary' }]
 features:
   - title: Keyboard navigation
     details: Navigate by mouse/touch, or use the space bar, tab, enter, delete/backspace and arrow keys

@@ -19,16 +19,18 @@ The easiest way to integrate Cleave is to use a directive:
 
 <script>
 import Cleave from 'cleave.js'
-import Vue from 'vue'
+import { createApp } from 'vue'
 
-Vue.directive('cleave', {
+const app = createApp({})
+
+app.directive('cleave', {
   inserted(el, binding) {
-    // if the binded element is not an input field search for one
+    // If the bound element is not an input field search for one
     // this is for cases where the input is inside a wrapper
     if (el.tagName !== 'INPUT') {
       el = el.querySelector('input')
     }
-    // only apply cleave if it is an input field and the options are set
+    // Only apply Cleave if it is an input field and the options are set
     if (
       el.tagName === 'INPUT' &&
       Object.keys(binding.value).length !== 0 &&
