@@ -350,7 +350,9 @@ describe('Datepicker mounted', () => {
 
   it('emits focus', async () => {
     const input = wrapper.find('input')
-    await input.trigger('focus')
+    // See https://github.com/vuejs/vue-test-utils/issues/1932
+    // await input.trigger('focus')
+    await input.element.dispatchEvent(new Event('focus'))
     expect(wrapper.emitted('focus')).toBeTruthy()
   })
 
@@ -396,7 +398,9 @@ describe('Datepicker mounted with showCalendarOnFocus', () => {
   it('opens on focusing the input', async () => {
     const input = wrapper.find('input')
 
-    await input.trigger('focus')
+    // See https://github.com/vuejs/vue-test-utils/issues/1932
+    // await input.trigger('focus')
+    await input.element.dispatchEvent(new Event('focus'))
 
     expect(wrapper.vm.isOpen).toBeTruthy()
   })
