@@ -10,10 +10,9 @@ module.exports = {
     'plugin:compat/recommended',
     'prettier',
     'plugin:cypress/recommended',
-    'plugin:jest/recommended',
     'plugin:vue/recommended',
   ],
-  plugins: ['import', 'prettier', 'html', 'vue', 'jest'],
+  plugins: ['import', 'prettier', 'html', 'vue', 'vitest'],
   settings: {
     'import/resolver': {
       webpack: {
@@ -92,6 +91,7 @@ module.exports = {
     ],
     'vue/no-deprecated-scope-attribute': 'error',
     'arrow-body-style': 'off',
+    // 'vitest/no-skipped-tests': 2,
   },
   overrides: [
     {

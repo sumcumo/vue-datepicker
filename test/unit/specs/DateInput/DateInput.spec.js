@@ -230,7 +230,7 @@ describe('DateInput shallowMounted with bootstrap styling', () => {
   it('adds bootstrap classes', async () => {
     const input = wrapper.find('input')
 
-    expect(input.element.classList).toContain('form-control')
+    expect([...input.element.classList]).toContain('form-control')
   })
 
   it('appends bootstrap classes', async () => {
@@ -240,14 +240,14 @@ describe('DateInput shallowMounted with bootstrap styling', () => {
 
     const input = wrapper.find('input')
 
-    expect(input.element.classList).toContain('form-control')
-    expect(input.element.classList).toContain('someClass')
+    expect([...input.element.classList]).toContain('form-control')
+    expect([...input.element.classList]).toContain('someClass')
 
     await wrapper.setProps({
       inputClass: { someClass: true },
     })
 
-    expect(input.element.classList).toContain('form-control')
-    expect(input.element.classList).toContain('someClass')
+    expect([...input.element.classList]).toContain('form-control')
+    expect([...input.element.classList]).toContain('someClass')
   })
 })
