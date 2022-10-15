@@ -728,12 +728,10 @@ describe('Datepicker mounted and attached to body with openDate', () => {
 
     firstOfMonth.element.focus()
     await firstOfMonth.trigger('keydown.left')
+    vi.advanceTimersByTime(250)
 
     const lastOfPreviousMonth = wrapper.findAll('button.cell').at(30)
-    setTimeout(
-      () => expect(document.activeElement).toBe(lastOfPreviousMonth.element),
-      250,
-    )
+    expect(document.activeElement).toBe(lastOfPreviousMonth.element)
   })
 
   it('arrows right on cell to next page', async () => {
@@ -744,12 +742,10 @@ describe('Datepicker mounted and attached to body with openDate', () => {
 
     lastOfMonth.element.focus()
     await lastOfMonth.trigger('keydown.right')
+    vi.advanceTimersByTime(250)
 
-    const firstOfNextMonth = wrapper.findAll('button.cell').at(3)
-    setTimeout(
-      () => expect(document.activeElement).toBe(firstOfNextMonth.element),
-      250,
-    )
+    const firstOfNextMonth = wrapper.findAll('button.cell').at(6)
+    expect(document.activeElement).toBe(firstOfNextMonth.element)
   })
 
   it('arrows up on cell to previous page', async () => {
