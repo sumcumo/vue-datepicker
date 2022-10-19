@@ -28,15 +28,15 @@ describe('Datepicker mounted with date', () => {
 
     await wrapper.vm.open()
 
-    const calendar = wrapper.vm.$refs.popup
-    expect(calendar.$el.style.left).toBe('0px')
-    expect(calendar.$el.style.top).toBe('10px')
+    const calendar = wrapper.vm.$refs.popup.$el.children[0]
+    expect(calendar.style.left).toBe('0px')
+    expect(calendar.style.top).toBe('10px')
 
     await wrapper.vm.close()
     await wrapper.vm.open()
 
-    expect(calendar.$el.style.left).toBe('0px')
-    expect(calendar.$el.style.top).toBe('10px')
+    expect(calendar.style.left).toBe('0px')
+    expect(calendar.style.top).toBe('10px')
   })
 
   it('has everything out of bounds', async () => {
@@ -58,9 +58,9 @@ describe('Datepicker mounted with date', () => {
 
     await wrapper.vm.open()
 
-    const calendar = wrapper.vm.$refs.popup
-    expect(calendar.$el.style.left).toBe('0px')
-    expect(calendar.$el.style.top).toBe('10px')
+    const calendar = wrapper.vm.$refs.popup.$el.children[0]
+    expect(calendar.style.left).toBe('0px')
+    expect(calendar.style.top).toBe('10px')
   })
 
   it('has a fixed position of `top-right`', async () => {
@@ -86,9 +86,9 @@ describe('Datepicker mounted with date', () => {
 
     await wrapper.vm.open()
 
-    const calendar = wrapper.vm.$refs.popup
-    expect(calendar.$el.style.left).toBe('10px')
-    expect(calendar.$el.style.top).toBe('0px')
+    const calendar = wrapper.vm.$refs.popup.$el.children[0]
+    expect(calendar.style.left).toBe('10px')
+    expect(calendar.style.top).toBe('0px')
   })
 
   it('has a fixed position of `bottom-left`', async () => {
@@ -98,9 +98,9 @@ describe('Datepicker mounted with date', () => {
 
     await wrapper.vm.open()
 
-    const calendar = wrapper.vm.$refs.popup
-    expect(calendar.$el.style.left).toBe('0px')
-    expect(calendar.$el.style.top).toBe('0px')
+    const calendar = wrapper.vm.$refs.popup.$el.children[0]
+    expect(calendar.style.left).toBe('0px')
+    expect(calendar.style.top).toBe('0px')
   })
 
   it('has a relative position', async () => {
@@ -124,8 +124,8 @@ describe('Datepicker mounted with date', () => {
 
     await wrapper.vm.open()
 
-    const calendar = wrapper.vm.$refs.popup
-    expect(calendar.$el.style.left).toBe('-9px')
-    expect(calendar.$el.style.top).toBe('-60px')
+    const calendar = wrapper.vm.$refs.popup.$el.children[0]
+    expect(calendar.style.left).toBe('-9px')
+    expect(calendar.style.top).toBe('-60px')
   })
 })

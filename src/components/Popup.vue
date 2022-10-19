@@ -74,7 +74,7 @@ export default {
     displayPopup() {
       if (this.inline || !this.visible) return
       this.setTopStyle()
-      const popup = this.$el
+      const popup = this.$el.children[0]
       const relativeElement = this.$parent.$el
       if (!this.popupRect) {
         this.popupRect = getPopupElementSize(popup)
@@ -90,12 +90,12 @@ export default {
         rtl: this.rtl,
       })
 
-      this.$el.style.left = left
-      this.$el.style.top = top
+      popup.style.left = left
+      popup.style.top = top
     },
   },
   render() {
-    return h('div', this.$slots.default())
+    return h('div', this.$slots.default()[0].children.default())
   },
 }
 </script>
