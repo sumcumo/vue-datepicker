@@ -23,7 +23,7 @@ describe('Datepicker mounted with date', () => {
       bottom: 10,
       height: 10,
     }))
-    wrapper.vm.$refs.popup.$el.getBoundingClientRect = getBoundingClientRect
+
     wrapper.vm.$el.getBoundingClientRect = getBoundingClientRect
 
     await wrapper.vm.open()
@@ -53,7 +53,7 @@ describe('Datepicker mounted with date', () => {
       marginTop: '-10',
       marginBottom: '0',
     }))
-    wrapper.vm.$refs.popup.$el.getBoundingClientRect = getBoundingClientRect
+
     wrapper.vm.$el.getBoundingClientRect = getBoundingClientRect
 
     await wrapper.vm.open()
@@ -70,14 +70,16 @@ describe('Datepicker mounted with date', () => {
       height: 10,
       width: 10,
     }))
+
     global.getComputedStyle = vi.fn(() => ({
       marginLeft: '0',
       marginRight: '0',
       marginTop: '0',
       marginBottom: '0',
     }))
-    wrapper.vm.$refs.popup.$el.getBoundingClientRect = getBoundingClientRect
+
     wrapper.vm.$el.getBoundingClientRect = getBoundingClientRect
+
     await wrapper.setProps({
       fixedPosition: 'top-right',
     })
@@ -110,13 +112,14 @@ describe('Datepicker mounted with date', () => {
       width: 10,
       top: 10,
     }))
+
     global.getComputedStyle = vi.fn(() => ({
       marginLeft: '0',
       marginRight: '50',
       marginTop: '50',
       marginBottom: '0',
     }))
-    wrapper.vm.$refs.popup.$el.getBoundingClientRect = getBoundingClientRect
+
     wrapper.vm.$el.getBoundingClientRect = getBoundingClientRect
 
     await wrapper.vm.open()
