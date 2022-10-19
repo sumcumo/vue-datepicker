@@ -17,9 +17,9 @@
     "keyboard navigation",
     "typeable"
   ],
-  "main": "dist/Datepicker.common.js",
-  "module": "dist/Datepicker.esm.js",
-  "unpkg": "dist/Datepicker.min.js",
+  "main": "dist/vue-datepicker.js",
+  "module": "dist/vue-datepicker.esm.js",
+  "unpkg": "dist/vue-datepicker.min.js",
   "sideEffects": [
     "*.css"
   ],
@@ -29,10 +29,10 @@
     "LICENSE"
   ],
   "scripts": {
-    "prepare": "npm run clear && npm run build",
-    "build": "npm run build:app && npm run build:locale",
-    "build:app": "rollup -c ./scripts/build.js",
-    "build:locale": "babel-node scripts/build-locale.js",
+    "prepare": "npm run build",
+    "build": "npm run clear && npm run build:app && npm run build:locale",
+    "build:app": "vite build -c scripts/build/default.js && vite build -c scripts/build/cjs.js && vite build -c scripts/build/esm.js",
+    "build:locale": "babel-node scripts/build/locale.js",
     "clear": "rm -rf dist/*",
     "audit": "npm audit --registry=https://registry.npmjs.org",
     "serve": "vite serve ./example",

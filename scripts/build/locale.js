@@ -97,6 +97,7 @@ async function buildEsm() {
     assetFileNames: '[name].esm.js',
   })
 }
+
 async function buildIndexes() {
   // eslint-disable-next-line no-console
   console.time('Index')

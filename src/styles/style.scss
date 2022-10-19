@@ -3,6 +3,7 @@
 }
 
 .vdp-datepicker {
+  font-family: Arial, serif;
   position: relative;
   text-align: left;
   box-sizing: border-box;
@@ -51,6 +52,7 @@
 
       &:hover:not(:disabled) {
         background: #eee;
+        cursor: pointer;
       }
 
       &.vdp-datepicker__up {
