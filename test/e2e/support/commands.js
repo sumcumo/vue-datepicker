@@ -74,7 +74,7 @@ Cypress.Commands.add('with', { prevSubject: true }, (form, formData) => {
 })
 
 Cypress.Commands.add('getStore', () => {
-  return cy.window().its('app.$store')
+  return cy.window().its('__store__')
 })
 
 Cypress.Commands.add(
