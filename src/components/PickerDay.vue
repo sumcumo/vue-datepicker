@@ -206,10 +206,12 @@ export default {
       if (!this.disabledConfig.has.from) {
         return false
       }
-      return (
-        this.disabledConfig.from.month <= this.pageMonth &&
-        this.disabledConfig.from.year <= this.pageYear
-      )
+
+      const { from } = this.disabledConfig
+      const disabledFromMonth = this.utils.createDateTime(from.year, from.month)
+      const pageMonth = this.utils.createDateTime(this.pageYear, this.pageMonth)
+
+      return disabledFromMonth <= pageMonth
     },
     /**
      * Is the previous month disabled?
@@ -219,10 +221,12 @@ export default {
       if (!this.disabledConfig.has.to) {
         return false
       }
-      return (
-        this.disabledConfig.to.month >= this.pageMonth &&
-        this.disabledConfig.to.year >= this.pageYear
-      )
+
+      const { to } = this.disabledConfig
+      const disabledToMonth = this.utils.createDateTime(to.year, to.month)
+      const pageMonth = this.utils.createDateTime(this.pageYear, this.pageMonth)
+
+      return disabledToMonth >= pageMonth
     },
     /**
      * Returns the current page's month as an integer.
@@ -289,36 +293,28 @@ export default {
       ).isDateHighlighted(dateWithoutTime)
     },
     /**
-     * Whether a day is highlighted and it is the last date
-     * in the highlighted range of dates
-     * @param {Date} date end highlight
+     * Whether a date is the last in a range of highlighted dates
+     * @param {Date} date
      * @return {Boolean}
      */
     isHighlightEnd(date) {
-      const config = this.highlightedConfig
-
-      return (
-        this.isHighlightedDate(date) &&
-        config.to.year === this.utils.getFullYear(date) &&
-        config.to.month === this.utils.getMonth(date) &&
-        config.to.day === this.utils.getDate(date)
-      )
+      return new HighlightedDate(
+        this.utils,
+        this.disabledDates,
+        this.highlighted,
+      ).isHighlightEnd(date)
     },
     /**
-     * Whether a day is highlighted and it is the first date
-     * in the highlighted range of dates
-     * @param {Date} date start highlight
+     * Whether a date is the first in a range of highlighted dates
+     * @param {Date} date
      * @return {Boolean}
      */
     isHighlightStart(date) {
-      const config = this.highlightedConfig
-
-      return (
-        this.isHighlightedDate(date) &&
-        config.from.year === this.utils.getFullYear(date) &&
-        config.from.month === this.utils.getMonth(date) &&
-        config.from.day === this.utils.getDate(date)
-      )
+      return new HighlightedDate(
+        this.utils,
+        this.disabledDates,
+        this.highlighted,
+      ).isHighlightStart(date)
     },
     /**
      * Whether a day is selected
@@ -326,9 +322,7 @@ export default {
      * @return {Boolean}
      */
     isSelectedDate(dObj) {
-      return (
-        this.selectedDate && this.utils.compareDates(this.selectedDate, dObj)
-      )
+      return this.utils.compareDates(this.selectedDate, dObj)
     },
     /**
      * Defines the objects within the days array
@@ -352,8 +346,7 @@ export default {
         isHighlighted: this.isHighlightedDate(dObj),
         isHighlightStart: this.isHighlightStart(dObj),
         isHighlightEnd: this.isHighlightEnd(dObj),
-        isOpenDate:
-          this.openDate && this.utils.compareDates(dObj, this.openDate),
+        isOpenDate: this.utils.compareDates(dObj, this.openDate),
         isToday: this.utils.compareDates(dObj, new Date()),
         isWeekend: isSaturday || isSunday,
         isSaturday,

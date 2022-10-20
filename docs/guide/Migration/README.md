@@ -1,10 +1,19 @@
 # Migration
 
+## 4.x.x to 5.x.x
+
+- the `selected` event has been deprecated in favour of `input`. You should therefore listen to `input` events on the datepicker, or simply bind your date via v-model: `<Datepicker v-model="myDate" />`
+- a `typeable` datepicker no longer selects the date each time the input string can be parsed to a date. Instead, a typed date is only selected - and an `input` event fired - when the input field is focused and the `enter` key is pressed, or when the datepicker loses focus entirely.
+- a new `changed` event is emitted whenever the selected date deviates from its previous value.
+- the `focus` and `blur` events now refer to the whole datepicker, not just the input field.
+- the `disabled-dates` prop is now watched for changes with the value of any selected date being nullified if that date is disabled.
+- the previously deprecated `calendar-button-icon`, `calendar-button-icon-content` and `clear-button-icon` props have been removed. Use [slots](../Slots/README.md) instead.
+
 ## 3.x.x to 4.x.x
 
-- the html changed because of the new keyboard support. If you have any custom css it might break.
-- additional a transition element was wrapped around the picker
-- inline css class change from inline to `vdp-datepicker__calendar--inline` too not get confused with css class libraries
+- the html changed due to the new keyboard support. If you have any custom css it might break.
+- an additional transition element was wrapped around the picker
+- inline css class changed from `inline` to `vdp-datepicker__calendar--inline` to avoid any conflict with css class libraries
 
 ## 2.x.x to 3.x.x
 

@@ -5,6 +5,7 @@ module.exports = [
     children: [
       ['/guide/', 'Getting started'],
       '/guide/Migration/',
+      '/guide/UtcDates/',
       '/guide/DateFormatting/',
       '/guide/ParsingDates/',
       '/guide/DisabledDates/',

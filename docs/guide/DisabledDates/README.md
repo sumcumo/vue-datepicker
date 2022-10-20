@@ -1,12 +1,19 @@
 # Disabled Dates
 
-Dates can be disabled in a number of ways.
+Dates can be disabled via the `disabled-dates` prop in a number of ways.
 
 ```vue
 <template>
   <DatePicker :disabled-dates="state.disabledDates"></DatePicker>
 </template>
 ```
+
+::: tip NOTE
+Since version 5, the `disabled-dates` prop is constantly watched for any changes.
+If/when a date is disabled, its value becomes `null` and both `input` and `changed`
+events are emitted. These same events are emitted again if/when the date is no
+longer disabled.
+:::
 
 ## Disable up to a specific date
 
@@ -18,7 +25,7 @@ var state = {
 }
 ```
 
-Everything before 2016-01-05 is disabled
+All dates before 2016-01-05 are disabled.
 
 ## Disable from a specific date
 
@@ -30,9 +37,9 @@ var state = {
 }
 ```
 
-Everything after 2016-01-26 is disabled
+All dates after 2016-01-26 are disabled.
 
-## Disable specific days in each week
+## Disable specific days of the week
 
 ```js
 var state = {
@@ -42,9 +49,9 @@ var state = {
 }
 ```
 
-Every Saturday and Sunday is disabled
+Every Saturday and Sunday is disabled.
 
-## Disable specific days of each month
+## Disable specific days of the month
 
 ```js
 var state = {
@@ -54,9 +61,9 @@ var state = {
 }
 ```
 
-Disable 29th, 30th and 31st of each month
+29th, 30th and 31st of each month are disabled.
 
-## Disable specific days from an array
+## Disable specific dates from an array
 
 ```js
 var state = {
@@ -70,12 +77,9 @@ var state = {
 }
 ```
 
-Following dates are disabled:
-2016-10-16
-2016-10-17
-2016-10-18
+The following dates are disabled: 2016-10-16, 2016-10-17, 2016-10-18.
 
-## Disable in given ranges
+## Disable within given ranges
 
 ::: tip IMPORTANT
 Both `to` and `from` properties are required to define a range of dates to highlight.
@@ -98,14 +102,14 @@ var state = {
 }
 ```
 
-The dates between 2016-12-24 - 2016-12-31 and 2017-02-11 - 2017-03-26 are disabled
+The dates from 2016-12-26 to 2016-12-29 (inclusive) and 2017-02-13 to 2017-03-24
+(inclusive) are disabled.
 
-## Disable after own logic
+## Disable based on custom logic
 
-A custom function that returns `true` if the date is disabled.
-This can be used for writing your own logic to disable a date if none
-of the above conditions serve your purpose.
-This function should accept a date and return `true` if it is disabled
+If none of the above scenarios serve your purpose, you can write your own
+`customPredictor` function to determine when a date should be disabled. This
+should accept a date and return `true` if it is disabled.
 
 ```js
 var state = {
@@ -120,4 +124,4 @@ var state = {
 }
 ```
 
-Every date that is a multiple of 5 is disabled
+Every date that is a multiple of 5 is disabled.

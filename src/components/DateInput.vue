@@ -14,12 +14,7 @@
       @focus="handleButtonFocus"
     >
       <span :class="{ 'input-group-text': bootstrapStyling }">
-        <slot name="calendarBtn">
-          <i :class="calendarButtonIcon">
-            {{ calendarButtonIconContent }}
-            <span v-if="!calendarButtonIcon">&hellip;</span>
-          </i>
-        </slot>
+        <slot name="calendarBtn">&hellip;</slot>
       </span>
     </button>
     <!-- Input -->
@@ -50,6 +45,7 @@
       @keydown.enter.prevent="handleKeydownEnter"
       @keydown.esc.prevent="handleKeydownEscape"
       @keydown.space="handleKeydownSpace($event)"
+      @keydown.tab="$emit('tab', $event)"
       @keyup="handleKeyup($event)"
       @keyup.space="handleKeyupSpace($event)"
     />
@@ -64,11 +60,7 @@
       @click="clearDate"
     >
       <span :class="{ 'input-group-text': bootstrapStyling }">
-        <slot name="clearBtn">
-          <i :class="clearButtonIcon">
-            <span v-if="!clearButtonIcon">&times;</span>
-          </i>
-        </slot>
+        <slot name="clearBtn">&times;</slot>
       </span>
     </button>
     <slot name="afterDateInput" />
@@ -192,7 +184,7 @@ export default {
       }
     },
     /**
-     * Validate typedDate and emit a `blur` event
+     * Validates typedDate
      */
     handleInputBlur() {
       if (this.showCalendarOnFocus && !this.isOpen) {
@@ -203,7 +195,6 @@ export default {
         this.formatTypedDate()
       }
       this.isInputFocused = false
-      this.$emit('blur')
     },
     /**
      * Resets `shouldToggleOnFocus` to true
@@ -232,7 +223,7 @@ export default {
       }
     },
     /**
-     * Emits a `focus` event and opens the calendar when `show-calendar-on-focus` is true
+     * Opens the calendar when `show-calendar-on-focus` is true
      */
     handleInputFocus() {
       this.isInputFocused = true
@@ -248,8 +239,6 @@ export default {
           this.shouldToggleOnClick = true
         }, 300)
       }
-
-      this.$emit('focus')
     },
     /**
      * Opens the calendar, or sets the focus to the next focusable element down

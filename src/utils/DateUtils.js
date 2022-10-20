@@ -148,10 +148,22 @@ const utils = {
   /**
    * Check if date1 is equivalent to date2, without comparing the time
    * @see https://stackoverflow.com/a/6202196/4455925
-   * @param {Date} date1
-   * @param {Date} date2
+   * @param {Date|null} date1
+   * @param {Date|null} date2
    */
+  // eslint-disable-next-line complexity
   compareDates(date1, date2) {
+    if (date1 === null && date2 === null) {
+      return true
+    }
+
+    if (
+      (date1 !== null && date2 === null) ||
+      (date2 !== null && date1 === null)
+    ) {
+      return false
+    }
+
     const d1 = new Date(date1.valueOf())
     const d2 = new Date(date2.valueOf())
 
@@ -374,6 +386,19 @@ const utils = {
     return new Date(
       this.useUtc ? date.setUTCHours(0, 0, 0, 0) : date.setHours(0, 0, 0, 0),
     )
+  },
+
+  /**
+   * Create a date object, using UTC or not
+   * @param {Number}  year
+   * @param {Number=} monthIndex
+   * @param {Number=} day
+   * @return {Date}
+   */
+  createDateTime(year, monthIndex = 0, day = 1) {
+    return this.useUtc
+      ? new Date(Date.UTC(year, monthIndex, day))
+      : new Date(year, monthIndex, day)
   },
 
   /**

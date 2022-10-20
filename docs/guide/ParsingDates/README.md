@@ -3,12 +3,13 @@
 ## Default parsing
 When you type into a `typeable` datepicker, each time you 'key-up', the datepicker
 will try to parse your input to a valid date. When the input field loses focus, the
-date is either formatted, or cleared if no valid is found.
+date is either formatted, or cleared if no valid date is found.
 
-*N.B. Since version 5.0, the datepicker no longer submits the date each time a valid
-date is typed. A typed date is only submitted - and a `selected` event fired - a) on pressing
-the enter key, or b) when the datepicker loses focus entirely. `input` events, however,
-continue to be fired each time a change in the input field occurs and a valid date is detected.*
+*N.B. Since version 5.0, the datepicker no longer submits the date each time a
+valid date is typed. A typed date is only submitted a) on pressing the enter key,
+or b) when the datepicker loses focus entirely. When this happens, both an
+`input` and `selected` event are fired, however, the latter is deprecated and will
+be dropped in the next major version.*
 
 
 ```vue

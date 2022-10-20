@@ -23,7 +23,7 @@ var state = {
 }
 ```
 
-Everything before 2016-01-05 is highlighted
+Everything before 2016-01-05 is highlighted.
 
 ## Highlight from a specific date
 
@@ -35,9 +35,9 @@ var state = {
 }
 ```
 
-Everything after 2016-01-26 is highlighted
+Everything after 2016-01-26 is highlighted.
 
-## Highlight specific days in each week
+## Highlight specific days of the week
 
 ```js
 var state = {
@@ -47,9 +47,9 @@ var state = {
 }
 ```
 
-Every Saturday and Sunday is highlighted
+Every Saturday and Sunday is highlighted.
 
-## Highlight specific days of each month
+## Highlight specific days of the month
 
 ```js
 var state = {
@@ -59,9 +59,9 @@ var state = {
 }
 ```
 
-Highlight 29th, 30th and 31st of each month
+Highlight 29th, 30th and 31st of each month.
 
-## Highlight specific days from an array
+## Highlight specific dates from an array
 
 ```js
 var state = {
@@ -75,12 +75,9 @@ var state = {
 }
 ```
 
-Following dates are highlighted:
-2016-10-16
-2016-10-17
-2016-10-18
+The following dates are highlighted: 2016-10-16, 2016-10-17, 2016-10-18.
 
-## Highlight in given ranges
+## Highlight within given ranges
 
 ::: tip IMPORTANT
 Both `to` and `from` properties are required to define a range of dates to highlight.
@@ -103,15 +100,13 @@ var state = {
 }
 ```
 
-The dates between 2016-12-24 - 2016-12-31 and 2017-02-11 - 2017-03-26 are highlighted
+The dates from 2016-12-25 to 2016-12-30 (inclusive) and from 2017-02-12 to 2017-03-25 (inclusive) are highlighted.
 
-## Highlight after own logic
+## Highlight based on custom logic
 
-A custom function that returns `true` if the date is highlighted.
-This can be used for writing your own logic to highlight a date if none
-of the above conditions serve your purpose.
-This function should accept a date and return `true` if it is highlighted
-
+If none of the above scenarios serve your purpose, you can write your own
+`customPredictor` function to determine when a date should be highlighted. This
+should accept a date and return `true` if it is highlighted.
 ```js
 var state = {
   highlighted: {
@@ -125,4 +120,4 @@ var state = {
 }
 ```
 
-Every date that is a multiple of 5 is highlighted
+Every date that is a multiple of 5 is highlighted.

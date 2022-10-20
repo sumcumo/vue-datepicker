@@ -256,21 +256,17 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapper.emitted('changed-decade')).toBeTruthy()
   })
 
-  it('clears date on default date disabled', async () => {
+  it('clears the date when it is disabled', async () => {
     const someDate = new Date('2021-01-15')
-    const wrapperTemp = shallowMount(Datepicker, {
-      propsData: {
-        value: someDate,
-        disabledDates: {
-          to: addDays(someDate, 1),
-        },
+
+    await wrapper.setProps({
+      value: someDate,
+      disabledDates: {
+        to: addDays(someDate, 1),
       },
     })
 
-    expect(wrapperTemp.vm.selectedDate).toEqual(null)
-    expect(wrapperTemp.emitted('input')).toBeTruthy()
-
-    wrapperTemp.destroy()
+    expect(wrapper.vm.selectedDate).toBeNull()
   })
 
   it('sets the transition correctly', async () => {
@@ -343,18 +339,39 @@ describe('Datepicker mounted', () => {
     expect(wrapper.vm.isOpen).toBeFalsy()
   })
 
-  it('emits blur', async () => {
-    const input = wrapper.find('input')
-    await input.trigger('blur')
-    expect(wrapper.emitted('blur')).toBeTruthy()
-  })
-
   it('emits focus', async () => {
     const input = wrapper.find('input')
     // See https://github.com/vuejs/vue-test-utils/issues/1932
     // await input.trigger('focus')
     await input.element.dispatchEvent(new Event('focus'))
     expect(wrapper.emitted('focus')).toBeTruthy()
+  })
+
+  it('emits blur', async () => {
+    const input = wrapper.find('input')
+    await input.trigger('focusin')
+    await input.trigger('focusout')
+
+    expect(wrapper.emitted('blur')).toBeTruthy()
+  })
+
+  it('emits changed', async () => {
+    await wrapper.vm.open()
+
+    const dayCell = wrapper.findAll('button').at(10)
+
+    await dayCell.trigger('click')
+    expect(wrapper.emitted('changed')).toHaveLength(1)
+
+    await wrapper.vm.open()
+    await dayCell.trigger('click')
+    expect(wrapper.emitted('changed')).toHaveLength(1)
+
+    await wrapper.vm.open()
+
+    const differentDayCell = wrapper.findAll('button').at(11)
+    await differentDayCell.trigger('click')
+    expect(wrapper.emitted('changed')).toHaveLength(2)
   })
 
   it('toggles when the input field is clicked', async () => {

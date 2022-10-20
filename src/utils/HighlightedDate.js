@@ -23,6 +23,7 @@ export default class HighlightedDate {
         daysOfMonth: utils.hasArray(highlightedDates, 'daysOfMonth'),
         daysOfWeek: utils.hasArray(highlightedDates, 'days'),
         from: utils.hasDate(highlightedDates, 'from'),
+        ranges: utils.hasArray(highlightedDates, 'ranges'),
         specificDates: utils.hasArray(highlightedDates, 'dates'),
         to: utils.hasDate(highlightedDates, 'to'),
         includeDisabled:
@@ -53,10 +54,25 @@ export default class HighlightedDate {
 
     return {
       to: () => {
-        return has.to && date <= highlightedDates.to
+        return has.to && date < highlightedDates.to
       },
       from: () => {
-        return has.from && date >= highlightedDates.from
+        return has.from && date > highlightedDates.from
+      },
+      range: () => {
+        if (!has.ranges) return false
+
+        const { ranges } = highlightedDates
+        const u = makeCellUtils(this._utils)
+
+        return ranges.some((thisRange) => {
+          const hasFrom = u.isDefined(thisRange, 'from')
+          const hasTo = u.isDefined(thisRange, 'to')
+
+          return (
+            hasFrom && hasTo && date <= thisRange.to && date >= thisRange.from
+          )
+        })
       },
       customPredictor: () => {
         return has.customPredictor && highlightedDates.customPredictor(date)
@@ -90,11 +106,45 @@ export default class HighlightedDate {
     const isHighlightedVia = this.isDateHighlightedVia(date)
 
     return (
-      (isHighlightedVia.to() && isHighlightedVia.from()) ||
+      isHighlightedVia.to() ||
+      isHighlightedVia.from() ||
+      isHighlightedVia.range() ||
       isHighlightedVia.specificDate() ||
       isHighlightedVia.daysOfWeek() ||
       isHighlightedVia.daysOfMonth() ||
       isHighlightedVia.customPredictor()
     )
+  }
+
+  isHighlightStart(date) {
+    if (!this.config.has.ranges || !this.isDateHighlighted(date)) {
+      return false
+    }
+
+    for (let i = 0; i < this._highlighted.ranges.length; i += 1) {
+      const range = this._highlighted.ranges[i]
+
+      if (range.from.valueOf() === date.valueOf()) {
+        return true
+      }
+    }
+
+    return false
+  }
+
+  isHighlightEnd(date) {
+    if (!this.config.has.ranges || !this.isDateHighlighted(date)) {
+      return false
+    }
+
+    for (let i = 0; i < this._highlighted.ranges.length; i += 1) {
+      const range = this._highlighted.ranges[i]
+
+      if (range.to.valueOf() === date.valueOf()) {
+        return true
+      }
+    }
+
+    return false
   }
 }

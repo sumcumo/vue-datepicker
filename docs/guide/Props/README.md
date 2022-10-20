@@ -1,23 +1,21 @@
 # Available props
 
 | Prop                          | Type                          | Default     | Description                                                                                                                      |
-| ----------------------------- | ----------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------- |
+|-------------------------------| ----------------------------- | ----------- |----------------------------------------------------------------------------------------------------------------------------------|
 | append-to-body                | Boolean                       | false       | Append datepicker calendar to body                                                                                               |
 | autofocus                     | Boolean                       | false       | Sets html `autofocus` attribute on input                                                                                         |
 | bootstrap-styling             | Boolean                       | false       | Use bootstrap v4 styling classes.                                                                                                |
-| calendar-button               | Boolean                       | false       | Show an icon that that can be clicked                                                                                            |
-| calendar-button-icon          | String                        |             | (Deprecated for slot) Use icon for button (ex: fa fa-calendar)                                                                                         |
-| calendar-button-icon-content  | String                        |             | (Deprecated for slot) Use for material-icons (ex: event)                                                                                               |
+| calendar-button               | Boolean                       | false       | Show an button that opens/closes the datepicker. Customisable via [slots](../Slots/README.md)                                    |
 | calendar-class                | String&#124;Object            |             | CSS class applied to the calendar el                                                                                             |
-| clear-button                  | Boolean                       | false       | Show an icon for clearing the date                                                                                               |
-| clear-button-icon             | String                        |             | (Deprecated for slot) Use icon for button (ex: fa fa-times)                                                                                            |
+| clear-button                  | Boolean                       | false       | Show a button for clearing the date. Customisable via [slots](../Slots/README.md)                                                |
 | day-cell-content              | Function                      |             | Use to render custom content in day cell                                                                                         |
-| disabled                      | Boolean                       | false       | If `true`, disable Datepicker on screen                                                                                          |
-| disabled-dates                | Object                        |             | See below for configuration                                                                                                      |
+| disabled                      | Boolean                       | false       | If `true`, disable datepicker on screen                                                                                          |
+| disabled-dates                | Object                        |             | See [Disabled Dates](../DisabledDates/README.md) for configuration                                                               |
 | first-day-of-week             | String                        | sun         | Sets the first day of the week. Possible values: _sun_, _mon_, _tue_, _wed_, _thu_, _fri_, _sat_                                 |
 | fixed-position                | String                        |             | Set a fixed position for the picker. Possible values: _bottom_, _bottom-left_, _bottom-right_, _top_, _top-left_ and _top-right_ |
 | format                        | String&#124;Function          | dd MMM yyyy | Date formatting string or function                                                                                               |
 | full-month-name               | Boolean                       | false       | To show the full month name                                                                                                      |
+| highlighted                   | Object                        |             | See [Highlighted Dates](../HighlightedDates/README.md) for configuration                                                         |
 | id                            | String                        |             | Input id                                                                                                                         |
 | initial-view                  | String                        | minimumView | If set, open on that view                                                                                                        |
 | inline                        | Boolean                       |             | To show the datepicker always open                                                                                               |
@@ -37,8 +35,8 @@
 | show-calendar-on-focus        | Boolean                       | false       | Opens the calendar on input focus                                                                                                |
 | show-calendar-on-button-click | Boolean                       | false       | Only open the calendar on calendar-button click                                                                                  |
 | tabindex                      | String&#124;Number            |             | Tabindex for the input field                                                                                                     |
-| typeable                      | Boolean                       | false       | If `true`, allow the user to type the date                                                                                       |
-| use-utc                       | Boolean                       | false       | Use UTC for time calculations                                                                                                    |
+| typeable                      | Boolean                       | false       | If `true`, allow the user to type the date. See [Parsing typed input](../ParsingDates/README.md)                                 |
+| use-utc                       | Boolean                       | false       | Use UTC for time calculations. See [Local Dates vs UTC Dates](../UtcDates/README.md)                                             |
 | value                         | Date&#124;String              |             | Date value of the datepicker                                                                                                     |
 | wrapper-class                 | String&#124;Object            |             | CSS class applied to the outer div                                                                                               |
 | year-picker-range             | Number                        | 10          | How many years to display in the _year picker_                                                                                   |
