@@ -340,10 +340,9 @@ describe('Datepicker mounted', () => {
   })
 
   it('emits focus', async () => {
-    const input = wrapper.find('input')
     // See https://github.com/vuejs/vue-test-utils/issues/1932
     // await input.trigger('focus')
-    await input.element.dispatchEvent(new Event('focus'))
+    await wrapper.element.dispatchEvent(new Event('focusin'))
     expect(wrapper.emitted('focus')).toBeTruthy()
   })
 
