@@ -315,9 +315,7 @@ describe('Datepicker mounted with showCalendarOnFocus', () => {
     const input = wrapper.find('input')
     const calendarButton = wrapper.find('button[data-test-calendar-button]')
 
-    // See https://github.com/vuejs/vue-test-utils/issues/1932
-    // await input.trigger('focus')
-    await input.element.dispatchEvent(new Event('focus'))
+    await input.trigger('focus')
     expect(wrapper.vm.isOpen).toBeTruthy()
 
     await calendarButton.trigger('click')

@@ -173,9 +173,7 @@ describe('DateInput shallowMounted with showCalendarOnFocus', () => {
   it('emits `open` event on focus', async () => {
     const input = wrapper.find('input')
 
-    // See https://github.com/vuejs/vue-test-utils/issues/1932
-    // await input.trigger('focus')
-    await input.element.dispatchEvent(new Event('focus'))
+    await input.trigger('focus')
 
     expect(wrapper.emitted('open')).toBeTruthy()
   })
@@ -197,9 +195,7 @@ describe('DateInput shallowMounted with showCalendarOnFocus', () => {
     const input = wrapper.find('input')
     const calendarButton = wrapper.find('button[data-test-calendar-button]')
 
-    // See https://github.com/vuejs/vue-test-utils/issues/1932
-    // await input.trigger('focus')
-    await input.element.dispatchEvent(new Event('focus'))
+    await input.trigger('focus')
     expect(wrapper.emitted('open')).toBeTruthy()
 
     await input.trigger('blur')
