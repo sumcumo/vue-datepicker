@@ -138,10 +138,13 @@ export default {
         }
       })
     },
-    selectedDate(selectedDate) {
-      if (this.typeable) {
-        this.typedDate = this.formatDate(selectedDate)
-      }
+    selectedDate: {
+      immediate: true,
+      handler(selectedDate) {
+        if (this.typeable) {
+          this.typedDate = this.formatDate(selectedDate)
+        }
+      },
     },
   },
   mounted() {
