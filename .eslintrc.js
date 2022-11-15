@@ -3,17 +3,16 @@ const prettierConfig = require('./prettier')
 module.exports = {
   root: true,
   parserOptions: {
-    parser: 'babel-eslint',
+    parser: '@babel/eslint-parser',
   },
   extends: [
     'airbnb-base',
     'plugin:compat/recommended',
     'prettier',
     'plugin:cypress/recommended',
-    'plugin:jest/recommended',
     'plugin:vue/recommended',
   ],
-  plugins: ['import', 'prettier', 'html', 'vue', 'jest'],
+  plugins: ['import', 'prettier', 'html', 'vue', 'vitest'],
   settings: {
     'import/resolver': {
       webpack: {
@@ -22,6 +21,8 @@ module.exports = {
     },
   },
   rules: {
+    'vue/max-attributes-per-line': 'off',
+    'vue/html-self-closing': 'off',
     'prettier/prettier': ['error', prettierConfig],
     'import/prefer-default-export': 'off',
     'import/extensions': [
@@ -88,10 +89,9 @@ module.exports = {
       'PascalCase',
       { registeredComponentsOnly: false },
     ],
-    'vue/html-self-closing': 'off',
-    'vue/max-attributes-per-line': 'off',
     'vue/no-deprecated-scope-attribute': 'error',
     'arrow-body-style': 'off',
+    // 'vitest/no-skipped-tests': 2,
   },
   overrides: [
     {

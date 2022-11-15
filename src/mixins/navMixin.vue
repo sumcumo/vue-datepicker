@@ -156,7 +156,7 @@ export default {
         return this.$refs.dateInput && this.$refs.dateInput.$refs[this.refName]
       }
       if (ref === 'calendarButton') {
-        return this.$refs.dateInput.$refs.calendarButton
+        return this.$refs.dateInput && this.$refs.dateInput.$refs.calendarButton
       }
       if (ref === 'openDate') {
         return this.$refs.picker.$refs.cells.$refs.openDate[0]

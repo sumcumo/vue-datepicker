@@ -173,7 +173,9 @@ describe('DateInput shallowMounted with showCalendarOnFocus', () => {
   it('emits `open` event on focus', async () => {
     const input = wrapper.find('input')
 
-    await input.trigger('focus')
+    // See https://github.com/vuejs/vue-test-utils/issues/1932
+    // await input.trigger('focus')
+    await input.element.dispatchEvent(new Event('focus'))
 
     expect(wrapper.emitted('open')).toBeTruthy()
   })
@@ -195,7 +197,9 @@ describe('DateInput shallowMounted with showCalendarOnFocus', () => {
     const input = wrapper.find('input')
     const calendarButton = wrapper.find('button[data-test-calendar-button]')
 
-    await input.trigger('focus')
+    // See https://github.com/vuejs/vue-test-utils/issues/1932
+    // await input.trigger('focus')
+    await input.element.dispatchEvent(new Event('focus'))
     expect(wrapper.emitted('open')).toBeTruthy()
 
     await input.trigger('blur')
@@ -226,7 +230,7 @@ describe('DateInput shallowMounted with bootstrap styling', () => {
   it('adds bootstrap classes', async () => {
     const input = wrapper.find('input')
 
-    expect(input.element.classList).toContain('form-control')
+    expect([...input.element.classList]).toContain('form-control')
   })
 
   it('appends bootstrap classes', async () => {
@@ -236,14 +240,14 @@ describe('DateInput shallowMounted with bootstrap styling', () => {
 
     const input = wrapper.find('input')
 
-    expect(input.element.classList).toContain('form-control')
-    expect(input.element.classList).toContain('someClass')
+    expect([...input.element.classList]).toContain('form-control')
+    expect([...input.element.classList]).toContain('someClass')
 
     await wrapper.setProps({
       inputClass: { someClass: true },
     })
 
-    expect(input.element.classList).toContain('form-control')
-    expect(input.element.classList).toContain('someClass')
+    expect([...input.element.classList]).toContain('form-control')
+    expect([...input.element.classList]).toContain('someClass')
   })
 })

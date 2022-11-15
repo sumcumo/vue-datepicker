@@ -1,4 +1,5 @@
 import { mount } from '@vue/test-utils'
+import { vi } from 'vitest'
 import Datepicker from '~/components/Datepicker.vue'
 
 describe('Datepicker mounted with date', () => {
@@ -17,7 +18,7 @@ describe('Datepicker mounted with date', () => {
   })
 
   it('is not out of bounds', async () => {
-    const getBoundingClientRect = jest.fn(() => ({
+    const getBoundingClientRect = vi.fn(() => ({
       right: 10,
       bottom: 10,
       height: 10,
@@ -39,14 +40,14 @@ describe('Datepicker mounted with date', () => {
   })
 
   it('has everything out of bounds', async () => {
-    const getBoundingClientRect = jest.fn(() => ({
+    const getBoundingClientRect = vi.fn(() => ({
       right: 2000,
       bottom: 1000,
       height: 10,
       width: 0,
     }))
 
-    global.getComputedStyle = jest.fn(() => ({
+    global.getComputedStyle = vi.fn(() => ({
       marginLeft: '0',
       marginRight: '0',
       marginTop: '-10',
@@ -63,13 +64,13 @@ describe('Datepicker mounted with date', () => {
   })
 
   it('has a fixed position of `top-right`', async () => {
-    const getBoundingClientRect = jest.fn(() => ({
+    const getBoundingClientRect = vi.fn(() => ({
       right: 10,
       bottom: 10,
       height: 10,
       width: 10,
     }))
-    global.getComputedStyle = jest.fn(() => ({
+    global.getComputedStyle = vi.fn(() => ({
       marginLeft: '0',
       marginRight: '0',
       marginTop: '0',
@@ -101,7 +102,7 @@ describe('Datepicker mounted with date', () => {
   })
 
   it('has a relative position', async () => {
-    const getBoundingClientRect = jest.fn(() => ({
+    const getBoundingClientRect = vi.fn(() => ({
       left: 10,
       right: 10,
       bottom: 10,
@@ -109,7 +110,7 @@ describe('Datepicker mounted with date', () => {
       width: 10,
       top: 10,
     }))
-    global.getComputedStyle = jest.fn(() => ({
+    global.getComputedStyle = vi.fn(() => ({
       marginLeft: '0',
       marginRight: '50',
       marginTop: '50',

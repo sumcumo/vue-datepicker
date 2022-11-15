@@ -149,6 +149,7 @@ import PickerYear from '~/components/PickerYear.vue'
 import Popup from '~/components/Popup.vue'
 
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Datepicker',
   components: {
     DateInput,
