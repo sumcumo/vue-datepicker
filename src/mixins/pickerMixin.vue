@@ -113,9 +113,6 @@ export default {
     pageYear() {
       return this.utils.getFullYear(this.pageDate)
     },
-    todayDate() {
-      return this.utils.getNewDateObject()
-    },
   },
   methods: {
     /**

@@ -205,7 +205,7 @@ export default {
      */
     isTodayYear(date) {
       const { utils } = this
-      const todayYear = utils.getFullYear(this.todayDate)
+      const todayYear = utils.getFullYear(utils.getNewDateObject())
 
       return utils.getFullYear(date) === todayYear
     },
