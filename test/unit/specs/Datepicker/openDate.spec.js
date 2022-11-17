@@ -12,10 +12,49 @@ describe('Datepicker shallowMounted', () => {
     wrapper.destroy()
   })
 
-  it("shows today's date if no open date is set", () => {
+  it("defaults to today's date if no open date is set", () => {
     const today = new Date()
     expect(wrapper.vm.pageDate.getMonth()).toEqual(today.getMonth())
     expect(wrapper.vm.pageDate.getFullYear()).toEqual(today.getFullYear())
+  })
+
+  it("defaults to today's date when invalid", async () => {
+    const today = new Date()
+
+    await wrapper.setProps({
+      openDate: 'invalid',
+    })
+
+    expect(wrapper.vm.pageDate.getMonth()).toEqual(today.getMonth())
+    expect(wrapper.vm.pageDate.getFullYear()).toEqual(today.getFullYear())
+  })
+
+  it('accepts an instance of a date object', async () => {
+    await wrapper.setProps({
+      openDate: new Date(2016, 9, 12),
+    })
+
+    expect(wrapper.vm.pageDate.getMonth()).toEqual(9)
+    expect(wrapper.vm.pageDate.getFullYear()).toEqual(2016)
+  })
+
+  it('accepts a string value', async () => {
+    await wrapper.setProps({
+      openDate: '2016-10-12',
+      useUtc: true,
+    })
+
+    expect(wrapper.vm.pageDate.getMonth()).toEqual(9)
+    expect(wrapper.vm.pageDate.getFullYear()).toEqual(2016)
+  })
+
+  it('accepts a timestamp value', async () => {
+    await wrapper.setProps({
+      openDate: new Date(2016, 9, 12).valueOf(),
+    })
+
+    expect(wrapper.vm.pageDate.getMonth()).toEqual(9)
+    expect(wrapper.vm.pageDate.getFullYear()).toEqual(2016)
   })
 })
 
@@ -33,11 +72,6 @@ describe('Datepicker shallowMounted with open date', () => {
 
   afterEach(() => {
     wrapper.destroy()
-  })
-
-  it('accepts an instance of a date object', () => {
-    expect(wrapper.vm.pageDate.getMonth()).toEqual(9)
-    expect(wrapper.vm.pageDate.getFullYear()).toEqual(2016)
   })
 
   it("sets pageTimestamp to be first day of open date's month", () => {

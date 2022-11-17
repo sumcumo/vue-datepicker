@@ -1,14 +1,10 @@
 const cellUtils = {
-  configExists(obj) {
-    return typeof obj !== 'undefined' && Object.keys(obj).length > 0
-  },
-
   isDefined(obj, prop) {
-    return this.configExists(obj) && typeof obj[prop] !== 'undefined'
+    return obj && typeof obj[prop] !== 'undefined'
   },
 
   hasArray(obj, prop) {
-    return this.isDefined(obj, prop) && obj[prop].length > 0
+    return obj && Array.isArray(obj[prop])
   },
 
   hasDate(obj, prop) {

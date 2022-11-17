@@ -59,6 +59,7 @@ describe('Datepicker shallowMounted', () => {
     const date = new Date('2016-02-20')
 
     await wrapper.setProps({
+      useUtc: true,
       value: '2016-02-20',
     })
 
@@ -90,6 +91,10 @@ describe('Datepicker shallowMounted', () => {
 
     wrapper.vm.clearDate()
     expect(wrapper.vm.selectedDate).toEqual(null)
+    expect(wrapper.emitted('cleared')).toHaveLength(1)
+
+    wrapper.vm.clearDate()
+    expect(wrapper.emitted('cleared')).toHaveLength(1)
   })
 
   it('sets pageTimestamp to be midnight on first day of current month', () => {
@@ -163,7 +168,7 @@ describe('Datepicker shallowMounted', () => {
     const spy = vi.spyOn(wrapper.vm, 'setValue')
 
     await wrapper.setProps({
-      value: '2018-04-26',
+      value: new Date(2018, 3, 26),
     })
 
     expect(spy).toHaveBeenCalled()
@@ -257,7 +262,7 @@ describe('Datepicker shallowMounted', () => {
   })
 
   it('clears the date when it is disabled', async () => {
-    const someDate = new Date('2021-01-15')
+    const someDate = new Date(2021, 0, 15)
 
     await wrapper.setProps({
       value: someDate,
@@ -267,6 +272,22 @@ describe('Datepicker shallowMounted', () => {
     })
 
     expect(wrapper.vm.selectedDate).toBeNull()
+  })
+
+  it('clears the date when it becomes disabled', async () => {
+    const someDate = new Date(2021, 0, 15)
+
+    await wrapper.setProps({
+      value: someDate,
+    })
+
+    expect(wrapper.vm.selectedDate).toBe(someDate)
+
+    await wrapper.setProps({
+      disabledDates: {
+        to: addDays(someDate, 1),
+      },
+    })
   })
 
   it('sets the transition correctly', async () => {
@@ -340,9 +361,9 @@ describe('Datepicker mounted', () => {
   })
 
   it('emits focus', async () => {
-    // See https://github.com/vuejs/vue-test-utils/issues/1932
-    // await input.trigger('focus')
-    await wrapper.element.dispatchEvent(new Event('focusin'))
+    const input = wrapper.find('input')
+    await input.trigger('focusin')
+
     expect(wrapper.emitted('focus')).toBeTruthy()
   })
 
@@ -707,12 +728,10 @@ describe('Datepicker mounted and attached to body with openDate', () => {
 
     firstOfMonth.element.focus()
     await firstOfMonth.trigger('keydown.left')
+    vi.advanceTimersByTime(250)
 
     const lastOfPreviousMonth = wrapper.findAll('button.cell').at(30)
-    setTimeout(
-      () => expect(document.activeElement).toBe(lastOfPreviousMonth.element),
-      250,
-    )
+    expect(document.activeElement).toBe(lastOfPreviousMonth.element)
   })
 
   it('arrows right on cell to next page', async () => {
@@ -723,12 +742,10 @@ describe('Datepicker mounted and attached to body with openDate', () => {
 
     lastOfMonth.element.focus()
     await lastOfMonth.trigger('keydown.right')
+    vi.advanceTimersByTime(250)
 
-    const firstOfNextMonth = wrapper.findAll('button.cell').at(3)
-    setTimeout(
-      () => expect(document.activeElement).toBe(firstOfNextMonth.element),
-      250,
-    )
+    const firstOfNextMonth = wrapper.findAll('button.cell').at(6)
+    expect(document.activeElement).toBe(firstOfNextMonth.element)
   })
 
   it('arrows up on cell to previous page', async () => {
@@ -1137,8 +1154,8 @@ describe('Datepicker mounted inline', () => {
   })
 
   it('does not close the calendar when date is selected', () => {
-    const date = new Date()
-    wrapper.vm.handleSelect({ timestamp: date.valueOf() })
+    const timestamp = new Date().setHours(0, 0, 0, 0)
+    wrapper.vm.handleSelect({ timestamp })
     expect(wrapper.vm.isOpen).toEqual(true)
     document.body.click()
     expect(wrapper.vm.isOpen).toEqual(true)

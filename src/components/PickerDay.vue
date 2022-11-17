@@ -11,24 +11,17 @@
       :is-next-disabled="isNextDisabled"
       :is-previous-disabled="isPreviousDisabled"
       :is-rtl="isRtl"
+      :is-up-disabled="isUpDisabled"
+      next-view-up="month"
       @focus-input="focusInput"
       @page-change="changePage($event)"
       @set-focus="$emit('set-focus', $event)"
+      @set-view="$emit('set-view', $event)"
     >
       <template #prevIntervalBtn>
         <slot name="prevIntervalBtn" />
       </template>
-      <UpButton
-        ref="up"
-        :class="{ btn: bootstrapStyling }"
-        :is-disabled="isUpDisabled"
-        :is-rtl="isRtl"
-        @focus-input="focusInput"
-        @select="$emit('set-view', 'month')"
-        @set-focus="$emit('set-focus', $event)"
-      >
-        {{ pageTitleDay }}
-      </UpButton>
+      {{ pageTitleDay }}
       <template #nextIntervalBtn>
         <slot name="nextIntervalBtn" />
       </template>
@@ -75,11 +68,10 @@ import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
 import HighlightedDate from '~/utils/HighlightedDate'
 import PickerCells from './PickerCells.vue'
-import UpButton from './UpButton.vue'
 
 export default {
   name: 'PickerDay',
-  components: { PickerCells, UpButton },
+  components: { PickerCells },
   mixins: [pickerMixin],
   props: {
     dayCellContent: {
@@ -188,17 +180,6 @@ export default {
       return new Date(this.utils.setMonth(d, this.utils.getMonth(d) + 1))
     },
     /**
-     * A look-up object created from 'highlighted' prop
-     * @return {Object}
-     */
-    highlightedConfig() {
-      return new HighlightedDate(
-        this.utils,
-        this.disabledDates,
-        this.highlighted,
-      ).config
-    },
-    /**
      * Is the next month disabled?
      * @return {Boolean}
      */
@@ -208,8 +189,8 @@ export default {
       }
 
       const { from } = this.disabledConfig
-      const disabledFromMonth = this.utils.createDateTime(from.year, from.month)
-      const pageMonth = this.utils.createDateTime(this.pageYear, this.pageMonth)
+      const disabledFromMonth = this.utils.monthYearDate(from.year, from.month)
+      const pageMonth = this.utils.monthYearDate(this.pageYear, this.pageMonth)
 
       return disabledFromMonth <= pageMonth
     },
@@ -223,8 +204,8 @@ export default {
       }
 
       const { to } = this.disabledConfig
-      const disabledToMonth = this.utils.createDateTime(to.year, to.month)
-      const pageMonth = this.utils.createDateTime(this.pageYear, this.pageMonth)
+      const disabledToMonth = this.utils.monthYearDate(to.year, to.month)
+      const pageMonth = this.utils.monthYearDate(this.pageYear, this.pageMonth)
 
       return disabledToMonth >= pageMonth
     },
@@ -261,24 +242,26 @@ export default {
      * @return {Boolean}
      */
     isDisabledDate(date) {
+      if (!this.disabledDates) return false
+
       return new DisabledDate(this.utils, this.disabledDates).isDateDisabled(
         date,
       )
     },
     /**
-     * Whether a day is highlighted
-     * (only if it is not disabled already except when highlighted.includeDisabled is true)
+     * Whether a day is highlighted (N.B. Disabled dates are not highlighted unless
+     * `highlighted.includeDisabled` is true)
      * @param {Date} date to check if highlighted
      * @return {Boolean}
      */
     isHighlightedDate(date) {
-      const dateWithoutTime = this.utils.resetDateTime(date)
+      if (!this.highlighted) return false
 
       return new HighlightedDate(
         this.utils,
         this.disabledDates,
         this.highlighted,
-      ).isDateHighlighted(dateWithoutTime)
+      ).isDateHighlighted(date)
     },
     /**
      * Whether a date is the last in a range of highlighted dates
@@ -286,6 +269,8 @@ export default {
      * @return {Boolean}
      */
     isHighlightEnd(date) {
+      if (!this.highlighted) return false
+
       return new HighlightedDate(
         this.utils,
         this.disabledDates,
@@ -298,6 +283,8 @@ export default {
      * @return {Boolean}
      */
     isHighlightStart(date) {
+      if (!this.highlighted) return false
+
       return new HighlightedDate(
         this.utils,
         this.disabledDates,
@@ -310,6 +297,8 @@ export default {
      * @return {Boolean}
      */
     isSelectedDate(dObj) {
+      if (!this.selectedDate) return false
+
       return this.utils.compareDates(this.selectedDate, dObj)
     },
     /**
@@ -336,7 +325,7 @@ export default {
         isHighlightStart: this.isHighlightStart(dObj),
         isHighlightEnd: this.isHighlightEnd(dObj),
         isOpenDate: utils.compareDates(dObj, this.openDate),
-        isToday: utils.compareDates(dObj, this.todayDate),
+        isToday: utils.compareDates(dObj, utils.getNewDateObject()),
         isWeekend: isSaturday || isSunday,
         isSaturday,
         isSunday,

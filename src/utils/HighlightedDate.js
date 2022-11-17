@@ -13,23 +13,23 @@ export default class HighlightedDate {
   get config() {
     const highlightedDates = this._highlighted
     const utils = makeCellUtils(this._utils)
+    const has = {
+      customPredictor: utils.isDefined(highlightedDates, 'customPredictor'),
+      daysOfMonth: utils.hasArray(highlightedDates, 'daysOfMonth'),
+      daysOfWeek: utils.hasArray(highlightedDates, 'days'),
+      from: utils.hasDate(highlightedDates, 'from'),
+      ranges: utils.hasArray(highlightedDates, 'ranges'),
+      specificDates: utils.hasArray(highlightedDates, 'dates'),
+      to: utils.hasDate(highlightedDates, 'to'),
+      includeDisabled:
+        utils.isDefined(highlightedDates, 'includeDisabled') &&
+        highlightedDates.includeDisabled,
+    }
 
     return {
-      exists: utils.configExists(highlightedDates),
       to: utils.dayMonthYear(highlightedDates, 'to'),
       from: utils.dayMonthYear(highlightedDates, 'from'),
-      has: {
-        customPredictor: utils.isDefined(highlightedDates, 'customPredictor'),
-        daysOfMonth: utils.hasArray(highlightedDates, 'daysOfMonth'),
-        daysOfWeek: utils.hasArray(highlightedDates, 'days'),
-        from: utils.hasDate(highlightedDates, 'from'),
-        ranges: utils.hasArray(highlightedDates, 'ranges'),
-        specificDates: utils.hasArray(highlightedDates, 'dates'),
-        to: utils.hasDate(highlightedDates, 'to'),
-        includeDisabled:
-          utils.isDefined(highlightedDates, 'includeDisabled') &&
-          highlightedDates.includeDisabled,
-      },
+      has,
     }
   }
 
@@ -41,11 +41,7 @@ export default class HighlightedDate {
   }
 
   isHighlightingNotPossible(date) {
-    const { config } = this
-
-    if (!config.exists) return false
-
-    return !config.has.includeDisabled && this.isDateDisabled(date)
+    return !this.config.has.includeDisabled && this.isDateDisabled(date)
   }
 
   isDateHighlightedVia(date) {

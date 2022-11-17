@@ -15,8 +15,7 @@ const options = {
 
 describe('pickerMixin unmounted', () => {
   it('checks props default', () => {
-    expect(typeof pickerMixin.props.disabledDates.default).toEqual('function')
-    expect(pickerMixin.props.disabledDates.default()).toEqual({})
+    expect(pickerMixin.props.disabledDates.default).toEqual(null)
     expect(typeof pickerMixin.props.translation.default).toEqual('function')
     expect(pickerMixin.props.translation.default()).toEqual({})
   })

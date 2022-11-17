@@ -367,25 +367,6 @@ const utils = {
   },
 
   /**
-   * Creates an array of dates for each day in between two dates.
-   * @param {Date} start
-   * @param {Date} end
-   * @return {Array}
-   */
-  createDateArray(start, end) {
-    const dates = []
-    let startTemp = start
-    while (startTemp <= end) {
-      dates.push(new Date(startTemp))
-      startTemp = this.setDate(
-        new Date(startTemp),
-        this.getDate(new Date(startTemp)) + 1,
-      )
-    }
-    return dates
-  },
-
-  /**
    * Remove hours/minutes/seconds/milliseconds from a date object
    * @param {Date} date
    * @return {Date}
@@ -397,16 +378,15 @@ const utils = {
   },
 
   /**
-   * Create a date object, using UTC or not
-   * @param {Number}  year
-   * @param {Number=} monthIndex
-   * @param {Number=} day
+   * Create a date object from a month and year, using UTC or not
+   * @param {Number} year
+   * @param {Number} monthIndex
    * @return {Date}
    */
-  createDateTime(year, monthIndex = 0, day = 1) {
+  monthYearDate(year, monthIndex) {
     return this.useUtc
-      ? new Date(Date.UTC(year, monthIndex, day))
-      : new Date(year, monthIndex, day)
+      ? new Date(Date.UTC(year, monthIndex, 1))
+      : new Date(year, monthIndex, 1)
   },
 
   /**

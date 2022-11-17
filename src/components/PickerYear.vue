@@ -11,6 +11,7 @@
       :is-next-disabled="isNextDisabled"
       :is-previous-disabled="isPreviousDisabled"
       :is-rtl="isRtl"
+      :is-up-disabled="true"
       @focus-input="focusInput"
       @page-change="changePage($event)"
       @set-focus="$emit('set-focus', $event)"
@@ -18,14 +19,7 @@
       <template #prevIntervalBtn>
         <slot name="prevIntervalBtn" />
       </template>
-      <UpButton
-        ref="up"
-        :class="{ btn: bootstrapStyling }"
-        :is-disabled="true"
-        :is-rtl="isRtl"
-      >
-        {{ pageTitleYear }}
-      </UpButton>
+      {{ pageTitleYear }}
       <template #nextIntervalBtn>
         <slot name="nextIntervalBtn" />
       </template>
@@ -60,11 +54,10 @@
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
 import PickerCells from './PickerCells.vue'
-import UpButton from './UpButton.vue'
 
 export default {
   name: 'PickerYear',
-  components: { PickerCells, UpButton },
+  components: { PickerCells },
   mixins: [pickerMixin],
   props: {
     yearRange: {
@@ -168,18 +161,19 @@ export default {
      * @return {Boolean}
      */
     isDisabledYear(date) {
+      if (!this.disabledDates) return false
+
       return new DisabledDate(this.utils, this.disabledDates).isYearDisabled(
         date,
       )
     },
     /**
      * Should the calendar open on this year?
+     * @param {Date} date
      * @return {Boolean}
      */
     isOpenYear(date) {
-      if (!this.openDate) {
-        return false
-      }
+      if (!this.openDate) return false
 
       const openDateYear = this.utils.getFullYear(this.openDate)
       const thisDateYear = this.utils.getFullYear(date)
@@ -192,6 +186,8 @@ export default {
      * @return {Boolean}
      */
     isSelectedYear(date) {
+      if (!this.selectedDate) return false
+
       const year = this.utils.getFullYear(date)
 
       return (
@@ -205,7 +201,7 @@ export default {
      */
     isTodayYear(date) {
       const { utils } = this
-      const todayYear = utils.getFullYear(this.todayDate)
+      const todayYear = utils.getFullYear(utils.getNewDateObject())
 
       return utils.getFullYear(date) === todayYear
     },

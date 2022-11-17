@@ -167,18 +167,6 @@ describe('dateUtils', () => {
     expect(dateUtils.formatDate(new Date(2016, 8, 12), 'E')).toEqual('Mon')
   })
 
-  it('can create an array of dates', () => {
-    const start = new Date(2016, 9, 12)
-    const end = new Date(2016, 9, 16)
-    const dates = dateUtils.createDateArray(start, end)
-    expect(dates.length).toEqual(5)
-    let day = 12
-    dates.forEach((date) => {
-      expect(date.getDate()).toEqual(day)
-      day += 1
-    })
-  })
-
   it('gives days in a month', () => {
     expect(dateUtils.daysInMonth(2016, 0)).toEqual(31)
     expect(dateUtils.daysInMonth(2016, 1)).toEqual(29)
@@ -226,6 +214,14 @@ describe('dateUtils', () => {
   it('getMonthName accepts a number return a short name', () => {
     expect(dateUtils.getMonthNameAbbr(3, en.monthsAbbr)).toEqual('Apr')
   })
+
+  it('returns the correct day number from an abbreviated day name', () => {
+    expect(dateUtils.getDayFromAbbr('sun')).toEqual(0)
+    expect(dateUtils.getDayFromAbbr('sat')).toEqual(6)
+    expect(() => dateUtils.getDayFromAbbr('invalid date')).toThrow(
+      'Invalid week day',
+    )
+  })
 })
 
 describe('daysInMonth', () => {
@@ -245,11 +241,11 @@ describe('daysInMonth', () => {
   })
 })
 
-const getAmbiguousDate = (_) => {
+const getAmbiguousDate = () => {
   const timezoneOffset = new Date().getTimezoneOffset() / 60
   const ambiguousHour = 25 - timezoneOffset
-  const ambiguousDate = new Date(2018, 11, 31, ambiguousHour)
-  return ambiguousDate
+
+  return new Date(2018, 11, 31, ambiguousHour)
 }
 
 describe('UTC functions', () => {
@@ -309,16 +305,15 @@ describe('UTC functions', () => {
     expect(utcUtils.setDate(date, 31)).toEqual(date.setUTCDate(31))
   })
 
-  it('returns the correct day number from an abbreviated day name', () => {
-    expect(dateUtils.getDayFromAbbr('sun')).toEqual(0)
-    expect(dateUtils.getDayFromAbbr('sat')).toEqual(6)
-    expect(() => dateUtils.getDayFromAbbr('invalid date')).toThrow(
-      'Invalid week day',
-    )
-  })
-
   it('getTime', () => {
     expect(dateUtils.getTime()).toEqual('T00:00:00')
     expect(utcUtils.getTime()).toEqual('T00:00:00Z')
+  })
+
+  it('monthYearDate', () => {
+    expect(dateUtils.monthYearDate(2000, 0)).toEqual(new Date(2000, 0, 1))
+    expect(utcUtils.monthYearDate(2000, 0)).toEqual(
+      new Date(Date.UTC(2000, 0, 1)),
+    )
   })
 })

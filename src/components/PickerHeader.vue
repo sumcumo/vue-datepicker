@@ -7,9 +7,9 @@
       data-test-previous-button
       :disabled="isPreviousDisabled"
       type="button"
-      @click.stop="$emit('page-change', previousPage)"
+      @click.stop="goToPreviousPage"
       @keydown.down.prevent="focusTabbableCell"
-      @keydown.up.prevent="$emit('focus-input')"
+      @keydown.up.prevent="focusInput"
       @keydown.left.prevent="arrowLeftPrev"
       @keydown.right.prevent="arrowRightPrev"
     >
@@ -17,7 +17,21 @@
         <span class="default">&lt;</span>
       </slot>
     </button>
-    <slot />
+    <button
+      ref="up"
+      class="vdp-datepicker__up"
+      :class="{ btn: bootstrapStyling }"
+      data-test-up-button
+      :disabled="isUpDisabled"
+      type="button"
+      @click="selectUpButton"
+      @keydown.down.prevent="focusTabbableCell"
+      @keydown.up.prevent="focusInput"
+      @keydown.left.prevent="focusLeftButton"
+      @keydown.right.prevent="focusRightButton"
+    >
+      <slot />
+    </button>
     <button
       ref="next"
       class="next"
@@ -25,9 +39,9 @@
       data-test-next-button
       :disabled="isNextDisabled"
       type="button"
-      @click.stop="$emit('page-change', nextPage)"
+      @click.stop="goToNextPage"
       @keydown.down.prevent="focusTabbableCell"
-      @keydown.up.prevent="$emit('focus-input')"
+      @keydown.up.prevent="focusInput"
       @keydown.left.prevent="arrowLeftNext"
       @keydown.right.prevent="arrowRightNext"
     >
@@ -58,12 +72,22 @@ export default {
       type: Boolean,
       required: true,
     },
+    isUpDisabled: {
+      type: Boolean,
+      default: false,
+    },
+    nextViewUp: {
+      type: String,
+      default: null,
+    },
   },
-  data() {
-    return {
-      previousPage: { incrementBy: -1, focusRefs: ['prev'] },
-      nextPage: { incrementBy: 1, focusRefs: ['next'] },
-    }
+  computed: {
+    leftButton() {
+      return [this.isRtl ? 'next' : 'prev']
+    },
+    rightButton() {
+      return [this.isRtl ? 'prev' : 'next']
+    },
   },
   methods: {
     /**
@@ -74,14 +98,14 @@ export default {
         this.$emit('set-focus', ['up', 'next', 'tabbableCell'])
         return
       }
-      this.$emit('page-change', this.previousPage)
+      this.goToPreviousPage()
     },
     /**
      * Changes the page, or sets focus to the adjacent button
      */
     arrowRightPrev() {
       if (this.isRtl) {
-        this.$emit('page-change', this.previousPage)
+        this.goToPreviousPage()
         return
       }
       this.$emit('set-focus', ['up', 'next', 'tabbableCell'])
@@ -91,7 +115,7 @@ export default {
      */
     arrowLeftNext() {
       if (this.isRtl) {
-        this.$emit('page-change', this.nextPage)
+        this.goToNextPage()
         return
       }
       this.$emit('set-focus', ['up', 'prev', 'tabbableCell'])
@@ -104,10 +128,30 @@ export default {
         this.$emit('set-focus', ['up', 'prev', 'tabbableCell'])
         return
       }
-      this.$emit('page-change', this.nextPage)
+      this.goToNextPage()
+    },
+    focusInput() {
+      this.$emit('focus-input')
     },
     focusTabbableCell() {
       this.$emit('set-focus', ['tabbableCell'])
+    },
+    focusLeftButton() {
+      this.$emit('set-focus', this.leftButton)
+    },
+    focusRightButton() {
+      this.$emit('set-focus', this.rightButton)
+    },
+    goToNextPage() {
+      this.$emit('page-change', { incrementBy: 1, focusRefs: ['next'] })
+    },
+    goToPreviousPage() {
+      this.$emit('page-change', { incrementBy: -1, focusRefs: ['prev'] })
+    },
+    selectUpButton() {
+      if (!this.isUpDisabled) {
+        this.$emit('set-view', this.nextViewUp)
+      }
     },
   },
 }

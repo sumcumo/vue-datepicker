@@ -117,7 +117,7 @@
                 @set-transition-name="setTransitionName($event)"
                 @set-view="setView"
               >
-                <template v-for="slotKey of calendarSlots" #[slotKey]>
+                <template v-for="slotKey of usedCalendarSlots" #[slotKey]>
                   <slot :name="slotKey" />
                 </template>
                 <template #dayCellContent="{ cell }">
@@ -174,9 +174,7 @@ export default {
     },
     disabledDates: {
       type: Object,
-      default() {
-        return {}
-      },
+      default: null,
     },
     firstDayOfWeek: {
       type: String,
@@ -204,9 +202,7 @@ export default {
     },
     highlighted: {
       type: Object,
-      default() {
-        return {}
-      },
+      default: null,
     },
     initialView: {
       type: String,
@@ -234,12 +230,7 @@ export default {
     },
     value: {
       type: [String, Date, Number],
-      default: '',
-      validator: (val) =>
-        val === null ||
-        val instanceof Date ||
-        typeof val === 'string' ||
-        typeof val === 'number',
+      default: null,
     },
     wrapperClass: {
       type: [String, Object, Array],
@@ -257,7 +248,6 @@ export default {
 
     return {
       calendarHeight: 0,
-      calendarSlots,
       isClickOutside: false,
       globalDatepickerId: '',
       /*
@@ -286,9 +276,8 @@ export default {
       return this.initialView || this.minimumView
     },
     computedOpenDate() {
-      const openDateOrToday = this.openDate
-        ? new Date(this.openDate)
-        : this.utils.getNewDateObject()
+      const parsedOpenDate = this.parseValue(this.openDate)
+      const openDateOrToday = this.utils.getNewDateObject(parsedOpenDate)
       const openDate = this.selectedDate || openDateOrToday
 
       // If the `minimum-view` is `month` or `year`, convert `openDate` accordingly
@@ -355,6 +344,9 @@ export default {
     translation() {
       return this.language
     },
+    usedCalendarSlots() {
+      return calendarSlots.filter((slot) => this.hasSlot(slot))
+    },
   },
   watch: {
     disabledDates: {
@@ -365,13 +357,12 @@ export default {
           return
         }
 
-        const isDateDisabled = this.isDateDisabled(selectedDate)
+        if (this.isDateDisabled(selectedDate) && this.selectedDate) {
+          this.selectDate(null)
+          return
+        }
 
-        if (isDateDisabled) {
-          if (this.selectedDate) {
-            this.selectDate(null)
-          }
-        } else if (this.dateChanged(selectedDate)) {
+        if (this.dateHasChanged(selectedDate)) {
           this.selectDate(selectedDate)
         }
       },
@@ -473,28 +464,18 @@ export default {
 
       this.$emit('closed')
     },
-    closeByClickOutside() {
-      this.isClickOutside = true
-      this.close()
+    /**
+     * Returns true if the given date differs from the `selectedDate`
+     * @param   {Date} date The date to check
+     * @returns {Boolean}
+     */
+    dateHasChanged(date) {
+      return !this.utils.compareDates(date, this.selectedDate)
     },
-    closeIfNotFocused() {
-      const isFocused = this.allElements.includes(document.activeElement)
-
-      if (!isFocused) {
-        this.closeByClickOutside()
-      }
-    },
-    dateChanged(date) {
-      if (!this.selectedDate && !date) {
-        return false
-      }
-
-      if (this.selectedDate && date) {
-        return date.valueOf() !== this.selectedDate.valueOf()
-      }
-
-      return true
-    },
+    /**
+     * Emits `focus` when the datepicker receives focus (and for an `inline`
+     * datepicker, ensures the correct cell is tabbed to)
+     */
     datepickerIsActive() {
       this.$emit('focus')
 
@@ -503,6 +484,9 @@ export default {
         this.tabToCorrectInlineCell()
       }
     },
+    /**
+     * Emits `blur` when the datepicker loses focus (and selects a typed date)
+     */
     datepickerIsInactive() {
       this.$emit('blur')
 
@@ -656,8 +640,11 @@ export default {
     /**
      * Returns true if a date is disabled
      * @param {Date} date
+     * @returns {Boolean}
      */
     isDateDisabled(date) {
+      if (!this.disabledDates) return false
+
       return new DisabledDate(this.utils, this.disabledDates).isDateDisabled(
         date,
       )
@@ -721,7 +708,7 @@ export default {
      * @param {Date|null} date
      */
     selectDate(date) {
-      if (this.dateChanged(date)) {
+      if (this.dateHasChanged(date)) {
         this.$emit('changed', date)
       }
 
@@ -748,7 +735,7 @@ export default {
       const parsedDate = this.$refs.dateInput.parseInput()
       const date = this.utils.isValidDate(parsedDate) ? parsedDate : null
 
-      if (this.dateChanged(date)) {
+      if (this.dateHasChanged(date)) {
         this.selectDate(date)
       }
     },
@@ -771,17 +758,8 @@ export default {
      * @param {Date=} date The date to set for the page
      */
     setPageDate(date) {
-      let dateTemp = date
-      if (!dateTemp) {
-        if (this.computedOpenDate) {
-          dateTemp = new Date(this.computedOpenDate)
-        } else {
-          dateTemp = new Date()
-        }
-      }
-
-      let pageTimestamp = this.utils.resetDateTime(new Date(dateTemp))
-      pageTimestamp = this.utils.setDate(new Date(pageTimestamp), 1)
+      const dateTemp = new Date(date || this.computedOpenDate)
+      let pageTimestamp = this.utils.setDate(dateTemp, 1)
 
       if (this.view === 'year') {
         pageTimestamp = this.utils.setMonth(new Date(pageTimestamp), 0)

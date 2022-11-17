@@ -11,24 +11,17 @@
       :is-next-disabled="isNextDisabled"
       :is-previous-disabled="isPreviousDisabled"
       :is-rtl="isRtl"
+      :is-up-disabled="isUpDisabled"
+      next-view-up="year"
       @focus-input="focusInput"
       @page-change="changePage($event)"
       @set-focus="$emit('set-focus', $event)"
+      @set-view="$emit('set-view', $event)"
     >
       <template #prevIntervalBtn>
         <slot name="prevIntervalBtn" />
       </template>
-      <UpButton
-        ref="up"
-        :class="{ btn: bootstrapStyling }"
-        :is-disabled="isUpDisabled"
-        :is-rtl="isRtl"
-        @focus-input="focusInput"
-        @select="$emit('set-view', 'year')"
-        @set-focus="$emit('set-focus', $event)"
-      >
-        {{ pageTitleMonth }}
-      </UpButton>
+      {{ pageTitleMonth }}
       <template #nextIntervalBtn>
         <slot name="nextIntervalBtn" />
       </template>
@@ -63,11 +56,10 @@
 import pickerMixin from '~/mixins/pickerMixin.vue'
 import DisabledDate from '~/utils/DisabledDate'
 import PickerCells from './PickerCells.vue'
-import UpButton from './UpButton.vue'
 
 export default {
   name: 'PickerMonth',
-  components: { PickerCells, UpButton },
+  components: { PickerCells },
   mixins: [pickerMixin],
   computed: {
     /**
@@ -138,18 +130,19 @@ export default {
      * @return {Boolean}
      */
     isDisabledMonth(date) {
+      if (!this.disabledDates) return false
+
       return new DisabledDate(this.utils, this.disabledDates).isMonthDisabled(
         date,
       )
     },
     /**
      * Should the calendar open on this month?
+     * @param {Date} date
      * @return {Boolean}
      */
     isOpenMonth(date) {
-      if (!this.openDate) {
-        return false
-      }
+      if (!this.openDate) return false
 
       const openDateMonth = this.utils.getMonth(this.openDate)
       const openDateYear = this.utils.getFullYear(this.openDate)
@@ -164,6 +157,8 @@ export default {
      * @return {Boolean}
      */
     isSelectedMonth(date) {
+      if (!this.selectedDate) return false
+
       const month = this.utils.getMonth(date)
       const year = this.utils.getFullYear(date)
 
@@ -180,7 +175,7 @@ export default {
      */
     isTodayMonth(date) {
       const { utils } = this
-      const todayMonth = new Date(utils.setDate(this.todayDate, 1))
+      const todayMonth = new Date(utils.setDate(utils.getNewDateObject(), 1))
 
       return utils.compareDates(date, todayMonth)
     },
