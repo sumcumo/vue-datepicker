@@ -378,7 +378,7 @@ describe('Datepicker mounted', () => {
   it('emits changed', async () => {
     await wrapper.vm.open()
 
-    const dayCell = wrapper.findAll('button').at(10)
+    const dayCell = wrapper.findAll('button')[10]
 
     await dayCell.trigger('click')
     expect(wrapper.emitted('changed')).toHaveLength(1)
@@ -389,7 +389,7 @@ describe('Datepicker mounted', () => {
 
     await wrapper.vm.open()
 
-    const differentDayCell = wrapper.findAll('button').at(11)
+    const differentDayCell = wrapper.findAll('button')[11]
     await differentDayCell.trigger('click')
     expect(wrapper.emitted('changed')).toHaveLength(2)
   })
@@ -410,7 +410,7 @@ describe('Datepicker mounted', () => {
     })
 
     const cells = wrapper.findAll('button.cell')
-    const lastCell = cells.at(cells.length - 1)
+    const lastCell = cells[cells.length - 1]
 
     await lastCell.trigger('click')
 
@@ -652,8 +652,8 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const firstOfMonth = wrapper.findAll('button.cell').at(3)
-    const secondOfMonth = wrapper.findAll('button.cell').at(4)
+    const firstOfMonth = wrapper.findAll('button.cell')[3]
+    const secondOfMonth = wrapper.findAll('button.cell')[4]
 
     firstOfMonth.element.focus()
     await firstOfMonth.trigger('keydown.right')
@@ -665,8 +665,8 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const secondOfMonth = wrapper.findAll('button.cell').at(4)
-    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+    const secondOfMonth = wrapper.findAll('button.cell')[4]
+    const firstOfMonth = wrapper.findAll('button.cell')[3]
 
     secondOfMonth.element.focus()
     await firstOfMonth.trigger('keydown.left')
@@ -678,11 +678,11 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const lastOfMonth = wrapper.findAll('button.cell').at(33)
+    const lastOfMonth = wrapper.findAll('button.cell')[33]
     lastOfMonth.element.focus()
     await lastOfMonth.trigger('keydown.up')
 
-    const cellUp = wrapper.findAll('button.cell').at(26)
+    const cellUp = wrapper.findAll('button.cell')[26]
     expect(document.activeElement).toBe(cellUp.element)
   })
 
@@ -690,11 +690,11 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+    const firstOfMonth = wrapper.findAll('button.cell')[3]
     firstOfMonth.element.focus()
     await firstOfMonth.trigger('keydown.down')
 
-    const cellDown = wrapper.findAll('button.cell').at(10)
+    const cellDown = wrapper.findAll('button.cell')[10]
     expect(document.activeElement).toBe(cellDown.element)
   })
 
@@ -709,12 +709,12 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+    const firstOfMonth = wrapper.findAll('button.cell')[3]
     firstOfMonth.element.focus()
     await firstOfMonth.trigger('keydown.up')
     expect(document.activeElement).toBe(firstOfMonth.element)
 
-    const lastOfMonth = wrapper.findAll('button.cell').at(33)
+    const lastOfMonth = wrapper.findAll('button.cell')[33]
     lastOfMonth.element.focus()
     await lastOfMonth.trigger('keydown.down')
     expect(document.activeElement).toBe(lastOfMonth.element)
@@ -724,13 +724,13 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+    const firstOfMonth = wrapper.findAll('button.cell')[3]
 
     firstOfMonth.element.focus()
     await firstOfMonth.trigger('keydown.left')
     vi.advanceTimersByTime(250)
 
-    const lastOfPreviousMonth = wrapper.findAll('button.cell').at(30)
+    const lastOfPreviousMonth = wrapper.findAll('button.cell')[30]
     expect(document.activeElement).toBe(lastOfPreviousMonth.element)
   })
 
@@ -738,13 +738,13 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const lastOfMonth = wrapper.findAll('button.cell').at(33)
+    const lastOfMonth = wrapper.findAll('button.cell')[33]
 
     lastOfMonth.element.focus()
     await lastOfMonth.trigger('keydown.right')
     vi.advanceTimersByTime(250)
 
-    const firstOfNextMonth = wrapper.findAll('button.cell').at(6)
+    const firstOfNextMonth = wrapper.findAll('button.cell')[6]
     expect(document.activeElement).toBe(firstOfNextMonth.element)
   })
 
@@ -752,12 +752,12 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+    const firstOfMonth = wrapper.findAll('button.cell')[3]
 
     firstOfMonth.element.focus()
     await firstOfMonth.trigger('keydown.up')
 
-    const cellUp = wrapper.findAll('button.cell').at(24)
+    const cellUp = wrapper.findAll('button.cell')[24]
 
     vi.advanceTimersByTime(250)
 
@@ -768,12 +768,12 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const lastOfMonth = wrapper.findAll('button.cell').at(33)
+    const lastOfMonth = wrapper.findAll('button.cell')[33]
 
     lastOfMonth.element.focus()
     await lastOfMonth.trigger('keydown.down')
 
-    const cellDown = wrapper.findAll('button.cell').at(12)
+    const cellDown = wrapper.findAll('button.cell')[12]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellDown.element)
   })
@@ -782,13 +782,13 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const cellBelowMuted = wrapper.findAll('button.cell').at(9)
+    const cellBelowMuted = wrapper.findAll('button.cell')[9]
 
     cellBelowMuted.element.focus()
     await cellBelowMuted.trigger('keydown.up')
 
     vi.advanceTimersByTime(250)
-    const cellUp = wrapper.findAll('button.cell').at(30)
+    const cellUp = wrapper.findAll('button.cell')[30]
     expect(document.activeElement).toBe(cellUp.element)
   })
 
@@ -796,13 +796,13 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const cellAboveMuted = wrapper.findAll('button.cell').at(27)
+    const cellAboveMuted = wrapper.findAll('button.cell')[27]
 
     cellAboveMuted.element.focus()
     await cellAboveMuted.trigger('keydown.down')
 
     vi.advanceTimersByTime(250)
-    const cellDown = wrapper.findAll('button.cell').at(6)
+    const cellDown = wrapper.findAll('button.cell')[6]
     expect(document.activeElement).toBe(cellDown.element)
   })
 
@@ -810,12 +810,12 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+    const firstOfMonth = wrapper.findAll('button.cell')[3]
 
     firstOfMonth.element.focus()
     await firstOfMonth.trigger('keydown.up')
 
-    const cellUp = wrapper.findAll('button.cell').at(24)
+    const cellUp = wrapper.findAll('button.cell')[24]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellUp.element)
   })
@@ -824,12 +824,12 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const lastOfMonth = wrapper.findAll('button.cell').at(33)
+    const lastOfMonth = wrapper.findAll('button.cell')[33]
 
     lastOfMonth.element.focus()
     await lastOfMonth.trigger('keydown.down')
 
-    const cellDown = wrapper.findAll('button.cell').at(12)
+    const cellDown = wrapper.findAll('button.cell')[12]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellDown.element)
   })
@@ -844,12 +844,12 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+    const firstOfMonth = wrapper.findAll('button.cell')[3]
 
     firstOfMonth.element.focus()
     await firstOfMonth.trigger('keydown.up')
 
-    const cellUp = wrapper.findAll('button.cell').at(17)
+    const cellUp = wrapper.findAll('button.cell')[17]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellUp.element)
   })
@@ -864,12 +864,12 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const lastOfMonth = wrapper.findAll('button.cell').at(33)
+    const lastOfMonth = wrapper.findAll('button.cell')[33]
 
     lastOfMonth.element.focus()
     await lastOfMonth.trigger('keydown.down')
 
-    const cellDown = wrapper.findAll('button.cell').at(12)
+    const cellDown = wrapper.findAll('button.cell')[12]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellDown.element)
   })
@@ -884,12 +884,12 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+    const firstOfMonth = wrapper.findAll('button.cell')[3]
 
     firstOfMonth.element.focus()
     await firstOfMonth.trigger('keydown.left')
 
-    const cellLeft = wrapper.findAll('button.cell').at(29)
+    const cellLeft = wrapper.findAll('button.cell')[29]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellLeft.element)
   })
@@ -904,12 +904,12 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const lastOfMonth = wrapper.findAll('button.cell').at(33)
+    const lastOfMonth = wrapper.findAll('button.cell')[33]
 
     lastOfMonth.element.focus()
     await lastOfMonth.trigger('keydown.right')
 
-    const cellRight = wrapper.findAll('button.cell').at(7)
+    const cellRight = wrapper.findAll('button.cell')[7]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellRight.element)
   })
@@ -922,12 +922,12 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const firstOfMonth = wrapper.findAll('button.cell').at(0)
+    const firstOfMonth = wrapper.findAll('button.cell')[0]
 
     firstOfMonth.element.focus()
     await firstOfMonth.trigger('keydown.left')
 
-    const cellLeft = wrapper.findAll('button.cell').at(34)
+    const cellLeft = wrapper.findAll('button.cell')[34]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellLeft.element)
   })
@@ -940,12 +940,12 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const lastOfMonth = wrapper.findAll('button.cell').at(34)
+    const lastOfMonth = wrapper.findAll('button.cell')[34]
 
     lastOfMonth.element.focus()
     await lastOfMonth.trigger('keydown.right')
 
-    const cellRight = wrapper.findAll('button.cell').at(0)
+    const cellRight = wrapper.findAll('button.cell')[0]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellRight.element)
   })
@@ -958,12 +958,12 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const firstOfMonth = wrapper.findAll('button.cell').at(0)
+    const firstOfMonth = wrapper.findAll('button.cell')[0]
 
     firstOfMonth.element.focus()
     await firstOfMonth.trigger('keydown.up')
 
-    const cellUp = wrapper.findAll('button.cell').at(28)
+    const cellUp = wrapper.findAll('button.cell')[28]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellUp.element)
   })
@@ -976,12 +976,12 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const lastOfMonth = wrapper.findAll('button.cell').at(34)
+    const lastOfMonth = wrapper.findAll('button.cell')[34]
 
     lastOfMonth.element.focus()
     await lastOfMonth.trigger('keydown.down')
 
-    const cellDown = wrapper.findAll('button.cell').at(6)
+    const cellDown = wrapper.findAll('button.cell')[6]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellDown.element)
   })
@@ -997,12 +997,12 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const startCell = wrapper.findAll('button.cell').at(13)
+    const startCell = wrapper.findAll('button.cell')[13]
 
     startCell.element.focus()
     await startCell.trigger('keydown.up')
 
-    const cellUp = wrapper.findAll('button.cell').at(27)
+    const cellUp = wrapper.findAll('button.cell')[27]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellUp.element)
   })
@@ -1018,12 +1018,12 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const startCell = wrapper.findAll('button.cell').at(27)
+    const startCell = wrapper.findAll('button.cell')[27]
 
     startCell.element.focus()
     await startCell.trigger('keydown.down')
 
-    const cellDown = wrapper.findAll('button.cell').at(6)
+    const cellDown = wrapper.findAll('button.cell')[6]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellDown.element)
   })
@@ -1188,7 +1188,7 @@ describe('Datepicker mounted inline and attached to body', () => {
 
     expect(document.activeElement).toBe(openDate.element)
 
-    const anotherDate = wrapper.findAll('button.cell').at(10)
+    const anotherDate = wrapper.findAll('button.cell')[10]
     await anotherDate.element.focus()
     await anotherDate.trigger('click')
 
