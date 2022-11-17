@@ -164,11 +164,11 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapper.vm.pageDate.getFullYear()).toEqual(date.getFullYear())
   })
 
-  it('watches value', async () => {
+  it('watches modelValue', async () => {
     const spy = vi.spyOn(wrapper.vm, 'setValue')
 
     await wrapper.setProps({
-      value: new Date(2018, 3, 26),
+      modelValue: new Date(2018, 3, 26),
     })
 
     expect(spy).toHaveBeenCalled()
@@ -278,7 +278,7 @@ describe('Datepicker shallowMounted', () => {
     const someDate = new Date(2021, 0, 15)
 
     await wrapper.setProps({
-      value: someDate,
+      modelValue: someDate,
     })
 
     expect(wrapper.vm.selectedDate).toBe(someDate)

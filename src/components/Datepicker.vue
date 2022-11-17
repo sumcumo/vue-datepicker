@@ -375,7 +375,9 @@ export default {
     disabledDates: {
       // eslint-disable-next-line complexity
       handler() {
-        const selectedDate = this.selectedDate || this.parseValue(this.value)
+        const selectedDate =
+          this.selectedDate || this.parseValue(this.modelValue)
+
         if (!selectedDate) {
           return
         }
@@ -804,7 +806,7 @@ export default {
       this.slideDuration = parseFloat(durationInSecs) * 1000
     },
     /**
-     * Set the datepicker value (and, if typeable, update `latestValidTypedDate`)
+     * Set the datepicker modelValue (and, if typeable, update `latestValidTypedDate`)
      * @param {Date|String|Number|null} date
      */
     setValue(date) {

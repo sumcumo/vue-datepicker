@@ -38,7 +38,7 @@
         :tabindex="tabindex"
         :typeable="typeable"
         :use-utc="useUtc"
-        :value="value"
+        :modelValue="modelValue"
         :wrapper-class="wrapperClass"
         :year-picker-range="yearPickerRange"
       />
@@ -127,6 +127,9 @@ export default {
     minimumView() {
       return this.$store.state.minimumView
     },
+    modelValue() {
+      return this.$store.state.modelValue
+    },
     name() {
       return this.$store.state.name
     },
@@ -165,9 +168,6 @@ export default {
     },
     useUtc() {
       return this.$store.state.useUtc
-    },
-    value() {
-      return this.$store.state.value
     },
     wrapperClass() {
       return this.$store.state.wrapperClass

@@ -232,7 +232,7 @@ describe('Datepicker mounted', () => {
     expect(wrapper.vm.selectedDate).toEqual(new Date(2000, 0, 1))
 
     await wrapper.setProps({
-      value: new Date(2016, 1, 15),
+      modelValue: new Date(2016, 1, 15),
     })
 
     expect(wrapper.vm.selectedDate).toEqual(new Date(2016, 1, 15))
@@ -265,7 +265,7 @@ describe('Datepicker mounted with a default value', () => {
     wrapper = mount(Datepicker, {
       propsData: {
         typeable: true,
-        value: new Date(new Date(2000, 0, 1).setHours(0, 0, 0, 0)),
+        modelValue: new Date(new Date(2000, 0, 1).setHours(0, 0, 0, 0)),
       },
     })
   })
