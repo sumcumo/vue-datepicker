@@ -248,13 +248,13 @@ export default {
     'closed': null,
     'focus': null,
     'opened': null,
-    'changed-month': (date) => {
+    'changedMonth': (date) => {
       return typeof date === 'object'
     },
-    'changed-year': (date) => {
+    'changedYear': (date) => {
       return typeof date === 'object'
     },
-    'changed-decade': (date) => {
+    'changedDecade': (date) => {
       return typeof date === 'object'
     },
     'selected': (date) => {
@@ -556,7 +556,7 @@ export default {
       this.focus.refs = focusRefs
       this.focus.delay = this.slideDuration || 250
       this.reviewFocus()
-      this.$emit(`changed-${this.nextView.up}`, pageDate)
+      this.$emit(`changed${this.ucFirst(this.nextView.up)}`, pageDate)
     },
     /**
      * Set the date, or go to the next view down
@@ -581,7 +581,7 @@ export default {
       }
     },
     /**
-     * Updates the page (if necessary) after a 'typed-date' event and sets `tabbableCell` & `latestValidTypedDate`
+     * Updates the page (if necessary) after a 'typedDate' event and sets `tabbableCell` & `latestValidTypedDate`
      * @param {Date=} date
      */
     handleTypedDate(date) {
@@ -741,8 +741,8 @@ export default {
       this.$emit('update:modelValue', date)
     },
     /**
-     * Select the date from a 'select-typed-date' event
-     * @param {Date|null} date
+     * Select the date from a 'selectTypedDate' event
+     * @param {Date=} date
      */
     selectTypedDate(date) {
       this.selectDate(date)
@@ -852,7 +852,7 @@ export default {
      */
     showNextViewDown(cell) {
       this.setPageDate(new Date(cell.timestamp))
-      this.$emit(`changed-${this.view}`, cell)
+      this.$emit(`changed${this.ucFirst(this.view)}`, cell)
       this.setView(this.nextView.down)
     },
     /**

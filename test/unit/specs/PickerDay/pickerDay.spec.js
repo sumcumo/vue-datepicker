@@ -29,12 +29,12 @@ describe('PickerDay mounted', () => {
 
   it('can set the next month', () => {
     wrapper.vm.changePage({ incrementBy: 1, focusRefs: ['next'] })
-    expect(wrapper.emitted('page-change')[0][0].pageDate.getMonth()).toEqual(2)
+    expect(wrapper.emitted('pageChange')[0][0].pageDate.getMonth()).toEqual(2)
   })
 
   it('can set the previous month', () => {
     wrapper.vm.changePage({ incrementBy: -1, focusRefs: ['prev'] })
-    expect(wrapper.emitted('page-change')[0][0].pageDate.getMonth()).toEqual(0)
+    expect(wrapper.emitted('pageChange')[0][0].pageDate.getMonth()).toEqual(0)
   })
 
   it('emits an event when selected', () => {
@@ -65,7 +65,7 @@ describe('PickerDay mounted', () => {
   it('emits set-view event with `month` when the up button is clicked', async () => {
     const upButton = wrapper.find('.vdp-datepicker__up')
     await upButton.trigger('click')
-    expect(wrapper.emitted('set-view')[0][0]).toBe('month')
+    expect(wrapper.emitted('setView')[0][0]).toBe('month')
   })
 
   it('displays edge dates by default', () => {

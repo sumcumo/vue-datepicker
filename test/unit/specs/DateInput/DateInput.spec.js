@@ -143,7 +143,7 @@ describe('DateInput shallowMounted with selectedDate', () => {
 
     await input.trigger('keydown.del')
 
-    expect(wrapper.emitted('clear-date')).toBeTruthy()
+    expect(wrapper.emitted('clearDate')).toBeTruthy()
   })
 
   it('emits `clear-date` when backspace is pressed', async () => {
@@ -151,7 +151,7 @@ describe('DateInput shallowMounted with selectedDate', () => {
 
     await input.trigger('keydown.backspace')
 
-    expect(wrapper.emitted('clear-date')).toBeTruthy()
+    expect(wrapper.emitted('clearDate')).toBeTruthy()
   })
 })
 

@@ -93,8 +93,8 @@ describe('DateInput shallowMounted', () => {
     input.setValue(dateString)
     await input.trigger('keyup')
 
-    expect(wrapper.emitted('typed-date')).toBeDefined()
-    expect(wrapper.emitted('typed-date')[0][0]).toStrictEqual(
+    expect(wrapper.emitted('typedDate')).toBeDefined()
+    expect(wrapper.emitted('typedDate')[0][0]).toStrictEqual(
       new Date(dateString),
     )
   })
@@ -104,7 +104,7 @@ describe('DateInput shallowMounted', () => {
 
     await input.trigger('keydown.enter')
 
-    expect(wrapper.emitted('select-typed-date')).toBeTruthy()
+    expect(wrapper.emitted('selectTypedDate')).toBeTruthy()
   })
 
   it('parses a typed date using a function passed in via a prop', async () => {
@@ -135,7 +135,7 @@ describe('DateInput shallowMounted', () => {
     input.setValue('2018-04-24')
     await input.trigger('keydown.enter')
 
-    expect(wrapper.emitted('typed-date')).not.toBeDefined()
+    expect(wrapper.emitted('typedDate')).not.toBeDefined()
   })
 })
 

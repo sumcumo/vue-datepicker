@@ -14,7 +14,7 @@
       :is-up-disabled="true"
       @focus-input="focusInput"
       @page-change="changePage($event)"
-      @set-focus="$emit('set-focus', $event)"
+      @set-focus="$emit('setFocus', $event)"
     >
       <template #prevIntervalBtn>
         <slot name="prevIntervalBtn" />
@@ -66,7 +66,7 @@ export default {
     },
   },
   emits: {
-    'set-focus': (refArray) => {
+    setFocus: (refArray) => {
       return refArray.every((ref) => {
         return ['input', 'prev', 'up', 'next', 'tabbableCell'].includes(ref)
       })

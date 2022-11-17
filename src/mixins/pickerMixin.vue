@@ -74,19 +74,19 @@ export default {
     },
   },
   emits: {
-    'page-change': (config) => {
+    pageChange: (config) => {
       return typeof config === 'object'
     },
-    'select': (cell) => {
+    select: (cell) => {
       return typeof cell === 'object'
     },
-    'set-focus': (refArray) => {
+    setFocus: (refArray) => {
       return refArray === ['input']
     },
-    'set-skip-review-focus': (value) => {
+    setSkipReviewFocus: (value) => {
       return typeof value === 'boolean'
     },
-    'set-transition-name': (incrementBy) => {
+    setTransitionName: (incrementBy) => {
       return incrementBy === -1 || incrementBy === 1
     },
   },
@@ -157,7 +157,7 @@ export default {
       const units =
         this.view === 'year' ? incrementBy * this.yearRange : incrementBy
 
-      this.$emit('set-transition-name', incrementBy)
+      this.$emit('setTransitionName', incrementBy)
 
       if (this.view === 'day') {
         utils.setMonth(pageDate, utils.getMonth(pageDate) + units)
@@ -165,7 +165,7 @@ export default {
         utils.setFullYear(pageDate, utils.getFullYear(pageDate) + units)
       }
 
-      this.$emit('page-change', { focusRefs, pageDate })
+      this.$emit('pageChange', { focusRefs, pageDate })
     },
     /**
      * Changes the page and focuses the cell that is being 'arrowed' to
@@ -181,7 +181,7 @@ export default {
         return
       }
 
-      this.$emit('set-skip-review-focus', true)
+      this.$emit('setSkipReviewFocus', true)
 
       this.changePage({
         incrementBy: Math.sign(delta),
@@ -190,7 +190,7 @@ export default {
 
       this.$nextTick(() => {
         this.setFocusOnNewPage(options)
-        this.$emit('set-skip-review-focus', false)
+        this.$emit('setSkipReviewFocus', false)
       })
     },
     /**
@@ -198,7 +198,7 @@ export default {
      */
     focusInput() {
       if (this.isTypeable) {
-        this.$emit('set-focus', ['input'])
+        this.$emit('setFocus', ['input'])
       }
     },
     /**
@@ -296,11 +296,11 @@ export default {
      */
     select(cell) {
       if (cell.isPreviousMonth) {
-        this.$emit('set-transition-name', -1)
+        this.$emit('setTransitionName', -1)
       }
 
       if (cell.isNextMonth) {
-        this.$emit('set-transition-name', 1)
+        this.$emit('setTransitionName', 1)
       }
 
       this.$emit('select', cell)
