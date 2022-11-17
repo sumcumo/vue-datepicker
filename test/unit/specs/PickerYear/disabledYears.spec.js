@@ -16,7 +16,7 @@ describe('PickerYear mounted', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('disables years from a given date', async () => {

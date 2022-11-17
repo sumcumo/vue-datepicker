@@ -32,7 +32,7 @@ describe('Datepicker shallowMounted', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('sets the date from method', () => {
@@ -321,7 +321,7 @@ describe('Datepicker mounted', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('opens in `day` view', async () => {
@@ -430,7 +430,7 @@ describe('Datepicker mounted with showCalendarOnFocus', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('opens on focusing the input', async () => {
@@ -477,7 +477,7 @@ describe('Datepicker mounted with calendar button', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('toggles via the calendar button', async () => {
@@ -541,7 +541,7 @@ describe('Datepicker mounted with slots', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('knows how many navElements there are', async () => {
@@ -577,7 +577,7 @@ describe('Datepicker mounted and attached to body', () => {
   afterEach(() => {
     vi.clearAllTimers()
 
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it("focuses today's date when append-to-body is true", async () => {
@@ -634,7 +634,7 @@ describe('Datepicker mounted and attached to body with openDate', () => {
 
   afterEach(() => {
     vi.clearAllTimers()
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('opens the calendar on pressing the `down` arrow when the input is focused', async () => {
@@ -1145,7 +1145,7 @@ describe('Datepicker mounted inline', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('shows calendar as already open', () => {
@@ -1178,7 +1178,7 @@ describe('Datepicker mounted inline and attached to body', () => {
   afterEach(() => {
     vi.clearAllTimers()
 
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('focuses the date when selected', async () => {
@@ -1214,14 +1214,14 @@ describe('Datepicker mounted and appended to body', () => {
     expect(document.querySelector('.vdp-datepicker__calendar')).toBeDefined()
 
     await wrapper.vm.close()
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('removes popup appended to body on component removal', async () => {
     await wrapper.vm.open()
     await wrapper.vm.close()
 
-    wrapper.destroy()
+    wrapper.unmount()
     expect(document.querySelector('.vdp-datepicker__calendar')).toBeNull()
   })
 })

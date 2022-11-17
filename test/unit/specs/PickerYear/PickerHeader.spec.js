@@ -15,7 +15,7 @@ describe('PickerHeader shallowMounted', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('arrows down to tabbable cell', () => {

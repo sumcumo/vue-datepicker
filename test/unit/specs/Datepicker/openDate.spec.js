@@ -9,7 +9,7 @@ describe('Datepicker shallowMounted', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it("defaults to today's date if no open date is set", () => {
@@ -71,7 +71,7 @@ describe('Datepicker shallowMounted with open date', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it("sets pageTimestamp to be first day of open date's month", () => {

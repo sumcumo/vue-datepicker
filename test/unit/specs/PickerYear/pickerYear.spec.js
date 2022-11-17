@@ -16,7 +16,7 @@ describe('PickerYear mounted', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('knows the selected year', async () => {

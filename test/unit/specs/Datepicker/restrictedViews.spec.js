@@ -9,7 +9,7 @@ describe('Datepicker mounted with restricted views', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('sets initialView to minimumView by default', async () => {

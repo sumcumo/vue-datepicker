@@ -16,7 +16,7 @@ describe('PickerDay mounted', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('disables dates from a given date', async () => {

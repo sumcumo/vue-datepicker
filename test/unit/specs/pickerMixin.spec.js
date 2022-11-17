@@ -29,7 +29,7 @@ describe('pickerMixin shallowMounted', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('mounts', () => {

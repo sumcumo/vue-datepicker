@@ -14,7 +14,7 @@ describe('Datepicker mounted with date', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('is not out of bounds', async () => {

@@ -17,7 +17,7 @@ describe('DateInput shallowMounted', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('does not format the date when typed', async () => {
@@ -151,7 +151,7 @@ describe('Datepicker mounted', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('sets the date and closes the calendar', () => {
@@ -271,7 +271,7 @@ describe('Datepicker mounted with a default value', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('displays a date passed in as a default value', async () => {
@@ -294,7 +294,7 @@ describe('Datepicker mounted with showCalendarOnFocus', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('toggles on clicking the input', async () => {
@@ -338,7 +338,7 @@ describe('DatePicker mounted and attached to body', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('arrows down from the input field to the header', async () => {

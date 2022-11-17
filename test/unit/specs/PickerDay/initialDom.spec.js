@@ -15,7 +15,7 @@ describe('PickerDay mounted', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('renders correct contents', () => {

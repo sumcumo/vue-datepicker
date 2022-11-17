@@ -18,7 +18,7 @@ describe('DateInput shallowMounted', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('renders correct contents', () => {
@@ -107,7 +107,7 @@ describe('DateInput shallowMounted with selectedDate', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('formats date', () => {
@@ -167,7 +167,7 @@ describe('DateInput shallowMounted with showCalendarOnFocus', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('emits `open` event on focus', async () => {
@@ -224,7 +224,7 @@ describe('DateInput shallowMounted with bootstrap styling', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('adds bootstrap classes', async () => {

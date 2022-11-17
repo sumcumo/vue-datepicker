@@ -13,7 +13,7 @@ describe('PickerCells', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('knows the number of columns', async () => {

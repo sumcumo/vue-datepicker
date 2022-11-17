@@ -16,7 +16,7 @@ describe('PickerMonth mounted', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('knows the selected month', async () => {

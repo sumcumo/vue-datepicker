@@ -16,7 +16,7 @@ describe('PickerDay mounted with Monday as first day of week', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('returns Monday as a first day of week', () => {
@@ -62,7 +62,7 @@ describe('PickerDay mounted with Saturday as first day of week', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('has 6 days from previous month when month starts on a Friday', async () => {
