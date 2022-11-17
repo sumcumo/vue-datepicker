@@ -99,7 +99,7 @@ describe('DateInput shallowMounted with selectedDate', () => {
 
   beforeEach(() => {
     wrapper = shallowMount(DateInput, {
-      propsData: {
+      props: {
         selectedDate: new Date(2018, 2, 24),
         translation: en,
       },
@@ -160,7 +160,7 @@ describe('DateInput shallowMounted with showCalendarOnFocus', () => {
 
   beforeEach(() => {
     wrapper = shallowMount(DateInput, {
-      propsData: {
+      props: {
         showCalendarOnFocus: true,
       },
     })
@@ -217,7 +217,7 @@ describe('DateInput shallowMounted with bootstrap styling', () => {
 
   beforeEach(() => {
     wrapper = shallowMount(DateInput, {
-      propsData: {
+      props: {
         bootstrapStyling: true,
       },
     })

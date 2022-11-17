@@ -5,7 +5,7 @@ describe('PickerCells', () => {
   let wrapper
   beforeEach(() => {
     wrapper = shallowMount(PickerCells, {
-      propsData: {
+      props: {
         cells: [],
         view: 'day',
       },

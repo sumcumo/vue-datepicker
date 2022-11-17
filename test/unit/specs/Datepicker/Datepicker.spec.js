@@ -423,7 +423,7 @@ describe('Datepicker mounted with showCalendarOnFocus', () => {
 
   beforeEach(() => {
     wrapper = mount(Datepicker, {
-      propsData: {
+      props: {
         showCalendarOnFocus: true,
       },
     })
@@ -470,7 +470,7 @@ describe('Datepicker mounted with calendar button', () => {
 
   beforeEach(() => {
     wrapper = mount(Datepicker, {
-      propsData: {
+      props: {
         calendarButton: true,
       },
     })
@@ -626,7 +626,7 @@ describe('Datepicker mounted and attached to body with openDate', () => {
 
     wrapper = mount(Datepicker, {
       attachTo: document.body,
-      propsData: {
+      props: {
         openDate: new Date(2020, 0, 1),
       },
     })
@@ -1118,7 +1118,7 @@ describe('Datepicker mounted using UTC', () => {
 
     // It's important to use the `mount` helper here
     wrapper = mount(Datepicker, {
-      propsData: {
+      props: {
         format: 'yyyy MM dd',
         value: ambiguousDate,
         useUtc: true, // This should fail if `useUtc=false`
@@ -1138,7 +1138,7 @@ describe('Datepicker mounted inline', () => {
 
   beforeEach(() => {
     wrapper = mount(Datepicker, {
-      propsData: {
+      props: {
         inline: true,
       },
     })
@@ -1169,7 +1169,7 @@ describe('Datepicker mounted inline and attached to body', () => {
 
     wrapper = mount(Datepicker, {
       attachTo: document.body,
-      propsData: {
+      props: {
         inline: true,
       },
     })
@@ -1201,7 +1201,7 @@ describe('Datepicker mounted and appended to body', () => {
 
   beforeEach(() => {
     wrapper = mount(Datepicker, {
-      propsData: {
+      props: {
         appendToBody: true,
       },
     })

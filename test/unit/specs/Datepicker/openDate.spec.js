@@ -64,7 +64,7 @@ describe('Datepicker shallowMounted with open date', () => {
 
   beforeEach(() => {
     wrapper = shallowMount(Datepicker, {
-      propsData: {
+      props: {
         openDate,
       },
     })

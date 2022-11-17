@@ -7,7 +7,7 @@ describe('PickerDay mounted with Monday as first day of week', () => {
 
   beforeEach(() => {
     wrapper = mount(PickerDay, {
-      propsData: {
+      props: {
         firstDayOfWeek: 'mon',
         translation: en,
         pageDate: new Date(2018, 1, 1),
@@ -53,7 +53,7 @@ describe('PickerDay mounted with Saturday as first day of week', () => {
 
   beforeEach(() => {
     wrapper = mount(PickerDay, {
-      propsData: {
+      props: {
         firstDayOfWeek: 'sat',
         translation: en,
         pageDate: new Date(2018, 1, 1),

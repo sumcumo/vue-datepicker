@@ -7,7 +7,7 @@ describe('Datepicker mounted with date', () => {
 
   beforeEach(() => {
     wrapper = mount(Datepicker, {
-      propsData: {
+      props: {
         modelValue: new Date(2016, 1, 15),
       },
     })

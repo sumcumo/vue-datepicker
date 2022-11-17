@@ -6,7 +6,7 @@ describe('PickerHeader shallowMounted', () => {
 
   beforeEach(() => {
     wrapper = shallowMount(PickerHeader, {
-      propsData: {
+      props: {
         isRtl: false,
         isNextDisabled: false,
         isPreviousDisabled: false,

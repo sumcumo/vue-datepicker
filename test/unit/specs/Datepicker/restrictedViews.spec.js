@@ -91,7 +91,7 @@ describe('Datepicker mounted with restricted views', () => {
 
   it('throws an error on disallowed initial views', () => {
     wrapper = mount(Datepicker, {
-      propsData: {
+      props: {
         minimumView: 'day',
         maximumView: 'month',
         initialView: 'year',

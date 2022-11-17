@@ -7,7 +7,7 @@ describe('PickerDay mounted', () => {
 
   beforeEach(() => {
     wrapper = mount(PickerDay, {
-      propsData: {
+      props: {
         translation: en,
         pageDate: new Date(2018, 1, 1),
       },
@@ -162,7 +162,7 @@ describe('PickerDay mounted', () => {
 describe('PickerDay mounted with scoped slot', () => {
   it('displays the dayCellContent scoped slot correctly', () => {
     const wrapper = mount(PickerDay, {
-      propsData: {
+      props: {
         translation: en,
         pageDate: new Date(2018, 1, 1),
       },

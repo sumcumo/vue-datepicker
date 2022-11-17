@@ -9,7 +9,7 @@ describe('DateInput shallowMounted', () => {
 
   beforeEach(() => {
     wrapper = shallowMount(DateInput, {
-      propsData: {
+      props: {
         translation: en,
         typeable: true,
       },
@@ -144,7 +144,7 @@ describe('Datepicker mounted', () => {
 
   beforeEach(() => {
     wrapper = mount(Datepicker, {
-      propsData: {
+      props: {
         typeable: true,
       },
     })
@@ -263,7 +263,7 @@ describe('Datepicker mounted with a default value', () => {
 
   beforeEach(() => {
     wrapper = mount(Datepicker, {
-      propsData: {
+      props: {
         typeable: true,
         modelValue: new Date(new Date(2000, 0, 1).setHours(0, 0, 0, 0)),
       },
@@ -286,7 +286,7 @@ describe('Datepicker mounted with showCalendarOnFocus', () => {
 
   beforeEach(() => {
     wrapper = mount(Datepicker, {
-      propsData: {
+      props: {
         typeable: true,
         showCalendarOnFocus: true,
       },
@@ -331,7 +331,7 @@ describe('DatePicker mounted and attached to body', () => {
   beforeEach(() => {
     wrapper = mount(Datepicker, {
       attachTo: document.body,
-      propsData: {
+      props: {
         typeable: true,
       },
     })

@@ -7,7 +7,7 @@ describe('PickerDay mounted', () => {
 
   beforeEach(() => {
     wrapper = mount(PickerDay, {
-      propsData: {
+      props: {
         translation: en,
         pageDate: new Date(2018, 1, 1),
       },
