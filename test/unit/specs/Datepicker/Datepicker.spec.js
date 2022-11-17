@@ -184,17 +184,6 @@ describe('Datepicker shallowMounted', () => {
     expect(spy).toHaveBeenCalled()
   })
 
-  it('watches initialView when open', async () => {
-    const spy = vi.spyOn(wrapper.vm, 'setInitialView')
-
-    await wrapper.vm.open()
-    await wrapper.setProps({
-      initialView: 'month',
-    })
-
-    expect(spy).toHaveBeenCalled()
-  })
-
   it('clears the date when it is disabled', async () => {
     const someDate = new Date(2021, 0, 15)
 
@@ -338,6 +327,17 @@ describe('Datepicker mounted', () => {
 
     wrapper.vm.setView('year')
     expect(wrapper.vm.picker).toBe('PickerYear')
+  })
+
+  it('watches initialView when open', async () => {
+    const spy = vi.spyOn(wrapper.vm, 'setInitialView')
+
+    await wrapper.vm.open()
+    await wrapper.setProps({
+      initialView: 'month',
+    })
+
+    expect(spy).toHaveBeenCalled()
   })
 
   it('sets picker classes correctly', async () => {
