@@ -35,7 +35,7 @@ export default {
       tabindex: null,
       typeable: false,
       useUtc: false,
-      value: '',
+      modelValue: null,
       wrapperClass: null,
       yearPickerRange: 10,
     }

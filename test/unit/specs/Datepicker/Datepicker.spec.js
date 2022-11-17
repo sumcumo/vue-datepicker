@@ -49,7 +49,7 @@ describe('Datepicker shallowMounted', () => {
     const date = new Date(2016, 1, 15)
 
     await wrapper.setProps({
-      value: date,
+      modelValue: date,
     })
 
     expect(wrapper.vm.selectedDate).toEqual(date)
@@ -60,7 +60,7 @@ describe('Datepicker shallowMounted', () => {
 
     await wrapper.setProps({
       useUtc: true,
-      value: '2016-02-20',
+      modelValue: '2016-02-20',
     })
 
     expect(wrapper.vm.selectedDate).toEqual(date)
@@ -68,7 +68,7 @@ describe('Datepicker shallowMounted', () => {
 
   it('nullifies a malformed string value', async () => {
     await wrapper.setProps({
-      value: 'today',
+      modelValue: 'today',
     })
 
     expect(wrapper.vm.selectedDate).toBeNull()
@@ -78,7 +78,7 @@ describe('Datepicker shallowMounted', () => {
     const date = new Date(2018, 0, 29)
 
     await wrapper.setProps({
-      value: date.valueOf(),
+      modelValue: date.valueOf(),
     })
 
     expect(wrapper.vm.selectedDate).toEqual(date)
@@ -86,7 +86,7 @@ describe('Datepicker shallowMounted', () => {
 
   it('clears the date', async () => {
     await wrapper.setProps({
-      value: new Date(2016, 1, 15),
+      modelValue: new Date(2016, 1, 15),
     })
 
     wrapper.vm.clearDate()
@@ -265,7 +265,7 @@ describe('Datepicker shallowMounted', () => {
     const someDate = new Date(2021, 0, 15)
 
     await wrapper.setProps({
-      value: someDate,
+      modelValue: someDate,
       disabledDates: {
         to: addDays(someDate, 1),
       },
@@ -406,7 +406,7 @@ describe('Datepicker mounted', () => {
 
   it('selects an edge date', async () => {
     await wrapper.setProps({
-      value: new Date(2020, 0, 1),
+      modelValue: new Date(2020, 0, 1),
     })
 
     const cells = wrapper.findAll('button.cell')
@@ -916,7 +916,7 @@ describe('Datepicker mounted and attached to body with openDate', () => {
 
   it('arrows left on first cell (with no dates from previous month) to the previous page', async () => {
     await wrapper.setProps({
-      value: new Date(2020, 2, 1),
+      modelValue: new Date(2020, 2, 1),
     })
 
     await wrapper.vm.open()
@@ -934,7 +934,7 @@ describe('Datepicker mounted and attached to body with openDate', () => {
 
   it('arrows right on last cell (with no dates from next month) to the next page', async () => {
     await wrapper.setProps({
-      value: new Date(2020, 1, 29),
+      modelValue: new Date(2020, 1, 29),
     })
 
     await wrapper.vm.open()
@@ -952,7 +952,7 @@ describe('Datepicker mounted and attached to body with openDate', () => {
 
   it('arrows up on first cell (with no dates from previous month) to the previous page', async () => {
     await wrapper.setProps({
-      value: new Date(2020, 2, 1),
+      modelValue: new Date(2020, 2, 1),
     })
 
     await wrapper.vm.open()
@@ -970,7 +970,7 @@ describe('Datepicker mounted and attached to body with openDate', () => {
 
   it('arrows down on last cell (with no dates from next month) to the next page', async () => {
     await wrapper.setProps({
-      value: new Date(2020, 1, 29),
+      modelValue: new Date(2020, 1, 29),
     })
 
     await wrapper.vm.open()
@@ -988,7 +988,7 @@ describe('Datepicker mounted and attached to body with openDate', () => {
 
   it('arrows up on cell, bypassing a disabled cell, to reach the previous page', async () => {
     await wrapper.setProps({
-      value: new Date(2020, 1, 8),
+      modelValue: new Date(2020, 1, 8),
       disabledDates: {
         dates: [new Date(2020, 1, 1)],
       },
@@ -1009,7 +1009,7 @@ describe('Datepicker mounted and attached to body with openDate', () => {
 
   it('arrows down on cell, bypassing a disabled cell, to reach the next page', async () => {
     await wrapper.setProps({
-      value: new Date(2020, 1, 22),
+      modelValue: new Date(2020, 1, 22),
       disabledDates: {
         dates: [new Date(2020, 1, 29)],
       },
@@ -1120,7 +1120,7 @@ describe('Datepicker mounted using UTC', () => {
     wrapper = mount(Datepicker, {
       props: {
         format: 'yyyy MM dd',
-        value: ambiguousDate,
+        modelValue: ambiguousDate,
         useUtc: true, // This should fail if `useUtc=false`
       },
     })
