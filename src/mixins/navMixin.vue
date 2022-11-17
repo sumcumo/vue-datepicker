@@ -228,7 +228,7 @@ export default {
       }
 
       const navNodeList = fragment.querySelectorAll(
-        'button:enabled, [href], input:not([type=hidden]), select:enabled, textarea:enabled, [tabindex]:not([tabindex="-1"])',
+        'button:enabled:not([tabindex="-1"]), [href]:not([tabindex="-1"]), input:not([tabindex="-1"]):not([type=hidden]), select:enabled:not([tabindex="-1"]), textarea:enabled:not([tabindex="-1"]), [tabindex]:not([tabindex="-1"])',
       )
 
       return [...Array.prototype.slice.call(navNodeList)]
