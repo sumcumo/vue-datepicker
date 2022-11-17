@@ -112,14 +112,23 @@ export default {
      * Returns the currently focused cell element, if there is one...
      */
     getActiveCell() {
-      const isActiveElementACell = this.hasClass(document.activeElement, 'cell')
-      const isOnSameView = this.hasClass(document.activeElement, this.view)
+      const activeElement = this.getActiveElement()
+      const isActiveElementACell = this.hasClass(activeElement, 'cell')
+      const isOnSameView = this.hasClass(activeElement, this.view)
 
       if (isActiveElementACell && isOnSameView && !this.resetTabbableCell) {
-        return document.activeElement
+        return activeElement
       }
 
       return null
+    },
+    /**
+     * Returns the currently focused element, using shadowRoot for web-components...
+     */
+    getActiveElement() {
+      return document.activeElement.shadowRoot
+        ? document.activeElement.shadowRoot.activeElement
+        : document.activeElement
     },
     /**
      * Returns the `cellId` for a given a date
@@ -333,9 +342,10 @@ export default {
         return false
       }
 
+      const activeElement = this.getActiveElement()
       const firstNavElement = this.navElements[0]
 
-      return document.activeElement === firstNavElement
+      return activeElement === firstNavElement
     },
     /**
      * Used for inline calendars; returns true if the user tabs forwards from the last focusable element
@@ -347,9 +357,10 @@ export default {
         return false
       }
 
+      const activeElement = this.getActiveElement()
       const lastNavElement = this.navElements[this.navElements.length - 1]
 
-      return document.activeElement === lastNavElement
+      return activeElement === lastNavElement
     },
     /**
      * Resets the focus to the open date
@@ -453,8 +464,10 @@ export default {
      * Keeps track of the currently focused index in the navElements array
      */
     setNavElementsFocusedIndex() {
+      const activeElement = this.getActiveElement()
+
       for (let i = 0; i < this.navElements.length; i += 1) {
-        if (document.activeElement === this.navElements[i]) {
+        if (activeElement === this.navElements[i]) {
           this.navElementsFocusedIndex = i
           return
         }
@@ -575,7 +588,8 @@ export default {
     tabToCorrectInlineCell() {
       const lastElement = this.getLastInlineFocusableElement()
       const isACell = this.hasClass(lastElement, 'cell')
-      const isLastElementFocused = document.activeElement === lastElement
+      const activeElement = this.getActiveElement()
+      const isLastElementFocused = activeElement === lastElement
 
       // If there are no focusable elements in the footer slots and the inline datepicker has been tabbed to (backwards)
       if (isACell && isLastElementFocused) {
@@ -585,8 +599,7 @@ export default {
 
       // If `show-header` is false and the inline datepicker has been tabbed to (forwards)
       this.$nextTick(() => {
-        const isFirstCell =
-          document.activeElement.getAttribute('data-id') === '0'
+        const isFirstCell = activeElement.getAttribute('data-id') === '0'
 
         if (isFirstCell) {
           this.focusInlineTabbableCell()
@@ -597,7 +610,8 @@ export default {
      * Update which cell in the picker should be focus-trapped
      */
     updateTabbableCell() {
-      const isActiveElementACell = this.hasClass(document.activeElement, 'cell')
+      const activeElement = this.getActiveElement()
+      const isActiveElementACell = this.hasClass(activeElement, 'cell')
       const needToUpdate = !this.tabbableCell || isActiveElementACell
 
       if (needToUpdate) {
