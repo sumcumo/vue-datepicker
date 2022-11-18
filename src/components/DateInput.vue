@@ -129,13 +129,12 @@ export default {
     },
     isOpen(isOpen, wasOpen) {
       this.$nextTick(() => {
-        if (this.showCalendarOnFocus) {
-          if (isOpen) {
-            this.shouldToggleOnFocus = false
-          }
+        if (isOpen && this.showCalendarOnFocus) {
           if (wasOpen && !this.isInputFocused) {
             this.shouldToggleOnFocus = true
+            return
           }
+          this.shouldToggleOnFocus = false
         }
       })
     },
