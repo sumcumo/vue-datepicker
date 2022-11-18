@@ -258,6 +258,29 @@ describe('Datepicker mounted', () => {
   })
 })
 
+describe('Datepicker mounted with a default value', () => {
+  let wrapper
+
+  beforeEach(() => {
+    wrapper = mount(Datepicker, {
+      propsData: {
+        typeable: true,
+        value: new Date(new Date(2000, 0, 1).setHours(0, 0, 0, 0)),
+      },
+    })
+  })
+
+  afterEach(() => {
+    wrapper.destroy()
+  })
+
+  it('displays a date passed in as a default value', async () => {
+    const input = wrapper.find('input')
+
+    expect(input.element.value).toEqual('01 Jan 2000')
+  })
+})
+
 describe('Datepicker mounted with showCalendarOnFocus', () => {
   let wrapper
 
