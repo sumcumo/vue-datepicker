@@ -262,9 +262,12 @@ export default {
      * @param {Object}
      */
     handleArrow({ delta }) {
+      const activeElement = document.activeElement.shadowRoot
+        ? document.activeElement.shadowRoot.activeElement
+        : document.activeElement
       const stepsRemaining = Math.abs(delta)
       const options = {
-        currentElement: document.activeElement,
+        currentElement: activeElement,
         delta,
         stepsRemaining,
       }
@@ -334,6 +337,7 @@ export default {
      * Sets the focus on the correct cell following a page change
      * @param {Object} options
      */
+    // eslint-disable-next-line max-statements
     setFocusOnNewPage({ delta, stepsRemaining }) {
       const currentElement = this.getFirstOrLastElement(delta)
       const options = {
@@ -341,6 +345,7 @@ export default {
         delta,
         stepsRemaining,
       }
+      const delay = this.slideDuration || 250
 
       if (stepsRemaining <= 0) {
         if (this.isMutedOrDisabled(currentElement)) {
@@ -348,21 +353,21 @@ export default {
 
           setTimeout(() => {
             this.setFocusToAvailableCell(options)
-          }, this.slideDuration)
+          }, delay)
 
           return
         }
 
         setTimeout(() => {
           currentElement.focus()
-        }, this.slideDuration)
+        }, delay)
 
         return
       }
 
       setTimeout(() => {
         this.setFocusToAvailableCell(options)
-      }, this.slideDuration)
+      }, delay)
     },
     /**
      * Sets the focus on the next focusable cell when an arrow key is pressed

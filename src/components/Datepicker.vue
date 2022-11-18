@@ -531,7 +531,7 @@ export default {
     handlePageChange({ focusRefs, pageDate }) {
       this.setPageDate(pageDate)
       this.focus.refs = focusRefs
-      this.focus.delay = this.slideDuration
+      this.focus.delay = this.slideDuration || 250
       this.reviewFocus()
       this.$emit(`changed-${this.nextView.up}`, pageDate)
     },
@@ -658,9 +658,10 @@ export default {
         return false
       }
 
+      const activeElement = this.getActiveElement()
       const isOpenCellFocused =
-        this.hasClass(document.activeElement, 'cell') &&
-        !this.hasClass(document.activeElement, 'open')
+        this.hasClass(activeElement, 'cell') &&
+        !this.hasClass(activeElement, 'open')
 
       return !this.isMinimumView || isOpenCellFocused
     },
