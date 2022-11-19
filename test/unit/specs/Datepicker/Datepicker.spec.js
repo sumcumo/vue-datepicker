@@ -1074,7 +1074,9 @@ describe('Datepicker mounted and attached to body with openDate', () => {
       openDate,
     })
 
-    await wrapper.vm.open()
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
     vi.advanceTimersByTime(250)
 
     const nextButton = wrapper.find('button.next')
@@ -1092,7 +1094,9 @@ describe('Datepicker mounted and attached to body with openDate', () => {
       openDate,
     })
 
-    await wrapper.vm.open()
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
     vi.advanceTimersByTime(250)
 
     const prevButton = wrapper.find('button.prev')
