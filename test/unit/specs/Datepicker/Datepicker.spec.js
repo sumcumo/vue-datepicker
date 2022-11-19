@@ -1036,7 +1036,10 @@ describe('Datepicker mounted and attached to body with openDate', () => {
       openDate,
     })
 
-    await wrapper.vm.open()
+    const input = wrapper.find('input')
+
+    await input.trigger('focusin')
+    await input.trigger('click')
     vi.advanceTimersByTime(250)
 
     const firstAvailableDate = wrapper.find('button.cell:not(.muted):enabled')
@@ -1055,7 +1058,10 @@ describe('Datepicker mounted and attached to body with openDate', () => {
       openDate,
     })
 
-    await wrapper.vm.open()
+    const input = wrapper.find('input')
+
+    await input.trigger('focusin')
+    await input.trigger('click')
     vi.advanceTimersByTime(250)
 
     const firstAvailableDate = wrapper.find('button.cell:not(.muted):enabled')
