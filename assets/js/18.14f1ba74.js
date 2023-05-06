@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[18],{274:function(e,t,a){"use strict";a.r(t);var n={name:"DatepickerOpenDate",data:()=>({openDate:null})},l=a(6),c=Object(l.a)(n,(function(){return(0,this._self._c)("Datepicker",{attrs:{language:this.$datepickerLocals.he}})}),[],!1,null,null,null);t.default=c.exports}}]);
