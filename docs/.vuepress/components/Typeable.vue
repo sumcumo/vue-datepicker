@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import Format from '../../../docs/.vuepress/components/Formats'
+import Format from '../components/Formats.vue'
 
 export default {
   name: 'Typeable',

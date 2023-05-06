@@ -5,7 +5,7 @@ describe('PickerCells', () => {
   let wrapper
   beforeEach(() => {
     wrapper = shallowMount(PickerCells, {
-      propsData: {
+      props: {
         cells: [],
         view: 'day',
       },
@@ -13,7 +13,7 @@ describe('PickerCells', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('knows the number of columns', async () => {

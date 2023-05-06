@@ -27,7 +27,7 @@ Download the latest release from github
 
 <script>
 import DatePicker from '@sum.cumo/vue-datepicker'
-import '@sum.cumo/vue-datepicker/dist/Datepicker.css'
+import '@sum.cumo/vue-datepicker/dist/vue-datepicker.css'
 
 export default {
   name: 'Example',

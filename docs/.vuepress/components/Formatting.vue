@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import Format from '../../../docs/.vuepress/components/Formats'
+import Format from '../components/Formats.vue'
 import { format, parse } from 'date-fns'
 
 export default {

@@ -39,7 +39,6 @@
       @blur="handleInputBlur"
       @click="handleInputClick"
       @focus="handleInputFocus"
-      @keydown.backspace="handleDelete"
       @keydown.delete="handleDelete"
       @keydown.down.prevent="handleKeydownDown"
       @keydown.enter.prevent="handleKeydownEnter"
@@ -88,6 +87,32 @@ export default {
       default() {
         return {}
       },
+    },
+  },
+  emits: {
+    blur: null,
+    clearDate: null,
+    close: null,
+    focus: null,
+    open: null,
+    selectTypedDate: (date) => {
+      return date === null || date instanceof Date
+    },
+    setFocus: (refArray) => {
+      return refArray.every((ref) => {
+        return [
+          'calendarButton',
+          'input',
+          'prev',
+          'up',
+          'next',
+          'tabbableCell',
+        ].includes(ref)
+      })
+    },
+    tab: null,
+    typedDate: (date) => {
+      return date === null || date instanceof Date
     },
   },
   data() {
@@ -156,7 +181,7 @@ export default {
      */
     clearDate() {
       this.input.value = ''
-      this.$emit('clear-date')
+      this.$emit('clearDate')
     },
     /**
      * Formats a date
@@ -254,7 +279,7 @@ export default {
         return
       }
 
-      this.$emit('set-focus', ['prev', 'up', 'next', 'tabbableCell'])
+      this.$emit('setFocus', ['prev', 'up', 'next', 'tabbableCell'])
     },
     /**
      * Selects a typed date and closes the calendar
@@ -265,14 +290,14 @@ export default {
       }
 
       if (!this.input.value) {
-        this.$emit('select-typed-date', null)
+        this.$emit('selectTypedDate', null)
         return
       }
 
       const parsedDate = this.parseInput()
 
       if (this.utils.isValidDate(parsedDate)) {
-        this.$emit('select-typed-date', parsedDate)
+        this.$emit('selectTypedDate', parsedDate)
       }
     },
     /**
@@ -315,14 +340,14 @@ export default {
       this.typedDate = this.input.value
 
       if (!this.input.value) {
-        this.$emit('typed-date', null)
+        this.$emit('typedDate', null)
         return
       }
 
       const parsedDate = this.parseInput()
 
       if (this.utils.isValidDate(parsedDate)) {
-        this.$emit('typed-date', parsedDate)
+        this.$emit('typedDate', parsedDate)
       }
     },
     /**
@@ -359,7 +384,7 @@ export default {
      */
     toggle(calendarButton) {
       if (this.isOpen) {
-        this.$emit('set-focus', [calendarButton || 'input'])
+        this.$emit('setFocus', [calendarButton || 'input'])
       }
 
       this.$emit(this.isOpen ? 'close' : 'open')

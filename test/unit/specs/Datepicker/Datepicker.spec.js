@@ -32,7 +32,7 @@ describe('Datepicker shallowMounted', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('sets the date from method', () => {
@@ -49,7 +49,7 @@ describe('Datepicker shallowMounted', () => {
     const date = new Date(2016, 1, 15)
 
     await wrapper.setProps({
-      value: date,
+      modelValue: date,
     })
 
     expect(wrapper.vm.selectedDate).toEqual(date)
@@ -60,7 +60,7 @@ describe('Datepicker shallowMounted', () => {
 
     await wrapper.setProps({
       useUtc: true,
-      value: '2016-02-20',
+      modelValue: '2016-02-20',
     })
 
     expect(wrapper.vm.selectedDate).toEqual(date)
@@ -68,7 +68,7 @@ describe('Datepicker shallowMounted', () => {
 
   it('nullifies a malformed string value', async () => {
     await wrapper.setProps({
-      value: 'today',
+      modelValue: 'today',
     })
 
     expect(wrapper.vm.selectedDate).toBeNull()
@@ -78,7 +78,7 @@ describe('Datepicker shallowMounted', () => {
     const date = new Date(2018, 0, 29)
 
     await wrapper.setProps({
-      value: date.valueOf(),
+      modelValue: date.valueOf(),
     })
 
     expect(wrapper.vm.selectedDate).toEqual(date)
@@ -86,7 +86,7 @@ describe('Datepicker shallowMounted', () => {
 
   it('clears the date', async () => {
     await wrapper.setProps({
-      value: new Date(2016, 1, 15),
+      modelValue: new Date(2016, 1, 15),
     })
 
     wrapper.vm.clearDate()
@@ -130,6 +130,67 @@ describe('Datepicker shallowMounted', () => {
     expect(wrapper.vm.isOpen).toEqual(false)
   })
 
+  it('watches modelValue', async () => {
+    const spy = vi.spyOn(wrapper.vm, 'setValue')
+
+    await wrapper.setProps({
+      modelValue: new Date(2018, 3, 26),
+    })
+
+    expect(spy).toHaveBeenCalled()
+  })
+
+  it('watches openDate', async () => {
+    const spy = vi.spyOn(wrapper.vm, 'setPageDate')
+
+    await wrapper.setProps({
+      openDate: new Date(2018, 3, 26),
+    })
+
+    expect(spy).toHaveBeenCalled()
+  })
+
+  it('clears the date when it is disabled', async () => {
+    const someDate = new Date(2021, 0, 15)
+
+    await wrapper.setProps({
+      modelValue: someDate,
+      disabledDates: {
+        to: addDays(someDate, 1),
+      },
+    })
+
+    expect(wrapper.vm.selectedDate).toBeNull()
+  })
+
+  it('clears the date when it becomes disabled', async () => {
+    const someDate = new Date(2021, 0, 15)
+
+    await wrapper.setProps({
+      modelValue: someDate,
+    })
+
+    expect(wrapper.vm.selectedDate).toBe(someDate)
+
+    await wrapper.setProps({
+      disabledDates: {
+        to: addDays(someDate, 1),
+      },
+    })
+  })
+})
+
+describe('Datepicker mounted', () => {
+  let wrapper
+
+  beforeEach(() => {
+    wrapper = mount(Datepicker)
+  })
+
+  afterEach(() => {
+    wrapper.unmount()
+  })
+
   it('can select a day', () => {
     const date = new Date(2016, 9, 1)
 
@@ -146,7 +207,7 @@ describe('Datepicker shallowMounted', () => {
     wrapper.vm.setView('month')
     wrapper.vm.handleSelect({ timestamp: date.valueOf() })
 
-    expect(wrapper.emitted('changed-month')[0][0].timestamp).toEqual(
+    expect(wrapper.emitted('changedMonth')[0][0].timestamp).toEqual(
       date.valueOf(),
     )
     expect(wrapper.vm.pageDate.getMonth()).toEqual(date.getMonth())
@@ -158,170 +219,10 @@ describe('Datepicker shallowMounted', () => {
     wrapper.vm.setView('year')
     wrapper.vm.handleSelect({ timestamp: date.valueOf() })
 
-    expect(wrapper.emitted('changed-year')[0][0].timestamp).toEqual(
+    expect(wrapper.emitted('changedYear')[0][0].timestamp).toEqual(
       date.valueOf(),
     )
     expect(wrapper.vm.pageDate.getFullYear()).toEqual(date.getFullYear())
-  })
-
-  it('watches value', async () => {
-    const spy = vi.spyOn(wrapper.vm, 'setValue')
-
-    await wrapper.setProps({
-      value: new Date(2018, 3, 26),
-    })
-
-    expect(spy).toHaveBeenCalled()
-  })
-
-  it('watches openDate', async () => {
-    const spy = vi.spyOn(wrapper.vm, 'setPageDate')
-
-    await wrapper.setProps({
-      openDate: new Date(2018, 3, 26),
-    })
-
-    expect(spy).toHaveBeenCalled()
-  })
-
-  it('watches initialView when open', async () => {
-    const spy = vi.spyOn(wrapper.vm, 'setInitialView')
-
-    await wrapper.vm.open()
-    await wrapper.setProps({
-      initialView: 'month',
-    })
-
-    expect(spy).toHaveBeenCalled()
-  })
-
-  it('derives `picker` from the current `view`', () => {
-    wrapper.vm.setView('day')
-    expect(wrapper.vm.picker).toBe('PickerDay')
-
-    wrapper.vm.setView('month')
-    expect(wrapper.vm.picker).toBe('PickerMonth')
-
-    wrapper.vm.setView('year')
-    expect(wrapper.vm.picker).toBe('PickerYear')
-  })
-
-  it('sets picker classes correctly', async () => {
-    await wrapper.setProps({
-      calendarClass: 'my-calendar-class',
-      inline: true,
-    })
-
-    const datepicker = wrapper.find('.vdp-datepicker__calendar')
-
-    expect(datepicker.element.className).toContain('vdp-datepicker__calendar')
-    expect(datepicker.element.className).toContain('my-calendar-class')
-    expect(datepicker.element.className).toContain('inline')
-    expect(datepicker.element.className).not.toContain('rtl')
-
-    await wrapper.setProps({
-      appendToBody: true,
-      language: he,
-    })
-
-    expect(datepicker.element.className).toContain('rtl')
-  })
-
-  it('knows the next view up / down', () => {
-    wrapper.vm.setView('day')
-
-    expect(wrapper.vm.nextView.down).toBeUndefined()
-    expect(wrapper.vm.nextView.up).toBe('month')
-
-    wrapper.vm.setView('month')
-
-    expect(wrapper.vm.nextView.down).toBe('day')
-    expect(wrapper.vm.nextView.up).toBe('year')
-
-    wrapper.vm.setView('year')
-
-    expect(wrapper.vm.nextView.down).toBe('month')
-    expect(wrapper.vm.nextView.up).toBe('decade')
-  })
-
-  it('emits changed-month/year/decade', () => {
-    const pageDate = new Date(2016, 2, 1)
-
-    wrapper.vm.setView('day')
-    wrapper.vm.handlePageChange({ pageDate })
-
-    expect(wrapper.emitted('changed-month')).toBeTruthy()
-
-    wrapper.vm.setView('month')
-    wrapper.vm.handlePageChange({ pageDate })
-    expect(wrapper.emitted('changed-year')).toBeTruthy()
-
-    wrapper.vm.setView('year')
-    wrapper.vm.handlePageChange({ pageDate })
-    expect(wrapper.emitted('changed-decade')).toBeTruthy()
-  })
-
-  it('clears the date when it is disabled', async () => {
-    const someDate = new Date(2021, 0, 15)
-
-    await wrapper.setProps({
-      value: someDate,
-      disabledDates: {
-        to: addDays(someDate, 1),
-      },
-    })
-
-    expect(wrapper.vm.selectedDate).toBeNull()
-  })
-
-  it('clears the date when it becomes disabled', async () => {
-    const someDate = new Date(2021, 0, 15)
-
-    await wrapper.setProps({
-      value: someDate,
-    })
-
-    expect(wrapper.vm.selectedDate).toBe(someDate)
-
-    await wrapper.setProps({
-      disabledDates: {
-        to: addDays(someDate, 1),
-      },
-    })
-  })
-
-  it('sets the transition correctly', async () => {
-    wrapper.vm.setTransitionName(1)
-    expect(wrapper.vm.transitionName).toBe('slide-right')
-
-    wrapper.vm.setTransitionName(-1)
-    expect(wrapper.vm.transitionName).toBe('slide-left')
-
-    await wrapper.setData({
-      translation: { rtl: true },
-    })
-
-    wrapper.vm.setTransitionName(1)
-    expect(wrapper.vm.transitionName).toBe('slide-left')
-
-    wrapper.vm.setTransitionName(-1)
-    expect(wrapper.vm.transitionName).toBe('slide-right')
-
-    await wrapper.setData({
-      translation: { rtl: false },
-    })
-  })
-})
-
-describe('Datepicker mounted', () => {
-  let wrapper
-
-  beforeEach(() => {
-    wrapper = mount(Datepicker)
-  })
-
-  afterEach(() => {
-    wrapper.destroy()
   })
 
   it('opens in `day` view', async () => {
@@ -378,7 +279,7 @@ describe('Datepicker mounted', () => {
   it('emits changed', async () => {
     await wrapper.vm.open()
 
-    const dayCell = wrapper.findAll('button').at(10)
+    const dayCell = wrapper.findAll('button')[10]
 
     await dayCell.trigger('click')
     expect(wrapper.emitted('changed')).toHaveLength(1)
@@ -389,7 +290,7 @@ describe('Datepicker mounted', () => {
 
     await wrapper.vm.open()
 
-    const differentDayCell = wrapper.findAll('button').at(11)
+    const differentDayCell = wrapper.findAll('button')[11]
     await differentDayCell.trigger('click')
     expect(wrapper.emitted('changed')).toHaveLength(2)
   })
@@ -406,15 +307,111 @@ describe('Datepicker mounted', () => {
 
   it('selects an edge date', async () => {
     await wrapper.setProps({
-      value: new Date(2020, 0, 1),
+      modelValue: new Date(2020, 0, 1),
     })
 
     const cells = wrapper.findAll('button.cell')
-    const lastCell = cells.at(cells.length - 1)
+    const lastCell = cells[cells.length - 1]
 
     await lastCell.trigger('click')
 
     expect(wrapper.vm.selectedDate).toStrictEqual(new Date(2020, 1, 1))
+  })
+
+  it('derives `picker` from the current `view`', () => {
+    wrapper.vm.setView('day')
+    expect(wrapper.vm.picker).toBe('PickerDay')
+
+    wrapper.vm.setView('month')
+    expect(wrapper.vm.picker).toBe('PickerMonth')
+
+    wrapper.vm.setView('year')
+    expect(wrapper.vm.picker).toBe('PickerYear')
+  })
+
+  it('watches initialView when open', async () => {
+    const spy = vi.spyOn(wrapper.vm, 'setInitialView')
+
+    await wrapper.vm.open()
+    await wrapper.setProps({
+      initialView: 'month',
+    })
+
+    expect(spy).toHaveBeenCalled()
+  })
+
+  it('sets picker classes correctly', async () => {
+    await wrapper.setProps({
+      calendarClass: 'my-calendar-class',
+      inline: true,
+    })
+
+    let datepicker = wrapper.find('.vdp-datepicker__calendar')
+
+    expect(datepicker.element.className).toContain('vdp-datepicker__calendar')
+    expect(datepicker.element.className).toContain('my-calendar-class')
+    expect(datepicker.element.className).toContain('inline')
+    expect(datepicker.element.className).not.toContain('rtl')
+
+    await wrapper.setProps({
+      appendToBody: true,
+      language: he,
+    })
+
+    datepicker = wrapper.find('.vdp-datepicker__calendar')
+    expect(datepicker.element.className).toContain('rtl')
+  })
+
+  it('sets the transition correctly', async () => {
+    wrapper.vm.setTransitionName(1)
+    expect(wrapper.vm.transitionName).toBe('slide-right')
+
+    wrapper.vm.setTransitionName(-1)
+    expect(wrapper.vm.transitionName).toBe('slide-left')
+
+    await wrapper.setProps({
+      language: he,
+    })
+
+    wrapper.vm.setTransitionName(1)
+    expect(wrapper.vm.transitionName).toBe('slide-left')
+
+    wrapper.vm.setTransitionName(-1)
+    expect(wrapper.vm.transitionName).toBe('slide-right')
+  })
+
+  it('knows the next view up / down', () => {
+    wrapper.vm.setView('day')
+
+    expect(wrapper.vm.nextView.down).toBeUndefined()
+    expect(wrapper.vm.nextView.up).toBe('month')
+
+    wrapper.vm.setView('month')
+
+    expect(wrapper.vm.nextView.down).toBe('day')
+    expect(wrapper.vm.nextView.up).toBe('year')
+
+    wrapper.vm.setView('year')
+
+    expect(wrapper.vm.nextView.down).toBe('month')
+    expect(wrapper.vm.nextView.up).toBe('decade')
+  })
+
+  it('emits changedMonth/Year/Decade', () => {
+    const pageDate = new Date(2016, 2, 1)
+
+    wrapper.vm.setView('day')
+    wrapper.vm.handlePageChange({ pageDate })
+
+    expect(wrapper.emitted('changedMonth')).toBeTruthy()
+
+    wrapper.vm.setView('month')
+    wrapper.vm.handlePageChange({ pageDate })
+    expect(wrapper.emitted('changedYear')).toBeTruthy()
+
+    wrapper.vm.setView('year')
+    wrapper.vm.handlePageChange({ pageDate })
+    expect(wrapper.emitted('changedDecade')).toBeTruthy()
   })
 })
 
@@ -423,22 +420,20 @@ describe('Datepicker mounted with showCalendarOnFocus', () => {
 
   beforeEach(() => {
     wrapper = mount(Datepicker, {
-      propsData: {
+      props: {
         showCalendarOnFocus: true,
       },
     })
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('opens on focusing the input', async () => {
     const input = wrapper.find('input')
 
-    // See https://github.com/vuejs/vue-test-utils/issues/1932
-    // await input.trigger('focus')
-    await input.element.dispatchEvent(new Event('focus'))
+    await input.trigger('focus')
 
     expect(wrapper.vm.isOpen).toBeTruthy()
   })
@@ -470,14 +465,14 @@ describe('Datepicker mounted with calendar button', () => {
 
   beforeEach(() => {
     wrapper = mount(Datepicker, {
-      propsData: {
+      props: {
         calendarButton: true,
       },
     })
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('toggles via the calendar button', async () => {
@@ -541,14 +536,14 @@ describe('Datepicker mounted with slots', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('knows how many navElements there are', async () => {
     expect(wrapper.vm.navElements.length).toEqual(0)
 
     await wrapper.vm.open()
-
+    await wrapper.vm.$nextTick()
     expect(wrapper.vm.navElements.length).toEqual(8)
 
     let upButton = wrapper.find('button.vdp-datepicker__up')
@@ -577,7 +572,7 @@ describe('Datepicker mounted and attached to body', () => {
   afterEach(() => {
     vi.clearAllTimers()
 
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it("focuses today's date when append-to-body is true", async () => {
@@ -626,7 +621,7 @@ describe('Datepicker mounted and attached to body with openDate', () => {
 
     wrapper = mount(Datepicker, {
       attachTo: document.body,
-      propsData: {
+      props: {
         openDate: new Date(2020, 0, 1),
       },
     })
@@ -634,7 +629,7 @@ describe('Datepicker mounted and attached to body with openDate', () => {
 
   afterEach(() => {
     vi.clearAllTimers()
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('opens the calendar on pressing the `down` arrow when the input is focused', async () => {
@@ -652,8 +647,8 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const firstOfMonth = wrapper.findAll('button.cell').at(3)
-    const secondOfMonth = wrapper.findAll('button.cell').at(4)
+    const firstOfMonth = wrapper.findAll('button.cell')[3]
+    const secondOfMonth = wrapper.findAll('button.cell')[4]
 
     firstOfMonth.element.focus()
     await firstOfMonth.trigger('keydown.right')
@@ -665,8 +660,8 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const secondOfMonth = wrapper.findAll('button.cell').at(4)
-    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+    const secondOfMonth = wrapper.findAll('button.cell')[4]
+    const firstOfMonth = wrapper.findAll('button.cell')[3]
 
     secondOfMonth.element.focus()
     await firstOfMonth.trigger('keydown.left')
@@ -678,11 +673,11 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const lastOfMonth = wrapper.findAll('button.cell').at(33)
+    const lastOfMonth = wrapper.findAll('button.cell')[33]
     lastOfMonth.element.focus()
     await lastOfMonth.trigger('keydown.up')
 
-    const cellUp = wrapper.findAll('button.cell').at(26)
+    const cellUp = wrapper.findAll('button.cell')[26]
     expect(document.activeElement).toBe(cellUp.element)
   })
 
@@ -690,11 +685,11 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+    const firstOfMonth = wrapper.findAll('button.cell')[3]
     firstOfMonth.element.focus()
     await firstOfMonth.trigger('keydown.down')
 
-    const cellDown = wrapper.findAll('button.cell').at(10)
+    const cellDown = wrapper.findAll('button.cell')[10]
     expect(document.activeElement).toBe(cellDown.element)
   })
 
@@ -709,12 +704,12 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+    const firstOfMonth = wrapper.findAll('button.cell')[3]
     firstOfMonth.element.focus()
     await firstOfMonth.trigger('keydown.up')
     expect(document.activeElement).toBe(firstOfMonth.element)
 
-    const lastOfMonth = wrapper.findAll('button.cell').at(33)
+    const lastOfMonth = wrapper.findAll('button.cell')[33]
     lastOfMonth.element.focus()
     await lastOfMonth.trigger('keydown.down')
     expect(document.activeElement).toBe(lastOfMonth.element)
@@ -724,13 +719,13 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+    const firstOfMonth = wrapper.findAll('button.cell')[3]
 
     firstOfMonth.element.focus()
     await firstOfMonth.trigger('keydown.left')
     vi.advanceTimersByTime(250)
 
-    const lastOfPreviousMonth = wrapper.findAll('button.cell').at(30)
+    const lastOfPreviousMonth = wrapper.findAll('button.cell')[30]
     expect(document.activeElement).toBe(lastOfPreviousMonth.element)
   })
 
@@ -738,13 +733,13 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const lastOfMonth = wrapper.findAll('button.cell').at(33)
+    const lastOfMonth = wrapper.findAll('button.cell')[33]
 
     lastOfMonth.element.focus()
     await lastOfMonth.trigger('keydown.right')
     vi.advanceTimersByTime(250)
 
-    const firstOfNextMonth = wrapper.findAll('button.cell').at(6)
+    const firstOfNextMonth = wrapper.findAll('button.cell')[6]
     expect(document.activeElement).toBe(firstOfNextMonth.element)
   })
 
@@ -752,12 +747,12 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+    const firstOfMonth = wrapper.findAll('button.cell')[3]
 
     firstOfMonth.element.focus()
     await firstOfMonth.trigger('keydown.up')
 
-    const cellUp = wrapper.findAll('button.cell').at(24)
+    const cellUp = wrapper.findAll('button.cell')[24]
 
     vi.advanceTimersByTime(250)
 
@@ -768,12 +763,12 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const lastOfMonth = wrapper.findAll('button.cell').at(33)
+    const lastOfMonth = wrapper.findAll('button.cell')[33]
 
     lastOfMonth.element.focus()
     await lastOfMonth.trigger('keydown.down')
 
-    const cellDown = wrapper.findAll('button.cell').at(12)
+    const cellDown = wrapper.findAll('button.cell')[12]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellDown.element)
   })
@@ -782,13 +777,13 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const cellBelowMuted = wrapper.findAll('button.cell').at(9)
+    const cellBelowMuted = wrapper.findAll('button.cell')[9]
 
     cellBelowMuted.element.focus()
     await cellBelowMuted.trigger('keydown.up')
 
     vi.advanceTimersByTime(250)
-    const cellUp = wrapper.findAll('button.cell').at(30)
+    const cellUp = wrapper.findAll('button.cell')[30]
     expect(document.activeElement).toBe(cellUp.element)
   })
 
@@ -796,13 +791,13 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const cellAboveMuted = wrapper.findAll('button.cell').at(27)
+    const cellAboveMuted = wrapper.findAll('button.cell')[27]
 
     cellAboveMuted.element.focus()
     await cellAboveMuted.trigger('keydown.down')
 
     vi.advanceTimersByTime(250)
-    const cellDown = wrapper.findAll('button.cell').at(6)
+    const cellDown = wrapper.findAll('button.cell')[6]
     expect(document.activeElement).toBe(cellDown.element)
   })
 
@@ -810,12 +805,12 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+    const firstOfMonth = wrapper.findAll('button.cell')[3]
 
     firstOfMonth.element.focus()
     await firstOfMonth.trigger('keydown.up')
 
-    const cellUp = wrapper.findAll('button.cell').at(24)
+    const cellUp = wrapper.findAll('button.cell')[24]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellUp.element)
   })
@@ -824,12 +819,12 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const lastOfMonth = wrapper.findAll('button.cell').at(33)
+    const lastOfMonth = wrapper.findAll('button.cell')[33]
 
     lastOfMonth.element.focus()
     await lastOfMonth.trigger('keydown.down')
 
-    const cellDown = wrapper.findAll('button.cell').at(12)
+    const cellDown = wrapper.findAll('button.cell')[12]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellDown.element)
   })
@@ -844,12 +839,12 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+    const firstOfMonth = wrapper.findAll('button.cell')[3]
 
     firstOfMonth.element.focus()
     await firstOfMonth.trigger('keydown.up')
 
-    const cellUp = wrapper.findAll('button.cell').at(17)
+    const cellUp = wrapper.findAll('button.cell')[17]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellUp.element)
   })
@@ -864,12 +859,12 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const lastOfMonth = wrapper.findAll('button.cell').at(33)
+    const lastOfMonth = wrapper.findAll('button.cell')[33]
 
     lastOfMonth.element.focus()
     await lastOfMonth.trigger('keydown.down')
 
-    const cellDown = wrapper.findAll('button.cell').at(12)
+    const cellDown = wrapper.findAll('button.cell')[12]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellDown.element)
   })
@@ -884,12 +879,12 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const firstOfMonth = wrapper.findAll('button.cell').at(3)
+    const firstOfMonth = wrapper.findAll('button.cell')[3]
 
     firstOfMonth.element.focus()
     await firstOfMonth.trigger('keydown.left')
 
-    const cellLeft = wrapper.findAll('button.cell').at(29)
+    const cellLeft = wrapper.findAll('button.cell')[29]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellLeft.element)
   })
@@ -904,91 +899,91 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const lastOfMonth = wrapper.findAll('button.cell').at(33)
+    const lastOfMonth = wrapper.findAll('button.cell')[33]
 
     lastOfMonth.element.focus()
     await lastOfMonth.trigger('keydown.right')
 
-    const cellRight = wrapper.findAll('button.cell').at(7)
+    const cellRight = wrapper.findAll('button.cell')[7]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellRight.element)
   })
 
   it('arrows left on first cell (with no dates from previous month) to the previous page', async () => {
     await wrapper.setProps({
-      value: new Date(2020, 2, 1),
+      modelValue: new Date(2020, 2, 1),
     })
 
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const firstOfMonth = wrapper.findAll('button.cell').at(0)
+    const firstOfMonth = wrapper.findAll('button.cell')[0]
 
     firstOfMonth.element.focus()
     await firstOfMonth.trigger('keydown.left')
 
-    const cellLeft = wrapper.findAll('button.cell').at(34)
+    const cellLeft = wrapper.findAll('button.cell')[34]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellLeft.element)
   })
 
   it('arrows right on last cell (with no dates from next month) to the next page', async () => {
     await wrapper.setProps({
-      value: new Date(2020, 1, 29),
+      modelValue: new Date(2020, 1, 29),
     })
 
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const lastOfMonth = wrapper.findAll('button.cell').at(34)
+    const lastOfMonth = wrapper.findAll('button.cell')[34]
 
     lastOfMonth.element.focus()
     await lastOfMonth.trigger('keydown.right')
 
-    const cellRight = wrapper.findAll('button.cell').at(0)
+    const cellRight = wrapper.findAll('button.cell')[0]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellRight.element)
   })
 
   it('arrows up on first cell (with no dates from previous month) to the previous page', async () => {
     await wrapper.setProps({
-      value: new Date(2020, 2, 1),
+      modelValue: new Date(2020, 2, 1),
     })
 
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const firstOfMonth = wrapper.findAll('button.cell').at(0)
+    const firstOfMonth = wrapper.findAll('button.cell')[0]
 
     firstOfMonth.element.focus()
     await firstOfMonth.trigger('keydown.up')
 
-    const cellUp = wrapper.findAll('button.cell').at(28)
+    const cellUp = wrapper.findAll('button.cell')[28]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellUp.element)
   })
 
   it('arrows down on last cell (with no dates from next month) to the next page', async () => {
     await wrapper.setProps({
-      value: new Date(2020, 1, 29),
+      modelValue: new Date(2020, 1, 29),
     })
 
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const lastOfMonth = wrapper.findAll('button.cell').at(34)
+    const lastOfMonth = wrapper.findAll('button.cell')[34]
 
     lastOfMonth.element.focus()
     await lastOfMonth.trigger('keydown.down')
 
-    const cellDown = wrapper.findAll('button.cell').at(6)
+    const cellDown = wrapper.findAll('button.cell')[6]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellDown.element)
   })
 
   it('arrows up on cell, bypassing a disabled cell, to reach the previous page', async () => {
     await wrapper.setProps({
-      value: new Date(2020, 1, 8),
+      modelValue: new Date(2020, 1, 8),
       disabledDates: {
         dates: [new Date(2020, 1, 1)],
       },
@@ -997,19 +992,19 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const startCell = wrapper.findAll('button.cell').at(13)
+    const startCell = wrapper.findAll('button.cell')[13]
 
     startCell.element.focus()
     await startCell.trigger('keydown.up')
 
-    const cellUp = wrapper.findAll('button.cell').at(27)
+    const cellUp = wrapper.findAll('button.cell')[27]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellUp.element)
   })
 
   it('arrows down on cell, bypassing a disabled cell, to reach the next page', async () => {
     await wrapper.setProps({
-      value: new Date(2020, 1, 22),
+      modelValue: new Date(2020, 1, 22),
       disabledDates: {
         dates: [new Date(2020, 1, 29)],
       },
@@ -1018,12 +1013,12 @@ describe('Datepicker mounted and attached to body with openDate', () => {
     await wrapper.vm.open()
     vi.advanceTimersByTime(250)
 
-    const startCell = wrapper.findAll('button.cell').at(27)
+    const startCell = wrapper.findAll('button.cell')[27]
 
     startCell.element.focus()
     await startCell.trigger('keydown.down')
 
-    const cellDown = wrapper.findAll('button.cell').at(6)
+    const cellDown = wrapper.findAll('button.cell')[6]
     vi.advanceTimersByTime(250)
     expect(document.activeElement).toBe(cellDown.element)
   })
@@ -1039,7 +1034,10 @@ describe('Datepicker mounted and attached to body with openDate', () => {
       openDate,
     })
 
-    await wrapper.vm.open()
+    const input = wrapper.find('input')
+
+    await input.trigger('focusin')
+    await input.trigger('click')
     vi.advanceTimersByTime(250)
 
     const firstAvailableDate = wrapper.find('button.cell:not(.muted):enabled')
@@ -1058,7 +1056,10 @@ describe('Datepicker mounted and attached to body with openDate', () => {
       openDate,
     })
 
-    await wrapper.vm.open()
+    const input = wrapper.find('input')
+
+    await input.trigger('focusin')
+    await input.trigger('click')
     vi.advanceTimersByTime(250)
 
     const firstAvailableDate = wrapper.find('button.cell:not(.muted):enabled')
@@ -1077,7 +1078,9 @@ describe('Datepicker mounted and attached to body with openDate', () => {
       openDate,
     })
 
-    await wrapper.vm.open()
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
     vi.advanceTimersByTime(250)
 
     const nextButton = wrapper.find('button.next')
@@ -1095,7 +1098,9 @@ describe('Datepicker mounted and attached to body with openDate', () => {
       openDate,
     })
 
-    await wrapper.vm.open()
+    const input = wrapper.find('input')
+
+    await input.trigger('click')
     vi.advanceTimersByTime(250)
 
     const prevButton = wrapper.find('button.prev')
@@ -1118,9 +1123,9 @@ describe('Datepicker mounted using UTC', () => {
 
     // It's important to use the `mount` helper here
     wrapper = mount(Datepicker, {
-      propsData: {
+      props: {
         format: 'yyyy MM dd',
-        value: ambiguousDate,
+        modelValue: ambiguousDate,
         useUtc: true, // This should fail if `useUtc=false`
       },
     })
@@ -1138,14 +1143,14 @@ describe('Datepicker mounted inline', () => {
 
   beforeEach(() => {
     wrapper = mount(Datepicker, {
-      propsData: {
+      props: {
         inline: true,
       },
     })
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('shows calendar as already open', () => {
@@ -1169,7 +1174,7 @@ describe('Datepicker mounted inline and attached to body', () => {
 
     wrapper = mount(Datepicker, {
       attachTo: document.body,
-      propsData: {
+      props: {
         inline: true,
       },
     })
@@ -1178,7 +1183,7 @@ describe('Datepicker mounted inline and attached to body', () => {
   afterEach(() => {
     vi.clearAllTimers()
 
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('focuses the date when selected', async () => {
@@ -1188,7 +1193,7 @@ describe('Datepicker mounted inline and attached to body', () => {
 
     expect(document.activeElement).toBe(openDate.element)
 
-    const anotherDate = wrapper.findAll('button.cell').at(10)
+    const anotherDate = wrapper.findAll('button.cell')[10]
     await anotherDate.element.focus()
     await anotherDate.trigger('click')
 
@@ -1201,7 +1206,7 @@ describe('Datepicker mounted and appended to body', () => {
 
   beforeEach(() => {
     wrapper = mount(Datepicker, {
-      propsData: {
+      props: {
         appendToBody: true,
       },
     })
@@ -1214,14 +1219,14 @@ describe('Datepicker mounted and appended to body', () => {
     expect(document.querySelector('.vdp-datepicker__calendar')).toBeDefined()
 
     await wrapper.vm.close()
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('removes popup appended to body on component removal', async () => {
     await wrapper.vm.open()
     await wrapper.vm.close()
 
-    wrapper.destroy()
+    wrapper.unmount()
     expect(document.querySelector('.vdp-datepicker__calendar')).toBeNull()
   })
 })

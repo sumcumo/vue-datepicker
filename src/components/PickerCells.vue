@@ -7,8 +7,8 @@
       :class="cellClasses(cell)"
       :data-id="id"
       :data-test-tabbable-cell="isTabbableCell(cell, id)"
-      :data-test-open-date="cell.isOpenDate"
-      :data-test-today-cell="cell.isToday"
+      :data-test-open-date="cell.isOpenDate || null"
+      :data-test-today-cell="cell.isToday || null"
       :disabled="cell.isDisabled"
       type="button"
       @click="$emit('select', cell)"
@@ -50,6 +50,14 @@ export default {
       type: String,
       validator: (val) => ['day', 'month', 'year'].includes(val),
       required: true,
+    },
+  },
+  emits: {
+    arrow(config) {
+      return typeof config === 'object'
+    },
+    select(cell) {
+      return typeof cell === 'object'
     },
   },
   computed: {
@@ -99,10 +107,10 @@ export default {
     },
     isTabbableCell(cell, id) {
       if (!this.tabbableCellId) {
-        return cell.isOpenDate
+        return cell.isOpenDate || null
       }
 
-      return id === this.tabbableCellId
+      return id === this.tabbableCellId || null
     },
   },
 }

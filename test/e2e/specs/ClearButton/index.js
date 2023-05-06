@@ -7,7 +7,7 @@ describe('Clear button', () => {
     Given('the calendar is {string} and a date is selected', (openOrClosed) => {
       createCalendar({
         clearButton: true,
-        value: new Date(2021, 2, 1),
+        modelValue: new Date(2021, 2, 1),
       })
 
       if (openOrClosed === 'open') {
@@ -41,7 +41,7 @@ describe('Clear button', () => {
         createCalendar({
           clearButton: true,
           typeable: true,
-          value: new Date(2021, 2, 1),
+          modelValue: new Date(2021, 2, 1),
         })
 
         if (openOrClosed === 'open') {
@@ -67,7 +67,7 @@ describe('Clear button', () => {
     Given('the calendar is closed and a date is selected', () => {
       createCalendar({
         clearButton: true,
-        value: new Date(2021, 2, 1),
+        modelValue: new Date(2021, 2, 1),
       })
 
       the('calendar').should('not.be.visible')

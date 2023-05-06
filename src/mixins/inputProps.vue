@@ -11,7 +11,7 @@ export default {
     },
     clearButton: {
       type: Boolean,
-      default: false,
+      default: null,
     },
     calendarButton: {
       type: Boolean,

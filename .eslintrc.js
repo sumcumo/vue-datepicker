@@ -10,7 +10,7 @@ module.exports = {
     'plugin:compat/recommended',
     'prettier',
     'plugin:cypress/recommended',
-    'plugin:vue/recommended',
+    'plugin:vue/vue3-recommended',
   ],
   plugins: ['import', 'prettier', 'html', 'vue', 'vitest'],
   settings: {

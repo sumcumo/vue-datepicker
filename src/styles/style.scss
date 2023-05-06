@@ -3,6 +3,7 @@
 }
 
 .vdp-datepicker {
+  font-family: Arial, serif;
   position: relative;
   text-align: left;
   box-sizing: border-box;
@@ -51,6 +52,7 @@
 
       &:hover:not(:disabled) {
         background: #eee;
+        cursor: pointer;
       }
 
       &.vdp-datepicker__up {
@@ -218,7 +220,7 @@
       position: absolute;
       top: 0;
     }
-    .slide-right-enter {
+    .slide-right-enter-from {
       transform: translate(100%, 0);
     }
     .slide-right-leave-to {
@@ -232,7 +234,7 @@
       position: absolute;
       top: 0;
     }
-    .slide-left-enter {
+    .slide-left-enter-from {
       transform: translate(-100%, 0);
     }
     .slide-left-leave-to {
@@ -246,7 +248,7 @@
   transition: all 250ms ease;
 }
 
-.toggle-enter,
+.toggle-enter-from,
 .toggle-leave-to {
   opacity: 0;
 }
@@ -260,7 +262,7 @@
   transition: all 250ms ease;
 }
 
-.view-enter,
+.view-enter-from,
 .view-leave-to {
   opacity: 0;
 }

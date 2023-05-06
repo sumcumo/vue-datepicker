@@ -15,8 +15,8 @@
       next-view-up="month"
       @focus-input="focusInput"
       @page-change="changePage($event)"
-      @set-focus="$emit('set-focus', $event)"
-      @set-view="$emit('set-view', $event)"
+      @set-focus="$emit('setFocus', $event)"
+      @set-view="$emit('setView', $event)"
     >
       <template #prevIntervalBtn>
         <slot name="prevIntervalBtn" />
@@ -95,6 +95,16 @@ export default {
     showEdgeDates: {
       type: Boolean,
       default: true,
+    },
+  },
+  emits: {
+    setFocus: (refArray) => {
+      return refArray.every((ref) => {
+        return ['input', 'prev', 'up', 'next', 'tabbableCell'].includes(ref)
+      })
+    },
+    setView: (view) => {
+      return view === 'month'
     },
   },
   computed: {

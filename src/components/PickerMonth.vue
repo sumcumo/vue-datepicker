@@ -15,8 +15,8 @@
       next-view-up="year"
       @focus-input="focusInput"
       @page-change="changePage($event)"
-      @set-focus="$emit('set-focus', $event)"
-      @set-view="$emit('set-view', $event)"
+      @set-focus="$emit('setFocus', $event)"
+      @set-view="$emit('setView', $event)"
     >
       <template #prevIntervalBtn>
         <slot name="prevIntervalBtn" />
@@ -61,6 +61,16 @@ export default {
   name: 'PickerMonth',
   components: { PickerCells },
   mixins: [pickerMixin],
+  emits: {
+    setFocus: (refArray) => {
+      return refArray.every((ref) => {
+        return ['input', 'prev', 'up', 'next', 'tabbableCell'].includes(ref)
+      })
+    },
+    setView: (view) => {
+      return view === 'year'
+    },
+  },
   computed: {
     /**
      * Sets an array with all months to show this year

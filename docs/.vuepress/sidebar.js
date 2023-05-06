@@ -1,9 +1,9 @@
-module.exports = [
+export default [
   {
-    title: 'Guide',
+    text: 'Guide',
     collapsable: false,
     children: [
-      ['/guide/', 'Getting started'],
+      '/guide/',
       '/guide/Migration/',
       '/guide/UtcDates/',
       '/guide/DateFormatting/',
@@ -11,23 +11,25 @@ module.exports = [
       '/guide/DisabledDates/',
       '/guide/Events/',
       '/guide/HighlightedDates/',
-      '/guide/Integrations/',
+      // TODO: Update integrations
+      // '/guide/Integrations/',
       '/guide/Props/',
       '/guide/Slots/',
       '/guide/Translations/',
     ],
   },
   {
-    title: 'Demo',
+    text: 'Demo',
     collapsable: false,
     children: [
-      ['/demo/', 'Demo'],
+      '/demo/',
       '/demo/Disabled/',
       '/demo/Highlighted/',
       '/demo/Language/',
       '/demo/Formatting/',
       '/demo/Typeable/',
-      '/demo/Integrations/',
+      // TODO: Update integrations
+      // '/demo/Integrations/',
     ],
   },
 ]

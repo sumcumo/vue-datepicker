@@ -8,7 +8,7 @@ const Component = {
 
 const options = {
   mixins: [pickerMixin],
-  propsData: {
+  props: {
     selectedDate: new Date(2018, 2, 24),
   },
 }
@@ -29,7 +29,7 @@ describe('pickerMixin shallowMounted', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('mounts', () => {

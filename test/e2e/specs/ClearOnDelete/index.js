@@ -6,7 +6,7 @@ describe('Clear date on delete', () => {
   describe('@id-1: Clear date via {string}', () => {
     Given('the calendar has a selected date', () => {
       createCalendar({
-        value: new Date(2020, 2, 15),
+        modelValue: new Date(2020, 2, 15),
       })
       the('calendar').should('not.be.visible')
       the('input').should('have.value', '15 Mar 2020')

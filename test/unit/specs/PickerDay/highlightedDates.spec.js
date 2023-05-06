@@ -7,7 +7,7 @@ describe('PickerDay mounted', () => {
 
   beforeEach(() => {
     wrapper = mount(PickerDay, {
-      propsData: {
+      props: {
         pageDate: new Date(2016, 9, 1),
         translation: en,
       },
@@ -15,7 +15,7 @@ describe('PickerDay mounted', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('highlights dates from a given date', async () => {

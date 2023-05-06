@@ -3,6 +3,8 @@ node_modules
 npm-debug.log
 .vscode
 .coveralls.yml
+docs/.vuepress/.cache
+docs/.vuepress/.temp
 example/demo.js
 example/demo.js.map
 example-e2e/app.js

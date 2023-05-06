@@ -17,7 +17,6 @@
 </template>
 
 <script>
-// export component
 export default {
   name: 'VeeValidate',
   data() {

@@ -9,7 +9,7 @@ describe('DateInput shallowMounted', () => {
 
   beforeEach(() => {
     wrapper = shallowMount(DateInput, {
-      propsData: {
+      props: {
         translation: en,
         typeable: true,
       },
@@ -17,7 +17,7 @@ describe('DateInput shallowMounted', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('does not format the date when typed', async () => {
@@ -93,8 +93,8 @@ describe('DateInput shallowMounted', () => {
     input.setValue(dateString)
     await input.trigger('keyup')
 
-    expect(wrapper.emitted('typed-date')).toBeDefined()
-    expect(wrapper.emitted('typed-date')[0][0]).toStrictEqual(
+    expect(wrapper.emitted('typedDate')).toBeDefined()
+    expect(wrapper.emitted('typedDate')[0][0]).toStrictEqual(
       new Date(dateString),
     )
   })
@@ -104,7 +104,7 @@ describe('DateInput shallowMounted', () => {
 
     await input.trigger('keydown.enter')
 
-    expect(wrapper.emitted('select-typed-date')).toBeTruthy()
+    expect(wrapper.emitted('selectTypedDate')).toBeTruthy()
   })
 
   it('parses a typed date using a function passed in via a prop', async () => {
@@ -135,7 +135,7 @@ describe('DateInput shallowMounted', () => {
     input.setValue('2018-04-24')
     await input.trigger('keydown.enter')
 
-    expect(wrapper.emitted('typed-date')).not.toBeDefined()
+    expect(wrapper.emitted('typedDate')).not.toBeDefined()
   })
 })
 
@@ -144,14 +144,14 @@ describe('Datepicker mounted', () => {
 
   beforeEach(() => {
     wrapper = mount(Datepicker, {
-      propsData: {
+      props: {
         typeable: true,
       },
     })
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('sets the date and closes the calendar', () => {
@@ -232,7 +232,7 @@ describe('Datepicker mounted', () => {
     expect(wrapper.vm.selectedDate).toEqual(new Date(2000, 0, 1))
 
     await wrapper.setProps({
-      value: new Date(2016, 1, 15),
+      modelValue: new Date(2016, 1, 15),
     })
 
     expect(wrapper.vm.selectedDate).toEqual(new Date(2016, 1, 15))
@@ -263,15 +263,15 @@ describe('Datepicker mounted with a default value', () => {
 
   beforeEach(() => {
     wrapper = mount(Datepicker, {
-      propsData: {
+      props: {
         typeable: true,
-        value: new Date(new Date(2000, 0, 1).setHours(0, 0, 0, 0)),
+        modelValue: new Date(new Date(2000, 0, 1).setHours(0, 0, 0, 0)),
       },
     })
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('displays a date passed in as a default value', async () => {
@@ -286,7 +286,7 @@ describe('Datepicker mounted with showCalendarOnFocus', () => {
 
   beforeEach(() => {
     wrapper = mount(Datepicker, {
-      propsData: {
+      props: {
         typeable: true,
         showCalendarOnFocus: true,
       },
@@ -294,7 +294,7 @@ describe('Datepicker mounted with showCalendarOnFocus', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('toggles on clicking the input', async () => {
@@ -315,9 +315,7 @@ describe('Datepicker mounted with showCalendarOnFocus', () => {
     const input = wrapper.find('input')
     const calendarButton = wrapper.find('button[data-test-calendar-button]')
 
-    // See https://github.com/vuejs/vue-test-utils/issues/1932
-    // await input.trigger('focus')
-    await input.element.dispatchEvent(new Event('focus'))
+    await input.trigger('focus')
     expect(wrapper.vm.isOpen).toBeTruthy()
 
     await calendarButton.trigger('click')
@@ -331,14 +329,14 @@ describe('DatePicker mounted and attached to body', () => {
   beforeEach(() => {
     wrapper = mount(Datepicker, {
       attachTo: document.body,
-      propsData: {
+      props: {
         typeable: true,
       },
     })
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('arrows down from the input field to the header', async () => {

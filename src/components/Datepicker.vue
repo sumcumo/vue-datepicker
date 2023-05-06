@@ -198,7 +198,7 @@ export default {
     },
     fullMonthName: {
       type: Boolean,
-      default: false,
+      default: null,
     },
     highlighted: {
       type: Object,
@@ -220,6 +220,10 @@ export default {
       type: String,
       default: 'day',
     },
+    modelValue: {
+      type: [String, Date, Number],
+      default: null,
+    },
     showEdgeDates: {
       type: Boolean,
       default: true,
@@ -228,10 +232,6 @@ export default {
       type: Boolean,
       default: true,
     },
-    value: {
-      type: [String, Date, Number],
-      default: null,
-    },
     wrapperClass: {
       type: [String, Object, Array],
       default: '',
@@ -239,6 +239,29 @@ export default {
     yearPickerRange: {
       type: Number,
       default: 10,
+    },
+  },
+  emits: {
+    'blur': null,
+    'changed': null,
+    'cleared': null,
+    'closed': null,
+    'focus': null,
+    'opened': null,
+    'changedMonth': (date) => {
+      return typeof date === 'object'
+    },
+    'changedYear': (date) => {
+      return typeof date === 'object'
+    },
+    'changedDecade': (date) => {
+      return typeof date === 'object'
+    },
+    'selected': (date) => {
+      return date instanceof Date || date === null
+    },
+    'update:modelValue': (date) => {
+      return date instanceof Date || date === null
     },
   },
   data() {
@@ -352,12 +375,14 @@ export default {
     disabledDates: {
       // eslint-disable-next-line complexity
       handler() {
-        const selectedDate = this.selectedDate || this.parseValue(this.value)
+        const selectedDate =
+          this.selectedDate || this.parseValue(this.modelValue)
+
         if (!selectedDate) {
           return
         }
 
-        if (this.isDateDisabled(selectedDate) && this.selectedDate) {
+        if (this.isDateDisabled(selectedDate) && selectedDate) {
           this.selectDate(null)
           return
         }
@@ -385,10 +410,7 @@ export default {
     latestValidTypedDate(date) {
       this.setPageDate(date)
     },
-    openDate() {
-      this.setPageDate()
-    },
-    value: {
+    modelValue: {
       handler(newValue, oldValue) {
         let parsedValue = this.parseValue(newValue)
         const oldParsedValue = this.parseValue(oldValue)
@@ -404,6 +426,9 @@ export default {
       },
       immediate: true,
     },
+    openDate() {
+      this.setPageDate()
+    },
     view(newView, oldView) {
       this.handleViewChange(newView, oldView)
     },
@@ -412,7 +437,7 @@ export default {
     this.init()
     document.addEventListener('click', this.handleClickOutside)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     document.removeEventListener('click', this.handleClickOutside)
   },
   methods: {
@@ -533,7 +558,7 @@ export default {
       this.focus.refs = focusRefs
       this.focus.delay = this.slideDuration || 250
       this.reviewFocus()
-      this.$emit(`changed-${this.nextView.up}`, pageDate)
+      this.$emit(`changed${this.ucFirst(this.nextView.up)}`, pageDate)
     },
     /**
      * Set the date, or go to the next view down
@@ -558,7 +583,7 @@ export default {
       }
     },
     /**
-     * Updates the page (if necessary) after a 'typed-date' event and sets `tabbableCell` & `latestValidTypedDate`
+     * Updates the page (if necessary) after a 'typedDate' event and sets `tabbableCell` & `latestValidTypedDate`
      * @param {Date=} date
      */
     handleTypedDate(date) {
@@ -679,7 +704,7 @@ export default {
       this.$emit('opened')
     },
     /**
-     * Parse a datepicker value from string/number to date
+     * Parse a datepicker modelValue from string/number to date
      * @param   {Date|String|Number|undefined} date
      * @returns {Date|null}
      */
@@ -714,12 +739,12 @@ export default {
       }
 
       this.setValue(date)
-      this.$emit('input', date)
       this.$emit('selected', date)
+      this.$emit('update:modelValue', date)
     },
     /**
-     * Select the date from a 'select-typed-date' event
-     * @param {Date|null} date
+     * Select the date from a 'selectTypedDate' event
+     * @param {Date=} date
      */
     selectTypedDate(date) {
       this.selectDate(date)
@@ -781,7 +806,7 @@ export default {
       this.slideDuration = parseFloat(durationInSecs) * 1000
     },
     /**
-     * Set the datepicker value (and, if typeable, update `latestValidTypedDate`)
+     * Set the datepicker modelValue (and, if typeable, update `latestValidTypedDate`)
      * @param {Date|String|Number|null} date
      */
     setValue(date) {
@@ -829,7 +854,7 @@ export default {
      */
     showNextViewDown(cell) {
       this.setPageDate(new Date(cell.timestamp))
-      this.$emit(`changed-${this.view}`, cell)
+      this.$emit(`changed${this.ucFirst(this.view)}`, cell)
       this.setView(this.nextView.down)
     },
     /**

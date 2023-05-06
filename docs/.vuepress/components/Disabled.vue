@@ -52,7 +52,7 @@
         return true
       }
       // disable first half of the month when it is a multiple of 2
-      if (month % 2 !== 0 && day < 15) {
+      if (month % 2 !== 0 && day &lt; 15) {
         return true
       }
     }

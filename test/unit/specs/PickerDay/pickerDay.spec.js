@@ -7,7 +7,7 @@ describe('PickerDay mounted', () => {
 
   beforeEach(() => {
     wrapper = mount(PickerDay, {
-      propsData: {
+      props: {
         translation: en,
         pageDate: new Date(2018, 1, 1),
       },
@@ -15,7 +15,7 @@ describe('PickerDay mounted', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('knows the selected date', async () => {
@@ -29,12 +29,12 @@ describe('PickerDay mounted', () => {
 
   it('can set the next month', () => {
     wrapper.vm.changePage({ incrementBy: 1, focusRefs: ['next'] })
-    expect(wrapper.emitted('page-change')[0][0].pageDate.getMonth()).toEqual(2)
+    expect(wrapper.emitted('pageChange')[0][0].pageDate.getMonth()).toEqual(2)
   })
 
   it('can set the previous month', () => {
     wrapper.vm.changePage({ incrementBy: -1, focusRefs: ['prev'] })
-    expect(wrapper.emitted('page-change')[0][0].pageDate.getMonth()).toEqual(0)
+    expect(wrapper.emitted('pageChange')[0][0].pageDate.getMonth()).toEqual(0)
   })
 
   it('emits an event when selected', () => {
@@ -65,13 +65,13 @@ describe('PickerDay mounted', () => {
   it('emits set-view event with `month` when the up button is clicked', async () => {
     const upButton = wrapper.find('.vdp-datepicker__up')
     await upButton.trigger('click')
-    expect(wrapper.emitted('set-view')[0][0]).toBe('month')
+    expect(wrapper.emitted('setView')[0][0]).toBe('month')
   })
 
   it('displays edge dates by default', () => {
     const cells = wrapper.findAll('button.cell')
-    const firstCell = cells.at(0)
-    const lastCell = cells.at(34)
+    const firstCell = cells[0]
+    const lastCell = cells[34]
 
     expect(firstCell.text()).toBe('28')
     expect(lastCell.text()).toBe('3')
@@ -83,8 +83,8 @@ describe('PickerDay mounted', () => {
     })
 
     const cells = wrapper.findAll('button.cell')
-    const firstCell = cells.at(0)
-    const lastCell = cells.at(34)
+    const firstCell = cells[0]
+    const lastCell = cells[34]
 
     expect(firstCell.text()).toBe('')
     expect(lastCell.text()).toBe('')
@@ -92,7 +92,7 @@ describe('PickerDay mounted', () => {
 
   it('selects an edge date from the previous month', async () => {
     const cells = wrapper.findAll('button.cell')
-    const firstCell = cells.at(0)
+    const firstCell = cells[0]
 
     await firstCell.trigger('click')
 
@@ -101,7 +101,7 @@ describe('PickerDay mounted', () => {
 
   it('selects an edge date from the next month', async () => {
     const cells = wrapper.findAll('button.cell')
-    const lastCell = cells.at(34)
+    const lastCell = cells[34]
 
     await lastCell.trigger('click')
 
@@ -162,11 +162,11 @@ describe('PickerDay mounted', () => {
 describe('PickerDay mounted with scoped slot', () => {
   it('displays the dayCellContent scoped slot correctly', () => {
     const wrapper = mount(PickerDay, {
-      propsData: {
+      props: {
         translation: en,
         pageDate: new Date(2018, 1, 1),
       },
-      scopedSlots: {
+      slots: {
         dayCellContent: `<template #dayCellContent="{ cell }">
                           <span>test{{ cell.date }}</span>
                         </template>`,

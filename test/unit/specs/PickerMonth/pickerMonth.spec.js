@@ -7,7 +7,7 @@ describe('PickerMonth mounted', () => {
 
   beforeEach(() => {
     wrapper = mount(PickerMonth, {
-      propsData: {
+      props: {
         translation: en,
         pageDate: new Date(2018, 1, 1),
         view: 'month',
@@ -16,7 +16,7 @@ describe('PickerMonth mounted', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('knows the selected month', async () => {
@@ -40,14 +40,14 @@ describe('PickerMonth mounted', () => {
 
   it('can set the next year', () => {
     wrapper.vm.changePage({ incrementBy: 1, focusRefs: ['next'] })
-    expect(wrapper.emitted('page-change')[0][0].pageDate.getFullYear()).toEqual(
+    expect(wrapper.emitted('pageChange')[0][0].pageDate.getFullYear()).toEqual(
       2019,
     )
   })
 
   it('can set the previous year', () => {
     wrapper.vm.changePage({ incrementBy: -1, focusRefs: ['prev'] })
-    expect(wrapper.emitted('page-change')[0][0].pageDate.getFullYear()).toEqual(
+    expect(wrapper.emitted('pageChange')[0][0].pageDate.getFullYear()).toEqual(
       2017,
     )
   })
@@ -62,6 +62,6 @@ describe('PickerMonth mounted', () => {
   it('emits set-view event with `year` when the up button is clicked', async () => {
     const upButton = wrapper.find('.vdp-datepicker__up')
     await upButton.trigger('click')
-    expect(wrapper.emitted('set-view')[0][0]).toBe('year')
+    expect(wrapper.emitted('setView')[0][0]).toBe('year')
   })
 })

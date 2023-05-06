@@ -18,7 +18,7 @@ describe('DateInput shallowMounted', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('renders correct contents', () => {
@@ -99,7 +99,7 @@ describe('DateInput shallowMounted with selectedDate', () => {
 
   beforeEach(() => {
     wrapper = shallowMount(DateInput, {
-      propsData: {
+      props: {
         selectedDate: new Date(2018, 2, 24),
         translation: en,
       },
@@ -107,7 +107,7 @@ describe('DateInput shallowMounted with selectedDate', () => {
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('formats date', () => {
@@ -141,9 +141,9 @@ describe('DateInput shallowMounted with selectedDate', () => {
   it('emits `clear-date` when delete is pressed', async () => {
     const input = wrapper.find('input')
 
-    await input.trigger('keydown.del')
+    await input.trigger('keydown.delete')
 
-    expect(wrapper.emitted('clear-date')).toBeTruthy()
+    expect(wrapper.emitted('clearDate')).toBeTruthy()
   })
 
   it('emits `clear-date` when backspace is pressed', async () => {
@@ -151,7 +151,7 @@ describe('DateInput shallowMounted with selectedDate', () => {
 
     await input.trigger('keydown.backspace')
 
-    expect(wrapper.emitted('clear-date')).toBeTruthy()
+    expect(wrapper.emitted('clearDate')).toBeTruthy()
   })
 })
 
@@ -160,22 +160,20 @@ describe('DateInput shallowMounted with showCalendarOnFocus', () => {
 
   beforeEach(() => {
     wrapper = shallowMount(DateInput, {
-      propsData: {
+      props: {
         showCalendarOnFocus: true,
       },
     })
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('emits `open` event on focus', async () => {
     const input = wrapper.find('input')
 
-    // See https://github.com/vuejs/vue-test-utils/issues/1932
-    // await input.trigger('focus')
-    await input.element.dispatchEvent(new Event('focus'))
+    await input.trigger('focus')
 
     expect(wrapper.emitted('open')).toBeTruthy()
   })
@@ -197,9 +195,7 @@ describe('DateInput shallowMounted with showCalendarOnFocus', () => {
     const input = wrapper.find('input')
     const calendarButton = wrapper.find('button[data-test-calendar-button]')
 
-    // See https://github.com/vuejs/vue-test-utils/issues/1932
-    // await input.trigger('focus')
-    await input.element.dispatchEvent(new Event('focus'))
+    await input.trigger('focus')
     expect(wrapper.emitted('open')).toBeTruthy()
 
     await input.trigger('blur')
@@ -217,14 +213,14 @@ describe('DateInput shallowMounted with bootstrap styling', () => {
 
   beforeEach(() => {
     wrapper = shallowMount(DateInput, {
-      propsData: {
+      props: {
         bootstrapStyling: true,
       },
     })
   })
 
   afterEach(() => {
-    wrapper.destroy()
+    wrapper.unmount()
   })
 
   it('adds bootstrap classes', async () => {
