@@ -266,8 +266,14 @@ export default {
   },
   data() {
     const utils = makeDateUtils(this.useUtc)
-    const startDate = utils.getNewDateObject(this.openDate || null)
-    const pageTimestamp = utils.setDate(startDate, 1)
+    const initialView = this.initialView || this.minimumView
+    const openDate = utils.getOpenDate(
+      this.openDate,
+      this.selectedDate,
+      initialView,
+    )
+
+    const pageTimestamp = utils.setDate(openDate, 1)
 
     return {
       calendarHeight: 0,
@@ -299,14 +305,11 @@ export default {
       return this.initialView || this.minimumView
     },
     computedOpenDate() {
-      const parsedOpenDate = this.parseValue(this.openDate)
-      const openDateOrToday = this.utils.getNewDateObject(parsedOpenDate)
-      const openDate = this.selectedDate || openDateOrToday
-
-      // If the `minimum-view` is `month` or `year`, convert `openDate` accordingly
-      return this.minimumView === 'day'
-        ? openDate
-        : new Date(this.utils.setDate(openDate, 1))
+      return this.utils.getOpenDate(
+        this.openDate,
+        this.selectedDate,
+        this.minimumView,
+      )
     },
     datepickerId() {
       return `vdp-${Math.random().toString(36).slice(-10)}`
@@ -376,7 +379,7 @@ export default {
       // eslint-disable-next-line complexity
       handler() {
         const selectedDate =
-          this.selectedDate || this.parseValue(this.modelValue)
+          this.selectedDate || this.utils.parseAsDate(this.modelValue)
 
         if (!selectedDate) {
           return
@@ -412,8 +415,8 @@ export default {
     },
     modelValue: {
       handler(newValue, oldValue) {
-        let parsedValue = this.parseValue(newValue)
-        const oldParsedValue = this.parseValue(oldValue)
+        let parsedValue = this.utils.parseAsDate(newValue)
+        const oldParsedValue = this.utils.parseAsDate(oldValue)
 
         if (!this.utils.compareDates(parsedValue, oldParsedValue)) {
           const isDateDisabled = parsedValue && this.isDateDisabled(parsedValue)
@@ -430,6 +433,9 @@ export default {
       this.setPageDate()
     },
     view(newView, oldView) {
+      if (oldView === '') {
+        this.setPageDate(this.utils.adjustDateToView(this.computedOpenDate))
+      }
       this.handleViewChange(newView, oldView)
     },
   },
@@ -702,18 +708,6 @@ export default {
       this.reviewFocus()
 
       this.$emit('opened')
-    },
-    /**
-     * Parse a datepicker modelValue from string/number to date
-     * @param   {Date|String|Number|undefined} date
-     * @returns {Date|null}
-     */
-    parseValue(date) {
-      if (typeof date === 'string' || typeof date === 'number') {
-        const parsed = new Date(date)
-        return this.utils.isValidDate(parsed) ? parsed : null
-      }
-      return this.utils.isValidDate(date) ? date : null
     },
     /**
      * Focus the open date, or close the calendar if already focused

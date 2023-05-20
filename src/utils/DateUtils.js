@@ -360,6 +360,19 @@ const utils = {
     return new Date(parsedDate)
   },
 
+  /**
+   * Parses a string/number to a date, or returns null
+   * @param   {Date|String|Number|undefined} date
+   * @returns {Date|null}
+   */
+  parseAsDate(date) {
+    if (typeof date === 'string' || typeof date === 'number') {
+      const parsed = new Date(date)
+      return this.isValidDate(parsed) ? parsed : null
+    }
+    return this.isValidDate(date) ? date : null
+  },
+
   getTime() {
     const time = 'T00:00:00'
 
@@ -399,6 +412,20 @@ const utils = {
     return date
       ? this.resetDateTime(new Date(date))
       : this.resetDateTime(new Date())
+  },
+
+  /**
+   * Returns the `open date` at a given view
+   * @param {Date|null} openDate   the date on which the datepicker should open
+   * @param {View} view   Either `day`, `month`, or `year`
+   * @return {Date|null}
+   */
+  getOpenDate(openDate, selectedDate, view) {
+    const parsedOpenDate = this.parseAsDate(openDate)
+    const openDateOrToday = this.getNewDateObject(parsedOpenDate)
+    const newOpenDate = selectedDate || openDateOrToday
+
+    return this.adjustDateToView(newOpenDate, view)
   },
 
   /**

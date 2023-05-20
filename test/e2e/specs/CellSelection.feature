@@ -4,10 +4,10 @@ Feature: Cell Selection
   So that I pick a date
 
 
-# N.B. Until native events are supported by Cypress, we are simulating `enter` and `space bar` key presses
-# on buttons by using a `click` event.
-# See https://github.com/cypress-io/cypress/issues/311
-# and https://github.com/cypress-io/cypress/issues/8267
+  # N.B. Until native events are supported by Cypress, we are simulating `enter` and `space bar` key presses
+  # on buttons by using a `click` event.
+  # See https://github.com/cypress-io/cypress/issues/311
+  # and https://github.com/cypress-io/cypress/issues/8267
 
   @id-1
   Scenario Outline: Select a cell: minimum view: <minimumView>
@@ -20,7 +20,7 @@ Feature: Cell Selection
       | # | minimumView | date        |
       | 1 | day         | 15 Mar 2020 |
       | 2 | month       | 01 Mar 2020 |
-      | 3 | year        | 01 Mar 2020 |
+      | 3 | year        | 01 Jan 2020 |
 
 
   @id-2

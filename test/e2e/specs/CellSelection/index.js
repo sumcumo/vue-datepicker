@@ -10,7 +10,6 @@ describe('Cell selection', () => {
         createCalendar({
           openDate: new Date(2020, 2, 15),
           minimumView,
-          initialView: minimumView,
         })
 
         clickThe('input')
