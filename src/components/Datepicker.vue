@@ -401,6 +401,12 @@ export default {
         this.setInitialView()
       }
     },
+    inline(isInline) {
+      if (!isInline) {
+        this.close()
+      }
+      this.setInitialView()
+    },
     isActive(hasJustBecomeActive, isNoLongerActive) {
       if (hasJustBecomeActive) {
         this.datepickerIsActive()
@@ -578,7 +584,15 @@ export default {
       }
 
       this.$refs.dateInput.typedDate = ''
-      this.selectDate(new Date(cell.timestamp))
+      const date = new Date(cell.timestamp)
+
+      if (this.isInline && !this.dateHasChanged(date)) {
+        this.selectedDate = null
+        this.$emit('cleared')
+        return
+      }
+
+      this.selectDate(date)
       this.focus.delay = cell.isNextMonth ? this.slideDuration : 0
       this.focus.refs = this.isInline ? ['tabbableCell'] : ['input']
       this.close()
@@ -696,7 +710,7 @@ export default {
         this.hasClass(activeElement, 'cell') &&
         !this.hasClass(activeElement, 'open')
 
-      return !this.isMinimumView || isOpenCellFocused
+      return this.isInline || !this.isMinimumView || isOpenCellFocused
     },
     /**
      * Opens the calendar with the relevant view: 'day', 'month', or 'year'
@@ -780,12 +794,13 @@ export default {
      * @param {Date=} date The date to set for the page
      */
     setPageDate(date) {
-      const dateTemp = new Date(date || this.computedOpenDate)
-      let pageTimestamp = this.utils.setDate(dateTemp, 1)
+      const validDate = this.utils.parseAsDate(date) || this.computedOpenDate
+      let dateTemp = this.utils.getNewDateObject(validDate)
+      dateTemp = new Date(this.utils.setDate(dateTemp, 1))
 
-      if (this.view === 'year') {
-        pageTimestamp = this.utils.setMonth(new Date(pageTimestamp), 0)
-      }
+      const pageTimestamp = this.utils
+        .adjustDateToView(dateTemp, this.view)
+        .valueOf()
 
       this.pageTimestamp = pageTimestamp
     },

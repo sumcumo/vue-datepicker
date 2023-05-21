@@ -34,3 +34,13 @@ Feature: Cell Selection
       | # | initialView | view  |
       | 1 | year        | month |
       | 2 | month       | day   |
+
+
+  @id-3
+  Scenario: Select and deselect a cell when inline>
+    Given an inline calendar is open
+    When the user clicks on the tabbable cell
+    Then the tabbable cell has focus
+    And the date is selected
+    When the user clicks on the tabbable cell
+    And the date is not selected

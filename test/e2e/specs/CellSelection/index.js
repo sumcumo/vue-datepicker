@@ -19,6 +19,7 @@ describe('Cell selection', () => {
     )
 
     When('the user clicks on the tabbable cell', () => {
+      the('picker-cells').should('have.length', 1)
       clickThe('tabbable-cell')
     })
 
@@ -52,6 +53,26 @@ describe('Cell selection', () => {
 
     Then('the tabbable cell has focus', () => {
       the('tabbable-cell').should('be.focused')
+    })
+  })
+
+  describe('@id-3: Select and deselect a cell when inline', () => {
+    Given('an inline calendar is open', () => {
+      createCalendar({
+        openDate: new Date(2020, 2, 15),
+        inline: true,
+      })
+
+      the('picker-cells').should('have.length', 1)
+      the('calendar').should('be.visible')
+    })
+
+    Then('the date is selected', () => {
+      the('tabbable-cell').should('have.class', 'selected')
+    })
+
+    Then('the date is not selected', () => {
+      the('tabbable-cell').should('not.have.class', 'selected')
     })
   })
 })
