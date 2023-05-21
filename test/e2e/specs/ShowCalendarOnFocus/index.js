@@ -10,9 +10,6 @@ describe('Show calendar on focus', () => {
     })
 
     When('the user focuses the input field', () => {
-      // TODO: Remove arbitrary wait
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(100)
       focusThe('input')
     })
 
