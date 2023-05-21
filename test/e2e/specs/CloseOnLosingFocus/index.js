@@ -66,4 +66,27 @@ describe('Close on losing focus', () => {
       the('input').should('have.value', value)
     })
   })
+
+  describe('@id-3: Reopen after click outside when `show-calendar-on-focus` is true', () => {
+    Given('`show-calendar-on-focus` is true and the calendar is open', () => {
+      createCalendar({
+        showCalendarOnFocus: true,
+      })
+
+      clickThe('input')
+
+      the('picker-cells').should('have.length', 1)
+      the('calendar').should('be.visible')
+    })
+
+    Then('the calendar closes', () => {
+      the('picker-cells').should('have.length', 1)
+      the('calendar').should('not.be.visible')
+    })
+
+    Then('the calendar opens', () => {
+      the('picker-cells').should('have.length', 1)
+      the('calendar').should('be.visible')
+    })
+  })
 })

@@ -33,3 +33,13 @@ Feature: Close on losing focus
       | 2 | closed       | invalid  | closes        | cleared            |
       | 3 | open         | valid    | closes        | formatted          |
       | 4 | open         | invalid  | closes        | cleared            |
+
+
+  @id-3
+  Scenario: Reopen after click outside when `show-calendar-on-focus` is true: <openOrClosed>
+    Given `show-calendar-on-focus` is true and the calendar is open
+    When the user clicks the body
+    Then the calendar closes
+    And no element has focus
+    When the input field is focused
+    Then the calendar opens

@@ -485,6 +485,7 @@ export default {
 
       if (this.showCalendarOnFocus) {
         this.$refs.dateInput.shouldToggleOnClick = true
+        this.$refs.dateInput.shouldToggleOnFocus = true
       }
 
       if (this.isClickOutside) {
@@ -584,6 +585,7 @@ export default {
 
       if (this.showCalendarOnFocus && !this.inline) {
         this.$refs.dateInput.shouldToggleOnClick = true
+        this.$refs.dateInput.shouldToggleOnFocus = false
       } else {
         this.reviewFocus()
       }
