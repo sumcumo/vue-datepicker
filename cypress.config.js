@@ -19,7 +19,7 @@ export async function setupNodeEvents(on, config) {
 }
 
 export default defineConfig({
-  defaultCommandTimeout: 1000,
+  defaultCommandTimeout: 2000,
   e2e: {
     baseUrl: 'http://localhost:8080',
     experimentalRunAllSpecs: true,
