@@ -27,7 +27,7 @@ Download the latest release from github
 
 <script>
 import DatePicker from '@sum.cumo/vue-datepicker'
-import '@sum.cumo/vue-datepicker/dist/vue-datepicker.css'
+import '@sum.cumo/vue-datepicker/style.css'
 
 export default {
   name: 'Example',
@@ -48,7 +48,7 @@ Another option is to use webpacks [css-loader](https://webpack.js.org/loaders/cs
 
 ```vue
 <style>
-@import '~@sum.cumo/vue-datepicker/dist/Datepicker.css';
+@import '~@sum.cumo/vue-datepicker/style.css';
 </style>
 ```
 
@@ -56,11 +56,11 @@ If you use [SASS](https://sass-lang.com/) you can directly import the src file.
 
 ```vue
 <style lang="scss">
-@import '~@sum.cumo/vue-datepicker/src/styles/style.scss';
+@import '~@sum.cumo/vue-datepicker/style.scss';
 </style>
 ```
 
-The `esm` build is for modern browser and includes ES5 or higher.
+The `esm` build is for modern browsers and includes ES5 or higher.
 If you want to use it and want to include own polyfills you need to transpile it within your build process:
 
 - vue-cli [documentation](https://cli.vuejs.org/config/#transpiledependencies)

@@ -165,7 +165,7 @@
 ```
 
 <style>
-/*@import '../../dist/vue-datepicker.css';*/
+/* @import '../../dist/style.css'; */
 
 /* Start vue-datepicker.css */
 .rtl {

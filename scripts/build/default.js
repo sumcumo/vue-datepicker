@@ -35,10 +35,6 @@ export default {
         globals: {
           vue: 'Vue',
         },
-        assetFileNames: (assetInfo) => {
-          if (assetInfo.name === 'style.css') return 'vue-datepicker.css'
-          return assetInfo.name
-        },
       },
     },
   },
