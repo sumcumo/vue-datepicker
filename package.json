@@ -18,8 +18,18 @@
     "typeable"
   ],
   "type": "module",
-  "main": "dist/vue-datepicker.js",
-  "module": "dist/vue-datepicker.esm.js",
+  "exports": {
+    ".": {
+      "import": "./dist/vue-datepicker.esm.js",
+      "require": "./dist/vue-datepicker.js"
+    },
+    "./locale": {
+      "import": "./dist/locale/index.esm.js",
+      "require": "./dist/locale/index.common.js"
+    },
+    "./style.css": "./dist/style.css",
+    "./style.scss": "./dist/style.scss"
+  },
   "unpkg": "dist/vue-datepicker.min.js",
   "sideEffects": [
     "*.css",
