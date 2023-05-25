@@ -1,9 +1,9 @@
-const { defineConfig } = require('cypress')
-const createBundler = require('@bahmutov/cypress-esbuild-preprocessor')
-const preprocessor = require('@badeball/cypress-cucumber-preprocessor')
-const createEsbuildPlugin = require('@badeball/cypress-cucumber-preprocessor/esbuild')
+import { defineConfig } from 'cypress'
+import createBundler from '@bahmutov/cypress-esbuild-preprocessor'
+import preprocessor from '@badeball/cypress-cucumber-preprocessor'
+import createEsbuildPlugin from '@badeball/cypress-cucumber-preprocessor/esbuild'
 
-async function setupNodeEvents(on, config) {
+export async function setupNodeEvents(on, config) {
   // This is required for the preprocessor to be able to generate JSON reports after each run, and more,
   await preprocessor.addCucumberPreprocessorPlugin(on, config)
 
@@ -18,7 +18,7 @@ async function setupNodeEvents(on, config) {
   return config
 }
 
-module.exports = defineConfig({
+export default defineConfig({
   defaultCommandTimeout: 1000,
   e2e: {
     baseUrl: 'http://localhost:8080',
