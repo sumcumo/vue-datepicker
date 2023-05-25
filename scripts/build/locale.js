@@ -4,7 +4,6 @@ import { rollup } from 'rollup'
 import terser from '@rollup/plugin-terser'
 import babel from '@rollup/plugin-babel'
 import resolve from '@rollup/plugin-node-resolve'
-import commonjs from '@rollup/plugin-commonjs'
 
 const babelConfig = {
   extensions: ['.js'],
@@ -25,7 +24,6 @@ async function buildLanguages() {
       input: `./src/locale/translations/${file}`,
       plugins: [
         resolve(),
-        commonjs(),
         babel({
           ...babelConfig,
           exclude: 'node_modules/**',
@@ -51,7 +49,6 @@ async function buildUmd() {
     input: './src/locale/index.js',
     plugins: [
       resolve(),
-      commonjs(),
       babel({
         ...babelConfig,
         exclude: 'node_modules/**',
@@ -69,7 +66,7 @@ async function buildUmd() {
 async function buildCjs() {
   const bundle = await rollup({
     input: './src/locale/index.js',
-    plugins: [resolve(), commonjs(), babel(babelConfig)],
+    plugins: [resolve(), babel(babelConfig)],
   })
   await bundle.write({
     file: './dist/locale/index.common.js',
