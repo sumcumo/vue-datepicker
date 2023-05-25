@@ -20,12 +20,12 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/vue-datepicker.esm.js",
-      "require": "./dist/vue-datepicker.js"
+      "import": "./dist/vue-datepicker.mjs",
+      "require": "./dist/vue-datepicker.cjs"
     },
     "./locale": {
-      "import": "./dist/locale/index.esm.js",
-      "require": "./dist/locale/index.common.js"
+      "import": "./dist/locale/index.mjs",
+      "require": "./dist/locale/index.cjs"
     },
     "./style.css": "./dist/style.css",
     "./style.scss": "./dist/style.scss"

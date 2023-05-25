@@ -69,7 +69,7 @@ async function buildCjs() {
     plugins: [resolve(), babel(babelConfig)],
   })
   await bundle.write({
-    file: './dist/locale/index.common.js',
+    file: './dist/locale/index.cjs',
     format: 'cjs',
     exports: 'auto',
   })
@@ -90,8 +90,8 @@ async function buildEsm() {
     dir: './dist/locale/',
     format: 'esm',
     preserveModules: true,
-    entryFileNames: '[name].esm.js',
-    assetFileNames: '[name].esm.js',
+    entryFileNames: '[name].mjs',
+    assetFileNames: '[name].mjs',
   })
 }
 
