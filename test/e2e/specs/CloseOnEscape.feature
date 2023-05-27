@@ -35,7 +35,7 @@ Feature: Close on escape
   Scenario Outline: Revert to open date when the focused cell is on a different page: <minimumView>
     Given the calendar is open on a "<minimumView>" view
     And the user visits another page
-    When the user focuses another cell on the same "<minimumView>" view and presses the escape key
+    When the user focuses another cell on the new "<minimumView>" view and presses the escape key
     Then the open date has focus
 
     Examples:

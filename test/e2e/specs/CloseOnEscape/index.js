@@ -70,9 +70,25 @@ describe('Close on escape', () => {
       clickThe('next-button')
     })
 
-    When('the user focuses a cell and presses the escape key', () => {
-      the('tabbable-cell').should('have.length', 1).focus().type('{esc}')
-    })
+    When(
+      'the user focuses another cell on the new {string} view and presses the escape key',
+      (view) => {
+        let cellText = ''
+
+        switch (view) {
+          case 'day':
+            cellText = '20'
+            break
+          case 'month':
+            cellText = 'December'
+            break
+          default:
+            cellText = '2039'
+        }
+
+        the('picker-cells').contains(cellText).focus().type('{esc}')
+      },
+    )
   })
 
   describe('@id-4: Revert to open date when the focused cell is on a different view', () => {
@@ -89,6 +105,10 @@ describe('Close on escape', () => {
         the('calendar').should('be.visible')
       },
     )
+
+    When('the user focuses a cell and presses the escape key', () => {
+      the('tabbable-cell').should('have.length', 1).focus().type('{esc}')
+    })
 
     Then('the open date on the minimum view has focus', () => {
       the('up-button').contains('Mar 2020')
