@@ -82,6 +82,10 @@ export default {
       type: Date,
       default: null,
     },
+    slideDuration: {
+      type: Number,
+      default: 250,
+    },
     translation: {
       type: Object,
       default() {
@@ -267,7 +271,7 @@ export default {
 
         setTimeout(() => {
           this.shouldToggleOnClick = true
-        }, 300)
+        }, this.slideDuration)
       }
     },
     /**

@@ -30,6 +30,7 @@
       :selected-date="selectedDate"
       :show-calendar-on-button-click="showCalendarOnButtonClick"
       :show-calendar-on-focus="showCalendarOnFocus"
+      :slide-duration="slideDuration"
       :tabindex="tabindex"
       :translation="translation"
       :typeable="typeable"
@@ -587,7 +588,7 @@ export default {
     handlePageChange({ focusRefs, pageDate }) {
       this.setPageDate(pageDate)
       this.focus.refs = focusRefs
-      this.focus.delay = this.slideDuration || 250
+      this.focus.delay = this.slideDuration
       this.reviewFocus()
       this.$emit(`changed${this.ucFirst(this.nextView.up)}`, pageDate)
     },

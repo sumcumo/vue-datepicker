@@ -367,7 +367,7 @@ export default {
         delta,
         stepsRemaining,
       }
-      const delay = this.slideDuration || 250
+      const delay = this.slideDuration
 
       if (stepsRemaining <= 0) {
         if (this.isMutedOrDisabled(currentElement)) {
