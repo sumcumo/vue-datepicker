@@ -25,4 +25,25 @@ describe('Clear date on delete', () => {
       the('input').should('be.focused')
     })
   })
+
+  describe('@id-2: Clear inline date via {string}', () => {
+    Given('the inline calendar has a selected date', () => {
+      createCalendar({
+        inline: true,
+        modelValue: new Date(2020, 2, 15),
+      })
+
+      the('calendar').should('be.visible')
+      the('picker-cells').should('have.length', 1)
+      cy.get('button.selected').should('have.attr', 'data-id', 14)
+    })
+
+    When('the user focuses any element and presses {string}', (key) => {
+      focusThe('tabbable-cell').type(`{${key}}`)
+    })
+
+    Then('the same element has focus', () => {
+      the('tabbable-cell').should('be.focused')
+    })
+  })
 })

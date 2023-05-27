@@ -66,6 +66,7 @@
       :inline="inline"
       :rtl="isRtl"
       :visible="isOpen"
+      @keydown.delete="clearDate"
     >
       <Transition name="toggle">
         <div
@@ -474,9 +475,17 @@ export default {
         return
       }
 
+      const { focusedDateTimestamp } = this
+
       this.selectDate(null)
-      this.focus.refs = ['input']
-      this.close()
+
+      if (this.isInline) {
+        this.resetFocusToOpenDate(focusedDateTimestamp)
+      } else {
+        this.focus.refs = ['input']
+        this.close()
+      }
+
       this.$emit('cleared')
     },
     /**
@@ -730,7 +739,7 @@ export default {
      */
     resetOrClose() {
       if (this.isResetFocus()) {
-        this.resetFocusToOpenDate()
+        this.resetFocusToOpenDate(this.focusedDateTimestamp)
         return
       }
 

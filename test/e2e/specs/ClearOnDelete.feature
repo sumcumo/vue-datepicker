@@ -15,3 +15,16 @@ Feature: Clear date on delete
       | # | key       |
       | 1 | backspace |
       | 2 | del       |
+
+
+  @id-2
+  Scenario Outline: Clear inline date via "<key>"
+    Given the inline calendar has a selected date
+    When the user focuses any element and presses "<key>"
+    Then the date is cleared
+    And the same element has focus
+
+    Examples:
+      | # | key       |
+      | 1 | backspace |
+      | 2 | del       |
