@@ -17,6 +17,7 @@
     "keyboard navigation",
     "typeable"
   ],
+  "type": "module",
   "main": "dist/vue-datepicker.js",
   "module": "dist/vue-datepicker.esm.js",
   "unpkg": "dist/vue-datepicker.min.js",

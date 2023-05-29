@@ -1,7 +1,7 @@
-import { resolve } from 'path'
+import { fileURLToPath, URL } from 'url'
 import vue from '@vitejs/plugin-vue'
 
-const sourcePath = resolve(__dirname, '../../', 'src')
+const sourcePath = fileURLToPath(new URL('../../src', import.meta.url))
 
 export default {
   resolve: {

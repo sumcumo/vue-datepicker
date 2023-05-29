@@ -1,6 +1,6 @@
 // https://github.com/michael-ciniawsky/postcss-load-config
 
-module.exports = {
+export default {
   'extract': true,
   'plugins': {
     // to edit target browsers: use "browserlist" field in package.json
