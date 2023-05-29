@@ -1,5 +1,8 @@
 <template>
-  <div class="picker-cells" data-test-picker-cells>
+  <div
+    class="picker-cells"
+    data-test-picker-cells
+  >
     <button
       v-for="(cell, id) in cells"
       :key="cell.timestamp"

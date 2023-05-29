@@ -1,5 +1,5 @@
 # Formatting
 
 <ClientOnly>
-  <formatting />
+  <DateFormatting />
 </ClientOnly>

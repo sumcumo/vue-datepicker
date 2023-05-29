@@ -1,21 +1,28 @@
 <template>
-  <div>
+  <div class="example">
+    <DatePicker
+      :open-date="openDate"
+      placeholder="Select Date"
+    />
+
     <div class="settings">
       <h5>Settings</h5>
       <div class="form-group">
         <label>Open date:</label>
-        <Datepicker v-model="openDate" placeholder="Select open Date" />
+        <DatePicker
+          v-model="openDate"
+          placeholder="Select open Date"
+        />
       </div>
       <pre>openDate: {{ openDate }}</pre>
     </div>
-    <Datepicker :open-date="openDate" placeholder="Select Date" />
-    <hr />
+    <DatePicker :open-date="openDate" placeholder="Select Date" />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'DatepickerOpenDate',
+  name: 'DatePickerOpenDate',
   data() {
     return {
       openDate: null,

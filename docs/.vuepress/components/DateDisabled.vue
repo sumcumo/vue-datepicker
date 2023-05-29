@@ -2,7 +2,7 @@
   <div>
     <div class="example">
       <h3>With minimum and maximum date range</h3>
-      <Datepicker :disabled-dates="disabledDates" />
+      <DatePicker :disabled-dates="disabledDates" />
       <code>
         &lt;datepicker :disabled-dates="disabledDates"&gt;&lt;/datepicker&gt;
       </code>
@@ -10,11 +10,11 @@
         <h5>Settings</h5>
         <div class="form-group">
           <label>Disabled to:</label>
-          <Datepicker @selected="disableTo" />
+          <DatePicker @selected="disableTo" />
         </div>
         <div class="form-group">
           <label>Disabled from:</label>
-          <Datepicker @selected="disableFrom" />
+          <DatePicker @selected="disableFrom" />
         </div>
         <div class="form-group">
           <label>Disabled Days of Month:</label>
@@ -31,7 +31,7 @@
 
     <div class="example">
       <h3>Disabled dates</h3>
-      <Datepicker :disabled-dates="disabledFn" />
+      <DatePicker :disabled-dates="disabledFn" />
       <code>
         &lt;datepicker :disabled-dates="disabledFn"&gt;&lt;/datepicker&gt;
       </code>
@@ -65,7 +65,7 @@
 
 <script>
 export default {
-  name: 'Disabled',
+  name: 'DateDisabled',
   data() {
     return {
       disabledDates: {},

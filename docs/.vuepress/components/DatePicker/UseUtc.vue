@@ -1,16 +1,16 @@
 <template>
   <div>
     <h3>UTC</h3>
-    <Datepicker
+    <DatePicker
+      v-model="utcDate"
       :use-utc="true"
       placeholder="Select utc date"
-      v-model="utcDate"
     />
     <pre>UTC date: {{ utcDate }}</pre>
     <h3>Browser Timezone</h3>
-    <Datepicker
-      placeholder="Select browser timezone date"
+    <DatePicker
       v-model="normalDate"
+      placeholder="Select browser timezone date"
     />
     <pre>Browser timezone date: {{ normalDate }}</pre>
   </div>
@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  name: 'DatepickerOpenDate',
+  name: 'DatePickerUserUtc',
   data() {
     return {
       utcDate: null,

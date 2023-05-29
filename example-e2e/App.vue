@@ -3,7 +3,7 @@
     <h1>Datepicker Integration Tests</h1>
     <div class="example">
       <h3>Default datepicker...</h3>
-      <Datepicker
+      <DatePicker
         :id="id"
         :append-to-body="appendToBody"
         :autofocus="autofocus"
@@ -38,7 +38,7 @@
         :tabindex="tabindex"
         :typeable="typeable"
         :use-utc="useUtc"
-        :modelValue="modelValue"
+        :model-value="modelValue"
         :wrapper-class="wrapperClass"
         :year-picker-range="yearPickerRange"
       />
@@ -50,13 +50,13 @@
 </template>
 
 <script>
-import Datepicker from '~/components/Datepicker.vue'
 import * as lang from '~/locale/index'
+import DatePicker from '~/components/DatePicker.vue'
 
 export default {
   name: 'App',
   components: {
-    Datepicker,
+    DatePicker,
   },
   data() {
     return {

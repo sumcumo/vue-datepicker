@@ -21,7 +21,7 @@ export default {
     minify: 'terser',
     sourcemap: true,
     lib: {
-      entry: `${sourcePath}/components/Datepicker.vue`,
+      entry: `${sourcePath}/components/DatePicker.vue`,
       name: 'Datepicker',
       formats: ['umd', 'iife'],
     },

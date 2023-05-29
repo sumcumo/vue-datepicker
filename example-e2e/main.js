@@ -9,4 +9,5 @@ const app = createApp(App)
 app.use(store)
 app.mount('#app')
 
+// eslint-disable-next-line no-underscore-dangle
 window.__store__ = store

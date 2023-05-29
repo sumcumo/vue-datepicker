@@ -1,11 +1,11 @@
 import { mount } from '@vue/test-utils'
-import Datepicker from '~/components/Datepicker.vue'
+import DatePicker from '~/components/DatePicker.vue'
 
 describe('Datepicker mounted with restricted views', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = mount(Datepicker)
+    wrapper = mount(DatePicker)
   })
 
   afterEach(() => {
@@ -90,7 +90,7 @@ describe('Datepicker mounted with restricted views', () => {
   })
 
   it('throws an error on disallowed initial views', () => {
-    wrapper = mount(Datepicker, {
+    wrapper = mount(DatePicker, {
       props: {
         minimumView: 'day',
         maximumView: 'month',

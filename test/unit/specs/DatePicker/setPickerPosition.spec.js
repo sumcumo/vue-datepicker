@@ -1,12 +1,12 @@
 import { mount } from '@vue/test-utils'
 import { vi } from 'vitest'
-import Datepicker from '~/components/Datepicker.vue'
+import DatePicker from '~/components/DatePicker.vue'
 
 describe('Datepicker mounted with date', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = mount(Datepicker, {
+    wrapper = mount(DatePicker, {
       props: {
         modelValue: new Date(2016, 1, 15),
       },

@@ -1,22 +1,25 @@
 <template>
   <div>
     <div class="example">
-      <h5>{{ $datepickerLocals[language].language }} datepicker</h5>
+      <h5>{{ $datepickerLocales[language].language }} datepicker</h5>
 
-      <Datepicker :language="$datepickerLocals[language]" />
+      <DatePicker
+        :language="$datepickerLocales[language]"
+        placeholder="Datepicker based on settings below..."
+      />
       <code>
-        &lt;datepicker :language="$datepickerLocals.{{ language }}"&gt;
+        &lt;datepicker :language="$datepickerLocales.{{ language }}"&gt;
         &lt;/datepicker&gt;
       </code>
       <div class="settings">
         <h5>Settings</h5>
         <select v-model="language">
           <option
-            v-for="(language, key) in $datepickerLocals"
+            v-for="(lang, key) in $datepickerLocales"
             :key="key"
             :value="key"
           >
-            {{ language.language }}
+            {{ lang.language }}
           </option>
         </select>
       </div>
@@ -26,7 +29,7 @@
 
 <script>
 export default {
-  name: 'Language',
+  name: 'DateLanguage',
   data() {
     return {
       language: 'en',

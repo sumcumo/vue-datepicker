@@ -1,5 +1,5 @@
 # Languages
 
 <ClientOnly>
-  <language />
+  <DateLanguage />
 </ClientOnly>

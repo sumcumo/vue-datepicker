@@ -3,17 +3,17 @@ import { addDays } from 'date-fns'
 import { vi } from 'vitest'
 import { he } from '~/locale'
 import DateInput from '~/components/DateInput.vue'
-import Datepicker from '~/components/Datepicker.vue'
+import DatePicker from '~/components/DatePicker.vue'
 
 describe('Datepicker unmounted', () => {
   it('has a mounted hook', () => {
-    expect(typeof Datepicker.mounted).toEqual('function')
+    expect(typeof DatePicker.mounted).toEqual('function')
   })
 
   it('sets the correct default data', () => {
-    expect(typeof Datepicker.data).toEqual('function')
-    const defaultData = Datepicker.data()
-    const defaultProps = Datepicker.props
+    expect(typeof DatePicker.data).toEqual('function')
+    const defaultData = DatePicker.data()
+    const defaultProps = DatePicker.props
     expect(defaultData.selectedDate).toEqual(null)
     expect(defaultData.view).toEqual('')
     expect(defaultData.calendarHeight).toEqual(0)
@@ -28,7 +28,7 @@ describe('Datepicker shallowMounted', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = shallowMount(Datepicker)
+    wrapper = shallowMount(DatePicker)
   })
 
   afterEach(() => {
@@ -184,7 +184,7 @@ describe('Datepicker mounted', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = mount(Datepicker)
+    wrapper = mount(DatePicker)
   })
 
   afterEach(() => {
@@ -419,7 +419,7 @@ describe('Datepicker mounted with showCalendarOnFocus', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = mount(Datepicker, {
+    wrapper = mount(DatePicker, {
       props: {
         showCalendarOnFocus: true,
       },
@@ -464,7 +464,7 @@ describe('Datepicker mounted with calendar button', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = mount(Datepicker, {
+    wrapper = mount(DatePicker, {
       props: {
         calendarButton: true,
       },
@@ -521,7 +521,7 @@ describe('Datepicker mounted with slots', () => {
     const calendarFooter =
       'One tabbable element in the <div tabindex="0">calendarFooter</div> slot'
 
-    wrapper = mount(Datepicker, {
+    wrapper = mount(DatePicker, {
       slots: {
         beforeCalendarHeader,
         beforeCalendarHeaderDay,
@@ -564,7 +564,7 @@ describe('Datepicker mounted and attached to body', () => {
   beforeEach(() => {
     vi.useFakeTimers()
 
-    wrapper = mount(Datepicker, {
+    wrapper = mount(DatePicker, {
       attachTo: document.body,
     })
   })
@@ -619,7 +619,7 @@ describe('Datepicker mounted and attached to body with openDate', () => {
   beforeEach(() => {
     vi.useFakeTimers()
 
-    wrapper = mount(Datepicker, {
+    wrapper = mount(DatePicker, {
       attachTo: document.body,
       props: {
         openDate: new Date(2020, 0, 1),
@@ -1122,7 +1122,7 @@ describe('Datepicker mounted using UTC', () => {
     const UTCString = `${ambiguousYear} ${ambiguousMonth} ${ambiguousDay}`
 
     // It's important to use the `mount` helper here
-    wrapper = mount(Datepicker, {
+    wrapper = mount(DatePicker, {
       props: {
         format: 'yyyy MM dd',
         modelValue: ambiguousDate,
@@ -1142,7 +1142,7 @@ describe('Datepicker mounted inline', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = mount(Datepicker, {
+    wrapper = mount(DatePicker, {
       props: {
         inline: true,
       },
@@ -1172,7 +1172,7 @@ describe('Datepicker mounted inline and attached to body', () => {
   beforeEach(() => {
     vi.useFakeTimers()
 
-    wrapper = mount(Datepicker, {
+    wrapper = mount(DatePicker, {
       attachTo: document.body,
       props: {
         inline: true,
@@ -1205,7 +1205,7 @@ describe('Datepicker mounted and appended to body', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = mount(Datepicker, {
+    wrapper = mount(DatePicker, {
       props: {
         appendToBody: true,
       },

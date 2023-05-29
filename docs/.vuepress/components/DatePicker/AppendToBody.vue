@@ -1,15 +1,15 @@
 <template>
   <div class="overflow-scroll">
     <h3>Don't append datepicker to body</h3>
-    <Datepicker />
+    <DatePicker />
     <h3>Append to body</h3>
-    <Datepicker :append-to-body="true" />
+    <DatePicker :append-to-body="true" />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'DatepickerOpenDate',
+  name: 'DatePickerAppendToBody',
   data() {
     return {
       openDate: null,

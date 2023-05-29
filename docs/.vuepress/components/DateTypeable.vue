@@ -1,6 +1,6 @@
 <template>
   <div class="example">
-    <Datepicker
+    <DatePicker
       placeholder="Type or select date"
       :typeable="true"
       :format="format"
@@ -11,18 +11,18 @@
     </code>
     <div class="settings">
       <h5>Settings</h5>
-      <Format @selected="selected" :format-init="format" />
+      <DateFormat :format-init="format" @selected="selected" />
     </div>
   </div>
 </template>
 
 <script>
-import Format from '../components/Formats.vue'
+import DateFormat from './DateFormats.vue'
 
 export default {
-  name: 'Typeable',
+  name: 'DateTypeable',
   components: {
-    Format,
+    DateFormat,
   },
   data() {
     return {

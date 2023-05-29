@@ -1,40 +1,32 @@
 <template>
   <div class="example">
-    <Datepicker
+    <DatePicker
       v-model="model"
-      v-validate="'required'"
+      v-cleave="options"
       :typeable="true"
       :format="format"
-      :input-class="fields[name]"
       :name="name"
-      @blur="touched"
       placeholder="Type or select date"
     />
-    <div class="error">
-      <span>{{ errors.first(name) }}</span>
-    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'VeeValidate',
+  name: 'DateCleave',
+  inject: ['$validator'],
   data() {
     return {
       model: '',
       name: 'datepicker',
       format: 'dd.MM.yyyy',
+      options: {
+        delimiter: '.',
+        date: true,
+        datePattern: ['d', 'm', 'Y'],
+      },
     }
   },
-  methods: {
-    touched() {
-      this.$validator.flag(this.name, {
-        untouched: false,
-        touched: true,
-      })
-    },
-  },
-  inject: ['$validator'],
 }
 </script>
 <style>

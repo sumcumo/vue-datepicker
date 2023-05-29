@@ -81,7 +81,10 @@
           @keydown.tab.stop="tabThroughNavigation($event)"
         >
           <Transition name="view">
-            <div ref="view" :key="view">
+            <div
+              ref="view"
+              :key="view"
+            >
               <div v-if="$slots.beforeCalendarHeader">
                 <slot name="beforeCalendarHeader" />
               </div>
@@ -118,11 +121,18 @@
                 @set-transition-name="setTransitionName($event)"
                 @set-view="setView"
               >
-                <template v-for="slotKey of usedCalendarSlots" #[slotKey]>
+                <template
+                  v-for="slotKey of usedCalendarSlots"
+                  #[slotKey]
+                >
                   <slot :name="slotKey" />
                 </template>
                 <template #dayCellContent="{ cell }">
-                  <slot v-if="cell" name="dayCellContent" :cell="cell" />
+                  <slot
+                    v-if="cell"
+                    name="dayCellContent"
+                    :cell="cell"
+                  />
                 </template>
               </Component>
               <div v-if="$slots.calendarFooter">
@@ -150,8 +160,7 @@ import PickerYear from '~/components/PickerYear.vue'
 import Popup from '~/components/Popup.vue'
 
 export default {
-  // eslint-disable-next-line vue/multi-word-component-names
-  name: 'Datepicker',
+  name: 'DatePicker',
   components: {
     DateInput,
     PickerDay,

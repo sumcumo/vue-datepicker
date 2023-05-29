@@ -1,7 +1,7 @@
 import { mount, shallowMount } from '@vue/test-utils'
 import { format, parse } from 'date-fns'
 import DateInput from '~/components/DateInput.vue'
-import Datepicker from '~/components/Datepicker.vue'
+import DatePicker from '~/components/DatePicker.vue'
 import { en } from '~/locale'
 
 describe('DateInput shallowMounted', () => {
@@ -143,7 +143,7 @@ describe('Datepicker mounted', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = mount(Datepicker, {
+    wrapper = mount(DatePicker, {
       props: {
         typeable: true,
       },
@@ -262,7 +262,7 @@ describe('Datepicker mounted with a default value', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = mount(Datepicker, {
+    wrapper = mount(DatePicker, {
       props: {
         typeable: true,
         modelValue: new Date(new Date(2000, 0, 1).setHours(0, 0, 0, 0)),
@@ -285,7 +285,7 @@ describe('Datepicker mounted with showCalendarOnFocus', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = mount(Datepicker, {
+    wrapper = mount(DatePicker, {
       props: {
         typeable: true,
         showCalendarOnFocus: true,
@@ -327,7 +327,7 @@ describe('DatePicker mounted and attached to body', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = mount(Datepicker, {
+    wrapper = mount(DatePicker, {
       attachTo: document.body,
       props: {
         typeable: true,

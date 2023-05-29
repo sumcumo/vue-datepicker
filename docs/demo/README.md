@@ -3,114 +3,114 @@
 ## Default
 
 <ClientOnly>
-  <Datepicker placeholder="Select Date" />
+  <DatePicker placeholder="Select Date" />
 </ClientOnly>
 
 ```vue
-<Datepicker placeholder="Select Date" />
+<DatePicker placeholder="Select Date" />
 ```
 
 ## v-model
 
 <ClientOnly>
-  <Datepicker-VModel/>
+  <DatePicker-VModel/>
 </ClientOnly>
 
 ```vue
-<Datepicker v-model="vModelExample" />
+<DatePicker v-model="vModelExample" />
 ```
 
 ## First day of Week
 
 <ClientOnly>
-  <Datepicker
+  <DatePicker
     placeholder="Select Date"
     first-day-of-week="mon"
   />
 </ClientOnly>
 
 ```vue
-<Datepicker first-day-of-week="mon" />
+<DatePicker first-day-of-week="mon" />
 ```
 
 ## Don't show edge dates
 
 <ClientOnly>
-  <Datepicker
+  <DatePicker
     placeholder="Select Date"
     :show-edge-dates="false"
   />
 </ClientOnly>
 
 ```vue
-<Datepicker :show-edge-dates="false" />
+<DatePicker :show-edge-dates="false" />
 ```
 
 ## Custom open Date
 
 <ClientOnly>
-  <Datepicker-OpenDate/>
+  <DatePicker-OpenDate/>
 </ClientOnly>
 
 ```vue
-<Datepicker :open-date="openDate" />
+<DatePicker :open-date="openDate" />
 ```
 
 ## Inline
 
 <ClientOnly>
-  <Datepicker
+  <DatePicker
     placeholder="Select Date"
     :inline="true"
   />
 </ClientOnly>
 
 ```vue
-<Datepicker :inline="true" />
+<DatePicker :inline="true" />
 ```
 
 ## Fixed position
 
 <ClientOnly>
-  <Datepicker
+  <DatePicker
     placeholder="Select Date"
     fixed-position="top-right"
   />
 </ClientOnly>
 
 ```vue
-<Datepicker fixed-position="top-right" />
+<DatePicker fixed-position="top-right" />
 ```
 
 ## Rtl
 
 <ClientOnly>
-  <Datepicker
-    :language="$datepickerLocals.he"
+  <DatePicker
+    :language="$datepickerLocales.he"
   />
 </ClientOnly>
 
 ```vue
-<Datepicker :language="$datepickerLocals.he" />
+<DatePicker :language="$datepickerLocales.he" />
 ```
 
 ## Day view only
 
 <ClientOnly>
-  <Datepicker
+  <DatePicker
     minimum-view="day"
     maximum-view="day"
   />
 </ClientOnly>
 
 ```vue
-<Datepicker minimum-view="day" maximum-view="day" />
+<DatePicker minimum-view="day" maximum-view="day" />
 ```
 
 ## Day and month view only
 
 <ClientOnly>
-  <Datepicker
+  <DatePicker
     minimum-view="day"
     maximum-view="month"
     initial-view="month"
@@ -118,50 +118,50 @@
 </ClientOnly>
 
 ```vue
-<Datepicker minimum-view="day" maximum-view="month" initial-view="month" />
+<DatePicker minimum-view="day" maximum-view="month" initial-view="month" />
 ```
 
 ## With Button
 
 <ClientOnly>
-  <Datepicker
+  <DatePicker
     :calendar-button="true"
     :show-calendar-on-button-click="true"
   />
 </ClientOnly>
 
 ```vue
-<Datepicker :calendar-button="true" :show-calendar-on-button-click="true" />
+<DatePicker :calendar-button="true" :show-calendar-on-button-click="true" />
 ```
 
 ## Year picker range
 
 <ClientOnly>
-  <Datepicker-YearPickerRange/>
+  <DatePicker-YearPickerRange/>
 </ClientOnly>
 
 ```vue
-<Datepicker :year-picker-range="yearPickerRange" />
+<DatePicker :year-picker-range="yearPickerRange" />
 ```
 
 ## Comparison append picker to body
 
 <ClientOnly>
-  <Datepicker-AppendToBody/>
+  <DatePicker-AppendToBody/>
 </ClientOnly>
 
 ```vue
-<Datepicker :append-to-body="true" />
+<DatePicker :append-to-body="true" />
 ```
 
 ## Comparison use utc or not
 
 <ClientOnly>
-  <Datepicker-UseUtc/>
+  <DatePicker-UseUtc/>
 </ClientOnly>
 
 ```vue
-<Datepicker :use-utc="true" />
+<DatePicker :use-utc="true" />
 ```
 
 <style>

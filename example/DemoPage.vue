@@ -3,7 +3,7 @@
     <h1>Datepicker Examples</h1>
     <div class="example">
       <h3>Default datepicker...</h3>
-      <Datepicker placeholder="Select Date" />
+      <DatePicker placeholder="Select Date" />
       <code>
         &lt;datepicker placeholder="Select Date"&gt;&lt;/datepicker&gt;
       </code>
@@ -11,7 +11,10 @@
 
     <div class="example">
       <h3>Custom first-day-of-week datepicker</h3>
-      <Datepicker placeholder="Select date" first-day-of-week="mon" />
+      <DatePicker
+        placeholder="Select date"
+        first-day-of-week="mon"
+      />
       <code>
         &lt;datepicker placeholder="Select date"
         first-day-of-week="mon"&gt;&lt;/datepicker&gt;
@@ -20,7 +23,10 @@
 
     <div class="example">
       <h3>Typeable datepicker</h3>
-      <Datepicker placeholder="Type or select date" :typeable="true" />
+      <DatePicker
+        placeholder="Type or select date"
+        :typeable="true"
+      />
       <code>
         &lt;datepicker placeholder="Type or select date"
         :typeable="true"&gt;&lt;/datepicker&gt;
@@ -29,7 +35,10 @@
 
     <div class="example">
       <h3>Only show dates from current month datepicker</h3>
-      <Datepicker placeholder="Select date" :show-edge-dates="false" />
+      <DatePicker
+        placeholder="Select date"
+        :show-edge-dates="false"
+      />
       <code>
         &lt;datepicker placeholder="Select date"
         :show-edge-dates="false"&gt;&lt;/datepicker&gt;
@@ -38,7 +47,7 @@
 
     <div class="example">
       <h3>Datepicker with slots</h3>
-      <Datepicker placeholder="Select Date">
+      <DatePicker placeholder="Select Date">
         <template #beforeCalendarHeader>
           <div class="slot">
             Read all about:
@@ -64,7 +73,7 @@
             </a>
           </div>
         </template>
-      </Datepicker>
+      </DatePicker>
       <pre>
 &lt;datepicker placeholder="Select Date"&gt;
   &lt;template #beforeCalendarHeader&gt;
@@ -81,13 +90,13 @@
       tabindex="0"&gt;available slots&lt;/a&gt;
     &lt;/div&gt;
   &lt;/template&gt;
-&lt;/datepicker&gt;</pre
-      >
+&lt;/datepicker&gt;
+      </pre>
     </div>
 
     <div class="example">
       <h3>Bootstrap styled datepicker</h3>
-      <Datepicker
+      <DatePicker
         :bootstrap-styling="true"
         :calendar-button="true"
         :clear-button="true"
@@ -99,7 +108,10 @@
 
     <div class="example">
       <h3>v-model datepicker</h3>
-      <Datepicker v-model="vModelExample" placeholder="Select Date" />
+      <DatePicker
+        v-model="vModelExample"
+        placeholder="Select Date"
+      />
       <code>
         &lt;datepicker placeholder="Select Date"
         v-model="vModelExample"&gt;&lt;/datepicker&gt;
@@ -110,15 +122,15 @@
 
     <div class="example overflow-scroll">
       <h3>Append datepicker to body</h3>
-      <Datepicker :append-to-body="true" />
+      <DatePicker :append-to-body="true" />
       <h3>Don't append datepicker to body</h3>
-      <Datepicker />
+      <DatePicker />
       <code>&lt;datepicker :append-to-body="true"&gt;&lt;/datepicker&gt;</code>
     </div>
 
     <div class="example">
       <h3>Format datepicker</h3>
-      <Datepicker :format="format" />
+      <DatePicker :format="format" />
       <code>&lt;datepicker format="format"&gt;&lt;/datepicker&gt;</code>
       <div class="settings">
         <h5>Settings</h5>
@@ -143,7 +155,10 @@
 
     <div class="example">
       <h3>Format a date with the date-fns library</h3>
-      <Datepicker :format="customFormatter" v-model="state" />
+      <DatePicker
+        v-model="state"
+        :format="customFormatter"
+      />
       <code>
         &lt;datepicker :format="customFormatter"&gt;&lt;/datepicker&gt;
       </code>
@@ -174,7 +189,7 @@
 
     <div class="example">
       <h3>With minimum and maximum date range</h3>
-      <Datepicker :disabled-dates="disabledDates" />
+      <DatePicker :disabled-dates="disabledDates" />
       <code>
         &lt;datepicker :disabled-dates="disabledDates"&gt;&lt;/datepicker&gt;
       </code>
@@ -182,11 +197,11 @@
         <h5>Settings</h5>
         <div class="form-group">
           <label>Disabled to:</label>
-          <Datepicker @selected="disableTo" />
+          <DatePicker @selected="disableTo" />
         </div>
         <div class="form-group">
           <label>Disabled from:</label>
-          <Datepicker @selected="disableFrom" />
+          <DatePicker @selected="disableFrom" />
         </div>
         <div class="form-group">
           <label>Disabled Days of Month:</label>
@@ -200,7 +215,7 @@
         <pre>disabledDates: {{ disabledDates }}</pre>
 
         <h5>Resulting Date picker</h5>
-        <Datepicker :disabled-dates="disabledDates" />
+        <DatePicker :disabled-dates="disabledDates" />
       </div>
     </div>
 
@@ -213,13 +228,13 @@
         </div>
         <pre>{{ disabledFnContent }}</pre>
         <h5>Resulting Date picker</h5>
-        <Datepicker :disabled-dates="disabledFn" />
+        <DatePicker :disabled-dates="disabledFn" />
       </div>
     </div>
 
     <div class="example">
       <h3>Highlighting Dates Matching Given Function</h3>
-      <Datepicker :highlighted="highlighted" />
+      <DatePicker :highlighted="highlighted" />
       <code>
         &lt;datepicker :highlighted="highlighted"&gt;&lt;/datepicker&gt;
       </code>
@@ -235,7 +250,7 @@
         </pre>
 
         <h5>Resulting Date picker</h5>
-        <Datepicker :highlighted="highlightedFn" />
+        <DatePicker :highlighted="highlightedFn" />
       </div>
     </div>
 
@@ -248,32 +263,36 @@
         <h5>Settings</h5>
         <div class="form-group">
           <label>Highlight from:</label>
-          <Datepicker @selected="highlightFrom" />
+          <DatePicker @selected="highlightFrom" />
         </div>
         <div class="form-group">
           <label>Highlight to:</label>
-          <Datepicker @selected="highlightTo" />
+          <DatePicker @selected="highlightTo" />
         </div>
         <div class="form-group">
           <label>Highlight Days of Month:</label>
-          <input type="text" value="" @change="setHighlightedDays" />
+          <input
+            type="text"
+            value=""
+            @change="setHighlightedDays"
+          />
         </div>
         <pre>highlighted: {{ highlighted }}</pre>
 
         <h5>Resulting Date picker</h5>
-        <Datepicker :highlighted="highlighted" />
+        <DatePicker :highlighted="highlighted" />
       </div>
     </div>
 
     <div class="example">
       <h3>With default open date</h3>
-      <Datepicker :open-date="openDate" />
+      <DatePicker :open-date="openDate" />
       <code>&lt;datepicker :disabled="disabled"&gt;&lt;/datepicker&gt;</code>
       <div class="settings">
         <h5>Settings</h5>
         <div class="form-group">
           <label>Open date:</label>
-          <Datepicker v-model="openDate" />
+          <DatePicker v-model="openDate" />
         </div>
         <pre>open-date: {{ openDate }}</pre>
       </div>
@@ -283,7 +302,10 @@
       <h3>Translations</h3>
       <h5>{{ languages[language].language }} datepicker</h5>
 
-      <Datepicker :language="languages[language]" format="d MMMM yyyy" />
+      <DatePicker
+        :language="languages[language]"
+        format="d MMMM yyyy"
+      />
       <code>
         &lt;datepicker :language="languages.{{
           language
@@ -292,8 +314,12 @@
       <div class="settings">
         <h5>Settings</h5>
         <select v-model="language">
-          <option v-for="(language, key) in languages" :key="key" :value="key">
-            {{ language.language }}
+          <option
+            v-for="(lang, key) in languages"
+            :key="key"
+            :value="key"
+          >
+            {{ lang.language }}
           </option>
         </select>
       </div>
@@ -301,13 +327,13 @@
 
     <div class="example">
       <h3>Inline datepicker</h3>
-      <Datepicker :inline="true" />
+      <DatePicker :inline="true" />
       <code>&lt;datepicker :inline="true"&gt;&lt;/datepicker&gt;</code>
     </div>
 
     <div class="example">
       <h3>RTL datepicker</h3>
-      <Datepicker :language="languages.he" />
+      <DatePicker :language="languages.he" />
       <code>
         &lt;datepicker :language="languages.he"&gt;&lt;/datepicker&gt;
       </code>
@@ -315,7 +341,10 @@
 
     <div class="example">
       <h3>Day view only</h3>
-      <Datepicker minimum-view="day" maximum-view="day" />
+      <DatePicker
+        minimum-view="day"
+        maximum-view="day"
+      />
       <code>
         &lt;datepicker minimum-view="day"
         maximum-view="day"&gt;&lt;/datepicker&gt;
@@ -324,7 +353,7 @@
 
     <div class="example">
       <h3>Day view only RTL</h3>
-      <Datepicker
+      <DatePicker
         minimum-view="day"
         maximum-view="day"
         :language="languages.he"
@@ -337,7 +366,10 @@
 
     <div class="example">
       <h3>Month view only</h3>
-      <Datepicker minimum-view="month" maximum-view="month" />
+      <DatePicker
+        minimum-view="month"
+        maximum-view="month"
+      />
       <code>
         &lt;datepicker minimum-view="month"
         maximum-view="month"&gt;&lt;/datepicker&gt;
@@ -346,7 +378,7 @@
 
     <div class="example">
       <h3>Day and month view only</h3>
-      <Datepicker
+      <DatePicker
         minimum-view="day"
         maximum-view="month"
         initial-view="month"
@@ -359,7 +391,7 @@
 
     <div class="example">
       <h3>Year and month view only</h3>
-      <Datepicker
+      <DatePicker
         minimum-view="month"
         maximum-view="year"
         initial-view="year"
@@ -372,7 +404,7 @@
 
     <div class="example">
       <h3>Year picker range</h3>
-      <Datepicker :year-picker-range="yearPickerRange" />
+      <DatePicker :year-picker-range="yearPickerRange" />
       <code>
         &lt;datepicker
         :year-picker-range="yearPickerRange"&gt;&lt;/datepicker&gt;
@@ -381,7 +413,10 @@
         <h5>Settings</h5>
         <div class="form-group">
           <label>Year picker range:</label>
-          <input v-model.number="yearPickerRange" type="number" />
+          <input
+            v-model.number="yearPickerRange"
+            type="number"
+          />
         </div>
         <pre>yearPickerRange: {{ yearPickerRange }}</pre>
       </div>
@@ -389,7 +424,7 @@
 
     <div class="example">
       <h3>Fixed positions</h3>
-      <Datepicker :fixed-position="fixedPosition" />
+      <DatePicker :fixed-position="fixedPosition" />
       <code>
         &lt;datepicker :fixed-position="fixedPosition"&gt;&lt;/datepicker&gt;
       </code>
@@ -410,14 +445,14 @@
 </template>
 
 <script>
-import Datepicker from '~/components/Datepicker.vue'
+import DatePicker from '~/components/DatePicker.vue'
 import { format, parse } from 'date-fns'
 import * as lang from '~/locale/index'
 
 export default {
-  name: 'Demo',
+  name: 'DemoPage',
   components: {
-    Datepicker,
+    DatePicker,
   },
   data() {
     return {

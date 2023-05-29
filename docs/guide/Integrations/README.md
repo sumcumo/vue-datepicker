@@ -8,7 +8,7 @@ The easiest way to integrate Cleave is to use a directive:
 
 ```vue
 <template>
-  <Datepicker
+  <DatePicker
     v-model="model"
     v-cleave="{ delimiter: '.', date: true, datePattern: ['d', 'm', 'Y'] }"
     :typeable="true"

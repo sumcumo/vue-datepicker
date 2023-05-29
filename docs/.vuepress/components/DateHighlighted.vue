@@ -2,7 +2,7 @@
   <div>
     <div class="example">
       <h3>Highlighting Dates</h3>
-      <Datepicker :highlighted="highlighted" />
+      <DatePicker :highlighted="highlighted" />
 
       <code>
         &lt;datepicker :highlighted="highlighted"&gt;&lt;/datepicker&gt;
@@ -11,11 +11,11 @@
         <h5>Settings</h5>
         <div class="form-group">
           <label>Highlight from:</label>
-          <Datepicker @selected="highlightFrom" />
+          <DatePicker @selected="highlightFrom" />
         </div>
         <div class="form-group">
           <label>Highlight to:</label>
-          <Datepicker @selected="highlightTo" />
+          <DatePicker @selected="highlightTo" />
         </div>
         <div class="form-group">
           <label>Highlight Days of Month:</label>
@@ -27,7 +27,7 @@
 
     <div class="example">
       <h3>Highlighting Dates Matching Given Function</h3>
-      <Datepicker :highlighted="highlightedFn" />
+      <DatePicker :highlighted="highlightedFn" />
       <code>
         &lt;datepicker :highlighted="highlightedFn"&gt;&lt;/datepicker&gt;
       </code>
@@ -50,13 +50,12 @@
 
 <script>
 export default {
-  name: 'Highlighted',
+  name: 'DateHighlighted',
   data() {
     return {
       highlightedFn: {
         customPredictor(date) {
-          return date.getDate() % 4 === 0;
-
+          return date.getDate() % 4 === 0
         },
       },
       highlighted: {},
@@ -87,7 +86,9 @@ export default {
       if (elem.target.value === 'undefined') {
         return
       }
-      const highlightedDays = elem.target.value.split(',').map(day => parseInt(day, 10))
+      const highlightedDays = elem.target.value
+        .split(',')
+        .map((day) => parseInt(day, 10))
       this.highlighted = {
         from: this.highlighted.from,
         to: this.highlighted.to,

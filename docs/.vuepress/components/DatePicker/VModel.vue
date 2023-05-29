@@ -1,14 +1,16 @@
 <template>
   <div>
-    <Datepicker v-model="vModelExample" placeholder="Select Date" />
-    <hr />
+    <DatePicker
+      v-model="vModelExample"
+      placeholder="Select Date"
+    />
     <p>{{ vModelExample }}</p>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'DatepickerVModel',
+  name: 'DatePickerVModel',
   data() {
     return {
       vModelExample: new Date(),

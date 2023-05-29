@@ -29,7 +29,10 @@
 
     <div>
       <div class="day-header">
-        <span v-for="day in daysOfWeek" :key="day">
+        <span
+          v-for="day in daysOfWeek"
+          :key="day"
+        >
           {{ day }}
         </span>
       </div>
@@ -49,7 +52,10 @@
             @arrow="handleArrow($event)"
             @select="select($event)"
           >
-            <slot name="dayCellContent" :cell="cell">
+            <slot
+              name="dayCellContent"
+              :cell="cell"
+            >
               {{ dayCellContent(cell) }}
             </slot>
           </PickerCells>

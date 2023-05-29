@@ -1,11 +1,11 @@
 import { shallowMount } from '@vue/test-utils'
-import Datepicker from '~/components/Datepicker.vue'
+import DatePicker from '~/components/DatePicker.vue'
 
 describe('Datepicker shallowMounted', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = shallowMount(Datepicker)
+    wrapper = shallowMount(DatePicker)
   })
 
   afterEach(() => {
@@ -63,7 +63,7 @@ describe('Datepicker shallowMounted with open date', () => {
   const openDate = new Date(2016, 9, 12)
 
   beforeEach(() => {
-    wrapper = shallowMount(Datepicker, {
+    wrapper = shallowMount(DatePicker, {
       props: {
         openDate,
       },

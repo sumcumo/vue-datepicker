@@ -49,7 +49,7 @@
     "audit": "npm audit --registry=https://registry.npmjs.org",
     "serve": "vite serve ./example",
     "serve:e2e": "vite serve ./example-e2e --port=8080",
-    "lint": "eslint --ext .js,.vue src test/unit/specs",
+    "lint": "eslint --ext .js,.vue .",
     "test": "vitest run --coverage",
     "test:watch": "vitest",
     "test:e2e": "npx cypress open",

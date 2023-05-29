@@ -1,7 +1,7 @@
 import { defineUserConfig, defaultTheme } from 'vuepress'
 import sidebar from './sidebar'
 import navbar from './navbar'
-import pkg from '../../package'
+import pkg from '../../package.json'
 
 export default defineUserConfig({
   title: pkg.name,

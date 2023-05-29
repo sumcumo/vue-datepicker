@@ -3,6 +3,7 @@
   "quoteProps": "consistent",
   "trailingComma": "all",
   "singleQuote": true,
+  "singleAttributePerLine": true,
   "htmlWhitespaceSensitivity": "ignore",
   "htmlSingleAttributePerLine": true
 }

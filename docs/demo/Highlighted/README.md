@@ -1,5 +1,5 @@
 # Highlighted
 
 <ClientOnly>
-  <highlighted />
+  <DateHighlighted />
 </ClientOnly>

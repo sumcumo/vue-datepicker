@@ -2,7 +2,7 @@
 
 ## 4.x.x to 5.x.x
 
-- the `selected` event has been deprecated in favour of `input`. You should therefore listen to `input` events on the datepicker, or simply bind your date via v-model: `<Datepicker v-model="myDate" />`
+- the `selected` event has been deprecated in favour of `input`. You should therefore listen to `input` events on the datepicker, or simply bind your date via v-model: `<DatePicker v-model="myDate" />`
 - a `typeable` datepicker no longer selects the date each time the input string can be parsed to a date. Instead, a typed date is only selected - and an `input` event fired - when the input field is focused and the `enter` key is pressed, or when the datepicker loses focus entirely.
 - a new `changed` event is emitted whenever the selected date deviates from its previous value.
 - the `focus` and `blur` events now refer to the whole datepicker, not just the input field.
@@ -17,7 +17,7 @@
 
 ## 2.x.x to 3.x.x
 
-- removed `monday-first` in favor of `first-day-of-week`. If you had `<Datepicker :monday-first="true"/>` you need to change it to `<Datepicker first-day-of-week="mon"/>`
+- removed `monday-first` in favor of `first-day-of-week`. If you had `<DatePicker :monday-first="true"/>` you need to change it to `<DatePicker first-day-of-week="mon"/>`
 - The build process was redone. The filenames inside the dist folder changed from `vuejs-datepicker.js` to `Datepicker.js`. Same goes with the css file.
   The umd and cjs build are now going through babel and will include needed polyfills automatically while the esm build is free of any polyfills.
   Same with the locale files which now have a esm and cjs build, too.

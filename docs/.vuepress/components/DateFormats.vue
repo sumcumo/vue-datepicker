@@ -2,8 +2,8 @@
   <div class="form-group">
     <label>Format</label>
     <select v-model="format">
-      <option v-for="format in formats" :value="format.value">
-        {{ format.text }}
+      <option v-for="(fmt, key) in formats" :key="key" :value="fmt.value">
+        {{ fmt.text }}
       </option>
     </select>
   </div>
@@ -11,13 +11,14 @@
 
 <script>
 export default {
-  name: 'Formats',
+  name: 'DateFormats',
   props: {
     formatInit: {
       type: String,
       required: true,
     },
   },
+  emits: ['selected'],
   data() {
     return {
       format: '',
@@ -53,13 +54,13 @@ export default {
       ],
     }
   },
-  mounted() {
-    this.format = this.formatInit
-  },
   watch: {
     format(newVal) {
       this.$emit('selected', newVal)
     },
+  },
+  mounted() {
+    this.format = this.formatInit
   },
 }
 </script>

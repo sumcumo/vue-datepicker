@@ -1,10 +1,10 @@
 <template>
-  <Datepicker :language="$datepickerLocals.he" />
+  <DatePicker :language="$datepickerLocales.he" />
 </template>
 
 <script>
 export default {
-  name: 'DatepickerOpenDate',
+  name: 'DatePickerRtlLanguage',
   data() {
     return {
       openDate: null,

@@ -1,5 +1,5 @@
 # Disabled
 
 <ClientOnly>
-  <disabled />
+  <DateDisabled />
 </ClientOnly>
