@@ -3,9 +3,6 @@ import defaultConfig from './default'
 
 export default defineConfig({
   ...defaultConfig,
-  esbuild: {
-    minify: false,
-  },
   build: {
     ...defaultConfig.build,
     minify: false,

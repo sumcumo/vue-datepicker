@@ -13,9 +13,6 @@ export default {
     ],
   },
   plugins: [vue()],
-  esbuild: {
-    minify: true,
-  },
   build: {
     target: 'es2015',
     emptyOutDir: false,
