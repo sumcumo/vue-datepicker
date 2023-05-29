@@ -30,7 +30,7 @@
     "./style.css": "./dist/style.css",
     "./style.scss": "./dist/style.scss"
   },
-  "unpkg": "dist/vue-datepicker.umd.js",
+  "unpkg": "dist/vue-datepicker.umd.cjs",
   "sideEffects": [
     "*.css",
     "test/e2e/support/*.js"

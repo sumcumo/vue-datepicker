@@ -18,6 +18,7 @@ export default {
   },
   build: {
     target: 'es2015',
+    emptyOutDir: false,
     minify: 'terser',
     sourcemap: true,
     lib: {

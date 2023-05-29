@@ -11,16 +11,8 @@ export default defineConfig({
     minify: false,
     lib: {
       ...defaultConfig.build.lib,
-      formats: ['es', 'cjs', 'umd', 'iife'],
-      fileName: (format) => {
-        if (format === 'es') {
-          return `vue-datepicker.mjs`
-        }
-        if (format === 'cjs') {
-          return `vue-datepicker.cjs`
-        }
-        return `vue-datepicker.${format}.js`
-      },
+      formats: ['es'],
+      fileName: () => 'vue-datepicker.mjs',
     },
   },
 })
