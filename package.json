@@ -52,7 +52,6 @@
     "lint",
     "test"
   ],
-  "prettier": "./prettier.js",
   "peerDependencies": {
     "vue": "^3.0.0"
   },
