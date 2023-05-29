@@ -43,7 +43,7 @@
   "scripts": {
     "prepare": "npm run build",
     "build": "npm run clear && npm run build:app && npm run build:locale",
-    "build:app": "vite build -c scripts/build/default.js && vite build -c scripts/build/cjs.js && vite build -c scripts/build/esm.js",
+    "build:app": "vite build -c scripts/build/default.js && vite build -c scripts/build/modules.js",
     "build:locale": "babel-node scripts/build/locale.js",
     "clear": "rm -rf dist/*",
     "audit": "npm audit --registry=https://registry.npmjs.org",
