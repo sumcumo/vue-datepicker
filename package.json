@@ -116,7 +116,7 @@
     "sass": "1.63.2",
     "semver": "7.5.1",
     "standard-version": "9.5.0",
-    "vee-validate": "2.2.15",
+    "vee-validate": "4.9.5",
     "vite": "4.3.9",
     "vitest": "0.32.0",
     "vue": "3.3.4",

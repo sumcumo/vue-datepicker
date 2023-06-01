@@ -3,11 +3,15 @@
 ## cleave.js
 
 <ClientOnly>
-  <Cleave />
+  <DateCleave />
 </ClientOnly>
+
+Click here to see the [code behind this example](../../guide/Integrations#cleave-js).
 
 ## vee-validate
 
 <ClientOnly>
-  <VeeValidate />
+  <DateVeeValidate />
 </ClientOnly>
+
+Click here to see the [code behind this example](../../guide/Integrations#vee-validate-4-x-x).

@@ -1,29 +1,23 @@
 <template>
-  <div class="example">
-    <DatePicker
-      v-model="model"
-      v-cleave="options"
-      :typeable="true"
-      :format="format"
-      :name="name"
-      placeholder="Type or select date"
-    />
-  </div>
+  <DatePicker
+    v-model="date"
+    v-cleave="cleaveOptions"
+    :typeable="true"
+    format="yyyy-MM-dd"
+    placeholder="YYYY-MM-DD"
+  />
 </template>
 
 <script>
 export default {
   name: 'DateCleave',
-  inject: ['$validator'],
   data() {
     return {
-      model: '',
-      name: 'datepicker',
-      format: 'dd.MM.yyyy',
-      options: {
-        delimiter: '.',
+      date: null,
+      cleaveOptions: {
         date: true,
-        datePattern: ['d', 'm', 'Y'],
+        delimiter: '-',
+        datePattern: ['Y', 'm', 'd'],
       },
     }
   },

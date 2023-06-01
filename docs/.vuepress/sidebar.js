@@ -11,8 +11,7 @@ export default [
       '/guide/DisabledDates/',
       '/guide/Events/',
       '/guide/HighlightedDates/',
-      // TODO: Update integrations
-      // '/guide/Integrations/',
+      '/guide/Integrations/',
       '/guide/Props/',
       '/guide/Slots/',
       '/guide/Translations/',
@@ -28,8 +27,7 @@ export default [
       '/demo/Language/',
       '/demo/Formatting/',
       '/demo/Typeable/',
-      // TODO: Update integrations
-      // '/demo/Integrations/',
+      '/demo/Integrations/',
     ],
   },
 ]

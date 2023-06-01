@@ -1,6 +1,3 @@
-// import { getDirname, path } from '@vuepress/utils'
-// import { searchPlugin } from '@vuepress/plugin-search'
-// import VeeValidate from 'vee-validate'
 import Cleave from 'cleave.js'
 import { defineClientConfig } from '@vuepress/client'
 import * as lang from '../../dist/locale/index.mjs'
@@ -16,78 +13,11 @@ import DateHighlighted from './components/DateHighlighted.vue'
 import DateFormatting from './components/DateFormatting.vue'
 import DateLanguage from './components/DateLanguage.vue'
 import DateTypeable from './components/DateTypeable.vue'
-// import { registerComponentsPlugin } from '@vuepress/plugin-register-components'
-
-// export default ({ Vue }) => {
-// const config = {
-//   aria: true,
-//   classNames: {},
-//   classes: true,
-//   delay: 0,
-//   dictionary: null,
-//   errorBagName: 'errors', // change if property conflicts
-//   events: 'input|blur',
-//   fieldsBagName: 'fields',
-//   i18n: null, // the vue-i18n plugin instance
-//   i18nRootKey: 'validations', // the key under which nested validation messages will be located
-//   inject: true,
-//   locale: 'en',
-//   validity: false,
-//   useConstraintAttrs: true,
-// }
-//
-//   Vue.use(VeeValidate, config)
-//   Vue.component('DatePicker', DatePicker)
-//   Vue.prototype.$datepickerLocales = lang
-//
-//   Vue.directive('cleave', {
-//     inserted(el, binding) {
-//       // if the bound element is not an input field search for one
-//       // this is for cases where the input is inside a wrapper
-//       if (el.tagName !== 'INPUT') {
-//         el = el.querySelector('input')
-//       }
-//       // only apply cleave if it is an input field and the options are set
-//       if (
-//         el.tagName === 'INPUT' &&
-//         Object.keys(binding.value).length !== 0 &&
-//         binding.value.constructor === Object
-//       ) {
-//         new Cleave(el, binding.value)
-//       }
-//     },
-//   })
-// }
-
-// const __dirname = getDirname(import.meta.url)
-
-// const config = {
-//   aria: true,
-//   classNames: {},
-//   classes: true,
-//   delay: 0,
-//   dictionary: null,
-//   errorBagName: 'errors', // change if property conflicts
-//   events: 'input|blur',
-//   fieldsBagName: 'fields',
-//   i18n: null, // the vue-i18n plugin instance
-//   i18nRootKey: 'validations', // the key under which nested validation messages will be located
-//   inject: true,
-//   locale: 'en',
-//   validity: false,
-//   useConstraintAttrs: true,
-// }
+import DateCleave from './components/DateCleave.vue'
+import DateVeeValidate from './components/DateVeeValidate.vue'
 
 export default defineClientConfig({
-  // plugins: [
-  //   searchPlugin({}),
-  //   registerComponentsPlugin({
-  //     componentsDir: path.resolve(__dirname, './components'),
-  //   }),
-  // ],
-
   // enhance({ app, router, siteData }) {},
-
   // eslint-disable-next-line max-statements, no-param-reassign
   enhance({ app }) {
     app.component('DatePicker', DatePicker)
@@ -102,13 +32,13 @@ export default defineClientConfig({
     app.component('DateFormatting', DateFormatting)
     app.component('DateLanguage', DateLanguage)
     app.component('DateTypeable', DateTypeable)
-    // app.component('DateVeeValidate', DateVeeValidate)
+    app.component('DateVeeValidate', DateVeeValidate)
+    app.component('DateCleave', DateCleave)
 
-    // app.use(VeeValidate, config)
     // eslint-disable-next-line no-param-reassign
     app.config.globalProperties.$datepickerLocales = lang
     app.directive('cleave', {
-      inserted(el, binding) {
+      mounted(el, binding) {
         // If the bound element is not an input field, search for one.
         // This is for cases where the input is inside a wrapper
         if (el.tagName !== 'INPUT') {

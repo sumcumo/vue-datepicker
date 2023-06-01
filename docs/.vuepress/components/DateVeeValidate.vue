@@ -1,40 +1,27 @@
 <template>
-  <div class="example">
-    <DatePicker
-      v-model="model"
-      v-validate="'required'"
-      :typeable="true"
-      :format="format"
-      :input-class="fields[name]"
-      :name="name"
-      placeholder="Type or select date"
-      @blur="touched"
-    />
-    <div class="error">
-      <span>{{ errors.first(name) }}</span>
-    </div>
+  <DatePicker
+    v-model="value"
+    placeholder="Select a date (required)"
+    name="datepicker"
+    @blur="validateDate"
+  />
+  <div class="error">
+    {{ errorMessage }}
   </div>
 </template>
 
-<script>
-export default {
-  name: 'VeeValidate',
-  inject: ['$validator'],
-  data() {
-    return {
-      model: '',
-      name: 'datepicker',
-      format: 'dd.MM.yyyy',
-    }
-  },
-  methods: {
-    touched() {
-      this.$validator.flag(this.name, {
-        untouched: false,
-        touched: true,
-      })
-    },
-  },
+<script setup>
+import { useField } from 'vee-validate'
+
+// Validator function
+const isRequired = (value) => (value ? true : 'Please enter a date')
+
+const { value, errorMessage, handleChange } = useField('datepicker', isRequired)
+
+function validateDate() {
+  const date = value.value
+  handleChange()
+  value.value = date
 }
 </script>
 <style>

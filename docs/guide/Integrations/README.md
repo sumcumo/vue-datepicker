@@ -2,7 +2,7 @@
 
 ## [cleave.js](https://github.com/nosir/cleave.js)
 
-For formatting while typing.
+For formatting while typing. Click here to see a [working example](../../demo/Integrations#cleave-js).
 
 The easiest way to integrate Cleave is to use a directive:
 
@@ -10,10 +10,12 @@ The easiest way to integrate Cleave is to use a directive:
 <template>
   <DatePicker
     v-model="model"
-    v-cleave="{ delimiter: '.', date: true, datePattern: ['d', 'm', 'Y'] }"
-    :typeable="true"
-    :format="format"
-    :name="name"
+    v-cleave="{
+      date: true,
+      delimiter: '-',
+      datePattern: ['Y', 'm', 'd'],
+    }"
+    format="yyyy-MM-dd"
   />
 </template>
 
@@ -24,9 +26,9 @@ import { createApp } from 'vue'
 const app = createApp({})
 
 app.directive('cleave', {
-  inserted(el, binding) {
-    // If the bound element is not an input field search for one
-    // this is for cases where the input is inside a wrapper
+  mounted(el, binding) {
+    // If the bound element is not an input field, search for one.
+    // This is for cases where the input is inside a wrapper
     if (el.tagName !== 'INPUT') {
       el = el.querySelector('input')
     }
@@ -43,59 +45,43 @@ app.directive('cleave', {
 </script>
 ```
 
-## [vee-validate](https://github.com/logaretm/vee-validate) 2.x.x
+## [vee-validate](https://github.com/logaretm/vee-validate) 4.x.x
 
-::: warning Version
-This integration only applies for vee-validate 2.x, and not the latest 3.x version!
-:::
+For input validation. For example, we can check whether the user has selected a date by firing
+vee-validate's `handleChange` function when the datepicker is blurred.
 
-For input validation.
-You can use `v-validate` with `:input-class="fields[name]"` to add validation classes to the input field.
-But the touched event needs to be set manually.
+Click here to see a [working example](../../demo/Integrations#vee-validate/).
 
 ```vue
 <template>
-  <div class="example">
-    <DatePicker
-      v-model="model"
-      v-validate="'required'"
-      :typeable="true"
-      :format="format"
-      :input-class="fields[name]"
-      :name="name"
-      @blur="touched"
-      placeholder="Type or select date"
-    />
-    <div class="error">
-      <span>{{ errors.first(name) }}</span>
-    </div>
+  <DatePicker
+    v-model="value"
+    placeholder="Select a date (required)"
+    name="datepicker"
+    @blur="validateDate"
+  />
+  <div class="error">
+    {{ errorMessage }}
   </div>
 </template>
 
-<script>
+<script setup>
+import { useField } from 'vee-validate'
 import DatePicker from '@sum.cumo/vue-datepicker'
 
-export default {
-  name: 'VeeValidate',
-  components: {
-    DatePicker,
-  },
-  data() {
-    return {
-      model: '',
-      name: 'datepicker',
-      format: 'dd.MM.yyyy',
-    }
-  },
-  methods: {
-    touched() {
-      this.$validator.flag(this.name, {
-        untouched: false,
-        touched: true,
-      })
-    },
-  },
-  inject: ['$validator'],
+// Validator function
+const isRequired = (value) => (value ? true : 'Please enter a date')
+
+const { value, errorMessage, handleChange } = useField('datepicker', isRequired)
+
+// TODO
+// For some reason, whenever the `handleChange` function fires, it clears the date.
+// Therefore I've reset the date to its original value.
+// But surely, this step should not be necessary?!
+function validateDate() {
+  const date = value.value
+  handleChange()
+  value.value = date
 }
 </script>
 ```
