@@ -3,7 +3,3 @@ dist
 src/tests/unit/coverage
 docs/.vuepress/.cache
 docs/.vuepress/.temp
-example/demo.js
-example/demo.js.map
-example-e2e/app.js
-example-e2e/app.js.map
