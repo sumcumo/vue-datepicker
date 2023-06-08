@@ -18,10 +18,31 @@
       :format="customFormatter"
       :parser="customParser"
       :typeable="true"
+      placeholder="Datepicker based on settings below..."
     />
     <code>
       &lt;DatePicker :format="customFormatter" :parser="customParser"/&gt;
     </code>
+
+    <pre>
+import { format, parse } from 'date-fns'
+
+export default {
+  data() {
+    return {
+      format: 'dd.MM.yyyy',
+    }
+  },
+  methods: {
+    customFormatter(date) {
+      return format(date, this.format)
+    },
+    customParser(date) {
+      return parse(date, this.format, new Date())
+    },
+  },
+}
+    </pre>
   </div>
 </template>
 

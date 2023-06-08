@@ -20,7 +20,7 @@
 <DatePicker v-model="vModelExample" />
 ```
 
-## First day of Week
+## First day of week
 
 <ClientOnly>
   <DatePicker
@@ -46,7 +46,7 @@
 <DatePicker :show-edge-dates="false" />
 ```
 
-## Custom open Date
+## Custom open date
 
 <ClientOnly>
   <DatePicker-OpenDate/>
@@ -121,7 +121,7 @@
 <DatePicker minimum-view="day" maximum-view="month" initial-view="month" />
 ```
 
-## With Button
+## With button
 
 <ClientOnly>
   <DatePicker
@@ -167,7 +167,6 @@
 <style>
 /* @import '../../dist/style.css'; */
 
-/* Start vue-datepicker.css */
 .rtl {
   direction: rtl;
 }
@@ -385,21 +384,5 @@
 .vdp-datepicker__calendar-button.input-group-prepend,
 .vdp-datepicker__calendar-button.input-group-append {
   padding: 0;
-}
-/* end vue-datepicker.css */
-
-input, select {
-  padding: .75em .5em;
-  font-size: 100%;
-  border: 1px solid #cccccc;
-  width: 100%;
-  box-sizing: border-box;
-}
-pre {
-  color: #ffffff;
-}
-.settings {
-  margin: 2em 0;
-  background: #eeeeee;
 }
 </style>

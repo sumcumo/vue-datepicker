@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="example">
     <h3>UTC</h3>
     <DatePicker
       v-model="utcDate"

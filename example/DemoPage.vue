@@ -116,7 +116,6 @@
         &lt;datepicker placeholder="Select Date"
         v-model="vModelExample"&gt;&lt;/datepicker&gt;
       </code>
-      <hr />
       <p>{{ vModelExample }}</p>
     </div>
 

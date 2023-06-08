@@ -15,12 +15,51 @@
 
 .example {
   padding: 0 0 1em;
-  margin-bottom: 2em;
+}
+
+.example code {
+  border: 1px solid #ccc;
+  border-radius: 0.5em;
+  display: block;
+  margin-top: 1em;
+  padding: 1em;
 }
 
 .settings {
-  margin: 2em 0;
-  background: #eeeeee;
+  background: #eee;
+  border: 1px solid #ccc;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 0.5em;
+}
+
+.settings h5 {
+  margin: 0;
+  padding: 0;
+}
+
+.settings pre {
+  margin: 0;
+  padding: 0;
+}
+
+.settings label {
+  padding-bottom: 0.3em;
+}
+
+input,
+select {
+  background-color: #fff;
+  border: 1px solid #cccccc;
+  border-radius: 0.3em;
+  box-sizing: border-box;
+  font-size: 100%;
+  padding: .75em .5em;
+  width: 100%;
+}
+
+h3 {
+  padding: 1em 0;
 }
 
 .form-group {
@@ -33,11 +72,13 @@
 }
 
 .example pre {
-  color: #ffffff;
+  color: #333;
 }
 
 .error {
   color: red;
+  font-style: italic;
+  margin-top: 0.5em;
 }
 
 .overflow-scroll {

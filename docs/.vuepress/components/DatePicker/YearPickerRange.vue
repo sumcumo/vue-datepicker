@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="example">
     <div class="settings">
       <h5>Settings</h5>
       <div class="form-group">
@@ -12,7 +12,6 @@
       <pre>yearPickerRange: {{ yearPickerRange }}</pre>
     </div>
     <DatePicker :year-picker-range="yearPickerRange" />
-    <hr />
   </div>
 </template>
 

@@ -2,10 +2,10 @@
   <div>
     <div class="example">
       <h3>With minimum and maximum date range</h3>
-      <DatePicker :disabled-dates="disabledDates" />
+      <DatePicker :disabled-dates="disabledDates" placeholder="Datepicker based on settings below..." />
       <code>
-        &lt;datepicker :disabled-dates="disabledDates"&gt;&lt;/datepicker&gt;
-      </code>
+          &lt;datepicker :disabled-dates="disabledDates"&gt;&lt;/datepicker&gt;
+        </code>
       <div class="settings">
         <h5>Settings</h5>
         <div class="form-group">
@@ -18,12 +18,7 @@
         </div>
         <div class="form-group">
           <label>Disabled Days of Month:</label>
-          <input
-            type="text"
-            value=""
-            placeholder="5,6,12,13"
-            @change="setDisabledDays"
-          />
+          <input type="text" value="" placeholder="5,6,12,13" @change="setDisabledDays" />
         </div>
         <pre>disabled: {{ disabledDates }}</pre>
       </div>
@@ -31,32 +26,32 @@
 
     <div class="example">
       <h3>Disabled dates</h3>
-      <DatePicker :disabled-dates="disabledFn" />
+      <DatePicker :disabled-dates="disabledFn" placeholder="Datepicker based on settings below..." />
       <code>
-        &lt;datepicker :disabled-dates="disabledFn"&gt;&lt;/datepicker&gt;
-      </code>
+          &lt;datepicker :disabled-dates="disabledFn"&gt;&lt;/datepicker&gt;
+        </code>
       <div class="settings">
         <h5>Settings</h5>
         <pre>
-  disabledDates: {
-    customPredictor: function (date) {
-      const year = date.getFullYear()
-      const month = date.getMonth()
-      const day = date.getDate()
-      // disable every years that are a multiple of 2
-      if (year % 2 === 0) {
-        return true
-      }
-      // disable every months that are a multiple of 3
-      if (month % 3 === 0) {
-        return true
-      }
-      // disable first half of the month when it is a multiple of 2
-      if (month % 2 !== 0 && day &lt; 15) {
-        return true
-      }
+disabledDates: {
+  customPredictor: function (date) {
+    const year = date.getFullYear()
+    const month = date.getMonth()
+    const day = date.getDate()
+    // disable all even years
+    if (year % 2 === 0) {
+      return true
+    }
+    // disable months that are a multiple of 3
+    if (month % 3 === 0) {
+      return true
+    }
+    // disable the first half of all even months
+    if (month % 2 !== 0 && day &lt; 15) {
+      return true
     }
   }
+}
         </pre>
       </div>
     </div>
@@ -108,7 +103,7 @@ export default {
         this.disabledDates = {
           to: null,
           daysOfMonth: this.disabledDates.daysOfMonth,
-          from: this.disabledDates.from,
+          from: `${this.disabledDates.from}`,
         }
       }
       this.disabledDates.to = val

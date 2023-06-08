@@ -16,7 +16,6 @@
       </div>
       <pre>openDate: {{ openDate }}</pre>
     </div>
-    <DatePicker :open-date="openDate" placeholder="Select Date" />
   </div>
 </template>
 

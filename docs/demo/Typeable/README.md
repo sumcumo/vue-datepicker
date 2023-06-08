@@ -1,5 +1,5 @@
 # Typeable
 
 <ClientOnly>
-  <typeable />
+  <DateTypeable />
 </ClientOnly>

@@ -2,7 +2,7 @@
   <div>
     <div class="example">
       <h3>Highlighting Dates</h3>
-      <DatePicker :highlighted="highlighted" />
+      <DatePicker :highlighted="highlighted" placeholder="Datepicker based on settings below..." />
 
       <code>
         &lt;datepicker :highlighted="highlighted"&gt;&lt;/datepicker&gt;
@@ -27,21 +27,21 @@
 
     <div class="example">
       <h3>Highlighting Dates Matching Given Function</h3>
-      <DatePicker :highlighted="highlightedFn" />
+      <DatePicker :highlighted="highlightedFn" placeholder="Datepicker based on settings below..." />
       <code>
         &lt;datepicker :highlighted="highlightedFn"&gt;&lt;/datepicker&gt;
       </code>
       <div class="settings">
         <h5>Settings</h5>
         <pre>
-  highlightedFn: {
-    customPredictor: function (date) {
-      // highlights every day of a month which is a multiple of 4
-      if (date.getDate() % 4 === 0) {
-        return true
-      }
+highlightedFn: {
+  customPredictor: function (date) {
+    // highlights every day of a month which is a multiple of 4
+    if (date.getDate() % 4 === 0) {
+      return true
     }
   }
+}
         </pre>
       </div>
     </div>

@@ -1,4 +1,4 @@
-# Disabled
+# Disabled Dates
 
 <ClientOnly>
   <DateDisabled />
