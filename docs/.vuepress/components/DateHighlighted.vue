@@ -2,11 +2,12 @@
   <div>
     <div class="example">
       <h3>Highlighting Dates</h3>
-      <DatePicker :highlighted="highlighted" placeholder="Datepicker based on settings below..." />
+      <DatePicker
+        :highlighted="highlighted"
+        placeholder="Datepicker based on settings below..."
+      />
 
-      <code>
-        &lt;datepicker :highlighted="highlighted"&gt;&lt;/datepicker&gt;
-      </code>
+      <code>&lt;DatePicker :highlighted="highlighted" /&gt;</code>
       <div class="settings">
         <h5>Settings</h5>
         <div class="form-group">
@@ -19,7 +20,12 @@
         </div>
         <div class="form-group">
           <label>Highlight Days of Month:</label>
-          <input type="text" value="" @change="setHighlightedDays" />
+          <input
+            placeholder="e.g. 5, 6, 12, 13"
+            type="text"
+            value=""
+            @change="setHighlightedDays"
+          />
         </div>
         <pre>highlighted: {{ highlighted }}</pre>
       </div>
@@ -27,10 +33,11 @@
 
     <div class="example">
       <h3>Highlighting Dates Matching Given Function</h3>
-      <DatePicker :highlighted="highlightedFn" placeholder="Datepicker based on settings below..." />
-      <code>
-        &lt;datepicker :highlighted="highlightedFn"&gt;&lt;/datepicker&gt;
-      </code>
+      <DatePicker
+        :highlighted="highlightedFn"
+        placeholder="Datepicker based on settings below..."
+      />
+      <code>&lt;DatePicker :highlighted="highlightedFn" /&gt;</code>
       <div class="settings">
         <h5>Settings</h5>
         <pre>

@@ -87,7 +87,8 @@
 <ClientOnly>
   <DatePicker
     :language="$datepickerLocales.he"
-  />
+    placeholder="Select date"
+/>
 </ClientOnly>
 
 ```vue
@@ -100,6 +101,7 @@
   <DatePicker
     minimum-view="day"
     maximum-view="day"
+    placeholder="Select date"
   />
 </ClientOnly>
 
@@ -114,6 +116,7 @@
     minimum-view="day"
     maximum-view="month"
     initial-view="month"
+    placeholder="Select date"
   />
 </ClientOnly>
 
@@ -127,6 +130,7 @@
   <DatePicker
     :calendar-button="true"
     :show-calendar-on-button-click="true"
+    placeholder="Select date"
   />
 </ClientOnly>
 
@@ -144,7 +148,7 @@
 <DatePicker :year-picker-range="yearPickerRange" />
 ```
 
-## Comparison append picker to body
+## Comparison: Append picker to body
 
 <ClientOnly>
   <DatePicker-AppendToBody/>
@@ -154,7 +158,7 @@
 <DatePicker :append-to-body="true" />
 ```
 
-## Comparison use utc or not
+## Comparison: Browser Timezone vs UTC
 
 <ClientOnly>
   <DatePicker-UseUtc/>

@@ -2,23 +2,35 @@
   <div>
     <div class="example">
       <h3>With minimum and maximum date range</h3>
-      <DatePicker :disabled-dates="disabledDates" placeholder="Datepicker based on settings below..." />
-      <code>
-          &lt;datepicker :disabled-dates="disabledDates"&gt;&lt;/datepicker&gt;
-        </code>
+      <DatePicker
+        :disabled-dates="disabledDates"
+        placeholder="Datepicker based on settings below..."
+      />
+      <code>&lt;DatePicker :disabled-dates="disabledDates" /&gt;</code>
       <div class="settings">
         <h5>Settings</h5>
         <div class="form-group">
           <label>Disabled to:</label>
-          <DatePicker @selected="disableTo" />
+          <DatePicker
+            placeholder="Select date"
+            @selected="disableTo"
+          />
         </div>
         <div class="form-group">
           <label>Disabled from:</label>
-          <DatePicker @selected="disableFrom" />
+          <DatePicker
+            placeholder="Select date"
+            @selected="disableFrom"
+          />
         </div>
         <div class="form-group">
           <label>Disabled Days of Month:</label>
-          <input type="text" value="" placeholder="5,6,12,13" @change="setDisabledDays" />
+          <input
+            type="text"
+            value=""
+            placeholder="e.g. 5, 6, 12, 13"
+            @change="setDisabledDays"
+          />
         </div>
         <pre>disabled: {{ disabledDates }}</pre>
       </div>
@@ -26,10 +38,11 @@
 
     <div class="example">
       <h3>Disabled dates</h3>
-      <DatePicker :disabled-dates="disabledFn" placeholder="Datepicker based on settings below..." />
-      <code>
-          &lt;datepicker :disabled-dates="disabledFn"&gt;&lt;/datepicker&gt;
-        </code>
+      <DatePicker
+        :disabled-dates="disabledFn"
+        placeholder="Datepicker based on settings below..."
+      />
+      <code>&lt;DatePicker :disabled-dates="disabledFn" /&gt;</code>
       <div class="settings">
         <h5>Settings</h5>
         <pre>

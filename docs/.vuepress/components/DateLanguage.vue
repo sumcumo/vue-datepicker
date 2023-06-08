@@ -8,8 +8,7 @@
         placeholder="Datepicker based on settings below..."
       />
       <code>
-        &lt;datepicker :language="$datepickerLocales.{{ language }}"&gt;
-        &lt;/datepicker&gt;
+        &lt;DatePicker :language="$datepickerLocales.{{ language }}" /&gt;
       </code>
       <div class="settings">
         <h5>Settings</h5>

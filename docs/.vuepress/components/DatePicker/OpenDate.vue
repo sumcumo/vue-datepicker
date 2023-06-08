@@ -14,7 +14,7 @@
           placeholder="Select open Date"
         />
       </div>
-      <pre>openDate: {{ openDate }}</pre>
+      <pre>openDate="{{ openDateFormatted }}"</pre>
     </div>
   </div>
 </template>
@@ -26,6 +26,12 @@ export default {
     return {
       openDate: null,
     }
+  },
+  computed: {
+    openDateFormatted() {
+      if (!this.openDate) return ''
+      return `new Date(${this.openDate.getFullYear()}, ${this.openDate.getMonth()}, ${this.openDate.getDate()})`
+    },
   },
 }
 </script>

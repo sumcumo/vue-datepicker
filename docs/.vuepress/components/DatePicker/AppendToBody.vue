@@ -1,9 +1,12 @@
 <template>
-  <div class="overflow-scroll">
+  <div class="example overflow-scroll">
     <h3>Don't append datepicker to body</h3>
-    <DatePicker />
+    <DatePicker placeholder="Select date" />
     <h3>Append to body</h3>
-    <DatePicker :append-to-body="true" />
+    <DatePicker
+      :append-to-body="true"
+      placeholder="Select date"
+    />
   </div>
 </template>
 
@@ -21,5 +24,6 @@ export default {
 <style>
 .overflow-scroll {
   overflow: scroll;
+  padding-bottom: 3em;
 }
 </style>

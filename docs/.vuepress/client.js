@@ -4,7 +4,6 @@ import * as lang from '../../dist/locale/index.mjs'
 import DatePicker from '../../dist/vue-datepicker.mjs'
 import AppendToBody from './components/DatePicker/AppendToBody.vue'
 import OpenDate from './components/DatePicker/OpenDate.vue'
-import RtlLanguage from './components/DatePicker/RtlLanguage.vue'
 import UseUtc from './components/DatePicker/UseUtc.vue'
 import VModel from './components/DatePicker/VModel.vue'
 import YearPickerRange from './components/DatePicker/YearPickerRange.vue'
@@ -23,7 +22,6 @@ export default defineClientConfig({
     app.component('DatePicker', DatePicker)
     app.component('DatePickerAppendToBody', AppendToBody)
     app.component('DatePickerOpenDate', OpenDate)
-    app.component('DatePickerRtlLanguage', RtlLanguage)
     app.component('DatePickerUseUtc', UseUtc)
     app.component('DatePickerVModel', VModel)
     app.component('DatePickerYearPickerRange', YearPickerRange)

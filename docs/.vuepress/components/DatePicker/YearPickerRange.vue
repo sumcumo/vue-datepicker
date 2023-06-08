@@ -11,7 +11,11 @@
       </div>
       <pre>yearPickerRange: {{ yearPickerRange }}</pre>
     </div>
-    <DatePicker :year-picker-range="yearPickerRange" />
+    <DatePicker
+      :year-picker-range="yearPickerRange"
+      placeholder="Select date"
+      initial-view="year"
+    />
   </div>
 </template>
 
