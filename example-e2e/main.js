@@ -11,3 +11,7 @@ app.mount('#app')
 
 // eslint-disable-next-line no-underscore-dangle
 window.__store__ = store
+
+// Set to dark mode...
+document.documentElement.style.setProperty('--theme', 'dark')
+document.documentElement.classList.add('dark')
