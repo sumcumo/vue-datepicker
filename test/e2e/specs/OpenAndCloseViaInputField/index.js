@@ -1,4 +1,4 @@
-import { Given, When, Then, And } from 'cypress-cucumber-preprocessor/steps'
+import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor'
 
 const { clickThe, createCalendar, focusThe, the } = cy
 
@@ -28,7 +28,7 @@ describe('Open and close the calendar via the input field', () => {
       the('calendar').should(`${isNot}be.visible`)
     })
 
-    And('the {string} has focus', (element) => {
+    Then('the {string} has focus', (element) => {
       the(element).should('have.focus')
     })
   })
@@ -48,7 +48,7 @@ describe('Open and close the calendar via the input field', () => {
       the('calendar').should('be.visible')
     })
 
-    And("today's cell has focus", () => {
+    Then("today's cell has focus", () => {
       the('today-cell').should('have.focus')
     })
   })

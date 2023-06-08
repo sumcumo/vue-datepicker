@@ -1,4 +1,4 @@
-import { Given, When, Then, And } from 'cypress-cucumber-preprocessor/steps'
+import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor'
 
 const { clickThe, createCalendar, focusThe, the } = cy
 
@@ -23,7 +23,7 @@ describe('Close on escape', () => {
       the('calendar').should(`not.be.visible`)
     })
 
-    And('the input field has focus', () => {
+    Then('the input field has focus', () => {
       the('input').should('be.focused')
     })
   })
@@ -66,17 +66,13 @@ describe('Close on escape', () => {
   })
 
   describe('@id-3: Revert to open date when the focused cell is on a different page', () => {
-    Given('the calendar is open on a {string} view')
-
-    And('the user visits another page', () => {
+    Given('the user visits another page', () => {
       clickThe('next-button')
     })
 
     When('the user focuses a cell and presses the escape key', () => {
       the('tabbable-cell').should('have.length', 1).focus().type('{esc}')
     })
-
-    Then('the open date has focus')
   })
 
   describe('@id-4: Revert to open date when the focused cell is on a different view', () => {
@@ -93,8 +89,6 @@ describe('Close on escape', () => {
         the('calendar').should('be.visible')
       },
     )
-
-    When('the user focuses a cell and presses the escape key')
 
     Then('the open date on the minimum view has focus', () => {
       the('up-button').contains('Mar 2020')

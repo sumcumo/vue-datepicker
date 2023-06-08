@@ -1,4 +1,4 @@
-import { Given, When, Then, And } from 'cypress-cucumber-preprocessor/steps'
+import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor'
 
 const { clickThe, createCalendar, focusThe, getStore, the } = cy
 
@@ -31,14 +31,12 @@ describe('Show calendar on button click', () => {
       the('calendar').should(`${isNot}be.visible`)
     })
 
-    And('the {string} has focus', (element) => {
+    Then('the {string} has focus', (element) => {
       the(element).should('have.focus')
     })
   })
 
   describe('@id-2: Click on the input field when closed', () => {
-    Given('the calendar is {string}')
-
     When('the user clicks on the input field', () => {
       clickThe('input')
     })
@@ -49,25 +47,19 @@ describe('Show calendar on button click', () => {
       the('calendar').should(`${isNot}be.visible`)
     })
 
-    And('the input field has focus', () => {
+    Then('the input field has focus', () => {
       the('input').should('be.focused')
     })
   })
 
   describe('@id-3: Focus input field when {string} and `show-calendar-on-focus` is true', () => {
-    Given('the calendar is {string}')
-
-    And('`show-calendar-on-focus` is true', () => {
+    Given('`show-calendar-on-focus` is true', () => {
       getStore().setState('showCalendarOnFocus', true)
     })
 
     When('the user focuses the input field', () => {
       focusThe('input')
     })
-
-    Then('the calendar remains {string}')
-
-    And('the input field has focus')
   })
 
   describe('@id-4: Focus the typeable input field when {string} and `show-calendar-on-focus` is true', () => {
@@ -86,13 +78,5 @@ describe('Show calendar on button click', () => {
 
       the('calendar').should(`${isNot}be.visible`)
     })
-
-    And('`show-calendar-on-focus` is true')
-
-    When('the user focuses the input field')
-
-    Then('the calendar remains {string}')
-
-    And('the input field has focus')
   })
 })

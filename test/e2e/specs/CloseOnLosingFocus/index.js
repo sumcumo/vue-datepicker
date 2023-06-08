@@ -1,4 +1,4 @@
-import { Given, When, Then, And } from 'cypress-cucumber-preprocessor/steps'
+import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor'
 
 const { clickThe, createCalendar, focusThe, the } = cy
 
@@ -18,12 +18,12 @@ describe('Close on losing focus', () => {
       the('calendar').should(`${isNot}be.visible`)
     })
 
-    And('the input field is focused', () => {
+    Given('the input field is focused', () => {
       focusThe('input')
     })
 
     When('the user clicks the body', () => {
-      clickThe('body', 'bottom')
+      clickThe('body', 'top')
     })
 
     Then('the calendar {string}', (opensOrCloses) => {
@@ -32,7 +32,7 @@ describe('Close on losing focus', () => {
       the('calendar').should(`${isNot}be.visible`)
     })
 
-    And('no element has focus', () => {
+    Then('no element has focus', () => {
       the('input').should('not.be.focused')
     })
   })
@@ -60,22 +60,10 @@ describe('Close on losing focus', () => {
       },
     )
 
-    And('the input field is focused', () => {
-      focusThe('input')
-    })
-
-    When('the user clicks the body', () => {
-      clickThe('body', 'bottom')
-    })
-
-    Then('the calendar {string}')
-
-    And('the date is {string}', (formattedOrCleared) => {
+    Then('the date is {string}', (formattedOrCleared) => {
       const value = formattedOrCleared === 'formatted' ? '01 Mar 2021' : ''
 
       the('input').should('have.value', value)
     })
-
-    And('no element has focus')
   })
 })

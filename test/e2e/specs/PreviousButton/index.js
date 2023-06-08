@@ -1,4 +1,4 @@
-import { Given, When, Then, And } from 'cypress-cucumber-preprocessor/steps'
+import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor'
 
 const { clickThe, createCalendar, focusThe, the } = cy
 
@@ -28,14 +28,12 @@ describe('Previous Button', () => {
       the('up-button').should('contain', 'Dec 2020')
     })
 
-    And('the previous button has focus', () => {
+    Then('the previous button has focus', () => {
       the('previous-button').should('be.focused')
     })
   })
 
   describe('@id-2: Arrow down to tabbable cell', () => {
-    Given('the calendar is open on `Jan 2021`')
-
     When('the user presses the `down` arrow', () => {
       focusThe('previous-button').type('{downarrow}')
     })

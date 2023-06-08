@@ -1,4 +1,4 @@
-import { Given, When, Then, And } from 'cypress-cucumber-preprocessor/steps'
+import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor'
 
 const { clickThe, createCalendar, the } = cy
 
@@ -27,7 +27,7 @@ describe('Cell selection', () => {
       the('input').should('have.value', date)
     })
 
-    And('the input field has focus', () => {
+    Then('the input field has focus', () => {
       the('input').should('be.focused')
     })
   })
@@ -44,8 +44,6 @@ describe('Cell selection', () => {
       the('calendar').should('be.visible')
     })
 
-    When('the user clicks on the tabbable cell')
-
     Then('the {string} view is shown', (view) => {
       const pageHeading = view === 'day' ? 'Mar 2020' : '2020'
 
@@ -53,7 +51,7 @@ describe('Cell selection', () => {
       the('up-button').should('contain', pageHeading)
     })
 
-    And('the tabbable cell has focus', () => {
+    Then('the tabbable cell has focus', () => {
       the('tabbable-cell').should('be.focused')
     })
   })

@@ -1,4 +1,4 @@
-import { Given, When, Then, And } from 'cypress-cucumber-preprocessor/steps'
+import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor'
 
 const { createCalendar, focusThe, the } = cy
 
@@ -21,7 +21,7 @@ describe('Clear date on delete', () => {
       the('input').should('have.value', '')
     })
 
-    And('the input field has focus', () => {
+    Then('the input field has focus', () => {
       the('input').should('be.focused')
     })
   })

@@ -1,4 +1,4 @@
-import { Given, When, Then, And } from 'cypress-cucumber-preprocessor/steps'
+import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor'
 
 const { clickThe, createCalendar, focusThe, the } = cy
 
@@ -23,11 +23,11 @@ describe('Clear button', () => {
       the('calendar').should(`not.be.visible`)
     })
 
-    And('the date is cleared', () => {
+    Then('the date is cleared', () => {
       the('input').should('have.value', '')
     })
 
-    And('the input field has focus', () => {
+    Then('the input field has focus', () => {
       the('input').should('be.focused')
     })
   })
@@ -52,15 +52,9 @@ describe('Clear button', () => {
       },
     )
 
-    When('the user clicks on the clear button')
-
     Then('the calendar remains closed', () => {
       the('calendar').should('not.be.visible')
     })
-
-    And('the date is cleared')
-
-    And('the input field has focus')
   })
 
   describe('@id-3: Press the enter key', () => {
@@ -76,25 +70,11 @@ describe('Clear button', () => {
     When('the user focuses the clear button and presses the enter key', () => {
       the('clear-button').type('{enter}')
     })
-
-    Then('the calendar remains closed')
-
-    And('the date is cleared')
-
-    And('the input field has focus')
   })
 
   describe('@id-4: Press the space bar', () => {
-    Given('the calendar is closed and a date is selected')
-
     When('the user focuses the clear button and presses the space bar', () => {
       focusThe('clear-button').type('{space}')
     })
-
-    Then('the calendar remains closed')
-
-    And('the date is cleared')
-
-    And('the input field has focus')
   })
 })

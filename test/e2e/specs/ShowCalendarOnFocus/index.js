@@ -1,4 +1,4 @@
-import { Given, When, Then, And } from 'cypress-cucumber-preprocessor/steps'
+import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor'
 
 const { clickThe, createCalendar, focusThe, the } = cy
 
@@ -20,7 +20,7 @@ describe('Show calendar on focus', () => {
       the('calendar').should('not.be.visible')
     })
 
-    And('the input field has focus', () => {
+    Then('the input field has focus', () => {
       the('input').should('have.focus')
     })
   })
@@ -33,14 +33,12 @@ describe('Show calendar on focus', () => {
       the('calendar').should('not.be.visible')
     })
 
-    When('the user focuses the input field')
-
     Then('the calendar opens', () => {
       the('picker-cells').should('have.length', 1)
       the('calendar').should('be.visible')
     })
 
-    And("today's cell has focus", () => {
+    Then("today's cell has focus", () => {
       the('today-cell').should('have.focus')
     })
   })
@@ -71,7 +69,7 @@ describe('Show calendar on focus', () => {
       the('calendar').should(`${isNot}be.visible`)
     })
 
-    And('the {string} has focus', (element) => {
+    Then('the {string} has focus', (element) => {
       the(element).should('have.focus')
     })
   })
@@ -91,21 +89,5 @@ describe('Show calendar on focus', () => {
       the('picker-cells').should('have.length', 1)
       the('calendar').should(`${isNot}be.visible`)
     })
-
-    When('the user focuses the input field')
-
-    Then('the calendar {string}')
-
-    And('the {string} has focus')
-  })
-
-  describe('@id-5: Click on the input field when the typeable calendar is {string}', () => {
-    Given('the typeable calendar is {string}')
-
-    When('the user clicks the input field')
-
-    Then('the calendar {string}')
-
-    And('the {string} has focus')
   })
 })

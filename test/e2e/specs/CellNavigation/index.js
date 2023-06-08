@@ -1,4 +1,4 @@
-import { Given, When, Then, And } from 'cypress-cucumber-preprocessor/steps'
+import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor'
 
 const { createCalendar, clickThe, the, theFirst } = cy
 
@@ -54,16 +54,12 @@ describe('Cell Navigation', () => {
       the('calendar').should('be.visible')
     })
 
-    When('the user presses the {string} arrow')
-
     Then('the picker slides to the {string}', (slideDirection) => {
       theFirst('picker-cells').should(
         'have.class',
         `slide-${slideDirection}-leave-active`,
       )
     })
-
-    And('the {string} has focus')
   })
 
   describe('@id-3: Arrow {string} to {string} page when destination and all cells beyond are disabled', () => {
@@ -85,8 +81,6 @@ describe('Cell Navigation', () => {
         the('calendar').should('be.visible')
       },
     )
-
-    When('the user presses the {string} arrow')
 
     Then('the focused cell is {string}', (focusedCell) => {
       the('picker-cells')

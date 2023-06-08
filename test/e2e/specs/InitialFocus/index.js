@@ -1,4 +1,4 @@
-import { Given, When, Then, And } from 'cypress-cucumber-preprocessor/steps'
+import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor'
 
 const { clickThe, createCalendar, the } = cy
 
@@ -21,7 +21,7 @@ describe('Set the initial focus', () => {
       the('calendar').should('be.visible')
     })
 
-    And('the focusable-cell cell for {string} has focus', (initialView) => {
+    Then('the focusable-cell cell for {string} has focus', (initialView) => {
       let cellId
 
       switch (initialView) {
@@ -59,15 +59,7 @@ describe('Set the initial focus', () => {
       })
     })
 
-    When('the user opens the calendar', () => {
-      clickThe('input')
-    })
-
-    Then('the calendar opens', () => {
-      the('calendar').should('be.visible')
-    })
-
-    And('the {string} day cell has focus', (firstAvailableCell) => {
+    Then('the {string} day cell has focus', (firstAvailableCell) => {
       const cellId = firstAvailableCell === 'next-day' ? 19 : 4
 
       cy.get(`[data-id=${cellId}]`).should('have.focus')
@@ -95,15 +87,7 @@ describe('Set the initial focus', () => {
       })
     })
 
-    When('the user opens the calendar', () => {
-      clickThe('input')
-    })
-
-    Then('the calendar opens', () => {
-      the('calendar').should('be.visible')
-    })
-
-    And('the {string} month cell has focus', (firstAvailableCell) => {
+    Then('the {string} month cell has focus', (firstAvailableCell) => {
       const cellId = firstAvailableCell === 'next-month' ? 7 : 0
 
       cy.get(`[data-id=${cellId}]`).should('have.focus')
@@ -131,15 +115,7 @@ describe('Set the initial focus', () => {
       })
     })
 
-    When('the user opens the calendar', () => {
-      clickThe('input')
-    })
-
-    Then('the calendar opens', () => {
-      the('calendar').should('be.visible')
-    })
-
-    And('the {string} cell has focus', (firstAvailableCell) => {
+    Then('the {string} cell has focus', (firstAvailableCell) => {
       const cellId = firstAvailableCell === 'next-year' ? 2 : 0
 
       cy.get(`[data-id=${cellId}]`).should('have.focus')
@@ -169,15 +145,7 @@ describe('Set the initial focus', () => {
       },
     )
 
-    When('the user opens the calendar', () => {
-      clickThe('input')
-    })
-
-    Then('the calendar opens', () => {
-      the('calendar').should('be.visible')
-    })
-
-    And('the {string} has focus', (element) => {
+    Then('the {string} has focus', (element) => {
       the(element).should('have.focus')
     })
   })
@@ -205,18 +173,6 @@ describe('Set the initial focus', () => {
         })
       },
     )
-
-    When('the user opens the calendar', () => {
-      clickThe('input')
-    })
-
-    Then('the calendar opens', () => {
-      the('calendar').should('be.visible')
-    })
-
-    And('the {string} has focus', (element) => {
-      the(element).should('have.focus')
-    })
   })
 
   describe('@id-7: Dates this decade and in the <pastOrFuture> are disabled', () => {
@@ -242,17 +198,5 @@ describe('Set the initial focus', () => {
         })
       },
     )
-
-    When('the user opens the calendar', () => {
-      clickThe('input')
-    })
-
-    Then('the calendar opens', () => {
-      the('calendar').should('be.visible')
-    })
-
-    And('the {string} has focus', (element) => {
-      the(element).should('have.focus')
-    })
   })
 })

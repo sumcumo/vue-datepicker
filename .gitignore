@@ -10,7 +10,9 @@ example/demo.js.map
 example-e2e/app.js
 example-e2e/app.js.map
 test/unit/coverage
-test/e2e/cucumber-json
+test/e2e/cucumber-messages.ndjson
+test/e2e/cucumber-report.json
+test/e2e/screenshots/
 yarn-debug.log*
 yarn-error.log*
 .idea
