@@ -250,9 +250,12 @@ export default {
       }
     },
     /**
-     * Opens the calendar when `show-calendar-on-focus` is true
+     * Opens the calendar when `show-calendar-on-focus` is true (unless `show-calendar-on-button-click` is true)
      */
+    // eslint-disable-next-line complexity
     handleInputFocus() {
+      if (this.showCalendarOnButtonClick) return
+
       this.isInputFocused = true
 
       if (!this.isOpen && this.shouldToggleOnFocus) {
