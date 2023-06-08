@@ -1,3 +1,50 @@
+:root {
+  // Layout
+  --vdp-width: 300px;
+  --vdp-border-width: 1px;
+  --vdp-header-height: 40px;
+  --vdp-day-header-height: 40px;
+  --vdp-cell-height: 40px;
+
+  // Light mode
+  --vdp-bg: #fff;
+  --vdp-text: #000;
+  --vdp-text-disabled: #ddd;
+  --vdp-border: #ccc;
+  --vdp-today-bg: #eee;
+  --vdp-button-hover-bg: #eee;
+  --vdp-cell-selected-bg: #4bd;
+  --vdp-cell-selected-text: #06262d;
+  --vdp-cell-hover-border: #4bd;
+  --vdp-cell-focus-outline: #000;
+  --vdp-cell-highlighted-bg: #cae5ed;
+  --vdp-cell-highlighted-text: #104756;
+  --vdp-cell-highlighted-disabled-text: #accad2;
+  --vdp-cell-edge-dates-text: #757575;
+  --vdp-cell-edge-dates-selected-text: #104756;
+  --vdp-cell-edge-dates-highlighted-text: #196676;
+}
+
+html.dark {
+  // Dark mode
+  --vdp-bg: #121212;
+  --vdp-text: #eee;
+  --vdp-text-disabled: #666;
+  --vdp-border: #333;
+  --vdp-today-bg: #333;
+  --vdp-button-hover-bg: #333;
+  --vdp-cell-selected-bg: #24a0c4;
+  --vdp-cell-selected-text: #092831;
+  --vdp-cell-hover-border: #24a0c4;
+  --vdp-cell-focus-outline: #fff;
+  --vdp-cell-highlighted-bg: #092831;
+  --vdp-cell-highlighted-text: #ecf8fc;
+  --vdp-cell-highlighted-disabled-text: #16647a;
+  --vdp-cell-edge-dates-text: #aaa;
+  --vdp-cell-edge-dates-selected-text: #ecf8fc;
+  --vdp-cell-edge-dates-highlighted-text: #9db8c2;
+}
+
 .rtl {
   direction: rtl;
 }
@@ -10,19 +57,19 @@
 }
 
 .vdp-datepicker__calendar {
-  background: #fff;
-  border: 1px solid #ccc;
+  background: var(--vdp-bg);
+  border: var(--vdp-border-width) solid var(--vdp-border);
   position: absolute;
-  width: 300px;
-  z-index: 10000;
+  width: var(--vdp-width);
+  z-index: 10;
 
   > div {
-    background: #fff;
-    width: 298px;
+    background: var(--vdp-bg);
+    width: calc(var(--vdp-width) - (2 * var(--vdp-border-width)));
   }
 
   .today {
-    background-color: #eee;
+    background-color: var(--vdp-today-bg);
   }
 
   * {
@@ -30,33 +77,34 @@
   }
 
   &.vdp-datepicker__calendar--inline {
-    position: static;
+    position: relative;
   }
 
   button {
     background: inherit;
+    color: var(--vdp-text);
     text-align: center;
 
     &:disabled {
-      color: #ddd;
+      color: var(--vdp-text-disabled);
     }
   }
 
   header {
     display: flex;
-    height: 40px;
+    height: var(--vdp-header-height);
     justify-content: space-between;
 
     button {
       border: none;
 
       &:hover:not(:disabled) {
-        background: #eee;
+        background: var(--vdp-button-hover-bg);
         cursor: pointer;
       }
 
       &.vdp-datepicker__up {
-        color: #000;
+        color: var(--vdp-text);
         flex-grow: 5;
       }
     }
@@ -64,7 +112,6 @@
     .prev,
     .next {
       flex-grow: 1;
-      max-height: 40px;
       position: relative;
 
       .default {
@@ -89,7 +136,7 @@
     .prev {
       .default {
         &:after {
-          border-right: 10px solid #000;
+          border-right: 10px solid var(--vdp-text);
           margin-left: -5px;
         }
       }
@@ -97,7 +144,7 @@
       &:disabled {
         .default {
           &:after {
-            border-right: 10px solid #ddd;
+            border-right: 10px solid var(--vdp-text-disabled);
           }
         }
       }
@@ -106,7 +153,7 @@
     .next {
       .default {
         &:after {
-          border-left: 10px solid #000;
+          border-left: 10px solid var(--vdp-text);
           margin-left: 5px;
         }
       }
@@ -114,7 +161,7 @@
       &:disabled {
         .default {
           &:after {
-            border-left: 10px solid #ddd;
+            border-left: 10px solid var(--vdp-text-disabled);
           }
         }
       }
@@ -124,7 +171,8 @@
   .cell {
     border: 1px solid transparent;
     display: inline-block;
-    height: 40px;
+    font-size: 100%;
+    height: var(--vdp-cell-height);
     padding: 0 5px;
     position: relative;
     text-align: center;
@@ -137,58 +185,67 @@
       cursor: pointer;
 
       &:hover {
-        border: 1px solid #4bd;
+        border: 0.1em solid var(--vdp-cell-hover-border);
       }
 
-      &:focus {
-        z-index: 1;
+      // Default 'non-bootstrap' focus style...
+      &:not(.btn):focus {
+        outline: 0.1em solid var(--vdp-cell-focus-outline);
+        outline-offset: -0.1em;
       }
     }
 
-    &.selected {
-      background: #4bd;
-      color: #104756;
+    &:hover {
+      outline: 0.1em solid var(--vdp-cell-hover-outline) !important;
+    }
 
-      &:hover {
-        background: #4bd;
-      }
+    &.selected,
+    &.selected:hover {
+      background: var(--vdp-cell-selected-bg);
+      color: var(--vdp-cell-selected-text);
 
       &.highlighted {
-        background: #4bd;
+        background: var(--vdp-cell-selected-bg);
+        color: var(--vdp-cell-selected-text);
       }
     }
 
     &.highlighted {
-      background: #cae5ed;
-      color: #104756;
+      background: var(--vdp-cell-highlighted-bg);
+      color: var(--vdp-cell-highlighted-text);
 
       &.disabled {
-        color: #accad2;
+        color: var(--vdp-cell-highlighted-disabled-text);
       }
     }
 
     &.muted {
-      color: #757575;
+      color: var(--vdp-cell-edge-dates-text);
 
       &.selected {
-        color: #104756;
+        color: var(--vdp-cell-edge-dates-selected-text);
+      }
+
+      &.highlighted {
+        color: var(--vdp-cell-edge-dates-highlighted-text);
       }
 
       &.disabled:not(.selected) {
-        color: #ddd;
+        color: var(--vdp-text-disabled);
 
         &.highlighted {
-          color: #accad2;
+          color: var(--vdp-cell-highlighted-disabled-text);
         }
       }
     }
   }
 
   .day-header span {
+    color: var(--vdp-text);
     display: inline-block;
     font-size: 75%;
-    height: 40px;
-    line-height: 40px;
+    height: var(--vdp-day-header-height);
+    line-height: var(--vdp-day-header-height);
     padding: 0 5px;
     text-align: center;
     vertical-align: middle;
@@ -269,8 +326,10 @@
 
 .vdp-datepicker__clear-button,
 .vdp-datepicker__calendar-button {
-  border: none;
-  font-style: normal;
+  background: var(--vdp-today-bg);
+  border: 1px solid var(--vdp-border);
+  cursor: pointer;
+  padding: 0.5em;
 
   &.input-group-prepend,
   &.input-group-append {
