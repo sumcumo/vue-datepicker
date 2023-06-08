@@ -24,6 +24,3 @@ function validateDate() {
   value.value = date
 }
 </script>
-<style>
-@import 'style.css';
-</style>
