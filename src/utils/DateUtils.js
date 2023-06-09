@@ -400,6 +400,30 @@ const utils = {
       ? this.resetDateTime(new Date(date))
       : this.resetDateTime(new Date())
   },
+
+  /**
+   * Converts a date according to a given view
+   * e.g. '2025-05-15' becomes '2025-05-01' at `month view and
+   * '2025-01-01' at `year` view
+   * @param  {Date}   dateToConvert  The date to convert
+   * @param  {String} view           The view for which to adjust the date
+   * @return {Date}
+   */
+  adjustDateToView(dateToConvert, view) {
+    const date = this.getNewDateObject(dateToConvert)
+
+    if (view === 'year') {
+      const resetDay = new Date(this.setDate(date, 1))
+      const resetMonth = this.setMonth(resetDay, 0)
+      return new Date(resetMonth)
+    }
+
+    if (view === 'month') {
+      return new Date(this.setDate(date, 1))
+    }
+
+    return date
+  },
 }
 
 export default (useUtc) => ({

@@ -160,7 +160,9 @@ export default {
         Math.floor(utils.getFullYear(pageDate) / this.yearRange) *
         this.yearRange
 
-      return new Date(utils.setFullYear(pageDate, firstYear))
+      const date = new Date(utils.setFullYear(pageDate, firstYear))
+
+      return this.utils.adjustDateToView(date, 'year')
     },
     /**
      * Whether a year is disabled

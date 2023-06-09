@@ -49,3 +49,19 @@ Feature: Cell Navigation
       | 4 | 2019-12-31 | down      | month | from     | 2020-01-31 | next     | January     |
       | 5 | 2022-01-01 | up        | year  | to       | 2019-01-01 | previous | 2019        |
       | 6 | 2018-01-01 | down      | year  | from     | 2020-12-31 | next     | 2020        |
+
+
+  @id-4
+  Scenario Outline: Arrow <direction> to cell when all cells beyond destination are disabled
+    Given the calendar is open on "<openDate>" with view "<view>" and disabled dates "<toOrFrom>" "<disabled>"
+    When the user presses the "<direction>" arrow
+    Then the focused cell is "<focusedCell>"
+
+    Examples:
+      | # | openDate   | direction | view  | toOrFrom | disabled   | focusedCell |
+      | 1 | 2020-01-15 | left      | day   | to       | 2020-01-14 | 14          |
+      | 2 | 2020-01-15 | right     | day   | from     | 2020-01-16 | 16          |
+      | 3 | 2020-06-01 | left      | month | to       | 2020-05-15 | May         |
+      | 4 | 2020-06-01 | right     | month | from     | 2020-07-15 | July        |
+      | 5 | 2023-01-01 | left      | year  | to       | 2022-06-01 | 2022        |
+      | 6 | 2020-01-01 | right     | year  | from     | 2021-06-01 | 2021        |

@@ -333,10 +333,16 @@ export default {
       const cellDate = new Date(this.cells[cellId].timestamp)
 
       if (delta > 0) {
-        return cellDate > this.latestPossibleDate
+        return (
+          cellDate >
+          this.utils.adjustDateToView(this.latestPossibleDate, this.view)
+        )
       }
 
-      return cellDate < this.earliestPossibleDate
+      return (
+        cellDate <
+        this.utils.adjustDateToView(this.earliestPossibleDate, this.view)
+      )
     },
     /**
      * Returns true if the given element cannot be focused
