@@ -15,8 +15,8 @@ module.exports = {
   plugins: ['import', 'prettier', 'html', 'vue', 'vitest'],
   settings: {
     'import/resolver': {
-      webpack: {
-        config: 'eslint-webpack-resolver.config.js',
+      alias: {
+        map: [['~', './src']],
       },
     },
   },

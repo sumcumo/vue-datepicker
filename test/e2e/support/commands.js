@@ -24,8 +24,6 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
-import 'cypress-plugin-tab'
-
 Cypress.Commands.add('the', (testSelector, options) =>
   cy.get(`[data-test-${testSelector}]`, options),
 )
