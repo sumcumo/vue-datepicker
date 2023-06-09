@@ -96,9 +96,9 @@ describe('Set the initial focus', () => {
 
   describe('@id-4: Year view when <pastOrFuture> dates are disabled', () => {
     Given('a year view where {string} dates are disabled', (pastOrFuture) => {
-      const openDate = new Date(2021, 6, 15)
-      const oneYearBeforeOpenDate = new Date(2020, 6, 15)
-      const oneYearAfterOpenDate = new Date(2022, 6, 15)
+      const openDate = new Date(2001, 6, 15)
+      const oneYearBeforeOpenDate = new Date(2000, 6, 15)
+      const oneYearAfterOpenDate = new Date(2002, 6, 15)
       const disabledDates =
         pastOrFuture === 'past'
           ? {
